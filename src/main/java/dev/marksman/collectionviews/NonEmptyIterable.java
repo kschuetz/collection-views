@@ -14,7 +14,7 @@ public interface NonEmptyIterable<A> extends Iterable<A> {
         return Cons.cons(head(), tail()).iterator();
     }
 
-    static <A> NonEmptyIterable<A> cons(A head, Iterable<A> tail) {
+    static <A> NonEmptyIterable<A> nonEmptyIterable(A head, Iterable<A> tail) {
         return new NonEmptyIterable<A>() {
             @Override
             public A head() {

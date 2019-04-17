@@ -1,15 +1,16 @@
 package dev.marksman.collectionviews;
 
 import com.jnape.palatable.lambda.adt.Maybe;
-import dev.marksman.collectionviews.concrete.vectors;
+import dev.marksman.collectionviews.concrete.Vectors;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.RandomAccess;
 
 import static com.jnape.palatable.lambda.adt.Maybe.just;
 import static com.jnape.palatable.lambda.adt.Maybe.nothing;
 
-public interface Vector<A> extends Iterable<A> {
+public interface Vector<A> extends Iterable<A>, RandomAccess {
     int size();
 
     A unsafeGet(int index);
@@ -36,29 +37,30 @@ public interface Vector<A> extends Iterable<A> {
     }
 
     static <A> Vector<A> empty() {
-        return vectors.empty();
+        return Vectors.empty();
     }
 
     static <A> Vector<A> wrap(A[] arr) {
-        return vectors.wrap(arr);
+        return Vectors.wrap(arr);
     }
 
     static <A> Vector<A> wrap(List<A> list) {
-        return vectors.wrap(list);
+        return Vectors.wrap(list);
     }
 
     static <A> Vector<A> take(int count, Iterable<A> source) {
-        return vectors.take(count, source);
+        return Vectors.take(count, source);
     }
 
     static <A> Vector<A> drop(int count, Vector<A> source) {
-        return vectors.drop(count, source);
+        return Vectors.drop(count, source);
     }
 
     static <A> Vector<A> slice(int startIndex, int endIndexExclusive, Iterable<A> source) {
-        return vectors.slice(startIndex, endIndexExclusive, source);
+        return Vectors.slice(startIndex, endIndexExclusive, source);
     }
 
+    @SafeVarargs
     static <A> NonEmptyVector<A> of(A first, A... more) {
         return NonEmptyVector.wrap(first, more);
     }

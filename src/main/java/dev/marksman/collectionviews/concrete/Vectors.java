@@ -14,7 +14,7 @@ import static com.jnape.palatable.lambda.adt.Maybe.just;
 import static com.jnape.palatable.lambda.adt.Maybe.nothing;
 import static com.jnape.palatable.lambda.functions.builtin.fn2.ToCollection.toCollection;
 
-public class vectors {
+public class Vectors {
 
     public static <A> Vector<A> empty() {
         return EmptyVector.emptyVector();
@@ -25,6 +25,9 @@ public class vectors {
         if (arr.length == 0) {
             return empty();
         } else {
+            for (A elem : arr) {
+                if (elem == null) noNullsAllowedError();
+            }
             return new VectorWrappedArray<>(arr);
         }
     }
@@ -34,6 +37,9 @@ public class vectors {
         if (list.isEmpty()) {
             return empty();
         } else {
+            for (A elem : list) {
+                if (elem == null) noNullsAllowedError();
+            }
             return new VectorWrappedList<>(list);
         }
     }
@@ -70,19 +76,22 @@ public class vectors {
         }
     }
 
-    static <A> NonEmptyVector<A> nonEmptyWrap(A first, A[] more) {
+    public static <A> NonEmptyVector<A> nonEmptyWrap(A first, A[] more) {
+        if (first == null) noNullsAllowedError();
         return new ConcreteNonEmptyVector<>(first, wrap(more));
     }
 
-    static <A> NonEmptyVector<A> nonEmptyWrap(A first, List<A> more) {
+    public static <A> NonEmptyVector<A> nonEmptyWrap(A first, List<A> more) {
+        if (first == null) noNullsAllowedError();
         return new ConcreteNonEmptyVector<>(first, wrap(more));
     }
 
-    static <A> NonEmptyVector<A> nonEmptyWrap(A first, Vector<A> more) {
+    public static <A> NonEmptyVector<A> nonEmptyWrap(A first, Vector<A> more) {
+        if (first == null) noNullsAllowedError();
         return new ConcreteNonEmptyVector<>(first, more);
     }
 
-    static <A> Maybe<NonEmptyVector<A>> tryNonEmptyWrap(A[] arr) {
+    public static <A> Maybe<NonEmptyVector<A>> tryNonEmptyWrap(A[] arr) {
         Objects.requireNonNull(arr);
         if (arr.length == 0) {
             return nothing();
@@ -91,7 +100,7 @@ public class vectors {
         }
     }
 
-    static <A> Maybe<NonEmptyVector<A>> tryNonEmptyWrap(List<A> list) {
+    public static <A> Maybe<NonEmptyVector<A>> tryNonEmptyWrap(List<A> list) {
         Objects.requireNonNull(list);
         if (list.isEmpty()) {
             return nothing();
@@ -100,7 +109,7 @@ public class vectors {
         }
     }
 
-    static <A> Maybe<NonEmptyVector<A>> tryNonEmptyWrap(Vector<A> vec) {
+    public static <A> Maybe<NonEmptyVector<A>> tryNonEmptyWrap(Vector<A> vec) {
         Objects.requireNonNull(vec);
         if (vec instanceof NonEmptyVector<?>) {
             return just((NonEmptyVector<A>) vec);
@@ -109,5 +118,9 @@ public class vectors {
         } else {
             return nothing();
         }
+    }
+
+    private static void noNullsAllowedError() {
+        throw new IllegalStateException("Vector cannot contain any null elements");
     }
 }

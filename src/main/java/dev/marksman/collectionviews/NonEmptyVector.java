@@ -1,6 +1,7 @@
 package dev.marksman.collectionviews;
 
 import com.jnape.palatable.lambda.adt.Maybe;
+import dev.marksman.collectionviews.concrete.Vectors;
 
 import java.util.Iterator;
 import java.util.List;
@@ -23,26 +24,26 @@ public interface NonEmptyVector<A> extends NonEmptyIterable<A>, Vector<A> {
     }
 
     static <A> NonEmptyVector<A> wrap(A first, A[] more) {
-        return null;
+        return Vectors.nonEmptyWrap(first, more);
     }
 
     static <A> NonEmptyVector<A> wrap(A first, List<A> more) {
-        return null;
+        return Vectors.nonEmptyWrap(first, more);
     }
 
     static <A> NonEmptyVector<A> wrap(A first, Vector<A> more) {
-        return null;
+        return Vectors.nonEmptyWrap(first, more);
     }
 
     static <A> Maybe<NonEmptyVector<A>> tryWrap(A[] arr) {
-        return null;
+        return Vectors.tryNonEmptyWrap(arr);
     }
 
     static <A> Maybe<NonEmptyVector<A>> tryWrap(List<A> list) {
-        return null;
+        return Vectors.tryNonEmptyWrap(list);
     }
 
     static <A> Maybe<NonEmptyVector<A>> tryWrap(Vector<A> vec) {
-        return null;
+        return Vectors.tryNonEmptyWrap(vec);
     }
 }
