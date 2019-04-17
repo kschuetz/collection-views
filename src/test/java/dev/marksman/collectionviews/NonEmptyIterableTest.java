@@ -38,6 +38,7 @@ class NonEmptyIterableTest {
         NonEmptyIterable<Integer> subject = nonEmptyIterable(1, asList(2, 3));
         Iterator<Integer> iterator = subject.iterator();
         assertTrue(iterator.hasNext());
+        assertTrue(iterator.hasNext());  // called second time
         assertThrows(UnsupportedOperationException.class, iterator::remove);
         assertEquals(1, iterator.next());
         assertTrue(iterator.hasNext());

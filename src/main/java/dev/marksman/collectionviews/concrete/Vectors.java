@@ -67,9 +67,22 @@ public class Vectors {
             return empty();
         }
         if (source instanceof Vector<?>) {
-            return new VectorSlice<>(startIndex, targetSize, (Vector<A>) source);
+            Vector<A> sourceVector = (Vector<A>) source;
+            int sourceSize = sourceVector.size();
+            if (startIndex == 0 && targetSize >= sourceSize) {
+                return sourceVector;
+            } else if (startIndex >= sourceSize) {
+                return empty();
+            } else {
+                int endIndex = Math.min(startIndex + targetSize, sourceSize);
+                return new VectorSlice<>(startIndex, endIndex - startIndex, sourceVector);
+            }
         } else if (source instanceof List<?>) {
-            return new VectorSlice<>(startIndex, targetSize, wrap((List<A>) source));
+            List<A> sourceList = (List<A>) source;
+            if (startIndex == 0 && targetSize >= sourceList.size()) {
+                return wrap(sourceList);
+            } else
+                return new VectorSlice<>(startIndex, targetSize, wrap(sourceList));
         } else {
             ArrayList<A> newList = toCollection(ArrayList::new, Take.take(targetSize, Drop.drop(startIndex, source)));
             return wrap(newList);
