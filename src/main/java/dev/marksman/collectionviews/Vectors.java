@@ -23,9 +23,6 @@ class Vectors {
         if (arr.length == 0) {
             return empty();
         } else {
-            for (A elem : arr) {
-                if (elem == null) noNullsAllowedError();
-            }
             return new VectorWrappedArray<>(arr);
         }
     }
@@ -35,9 +32,6 @@ class Vectors {
         if (list.isEmpty()) {
             return empty();
         } else {
-            for (A elem : list) {
-                if (elem == null) noNullsAllowedError();
-            }
             return new VectorWrappedList<>(list);
         }
     }
@@ -88,17 +82,14 @@ class Vectors {
     }
 
     static <A> NonEmptyVector<A> nonEmptyWrap(A first, A[] more) {
-        if (first == null) noNullsAllowedError();
         return new ConcreteNonEmptyVector<>(first, wrap(more));
     }
 
     static <A> NonEmptyVector<A> nonEmptyWrap(A first, List<A> more) {
-        if (first == null) noNullsAllowedError();
         return new ConcreteNonEmptyVector<>(first, wrap(more));
     }
 
     static <A> NonEmptyVector<A> nonEmptyWrap(A first, Vector<A> more) {
-        if (first == null) noNullsAllowedError();
         return new ConcreteNonEmptyVector<>(first, more);
     }
 
@@ -131,7 +122,4 @@ class Vectors {
         }
     }
 
-    private static void noNullsAllowedError() {
-        throw new IllegalStateException("Vector cannot contain any null elements");
-    }
 }

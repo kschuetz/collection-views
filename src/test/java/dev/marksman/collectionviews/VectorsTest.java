@@ -88,12 +88,6 @@ class VectorsTest {
     }
 
     @Test
-    void wrapArrayWillNotAcceptArrayContainingAnyNulls() {
-        Integer[] arr = new Integer[]{1, 2, null, 3};
-        assertThrows(IllegalStateException.class, () -> Vectors.wrap(arr));
-    }
-
-    @Test
     void wrapArrayWillNotMakeCopy() {
         Integer[] arr = new Integer[]{1, 2, 3};
         Vector<Integer> subject = Vectors.wrap(arr);
@@ -174,12 +168,6 @@ class VectorsTest {
     void wrapListNullArgument() {
         List<String> list = null;
         assertThrows(NullPointerException.class, () -> Vectors.wrap(list));
-    }
-
-    @Test
-    void wrapListWillNotAcceptListContainingAnyNulls() {
-        List<String> list = asList("foo", "bar", null, "baz");
-        assertThrows(IllegalStateException.class, () -> Vectors.wrap(list));
     }
 
     @Test
@@ -265,11 +253,6 @@ class VectorsTest {
         Vector<String> slice2 = Vectors.take(3, slice1);
         assertSame(original, slice1);
         assertSame(original, slice2);
-    }
-
-    @Test
-    void takeWillNotAcceptNullsAsElements() {
-        assertThrows(IllegalStateException.class, () -> Vectors.take(3, asList("foo", null, "bar")));
     }
 
 //    @Test
