@@ -62,6 +62,6 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
 
     @SafeVarargs
     static <A> NonEmptyVector<A> of(A first, A... more) {
-        return NonEmptyVector.wrap(first, more);
+        return Vectors.nonEmptyWrap(first, more);
     }
 }

@@ -5,10 +5,18 @@ import dev.marksman.collectionviews.NonEmptyVector;
 import java.util.List;
 
 class VectorWrappedList<A> implements NonEmptyVector<A> {
+    /**
+     * underlying must contain at least one element
+     */
     private final List<A> underlying;
 
     VectorWrappedList(List<A> underlying) {
         this.underlying = underlying;
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return false;
     }
 
     @Override
