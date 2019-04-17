@@ -1,10 +1,8 @@
-package dev.marksman.collectionviews.concrete;
+package dev.marksman.collectionviews;
 
 import com.jnape.palatable.lambda.adt.Maybe;
 import com.jnape.palatable.lambda.functions.builtin.fn2.Drop;
 import com.jnape.palatable.lambda.functions.builtin.fn2.Take;
-import dev.marksman.collectionviews.NonEmptyVector;
-import dev.marksman.collectionviews.Vector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,13 +12,13 @@ import static com.jnape.palatable.lambda.adt.Maybe.just;
 import static com.jnape.palatable.lambda.adt.Maybe.nothing;
 import static com.jnape.palatable.lambda.functions.builtin.fn2.ToCollection.toCollection;
 
-public class Vectors {
+class Vectors {
 
-    public static <A> Vector<A> empty() {
+    static <A> Vector<A> empty() {
         return EmptyVector.emptyVector();
     }
 
-    public static <A> Vector<A> wrap(A[] arr) {
+    static <A> Vector<A> wrap(A[] arr) {
         Objects.requireNonNull(arr);
         if (arr.length == 0) {
             return empty();
@@ -32,7 +30,7 @@ public class Vectors {
         }
     }
 
-    public static <A> Vector<A> wrap(List<A> list) {
+    static <A> Vector<A> wrap(List<A> list) {
         Objects.requireNonNull(list);
         if (list.isEmpty()) {
             return empty();
@@ -44,12 +42,12 @@ public class Vectors {
         }
     }
 
-    public static <A> Vector<A> take(int count, Iterable<A> source) {
+    static <A> Vector<A> take(int count, Iterable<A> source) {
         if (count < 0) throw new IllegalArgumentException("count must be >= 0");
         return slice(0, count, source);
     }
 
-    public static <A> Vector<A> drop(int count, Vector<A> source) {
+    static <A> Vector<A> drop(int count, Vector<A> source) {
         Objects.requireNonNull(source);
         if (count < 0) throw new IllegalArgumentException("count must be >= 0");
         if (count == 0) return source;
@@ -58,7 +56,7 @@ public class Vectors {
         return new VectorSlice<>(count, sourceSize - count, source);
     }
 
-    public static <A> Vector<A> slice(int startIndex, int endIndexExclusive, Iterable<A> source) {
+    static <A> Vector<A> slice(int startIndex, int endIndexExclusive, Iterable<A> source) {
         if (startIndex < 0) throw new IllegalArgumentException("startIndex must be >= 0");
         if (endIndexExclusive < 0) throw new IllegalArgumentException("endIndex must be >= 0");
         Objects.requireNonNull(source);
@@ -89,22 +87,22 @@ public class Vectors {
         }
     }
 
-    public static <A> NonEmptyVector<A> nonEmptyWrap(A first, A[] more) {
+    static <A> NonEmptyVector<A> nonEmptyWrap(A first, A[] more) {
         if (first == null) noNullsAllowedError();
         return new ConcreteNonEmptyVector<>(first, wrap(more));
     }
 
-    public static <A> NonEmptyVector<A> nonEmptyWrap(A first, List<A> more) {
+    static <A> NonEmptyVector<A> nonEmptyWrap(A first, List<A> more) {
         if (first == null) noNullsAllowedError();
         return new ConcreteNonEmptyVector<>(first, wrap(more));
     }
 
-    public static <A> NonEmptyVector<A> nonEmptyWrap(A first, Vector<A> more) {
+    static <A> NonEmptyVector<A> nonEmptyWrap(A first, Vector<A> more) {
         if (first == null) noNullsAllowedError();
         return new ConcreteNonEmptyVector<>(first, more);
     }
 
-    public static <A> Maybe<NonEmptyVector<A>> tryNonEmptyWrap(A[] arr) {
+    static <A> Maybe<NonEmptyVector<A>> tryNonEmptyWrap(A[] arr) {
         Objects.requireNonNull(arr);
         if (arr.length == 0) {
             return nothing();
@@ -113,7 +111,7 @@ public class Vectors {
         }
     }
 
-    public static <A> Maybe<NonEmptyVector<A>> tryNonEmptyWrap(List<A> list) {
+    static <A> Maybe<NonEmptyVector<A>> tryNonEmptyWrap(List<A> list) {
         Objects.requireNonNull(list);
         if (list.isEmpty()) {
             return nothing();
@@ -122,7 +120,7 @@ public class Vectors {
         }
     }
 
-    public static <A> Maybe<NonEmptyVector<A>> tryNonEmptyWrap(Vector<A> vec) {
+    static <A> Maybe<NonEmptyVector<A>> tryNonEmptyWrap(Vector<A> vec) {
         Objects.requireNonNull(vec);
         if (vec instanceof NonEmptyVector<?>) {
             return just((NonEmptyVector<A>) vec);

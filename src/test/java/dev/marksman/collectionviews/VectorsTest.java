@@ -1,6 +1,5 @@
-package dev.marksman.collectionviews.concrete;
+package dev.marksman.collectionviews;
 
-import dev.marksman.collectionviews.Vector;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;

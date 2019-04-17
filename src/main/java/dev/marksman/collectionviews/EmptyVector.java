@@ -1,7 +1,6 @@
-package dev.marksman.collectionviews.concrete;
+package dev.marksman.collectionviews;
 
 import com.jnape.palatable.lambda.adt.Maybe;
-import dev.marksman.collectionviews.Vector;
 
 import java.util.Iterator;
 

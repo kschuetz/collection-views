@@ -1,6 +1,4 @@
-package dev.marksman.collectionviews.concrete;
-
-import dev.marksman.collectionviews.NonEmptyVector;
+package dev.marksman.collectionviews;
 
 import java.util.List;
 

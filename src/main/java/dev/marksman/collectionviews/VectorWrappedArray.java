@@ -1,6 +1,4 @@
-package dev.marksman.collectionviews.concrete;
-
-import dev.marksman.collectionviews.NonEmptyVector;
+package dev.marksman.collectionviews;
 
 class VectorWrappedArray<A> implements NonEmptyVector<A> {
     /**

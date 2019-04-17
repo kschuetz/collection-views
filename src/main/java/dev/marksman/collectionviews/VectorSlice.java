@@ -1,6 +1,4 @@
-package dev.marksman.collectionviews.concrete;
-
-import dev.marksman.collectionviews.Vector;
+package dev.marksman.collectionviews;
 
 class VectorSlice<A> implements Vector<A> {
     private final int offset;
