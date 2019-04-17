@@ -122,4 +122,21 @@ class Vectors {
         }
     }
 
+    static <A> NonEmptyVector<A> wrapNonEmptyOrThrow(A[] arr) {
+        return getNonEmptyOrThrow(tryNonEmptyWrap(arr));
+    }
+
+    static <A> NonEmptyVector<A> wrapNonEmptyOrThrow(List<A> list) {
+        return getNonEmptyOrThrow(tryNonEmptyWrap(list));
+    }
+
+    static <A> NonEmptyVector<A> wrapNonEmptyOrThrow(Vector<A> vec) {
+        return getNonEmptyOrThrow(tryNonEmptyWrap(vec));
+    }
+
+    private static <A> NonEmptyVector<A> getNonEmptyOrThrow(Maybe<NonEmptyVector<A>> maybeResult) {
+        return maybeResult.orElseThrow(() -> {
+            throw new IllegalArgumentException("Cannot construct NonEmptyVector from empty input");
+        });
+    }
 }
