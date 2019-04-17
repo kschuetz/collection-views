@@ -47,15 +47,15 @@ public interface NonEmptyVector<A> extends NonEmptyIterable<A>, Vector<A> {
     }
 
     static <A> NonEmptyVector<A> wrapOrThrow(A[] arr) {
-        return Vectors.wrapNonEmptyOrThrow(arr);
+        return Vectors.nonEmptyWrapOrThrow(arr);
     }
 
     static <A> NonEmptyVector<A> wrapOrThrow(List<A> list) {
-        return Vectors.wrapNonEmptyOrThrow(list);
+        return Vectors.nonEmptyWrapOrThrow(list);
     }
 
     static <A> NonEmptyVector<A> wrapOrThrow(Vector<A> vec) {
-        return Vectors.wrapNonEmptyOrThrow(vec);
+        return Vectors.nonEmptyWrapOrThrow(vec);
     }
 
     @SafeVarargs

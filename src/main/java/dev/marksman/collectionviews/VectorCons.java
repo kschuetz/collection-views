@@ -1,10 +1,10 @@
 package dev.marksman.collectionviews;
 
-class ConcreteNonEmptyVector<A> implements NonEmptyVector<A> {
+class VectorCons<A> implements NonEmptyVector<A> {
     private final A head;
     private final Vector<A> tail;
 
-    ConcreteNonEmptyVector(A head, Vector<A> tail) {
+    VectorCons(A head, Vector<A> tail) {
         this.head = head;
         this.tail = tail;
     }

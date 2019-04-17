@@ -82,15 +82,15 @@ class Vectors {
     }
 
     static <A> NonEmptyVector<A> nonEmptyWrap(A first, A[] more) {
-        return new ConcreteNonEmptyVector<>(first, wrap(more));
+        return new VectorCons<>(first, wrap(more));
     }
 
     static <A> NonEmptyVector<A> nonEmptyWrap(A first, List<A> more) {
-        return new ConcreteNonEmptyVector<>(first, wrap(more));
+        return new VectorCons<>(first, wrap(more));
     }
 
     static <A> NonEmptyVector<A> nonEmptyWrap(A first, Vector<A> more) {
-        return new ConcreteNonEmptyVector<>(first, more);
+        return new VectorCons<>(first, more);
     }
 
     static <A> Maybe<NonEmptyVector<A>> tryNonEmptyWrap(A[] arr) {
@@ -116,21 +116,21 @@ class Vectors {
         if (vec instanceof NonEmptyVector<?>) {
             return just((NonEmptyVector<A>) vec);
         } else if (!vec.isEmpty()) {
-            return just(new ConcreteNonEmptyVector<>(vec.unsafeGet(0), vec.tail()));
+            return just(new VectorCons<>(vec.unsafeGet(0), vec.tail()));
         } else {
             return nothing();
         }
     }
 
-    static <A> NonEmptyVector<A> wrapNonEmptyOrThrow(A[] arr) {
+    static <A> NonEmptyVector<A> nonEmptyWrapOrThrow(A[] arr) {
         return getNonEmptyOrThrow(tryNonEmptyWrap(arr));
     }
 
-    static <A> NonEmptyVector<A> wrapNonEmptyOrThrow(List<A> list) {
+    static <A> NonEmptyVector<A> nonEmptyWrapOrThrow(List<A> list) {
         return getNonEmptyOrThrow(tryNonEmptyWrap(list));
     }
 
-    static <A> NonEmptyVector<A> wrapNonEmptyOrThrow(Vector<A> vec) {
+    static <A> NonEmptyVector<A> nonEmptyWrapOrThrow(Vector<A> vec) {
         return getNonEmptyOrThrow(tryNonEmptyWrap(vec));
     }
 

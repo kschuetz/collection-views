@@ -39,12 +39,12 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
         return Vectors.empty();
     }
 
-    static <A> Vector<A> wrap(A[] arr) {
-        return Vectors.wrap(arr);
+    static <A> Vector<A> wrap(A[] underlying) {
+        return Vectors.wrap(underlying);
     }
 
-    static <A> Vector<A> wrap(List<A> list) {
-        return Vectors.wrap(list);
+    static <A> Vector<A> wrap(List<A> underlying) {
+        return Vectors.wrap(underlying);
     }
 
     static <A> Vector<A> take(int count, Iterable<A> source) {
