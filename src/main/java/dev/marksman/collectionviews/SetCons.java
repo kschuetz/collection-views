@@ -6,7 +6,7 @@ import java.util.Objects;
 class SetCons<A> implements NonEmptySet<A> {
     /**
      * `tail` must not contain `head`.
-     * Use `SetWrappedSet` in that case.
+     * Use `WrappedSet` in that case.
      */
     private final A head;
     private final Set<A> tail;

@@ -23,7 +23,7 @@ class Vectors {
         if (arr.length == 0) {
             return empty();
         } else {
-            return new VectorWrappedArray<>(arr);
+            return new WrappedArrayVector<>(arr);
         }
     }
 
@@ -32,7 +32,7 @@ class Vectors {
         if (list.isEmpty()) {
             return empty();
         } else {
-            return new VectorWrappedList<>(list);
+            return new WrappedListVector<>(list);
         }
     }
 
@@ -98,7 +98,7 @@ class Vectors {
         if (arr.length == 0) {
             return nothing();
         } else {
-            return just(new VectorWrappedArray<>(arr));
+            return just(new WrappedArrayVector<>(arr));
         }
     }
 
@@ -107,7 +107,7 @@ class Vectors {
         if (list.isEmpty()) {
             return nothing();
         } else {
-            return just(new VectorWrappedList<>(list));
+            return just(new WrappedListVector<>(list));
         }
     }
 

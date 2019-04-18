@@ -1,14 +1,12 @@
 package dev.marksman.collectionviews;
 
-import java.util.List;
-
-class VectorWrappedList<A> implements NonEmptyVector<A> {
+class WrappedArrayVector<A> implements NonEmptyVector<A> {
     /**
      * underlying must contain at least one element
      */
-    private final List<A> underlying;
+    private final A[] underlying;
 
-    VectorWrappedList(List<A> underlying) {
+    WrappedArrayVector(A[] underlying) {
         this.underlying = underlying;
     }
 
@@ -19,16 +17,18 @@ class VectorWrappedList<A> implements NonEmptyVector<A> {
 
     @Override
     public A head() {
-        return underlying.get(0);
+        return underlying[0];
     }
 
     @Override
     public int size() {
-        return underlying.size();
+        return underlying.length;
     }
 
     @Override
     public A unsafeGet(int index) {
-        return underlying.get(index);
+        if (index < 0 || index >= underlying.length) throw new IndexOutOfBoundsException();
+        return underlying[index];
     }
+
 }

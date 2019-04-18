@@ -19,7 +19,7 @@ class Sets {
         if (underlying.isEmpty()) {
             return empty();
         } else {
-            return new SetWrappedSet<>(underlying);
+            return new WrappedSet<>(underlying);
         }
     }
 
@@ -28,13 +28,13 @@ class Sets {
         java.util.Set<A> underlying = new java.util.HashSet<>();
         underlying.add(first);
         underlying.addAll(Arrays.asList(more));
-        return new SetWrappedSet<>(underlying);
+        return new WrappedSet<>(underlying);
     }
 
     static <A> NonEmptySet<A> nonEmptyWrap(A first, java.util.Set<A> more) {
         Objects.requireNonNull(first);
         Objects.requireNonNull(more);
-        SetWrappedSet<A> tail = new SetWrappedSet<>(more);
+        WrappedSet<A> tail = new WrappedSet<>(more);
         if (more.contains(first)) {
             return tail;
         } else {
@@ -58,7 +58,7 @@ class Sets {
         if (underlying.isEmpty()) {
             return nothing();
         } else {
-            return just(new SetWrappedSet<>(underlying));
+            return just(new WrappedSet<>(underlying));
         }
     }
 

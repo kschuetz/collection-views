@@ -5,14 +5,14 @@ import java.util.Set;
 
 import static dev.marksman.collectionviews.ProtectedIterator.protectedIterator;
 
-class SetWrappedSet<A> implements NonEmptySet<A> {
+class WrappedSet<A> implements NonEmptySet<A> {
 
     /**
      * underlying must contain at least one element
      */
     private final java.util.Set<A> underlying;
 
-    SetWrappedSet(Set<A> underlying) {
+    WrappedSet(Set<A> underlying) {
         this.underlying = underlying;
     }
 

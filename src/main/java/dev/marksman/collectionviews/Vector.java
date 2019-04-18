@@ -6,7 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.RandomAccess;
 
-import static com.jnape.palatable.lambda.adt.Maybe.just;
+import static com.jnape.palatable.lambda.adt.Maybe.maybe;
 import static com.jnape.palatable.lambda.adt.Maybe.nothing;
 
 public interface Vector<A> extends Iterable<A>, RandomAccess {
@@ -24,7 +24,7 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
 
     default Maybe<A> get(int index) {
         if (index >= 0 && index < size()) {
-            return just(unsafeGet(index));
+            return maybe(unsafeGet(index));
         } else {
             return nothing();
         }
