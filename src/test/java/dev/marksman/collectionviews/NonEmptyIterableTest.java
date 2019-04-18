@@ -3,7 +3,6 @@ package dev.marksman.collectionviews;
 import org.junit.jupiter.api.Test;
 
 import java.util.Iterator;
-import java.util.List;
 import java.util.NoSuchElementException;
 
 import static dev.marksman.collectionviews.NonEmptyIterable.nonEmptyIterable;
@@ -17,37 +16,88 @@ import static org.junit.jupiter.api.Assertions.*;
 class NonEmptyIterableTest {
 
     @Test
-    void testSingleton() {
+    void singletonHead() {
         NonEmptyIterable<Integer> subject = nonEmptyIterable(1, emptyList());
-        assertThat(subject, contains(1));
         assertEquals(1, subject.head());
+    }
+
+    @Test
+    void singletonTail() {
+        NonEmptyIterable<Integer> subject = nonEmptyIterable(1, emptyList());
         assertThat(subject.tail(), emptyIterable());
     }
 
     @Test
-    void testMultiple() {
-        List<Integer> tail = asList(2, 3, 4, 5, 6);
-        NonEmptyIterable<Integer> subject = nonEmptyIterable(1, tail);
-        assertThat(subject, contains(1, 2, 3, 4, 5, 6));
-        assertEquals(1, subject.head());
-        assertThat(subject.tail(), contains(2, 3, 4, 5, 6));
+    void singletonIteration() {
+        NonEmptyIterable<Integer> subject = nonEmptyIterable(1, emptyList());
+        assertThat(subject, contains(1));
     }
 
     @Test
-    void testIterator() {
+    void multipleHead() {
         NonEmptyIterable<Integer> subject = nonEmptyIterable(1, asList(2, 3));
-        Iterator<Integer> iterator = subject.iterator();
+        assertEquals(1, subject.head());
+    }
+
+    @Test
+    void multipleTail() {
+        NonEmptyIterable<Integer> subject = nonEmptyIterable(1, asList(2, 3));
+        assertThat(subject.tail(), contains(2, 3));
+    }
+
+    @Test
+    void multipleIteration() {
+        NonEmptyIterable<Integer> subject = nonEmptyIterable(1, asList(2, 3, 4, 5, 6));
+        assertThat(subject, contains(1, 2, 3, 4, 5, 6));
+    }
+
+    @Test
+    void iteratorNextReturnsCorrectElements() {
+        NonEmptyIterable<String> subject = nonEmptyIterable("foo", asList("bar", "baz"));
+        Iterator<String> iterator = subject.iterator();
+        assertEquals("foo", iterator.next());
+        assertEquals("bar", iterator.next());
+        assertEquals("baz", iterator.next());
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    @Test
+    void iteratorHasNextCanBeCalledMultipleTimes() {
+        NonEmptyIterable<String> subject = nonEmptyIterable("foo", asList("bar", "baz"));
+        Iterator<String> iterator = subject.iterator();
         assertTrue(iterator.hasNext());
-        assertTrue(iterator.hasNext());  // called second time
-        assertThrows(UnsupportedOperationException.class, iterator::remove);
-        assertEquals(1, iterator.next());
         assertTrue(iterator.hasNext());
-        assertThrows(UnsupportedOperationException.class, iterator::remove);
-        assertEquals(2, iterator.next());
         assertTrue(iterator.hasNext());
-        assertThrows(UnsupportedOperationException.class, iterator::remove);
-        assertEquals(3, iterator.next());
+        assertEquals("foo", iterator.next());
+    }
+
+    @Test
+    void iteratorHasNextReturnsFalseIfNothingRemains() {
+        NonEmptyIterable<String> subject = nonEmptyIterable("foo", emptyList());
+        Iterator<String> iterator = subject.iterator();
+        iterator.next();
         assertFalse(iterator.hasNext());
+    }
+
+    @Test
+    void iteratorNextThrowsIfNothingRemains() {
+        NonEmptyIterable<String> subject = nonEmptyIterable("foo", emptyList());
+        Iterator<String> iterator = subject.iterator();
+        iterator.next();
         assertThrows(NoSuchElementException.class, iterator::next);
     }
+
+    @Test
+    void iteratorThrowsIfRemoveIsCalled() {
+        NonEmptyIterable<String> subject = nonEmptyIterable("foo", asList("bar", "baz"));
+        Iterator<String> iterator = subject.iterator();
+        assertThrows(UnsupportedOperationException.class, iterator::remove);
+        iterator.next();
+        assertThrows(UnsupportedOperationException.class, iterator::remove);
+        iterator.next();
+        assertThrows(UnsupportedOperationException.class, iterator::remove);
+        iterator.next();
+        assertThrows(UnsupportedOperationException.class, iterator::remove);
+    }
+
 }
