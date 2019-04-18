@@ -1,5 +1,6 @@
 package dev.marksman.collectionviews;
 
+import com.jnape.palatable.lambda.functions.builtin.fn1.Repeat;
 import org.junit.jupiter.api.Test;
 
 import java.util.Iterator;
@@ -407,7 +408,7 @@ class VectorTest {
     }
 
     @Test
-    void takeOnlyTakesAsMuchAsItCan() {
+    void takeTakesAsMuchAsItCan() {
         assertThat(Vector.take(1_000_000, asList(1, 2, 3)),
                 contains(1, 2, 3));
     }
@@ -422,6 +423,14 @@ class VectorTest {
                 contains(1));
         assertThat(Vector.take(0, asList(1, 2, 3)),
                 emptyIterable());
+    }
+
+    @Test
+    void takeWillNotEvaluateIterableUnlessNecessary() {
+        Iterable<String> iterable = () -> {
+            throw new AssertionError("Iterable was evaluated");
+        };
+        Vector.take(0, iterable);
     }
 
     @Test
@@ -448,7 +457,7 @@ class VectorTest {
     }
 
     @Test
-    void takeWillReturnOriginalVectorReferenceIfPossible() {
+    void takeReturnsOriginalVectorReferenceIfPossible() {
         Vector<String> original = Vector.wrap(asList("foo", "bar", "baz"));
         Vector<String> slice1 = Vector.take(100, original);
         Vector<String> slice2 = Vector.take(3, slice1);
@@ -467,19 +476,19 @@ class VectorTest {
     }
 
     @Test
-    void dropOfZeroWillReturnSameReference() {
+    void dropOfZeroReturnsSameReference() {
         Vector<Integer> source = Vector.of(1, 2, 3);
         Vector<Integer> sliced = Vector.drop(0, source);
         assertSame(source, sliced);
     }
 
     @Test
-    void dropOfCountEqualToSizeWillReturnEmptyVector() {
+    void dropOfCountEqualToSizeReturnsEmptyVector() {
         assertEquals(emptyVector(), Vector.drop(3, Vector.of(1, 2, 3)));
     }
 
     @Test
-    void dropOfCountExceedingSizeWillReturnEmptyVector() {
+    void dropOfCountExceedingSizeReturnsEmptyVector() {
         assertEquals(emptyVector(), Vector.drop(4, Vector.of(1, 2, 3)));
         assertEquals(emptyVector(), Vector.drop(1_000_000, Vector.of(1, 2, 3)));
     }
@@ -514,6 +523,132 @@ class VectorTest {
         assertThat(drop1, contains("bar", "baz"));
         underlying.set(1, "qwerty");
         assertThat(drop1, contains("qwerty", "baz"));
+    }
+
+    @Test
+    void sliceThrowsOnNegativeStartIndex() {
+        assertThrows(IllegalArgumentException.class, () -> Vector.slice(-1, 1, Vector.empty()));
+    }
+
+    @Test
+    void sliceThrowsOnNegativeEndIndex() {
+        assertThrows(IllegalArgumentException.class, () -> Vector.slice(0, -1, Vector.empty()));
+    }
+
+    @Test
+    void sliceThrowsOnNullSource() {
+        assertThrows(NullPointerException.class, () -> Vector.slice(0, 0, null));
+    }
+
+    @Test
+    void sliceReturnsEmptyVectorIfWidthIsZero() {
+        Iterable<String> infinite = Repeat.repeat("foo");
+        assertEquals(Vector.empty(), Vector.slice(0, 0, infinite));
+        assertEquals(Vector.empty(), Vector.slice(1_000_000, 1_000_000, infinite));
+    }
+
+    @Test
+    void sliceReturnsEmptyVectorIfWidthLessThanZero() {
+        Iterable<String> infinite = Repeat.repeat("foo");
+        assertEquals(Vector.empty(), Vector.slice(10, 9, infinite));
+        assertEquals(Vector.empty(), Vector.slice(1_000_000, 0, infinite));
+    }
+
+    @Test
+    void sliceListTakesAsMuchAsItCan() {
+        assertThat(Vector.slice(1, 1_000_000, asList(1, 2, 3)),
+                contains(2, 3));
+    }
+
+    @Test
+    void sliceVectorTakesAsMuchAsItCan() {
+        assertThat(Vector.slice(1, 1_000_000, Vector.of(1, 2, 3)),
+                contains(2, 3));
+    }
+
+    @Test
+    void sliceListOnlyTakesWhatWasAskedFor() {
+        assertThat(Vector.slice(0, 3, asList(1, 2, 3)),
+                contains(1, 2, 3));
+        assertThat(Vector.slice(1, 3, asList(1, 2, 3)),
+                contains(2, 3));
+        assertThat(Vector.slice(1, 2, asList(1, 2, 3)),
+                contains(2));
+        assertThat(Vector.slice(0, 0, asList(1, 2, 3)),
+                emptyIterable());
+    }
+
+    @Test
+    void sliceVectorOnlyTakesWhatWasAskedFor() {
+        assertThat(Vector.slice(0, 3, Vector.of(1, 2, 3)),
+                contains(1, 2, 3));
+        assertThat(Vector.slice(1, 3, Vector.of(1, 2, 3)),
+                contains(2, 3));
+        assertThat(Vector.slice(1, 2, Vector.of(1, 2, 3)),
+                contains(2));
+        assertThat(Vector.slice(0, 0, Vector.of(1, 2, 3)),
+                emptyIterable());
+    }
+
+    @Test
+    void sliceWillNotEvaluateIterableUnlessNecessary() {
+        Iterable<String> iterable = () -> {
+            throw new AssertionError("Iterable was evaluated");
+        };
+        Vector.slice(0, 0, iterable);
+        Vector.slice(1, 0, iterable);
+        Vector.slice(1, 1, iterable);
+    }
+
+    @Test
+    void sliceListOfStartIndexEqualToSizeReturnsEmptyVector() {
+        assertEquals(emptyVector(), Vector.slice(3, 6, asList(1, 2, 3)));
+    }
+
+    @Test
+    void sliceVectorOfStartIndexEqualToSizeReturnsEmptyVector() {
+        assertEquals(emptyVector(), Vector.slice(3, 6, Vector.of(1, 2, 3)));
+    }
+
+    @Test
+    void sliceListOfStartIndexExceedingSizeReturnsEmptyVector() {
+        assertEquals(emptyVector(), Vector.slice(4, 3, asList(1, 2, 3)));
+        assertEquals(emptyVector(), Vector.slice(1_000_000, 3, asList(1, 2, 3)));
+    }
+
+    @Test
+    void sliceVectorOfStartIndexExceedingSizeReturnsEmptyVector() {
+        assertEquals(emptyVector(), Vector.slice(4, 3, Vector.of(1, 2, 3)));
+        assertEquals(emptyVector(), Vector.slice(1_000_000, 3, Vector.of(1, 2, 3)));
+    }
+
+    @Test
+    void sliceWillNotMakeCopiesOfUnderlyingForVectors() {
+        List<String> originalUnderlying = asList("foo", "bar", "baz");
+        Vector<String> original = Vector.wrap(originalUnderlying);
+        Vector<String> sliced = Vector.slice(1, 10000, original);
+        assertThat(sliced, contains("bar", "baz"));
+        originalUnderlying.set(2, "qwerty");
+        assertThat(sliced, contains("bar", "qwerty"));
+    }
+
+    @Test
+    void sliceWillNotMakeCopiesOfUnderlyingForLists() {
+        List<String> originalList = asList("foo", "bar", "baz");
+        Vector<String> slice1 = Vector.slice(0, 100, originalList);
+        Vector<String> slice2 = Vector.slice(1, 3, originalList);
+        Vector<String> slice3 = Vector.slice(2, 100, originalList);
+        originalList.set(0, "qwerty");
+        originalList.set(2, "quux");
+        assertThat(slice1, contains("qwerty", "bar", "quux"));
+        assertThat(slice2, contains("bar", "quux"));
+        assertThat(slice3, contains("quux"));
+    }
+
+    @Test
+    void sliceCanHandleInfiniteSource() {
+        Vector<String> subject = Vector.slice(100, 102, Repeat.repeat("foo"));
+        assertThat(subject, contains("foo", "foo"));
     }
 
 }

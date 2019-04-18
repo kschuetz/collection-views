@@ -54,29 +54,36 @@ class Vectors {
         if (startIndex < 0) throw new IllegalArgumentException("startIndex must be >= 0");
         if (endIndexExclusive < 0) throw new IllegalArgumentException("endIndex must be >= 0");
         Objects.requireNonNull(source);
-        int targetSize = endIndexExclusive - startIndex;
-        if (targetSize < 1) {
+        int requestedSize = endIndexExclusive - startIndex;
+        if (requestedSize < 1) {
             return empty();
         }
         if (source instanceof Vector<?>) {
             Vector<A> sourceVector = (Vector<A>) source;
             int sourceSize = sourceVector.size();
-            if (startIndex == 0 && targetSize >= sourceSize) {
+            if (startIndex == 0 && requestedSize >= sourceSize) {
                 return sourceVector;
             } else if (startIndex >= sourceSize) {
                 return empty();
             } else {
-                int endIndex = Math.min(startIndex + targetSize, sourceSize);
-                return new VectorSlice<>(startIndex, endIndex - startIndex, sourceVector);
+                int available = Math.max(sourceSize - startIndex, 0);
+                int sliceSize = Math.min(available, requestedSize);
+                return new VectorSlice<>(startIndex, sliceSize, sourceVector);
             }
         } else if (source instanceof List<?>) {
             List<A> sourceList = (List<A>) source;
-            if (startIndex == 0 && targetSize >= sourceList.size()) {
+            int sourceSize = sourceList.size();
+            if (startIndex == 0 && requestedSize >= sourceSize) {
                 return wrap(sourceList);
-            } else
-                return new VectorSlice<>(startIndex, targetSize, wrap(sourceList));
+            } else if (startIndex >= sourceSize) {
+                return empty();
+            } else {
+                int available = Math.max(sourceSize - startIndex, 0);
+                int sliceSize = Math.min(available, requestedSize);
+                return new VectorSlice<>(startIndex, sliceSize, wrap(sourceList));
+            }
         } else {
-            ArrayList<A> newList = toCollection(ArrayList::new, Take.take(targetSize, Drop.drop(startIndex, source)));
+            ArrayList<A> newList = toCollection(ArrayList::new, Take.take(requestedSize, Drop.drop(startIndex, source)));
             return wrap(newList);
         }
     }
