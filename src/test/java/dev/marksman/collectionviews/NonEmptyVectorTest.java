@@ -573,6 +573,27 @@ class NonEmptyVectorTest {
         }
 
         @Test
+        void customVectorSuccess() {
+            // Vector is not empty, but doesn't subtype NonEmptyVector
+            Vector<String> underlying = new Vector<String>() {
+                @Override
+                public int size() {
+                    return 1;
+                }
+
+                @Override
+                public String unsafeGet(int index) {
+                    return "foo";
+                }
+            };
+
+            NonEmptyVector<String> result = NonEmptyVector.tryWrap(underlying).orElseThrow(AssertionError::new);
+            assertThat(result, contains("foo"));
+            assertEquals("foo", result.head());
+            assertEquals(1, result.size());
+        }
+
+        @Test
         void arrayFailure() {
             assertEquals(nothing(), NonEmptyVector.tryWrap(new String[]{}));
         }
@@ -585,6 +606,23 @@ class NonEmptyVectorTest {
         @Test
         void vectorFailure() {
             assertEquals(nothing(), NonEmptyVector.tryWrap(Vector.empty()));
+        }
+
+        @Test
+        void customVectorFailure() {
+            Vector<String> underlying = new Vector<String>() {
+                @Override
+                public int size() {
+                    return 0;
+                }
+
+                @Override
+                public String unsafeGet(int index) {
+                    throw new IndexOutOfBoundsException();
+                }
+            };
+
+            assertEquals(nothing(), NonEmptyVector.tryWrap(underlying));
         }
     }
 
@@ -615,6 +653,27 @@ class NonEmptyVectorTest {
         }
 
         @Test
+        void customVectorSuccess() {
+            // Vector is not empty, but doesn't subtype NonEmptyVector
+            Vector<String> underlying = new Vector<String>() {
+                @Override
+                public int size() {
+                    return 1;
+                }
+
+                @Override
+                public String unsafeGet(int index) {
+                    return "foo";
+                }
+            };
+
+            NonEmptyVector<String> result = NonEmptyVector.wrapOrThrow(underlying);
+            assertThat(result, contains("foo"));
+            assertEquals("foo", result.head());
+            assertEquals(1, result.size());
+        }
+
+        @Test
         void arrayFailure() {
             assertThrows(IllegalArgumentException.class, () -> NonEmptyVector.wrapOrThrow(new String[]{}));
         }
@@ -627,6 +686,23 @@ class NonEmptyVectorTest {
         @Test
         void vectorFailure() {
             assertThrows(IllegalArgumentException.class, () -> NonEmptyVector.wrapOrThrow(Vector.empty()));
+        }
+
+        @Test
+        void customVectorFailure() {
+            Vector<String> underlying = new Vector<String>() {
+                @Override
+                public int size() {
+                    return 0;
+                }
+
+                @Override
+                public String unsafeGet(int index) {
+                    throw new IndexOutOfBoundsException();
+                }
+            };
+
+            assertThrows(IllegalArgumentException.class, () -> NonEmptyVector.wrapOrThrow(underlying));
         }
     }
 
