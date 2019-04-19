@@ -12,7 +12,6 @@ import java.util.NoSuchElementException;
 
 import static com.jnape.palatable.lambda.adt.Maybe.just;
 import static com.jnape.palatable.lambda.adt.Maybe.nothing;
-import static dev.marksman.collectionviews.EmptyVector.emptyVector;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
@@ -28,8 +27,8 @@ class VectorTest {
     class EmptyVectorTests {
         @Test
         void alwaysYieldsSameReference() {
-            Vector<Integer> v1 = emptyVector();
-            Vector<String> v2 = emptyVector();
+            Vector<Integer> v1 = Vector.empty();
+            Vector<String> v2 = Vector.empty();
             assertSame(v1, v2);
         }
 
@@ -556,13 +555,13 @@ class VectorTest {
 
         @Test
         void countEqualToSizeReturnsEmptyVector() {
-            assertEquals(emptyVector(), Vector.drop(3, Vector.of(1, 2, 3)));
+            assertEquals(Vector.empty(), Vector.drop(3, Vector.of(1, 2, 3)));
         }
 
         @Test
         void countExceedingSizeReturnsEmptyVector() {
-            assertEquals(emptyVector(), Vector.drop(4, Vector.of(1, 2, 3)));
-            assertEquals(emptyVector(), Vector.drop(1_000_000, Vector.of(1, 2, 3)));
+            assertEquals(Vector.empty(), Vector.drop(4, Vector.of(1, 2, 3)));
+            assertEquals(Vector.empty(), Vector.drop(1_000_000, Vector.of(1, 2, 3)));
         }
 
         @Test
@@ -659,13 +658,13 @@ class VectorTest {
 
             @Test
             void startIndexEqualToSizeReturnsEmptyVector() {
-                assertEquals(emptyVector(), Vector.slice(3, 6, asList(1, 2, 3)));
+                assertEquals(Vector.empty(), Vector.slice(3, 6, asList(1, 2, 3)));
             }
 
             @Test
             void startIndexExceedingSizeReturnsEmptyVector() {
-                assertEquals(emptyVector(), Vector.slice(4, 3, asList(1, 2, 3)));
-                assertEquals(emptyVector(), Vector.slice(1_000_000, 3, asList(1, 2, 3)));
+                assertEquals(Vector.empty(), Vector.slice(4, 3, asList(1, 2, 3)));
+                assertEquals(Vector.empty(), Vector.slice(1_000_000, 3, asList(1, 2, 3)));
             }
 
             @Test
@@ -716,13 +715,13 @@ class VectorTest {
 
             @Test
             void startIndexEqualToSizeReturnsEmptyVector() {
-                assertEquals(emptyVector(), Vector.slice(3, 6, Vector.of(1, 2, 3)));
+                assertEquals(Vector.empty(), Vector.slice(3, 6, Vector.of(1, 2, 3)));
             }
 
             @Test
             void startIndexExceedingSizeReturnsEmptyVector() {
-                assertEquals(emptyVector(), Vector.slice(4, 3, Vector.of(1, 2, 3)));
-                assertEquals(emptyVector(), Vector.slice(1_000_000, 3, Vector.of(1, 2, 3)));
+                assertEquals(Vector.empty(), Vector.slice(4, 3, Vector.of(1, 2, 3)));
+                assertEquals(Vector.empty(), Vector.slice(1_000_000, 3, Vector.of(1, 2, 3)));
             }
 
             @Test

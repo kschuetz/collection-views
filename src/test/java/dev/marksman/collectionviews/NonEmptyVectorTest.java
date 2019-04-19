@@ -574,7 +574,7 @@ class NonEmptyVectorTest {
 
         @Test
         void customVectorSuccess() {
-            // Vector is not empty, but doesn't subtype NonEmptyVector
+            // A Vector that is not empty, but doesn't subtype NonEmptyVector
             Vector<String> underlying = new Vector<String>() {
                 @Override
                 public int size() {
