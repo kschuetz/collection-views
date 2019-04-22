@@ -19,7 +19,7 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
     }
 
     default Vector<A> tail() {
-        return drop(1, this);
+        return drop(1);
     }
 
     default Maybe<A> get(int index) {
@@ -35,6 +35,18 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
         return new VectorIterator<>(this);
     }
 
+    default Vector<A> take(int count) {
+        return Vectors.take(count, this);
+    }
+
+    default Vector<A> drop(int count) {
+        return Vectors.drop(count, this);
+    }
+
+    default Vector<A> slice(int startIndex, int endIndexExclusive) {
+        return Vectors.sliceFromIterable(startIndex, endIndexExclusive, this);
+    }
+
     static <A> Vector<A> empty() {
         return Vectors.empty();
     }
@@ -47,16 +59,12 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
         return Vectors.wrap(underlying);
     }
 
-    static <A> Vector<A> take(int count, Iterable<A> source) {
-        return Vectors.take(count, source);
+    static <A> Vector<A> takeFromIterable(int count, Iterable<A> source) {
+        return Vectors.takeFromIterable(count, source);
     }
 
-    static <A> Vector<A> drop(int count, Vector<A> source) {
-        return Vectors.drop(count, source);
-    }
-
-    static <A> Vector<A> slice(int startIndex, int endIndexExclusive, Iterable<A> source) {
-        return Vectors.slice(startIndex, endIndexExclusive, source);
+    static <A> Vector<A> sliceFromIterable(int startIndex, int endIndexExclusive, Iterable<A> source) {
+        return Vectors.sliceFromIterable(startIndex, endIndexExclusive, source);
     }
 
     @SafeVarargs
