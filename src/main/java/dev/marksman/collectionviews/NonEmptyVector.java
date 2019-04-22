@@ -14,7 +14,7 @@ public interface NonEmptyVector<A> extends NonEmptyIterable<A>, Vector<A> {
 
     @Override
     default Vector<A> tail() {
-        return Vector.drop(1, this);
+        return drop(1);
     }
 
     @Override

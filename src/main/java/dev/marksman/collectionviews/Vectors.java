@@ -36,9 +36,13 @@ class Vectors {
         }
     }
 
-    static <A> Vector<A> take(int count, Iterable<A> source) {
+    static <A> Vector<A> take(int count, Vector<A> source) {
+        return takeFromIterable(count, source);
+    }
+
+    static <A> Vector<A> takeFromIterable(int count, Iterable<A> source) {
         if (count < 0) throw new IllegalArgumentException("count must be >= 0");
-        return slice(0, count, source);
+        return sliceFromIterable(0, count, source);
     }
 
     static <A> Vector<A> drop(int count, Vector<A> source) {
@@ -50,7 +54,11 @@ class Vectors {
         return new VectorSlice<>(count, sourceSize - count, source);
     }
 
-    static <A> Vector<A> slice(int startIndex, int endIndexExclusive, Iterable<A> source) {
+    static <A> Vector<A> slice(int startIndex, int endIndexExclusive, Vector<A> source) {
+        return sliceFromIterable(startIndex, endIndexExclusive, source);
+    }
+
+    static <A> Vector<A> sliceFromIterable(int startIndex, int endIndexExclusive, Iterable<A> source) {
         if (startIndex < 0) throw new IllegalArgumentException("startIndex must be >= 0");
         if (endIndexExclusive < 0) throw new IllegalArgumentException("endIndex must be >= 0");
         Objects.requireNonNull(source);
