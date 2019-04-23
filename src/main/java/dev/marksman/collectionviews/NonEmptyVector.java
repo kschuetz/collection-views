@@ -27,45 +27,6 @@ public interface NonEmptyVector<A> extends NonEmptyIterable<A>, Vector<A> {
         return new VectorIterator<>(this);
     }
 
-    /**
-     * Wraps an array in a NonEmptyVector without making a copy of the array.
-     * <p>
-     * Requires an additional element at the front to guarantee non-emptiness.
-     * The resulting Vector will be of size 1 + more.length.
-     * <p>
-     * If you don't have an additional element, use tryNonEmptyWrap.
-     * If you have an array that you know is not empty, use wrapOrThrow.
-     *
-     * @param first
-     * @param more
-     * @param <A>
-     * @return
-     */
-    static <A> NonEmptyVector<A> wrap(A first, A[] more) {
-        return Vectors.nonEmptyWrap(first, more);
-    }
-
-    static <A> NonEmptyVector<A> wrap(A first, List<A> more) {
-        return Vectors.nonEmptyWrap(first, more);
-    }
-
-    /**
-     * Creates a NonEmptyVector from a Vector, and an additional element at the
-     * front to guarantee non-emptiness.
-     * <p>
-     * While it may be tempting to use this method as a way to cons items onto existing Vectors,
-     * beware:  doing this multiple times will remove the O(1) guarantees of
-     * size, unsafeGet, and get. (These will become O(n), violating the contract of Vector).
-     *
-     * @param first
-     * @param more
-     * @param <A>
-     * @return
-     */
-    static <A> NonEmptyVector<A> wrap(A first, Vector<A> more) {
-        return Vectors.nonEmptyWrap(first, more);
-    }
-
     static <A> Maybe<NonEmptyVector<A>> tryWrap(A[] arr) {
         return Vectors.tryNonEmptyWrap(arr);
     }

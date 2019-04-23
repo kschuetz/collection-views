@@ -35,7 +35,7 @@ class Vectors {
         return wrap(list, false);
     }
 
-    static <A> Vector<A> wrap(List<A> list, boolean ownsAllReferences) {
+    private static <A> Vector<A> wrap(List<A> list, boolean ownsAllReferences) {
         Objects.requireNonNull(list);
         if (list.isEmpty()) {
             return empty();
@@ -107,19 +107,6 @@ class Vectors {
     @SafeVarargs
     static <A> NonEmptyVector<A> of(A first, A... more) {
         return new VectorCons<>(first, wrap(more, true));
-    }
-
-    // TODO: remove nonEmptyWrap methods
-    static <A> NonEmptyVector<A> nonEmptyWrap(A first, A[] more) {
-        return new VectorCons<>(first, wrap(more));
-    }
-
-    static <A> NonEmptyVector<A> nonEmptyWrap(A first, List<A> more) {
-        return new VectorCons<>(first, wrap(more));
-    }
-
-    static <A> NonEmptyVector<A> nonEmptyWrap(A first, Vector<A> more) {
-        return new VectorCons<>(first, more);
     }
 
     static <A> Maybe<NonEmptyVector<A>> tryNonEmptyWrap(A[] arr) {
