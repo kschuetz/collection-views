@@ -19,6 +19,18 @@ To provide controlled access to the essential operations of a collection (and no
 
 # Types of collection views
 
+| Interface | Immutable to bearer | Guaranteed safe from mutation anywhere | Guaranteed non-empty |
+|---|---|---|---|
+| `Vector<A>` | yes | no | no |
+| `NonEmptyVector<A>` | yes | no | yes |
+| `ProtectedVector<A>` | yes | yes | no |
+| `ProtectedNonEmptyVector<A>` | yes | yes | yes |
+| `Set<A>` | yes | no | no |
+| `NonEmptySet<A>` | yes | no | yes |
+| `ProtectedSet<A>` | yes | yes | no |
+| `ProtectedNonEmptySet<A>` | yes | yes | yes |
+
+
 ## `Vector<A>`
 
 ### Using a `Vector`

@@ -72,8 +72,8 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
         return false;
     }
 
-    default Vector<A> ensureImmutable() {
-        return Vectors.ensureImmutable(this);
+    default ProtectedVector<A> ensureProtected() {
+        return Vectors.ensureProtected(this);
     }
 
     @Override
@@ -137,7 +137,7 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
      * @param <A>
      * @return
      */
-    static <A> Vector<A> empty() {
+    static <A> ProtectedVector<A> empty() {
         return Vectors.empty();
     }
 

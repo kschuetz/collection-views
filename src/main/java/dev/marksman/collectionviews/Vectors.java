@@ -14,7 +14,7 @@ import static com.jnape.palatable.lambda.functions.builtin.fn2.ToCollection.toCo
 
 class Vectors {
 
-    static <A> Vector<A> empty() {
+    static <A> ProtectedVector<A> empty() {
         return EmptyVector.emptyVector();
     }
 
@@ -41,6 +41,15 @@ class Vectors {
             return empty();
         } else {
             return new WrappedListVector<>(list, ownsAllReferences);
+        }
+    }
+
+    static <A> ProtectedVector<A> protectedWrap(List<A> list) {
+        Objects.requireNonNull(list);
+        if (list.isEmpty()) {
+            return empty();
+        } else {
+            return new ProtectedListVector<>(list);
         }
     }
 
@@ -150,21 +159,26 @@ class Vectors {
         return getNonEmptyOrThrow(tryNonEmptyWrap(vec));
     }
 
-    static <A> Vector<A> ensureImmutable(Vector<A> vector) {
-        if (vector.ownsAllReferencesToUnderlying()) {
-            return vector;
+    static <A> ProtectedVector<A> ensureProtected(Vector<A> vector) {
+        if (vector instanceof ProtectedVector<?>) {
+            return (ProtectedVector<A>) vector;
+        } else if (vector.ownsAllReferencesToUnderlying()) {
+            if (vector.isEmpty()) return empty();
+            else return new MarkedProtectedVector<>(nonEmptyWrapOrThrow(vector));
         } else {
             ArrayList<A> copied = toCollection(ArrayList::new, vector);
-            return wrap(copied, true);
+            return protectedWrap(copied);
         }
     }
 
-    static <A> NonEmptyVector<A> ensureImmutable(NonEmptyVector<A> vector) {
-        if (vector.ownsAllReferencesToUnderlying()) {
-            return vector;
+    static <A> ProtectedNonEmptyVector<A> ensureProtected(NonEmptyVector<A> vector) {
+        if (vector instanceof ProtectedNonEmptyVector<?>) {
+            return (ProtectedNonEmptyVector<A>) vector;
+        } else if (vector.ownsAllReferencesToUnderlying()) {
+            return new MarkedProtectedVector<>(vector);
         } else {
             ArrayList<A> copied = toCollection(ArrayList::new, vector);
-            return nonEmptyWrapOrThrow(wrap(copied, true));
+            return new ProtectedListVector<>(copied);
         }
     }
 

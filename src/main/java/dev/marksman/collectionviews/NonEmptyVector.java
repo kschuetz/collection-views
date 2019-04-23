@@ -18,8 +18,8 @@ public interface NonEmptyVector<A> extends NonEmptyIterable<A>, Vector<A> {
     }
 
     @Override
-    default NonEmptyVector<A> ensureImmutable() {
-        return Vectors.ensureImmutable(this);
+    default ProtectedNonEmptyVector<A> ensureProtected() {
+        return Vectors.ensureProtected(this);
     }
 
     @Override
