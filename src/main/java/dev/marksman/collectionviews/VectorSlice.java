@@ -21,4 +21,9 @@ class VectorSlice<A> implements Vector<A> {
         if (index < 0 || index >= size) throw new IndexOutOfBoundsException();
         return underlying.unsafeGet(offset + index);
     }
+
+    @Override
+    public boolean ownsAllReferencesToUnderlying() {
+        return underlying.ownsAllReferencesToUnderlying();
+    }
 }

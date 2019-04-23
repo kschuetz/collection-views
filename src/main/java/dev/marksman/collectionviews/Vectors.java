@@ -19,20 +19,28 @@ class Vectors {
     }
 
     static <A> Vector<A> wrap(A[] arr) {
+        return wrap(arr, false);
+    }
+
+    private static <A> Vector<A> wrap(A[] arr, boolean ownsAllReferences) {
         Objects.requireNonNull(arr);
         if (arr.length == 0) {
             return empty();
         } else {
-            return new WrappedArrayVector<>(arr);
+            return new WrappedArrayVector<>(arr, ownsAllReferences);
         }
     }
 
     static <A> Vector<A> wrap(List<A> list) {
+        return wrap(list, false);
+    }
+
+    static <A> Vector<A> wrap(List<A> list, boolean ownsAllReferences) {
         Objects.requireNonNull(list);
         if (list.isEmpty()) {
             return empty();
         } else {
-            return new WrappedListVector<>(list);
+            return new WrappedListVector<>(list, ownsAllReferences);
         }
     }
 
@@ -92,10 +100,16 @@ class Vectors {
             }
         } else {
             ArrayList<A> newList = toCollection(ArrayList::new, Take.take(requestedSize, Drop.drop(startIndex, source)));
-            return wrap(newList);
+            return wrap(newList, true);
         }
     }
 
+    @SafeVarargs
+    static <A> NonEmptyVector<A> of(A first, A... more) {
+        return new VectorCons<>(first, wrap(more, true));
+    }
+
+    // TODO: remove nonEmptyWrap methods
     static <A> NonEmptyVector<A> nonEmptyWrap(A first, A[] more) {
         return new VectorCons<>(first, wrap(more));
     }
@@ -113,7 +127,7 @@ class Vectors {
         if (arr.length == 0) {
             return nothing();
         } else {
-            return just(new WrappedArrayVector<>(arr));
+            return just(new WrappedArrayVector<>(arr, false));
         }
     }
 
@@ -122,7 +136,7 @@ class Vectors {
         if (list.isEmpty()) {
             return nothing();
         } else {
-            return just(new WrappedListVector<>(list));
+            return just(new WrappedListVector<>(list, false));
         }
     }
 
@@ -149,9 +163,29 @@ class Vectors {
         return getNonEmptyOrThrow(tryNonEmptyWrap(vec));
     }
 
+    static <A> Vector<A> ensureImmutable(Vector<A> vector) {
+        if (vector.ownsAllReferencesToUnderlying()) {
+            return vector;
+        } else {
+            ArrayList<A> copied = toCollection(ArrayList::new, vector);
+            return wrap(copied, true);
+        }
+    }
+
+    static <A> NonEmptyVector<A> ensureImmutable(NonEmptyVector<A> vector) {
+        if (vector.ownsAllReferencesToUnderlying()) {
+            return vector;
+        } else {
+            ArrayList<A> copied = toCollection(ArrayList::new, vector);
+            return nonEmptyWrapOrThrow(wrap(copied, true));
+        }
+    }
+
     private static <A> NonEmptyVector<A> getNonEmptyOrThrow(Maybe<NonEmptyVector<A>> maybeResult) {
         return maybeResult.orElseThrow(() -> {
             throw new IllegalArgumentException("Cannot construct NonEmptyVector from empty input");
         });
     }
+
+
 }

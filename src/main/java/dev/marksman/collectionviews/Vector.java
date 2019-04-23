@@ -60,6 +60,22 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
         }
     }
 
+    /**
+     * If it is known that this Vector fully contains its underlying collection
+     * and it is safe from mutation elsewhere, this method returns true.
+     * <p>
+     * If this is not known, this method returns false.
+     * <p>
+     * Used as an optimization when copying.
+     */
+    default boolean ownsAllReferencesToUnderlying() {
+        return false;
+    }
+
+    default Vector<A> ensureImmutable() {
+        return Vectors.ensureImmutable(this);
+    }
+
     @Override
     default Iterator<A> iterator() {
         return new VectorIterator<>(this);
@@ -211,6 +227,6 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
      */
     @SafeVarargs
     static <A> NonEmptyVector<A> of(A first, A... more) {
-        return Vectors.nonEmptyWrap(first, more);
+        return Vectors.of(first, more);
     }
 }

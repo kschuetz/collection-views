@@ -28,4 +28,9 @@ class VectorCons<A> implements NonEmptyVector<A> {
             return tail.unsafeGet(index - 1);
         }
     }
+
+    @Override
+    public boolean ownsAllReferencesToUnderlying() {
+        return tail.ownsAllReferencesToUnderlying();
+    }
 }

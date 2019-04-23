@@ -18,6 +18,11 @@ public interface NonEmptyVector<A> extends NonEmptyIterable<A>, Vector<A> {
     }
 
     @Override
+    default NonEmptyVector<A> ensureImmutable() {
+        return Vectors.ensureImmutable(this);
+    }
+
+    @Override
     default Iterator<A> iterator() {
         return new VectorIterator<>(this);
     }
@@ -108,6 +113,6 @@ public interface NonEmptyVector<A> extends NonEmptyIterable<A>, Vector<A> {
 
     @SafeVarargs
     static <A> NonEmptyVector<A> of(A first, A... more) {
-        return Vectors.nonEmptyWrap(first, more);
+        return Vectors.of(first, more);
     }
 }

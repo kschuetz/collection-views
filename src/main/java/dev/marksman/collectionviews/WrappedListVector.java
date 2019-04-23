@@ -7,9 +7,11 @@ class WrappedListVector<A> implements NonEmptyVector<A> {
      * underlying must contain at least one element
      */
     private final List<A> underlying;
+    private final boolean ownsAllReferences;
 
-    WrappedListVector(List<A> underlying) {
+    WrappedListVector(List<A> underlying, boolean ownsAllReferences) {
         this.underlying = underlying;
+        this.ownsAllReferences = ownsAllReferences;
     }
 
     @Override
@@ -30,5 +32,10 @@ class WrappedListVector<A> implements NonEmptyVector<A> {
     @Override
     public A unsafeGet(int index) {
         return underlying.get(index);
+    }
+
+    @Override
+    public boolean ownsAllReferencesToUnderlying() {
+        return ownsAllReferences;
     }
 }

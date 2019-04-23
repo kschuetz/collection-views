@@ -5,9 +5,11 @@ class WrappedArrayVector<A> implements NonEmptyVector<A> {
      * underlying must contain at least one element
      */
     private final A[] underlying;
+    private final boolean ownsAllReferences;
 
-    WrappedArrayVector(A[] underlying) {
+    WrappedArrayVector(A[] underlying, boolean ownsAllReferences) {
         this.underlying = underlying;
+        this.ownsAllReferences = ownsAllReferences;
     }
 
     @Override
@@ -31,4 +33,8 @@ class WrappedArrayVector<A> implements NonEmptyVector<A> {
         return underlying[index];
     }
 
+    @Override
+    public boolean ownsAllReferencesToUnderlying() {
+        return ownsAllReferences;
+    }
 }

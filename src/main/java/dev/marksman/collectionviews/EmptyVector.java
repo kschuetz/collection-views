@@ -40,6 +40,11 @@ class EmptyVector<A> implements Vector<A> {
         return emptyIterator();
     }
 
+    @Override
+    public boolean ownsAllReferencesToUnderlying() {
+        return true;
+    }
+
     @SuppressWarnings("unchecked")
     static <A> EmptyVector<A> emptyVector() {
         return (EmptyVector<A>) INSTANCE;
