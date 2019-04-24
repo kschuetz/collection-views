@@ -7,7 +7,7 @@ import java.util.Iterator;
 import static com.jnape.palatable.lambda.adt.Maybe.nothing;
 import static java.util.Collections.emptyIterator;
 
-class EmptyVector<A> implements ProtectedVector<A> {
+class EmptyVector<A> implements ImmutableVector<A> {
     private static final EmptyVector<?> INSTANCE = new EmptyVector<>();
 
     @Override
@@ -26,7 +26,7 @@ class EmptyVector<A> implements ProtectedVector<A> {
     }
 
     @Override
-    public Vector<A> tail() {
+    public ImmutableVector<A> tail() {
         return this;
     }
 

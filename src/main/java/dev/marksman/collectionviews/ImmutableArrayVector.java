@@ -1,12 +1,12 @@
 package dev.marksman.collectionviews;
 
-class ProtectedArrayVector<A> implements ProtectedNonEmptyVector<A> {
+class ImmutableArrayVector<A> implements ImmutableNonEmptyVector<A> {
     /**
      * underlying must contain at least one element
      */
     private final A[] underlying;
 
-    ProtectedArrayVector(A[] underlying, boolean ownsAllReferences) {
+    ImmutableArrayVector(A[] underlying) {
         this.underlying = underlying;
     }
 

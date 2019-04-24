@@ -14,47 +14,53 @@ import static com.jnape.palatable.lambda.functions.builtin.fn2.ToCollection.toCo
 
 class Vectors {
 
-    static <A> ProtectedVector<A> empty() {
+    static <A> ImmutableVector<A> empty() {
         return EmptyVector.emptyVector();
     }
 
     static <A> Vector<A> wrap(A[] arr) {
-        return wrap(arr, false);
-    }
-
-    private static <A> Vector<A> wrap(A[] arr, boolean ownsAllReferences) {
         Objects.requireNonNull(arr);
         if (arr.length == 0) {
             return empty();
         } else {
-            return new WrappedArrayVector<>(arr, ownsAllReferences);
+            return new WrappedArrayVector<>(arr);
+        }
+    }
+
+    static <A> ImmutableVector<A> immutableWrap(A[] arr) {
+        Objects.requireNonNull(arr);
+        if (arr.length == 0) {
+            return empty();
+        } else {
+            return new ImmutableArrayVector<>(arr);
         }
     }
 
     static <A> Vector<A> wrap(List<A> list) {
-        return wrap(list, false);
-    }
-
-    private static <A> Vector<A> wrap(List<A> list, boolean ownsAllReferences) {
         Objects.requireNonNull(list);
         if (list.isEmpty()) {
             return empty();
         } else {
-            return new WrappedListVector<>(list, ownsAllReferences);
+            return new WrappedListVector<>(list);
         }
     }
 
-    static <A> ProtectedVector<A> protectedWrap(List<A> list) {
+    static <A> ImmutableVector<A> immutableWrap(List<A> list) {
         Objects.requireNonNull(list);
         if (list.isEmpty()) {
             return empty();
         } else {
-            return new ProtectedListVector<>(list);
+            return new ImmutableListVector<>(list);
         }
     }
 
     static <A> Vector<A> take(int count, Vector<A> source) {
         return takeFromIterable(count, source);
+    }
+
+    static <A> ImmutableVector<A> immutableTake(int count, ImmutableVector<A> source) {
+//        return takeFromIterable(count, source);
+        return null;
     }
 
     static <A> Vector<A> takeFromIterable(int count, Iterable<A> source) {
@@ -71,8 +77,16 @@ class Vectors {
         return new VectorSlice<>(count, sourceSize - count, source);
     }
 
+    static <A> ImmutableVector<A> immutableDrop(int count, ImmutableVector<A> source) {
+        return null;
+    }
+
     static <A> Vector<A> slice(int startIndex, int endIndexExclusive, Vector<A> source) {
         return sliceFromIterable(startIndex, endIndexExclusive, source);
+    }
+
+    static <A> ImmutableVector<A> immutableSlice(int startIndex, int endIndexExclusive, ImmutableVector<A> source) {
+        return null;
     }
 
     static <A> Vector<A> sliceFromIterable(int startIndex, int endIndexExclusive, Iterable<A> source) {
@@ -109,13 +123,13 @@ class Vectors {
             }
         } else {
             ArrayList<A> newList = toCollection(ArrayList::new, Take.take(requestedSize, Drop.drop(startIndex, source)));
-            return wrap(newList, true);
+            return immutableWrap(newList);
         }
     }
 
     @SafeVarargs
     static <A> NonEmptyVector<A> of(A first, A... more) {
-        return new VectorCons<>(first, wrap(more, true));
+        return new VectorCons<>(first, wrap(more));
     }
 
     static <A> Maybe<NonEmptyVector<A>> tryNonEmptyWrap(A[] arr) {
@@ -123,7 +137,7 @@ class Vectors {
         if (arr.length == 0) {
             return nothing();
         } else {
-            return just(new WrappedArrayVector<>(arr, false));
+            return just(new WrappedArrayVector<>(arr));
         }
     }
 
@@ -132,7 +146,7 @@ class Vectors {
         if (list.isEmpty()) {
             return nothing();
         } else {
-            return just(new WrappedListVector<>(list, false));
+            return just(new WrappedListVector<>(list));
         }
     }
 
@@ -159,26 +173,26 @@ class Vectors {
         return getNonEmptyOrThrow(tryNonEmptyWrap(vec));
     }
 
-    static <A> ProtectedVector<A> ensureProtected(Vector<A> vector) {
-        if (vector instanceof ProtectedVector<?>) {
-            return (ProtectedVector<A>) vector;
+    static <A> ImmutableVector<A> ensureImmutable(Vector<A> vector) {
+        if (vector instanceof ImmutableVector<?>) {
+            return (ImmutableVector<A>) vector;
         } else if (vector.ownsAllReferencesToUnderlying()) {
             if (vector.isEmpty()) return empty();
-            else return new MarkedProtectedVector<>(nonEmptyWrapOrThrow(vector));
+            else return new MarkedImmutableVector<>(nonEmptyWrapOrThrow(vector));
         } else {
             ArrayList<A> copied = toCollection(ArrayList::new, vector);
-            return protectedWrap(copied);
+            return immutableWrap(copied);
         }
     }
 
-    static <A> ProtectedNonEmptyVector<A> ensureProtected(NonEmptyVector<A> vector) {
-        if (vector instanceof ProtectedNonEmptyVector<?>) {
-            return (ProtectedNonEmptyVector<A>) vector;
+    static <A> ImmutableNonEmptyVector<A> ensureImmutable(NonEmptyVector<A> vector) {
+        if (vector instanceof ImmutableNonEmptyVector<?>) {
+            return (ImmutableNonEmptyVector<A>) vector;
         } else if (vector.ownsAllReferencesToUnderlying()) {
-            return new MarkedProtectedVector<>(vector);
+            return new MarkedImmutableVector<>(vector);
         } else {
             ArrayList<A> copied = toCollection(ArrayList::new, vector);
-            return new ProtectedListVector<>(copied);
+            return new ImmutableListVector<>(copied);
         }
     }
 

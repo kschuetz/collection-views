@@ -1,15 +1,15 @@
 package dev.marksman.collectionviews;
 
+import java.util.Arrays;
+
 class WrappedArrayVector<A> implements NonEmptyVector<A> {
     /**
      * underlying must contain at least one element
      */
     private final A[] underlying;
-    private final boolean ownsAllReferences;
 
-    WrappedArrayVector(A[] underlying, boolean ownsAllReferences) {
+    WrappedArrayVector(A[] underlying) {
         this.underlying = underlying;
-        this.ownsAllReferences = ownsAllReferences;
     }
 
     @Override
@@ -34,7 +34,8 @@ class WrappedArrayVector<A> implements NonEmptyVector<A> {
     }
 
     @Override
-    public boolean ownsAllReferencesToUnderlying() {
-        return ownsAllReferences;
+    public ImmutableNonEmptyVector<A> ensureImmutable() {
+        A[] copied = Arrays.copyOf(underlying, underlying.length);
+        return new ImmutableArrayVector<>(copied);
     }
 }

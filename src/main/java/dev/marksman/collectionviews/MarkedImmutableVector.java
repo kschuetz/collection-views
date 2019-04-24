@@ -1,9 +1,9 @@
 package dev.marksman.collectionviews;
 
-class MarkedProtectedVector<A> implements ProtectedNonEmptyVector<A> {
+class MarkedImmutableVector<A> implements ImmutableNonEmptyVector<A> {
     private final NonEmptyVector<A> underlying;
 
-    MarkedProtectedVector(NonEmptyVector<A> underlying) {
+    MarkedImmutableVector(NonEmptyVector<A> underlying) {
         this.underlying = underlying;
     }
 

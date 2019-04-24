@@ -2,13 +2,13 @@ package dev.marksman.collectionviews;
 
 import java.util.List;
 
-class ProtectedListVector<A> implements ProtectedNonEmptyVector<A> {
+class ImmutableListVector<A> implements ImmutableNonEmptyVector<A> {
     /**
      * underlying must contain at least one element
      */
     private final List<A> underlying;
 
-    ProtectedListVector(List<A> underlying) {
+    ImmutableListVector(List<A> underlying) {
         this.underlying = underlying;
     }
 

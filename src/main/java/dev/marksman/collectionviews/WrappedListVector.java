@@ -1,17 +1,18 @@
 package dev.marksman.collectionviews;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import static com.jnape.palatable.lambda.functions.builtin.fn2.ToCollection.toCollection;
 
 class WrappedListVector<A> implements NonEmptyVector<A> {
     /**
      * underlying must contain at least one element
      */
     private final List<A> underlying;
-    private final boolean ownsAllReferences;
 
-    WrappedListVector(List<A> underlying, boolean ownsAllReferences) {
+    WrappedListVector(List<A> underlying) {
         this.underlying = underlying;
-        this.ownsAllReferences = ownsAllReferences;
     }
 
     @Override
@@ -35,7 +36,8 @@ class WrappedListVector<A> implements NonEmptyVector<A> {
     }
 
     @Override
-    public boolean ownsAllReferencesToUnderlying() {
-        return ownsAllReferences;
+    public ImmutableNonEmptyVector<A> ensureImmutable() {
+        ArrayList<A> copied = toCollection(ArrayList::new, underlying);
+        return new ImmutableListVector<>(copied);
     }
 }
