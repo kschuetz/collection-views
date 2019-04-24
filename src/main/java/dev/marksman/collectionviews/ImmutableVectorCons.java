@@ -1,10 +1,10 @@
 package dev.marksman.collectionviews;
 
-class VectorCons<A> implements NonEmptyVector<A> {
+class ImmutableVectorCons<A> implements ImmutableNonEmptyVector<A> {
     private final A head;
-    private final Vector<A> tail;
+    private final ImmutableVector<A> tail;
 
-    VectorCons(A head, Vector<A> tail) {
+    ImmutableVectorCons(A head, ImmutableVector<A> tail) {
         this.head = head;
         this.tail = tail;
     }

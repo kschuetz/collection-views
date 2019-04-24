@@ -1,11 +1,11 @@
 package dev.marksman.collectionviews;
 
-class VectorSlice<A> implements Vector<A> {
+class ImmutableVectorSlice<A> implements ImmutableVector<A> {
     private final int offset;
     private final int size;
-    private final Vector<A> underlying;
+    private final ImmutableVector<A> underlying;
 
-    VectorSlice(int offset, int size, Vector<A> underlying) {
+    ImmutableVectorSlice(int offset, int size, ImmutableVector<A> underlying) {
         this.offset = offset;
         this.size = size;
         this.underlying = underlying;

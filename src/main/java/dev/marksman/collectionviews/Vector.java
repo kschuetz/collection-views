@@ -60,18 +60,6 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
         }
     }
 
-    /**
-     * If it is known that this Vector fully contains its underlying collection
-     * and it is safe from mutation elsewhere, this method returns true.
-     * <p>
-     * If this is not known, this method returns false.
-     * <p>
-     * Used as an optimization when copying.
-     */
-    default boolean ownsAllReferencesToUnderlying() {
-        return false;
-    }
-
     default ImmutableVector<A> ensureImmutable() {
         return Vectors.ensureImmutable(this);
     }

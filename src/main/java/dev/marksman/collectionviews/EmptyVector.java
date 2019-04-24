@@ -40,11 +40,6 @@ class EmptyVector<A> implements ImmutableVector<A> {
         return emptyIterator();
     }
 
-    @Override
-    public boolean ownsAllReferencesToUnderlying() {
-        return true;
-    }
-
     @SuppressWarnings("unchecked")
     static <A> EmptyVector<A> emptyVector() {
         return (EmptyVector<A>) INSTANCE;

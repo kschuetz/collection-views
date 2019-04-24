@@ -1,6 +1,7 @@
 package dev.marksman.collectionviews;
 
 import com.jnape.palatable.lambda.adt.Maybe;
+import com.jnape.palatable.lambda.functions.Fn3;
 import com.jnape.palatable.lambda.functions.builtin.fn2.Drop;
 import com.jnape.palatable.lambda.functions.builtin.fn2.Take;
 
@@ -59,8 +60,8 @@ class Vectors {
     }
 
     static <A> ImmutableVector<A> immutableTake(int count, ImmutableVector<A> source) {
-//        return takeFromIterable(count, source);
-        return null;
+        if (count < 0) throw new IllegalArgumentException("count must be >= 0");
+        return immutableSlice(0, count, source);
     }
 
     static <A> Vector<A> takeFromIterable(int count, Iterable<A> source) {
@@ -69,16 +70,21 @@ class Vectors {
     }
 
     static <A> Vector<A> drop(int count, Vector<A> source) {
+        return dropImpl(VectorSlice::new, count, source);
+    }
+
+    static <A> ImmutableVector<A> immutableDrop(int count, ImmutableVector<A> source) {
+        return dropImpl(ImmutableVectorSlice::new, count, source);
+    }
+
+    private static <A, V extends Vector<A>> V dropImpl(Fn3<Integer, Integer, V, V> factory, int count, V source) {
         Objects.requireNonNull(source);
         if (count < 0) throw new IllegalArgumentException("count must be >= 0");
         if (count == 0) return source;
         int sourceSize = source.size();
-        if (count >= sourceSize) return empty();
-        return new VectorSlice<>(count, sourceSize - count, source);
-    }
-
-    static <A> ImmutableVector<A> immutableDrop(int count, ImmutableVector<A> source) {
-        return null;
+        if (count >= sourceSize) //noinspection unchecked
+            return (V) empty();
+        return factory.apply(count, sourceSize - count, source);
     }
 
     static <A> Vector<A> slice(int startIndex, int endIndexExclusive, Vector<A> source) {
@@ -86,7 +92,23 @@ class Vectors {
     }
 
     static <A> ImmutableVector<A> immutableSlice(int startIndex, int endIndexExclusive, ImmutableVector<A> source) {
-        return null;
+        if (startIndex < 0) throw new IllegalArgumentException("startIndex must be >= 0");
+        if (endIndexExclusive < 0) throw new IllegalArgumentException("endIndex must be >= 0");
+        Objects.requireNonNull(source);
+        int requestedSize = endIndexExclusive - startIndex;
+        if (requestedSize < 1) {
+            return empty();
+        }
+        int sourceSize = source.size();
+        if (startIndex == 0 && requestedSize >= sourceSize) {
+            return source;
+        } else if (startIndex >= sourceSize) {
+            return empty();
+        } else {
+            int available = Math.max(sourceSize - startIndex, 0);
+            int sliceSize = Math.min(available, requestedSize);
+            return new ImmutableVectorSlice<>(startIndex, sliceSize, source);
+        }
     }
 
     static <A> Vector<A> sliceFromIterable(int startIndex, int endIndexExclusive, Iterable<A> source) {
@@ -176,9 +198,8 @@ class Vectors {
     static <A> ImmutableVector<A> ensureImmutable(Vector<A> vector) {
         if (vector instanceof ImmutableVector<?>) {
             return (ImmutableVector<A>) vector;
-        } else if (vector.ownsAllReferencesToUnderlying()) {
-            if (vector.isEmpty()) return empty();
-            else return new MarkedImmutableVector<>(nonEmptyWrapOrThrow(vector));
+        } else if (vector.isEmpty()) {
+            return empty();
         } else {
             ArrayList<A> copied = toCollection(ArrayList::new, vector);
             return immutableWrap(copied);
@@ -188,8 +209,6 @@ class Vectors {
     static <A> ImmutableNonEmptyVector<A> ensureImmutable(NonEmptyVector<A> vector) {
         if (vector instanceof ImmutableNonEmptyVector<?>) {
             return (ImmutableNonEmptyVector<A>) vector;
-        } else if (vector.ownsAllReferencesToUnderlying()) {
-            return new MarkedImmutableVector<>(vector);
         } else {
             ArrayList<A> copied = toCollection(ArrayList::new, vector);
             return new ImmutableListVector<>(copied);

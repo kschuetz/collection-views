@@ -48,7 +48,6 @@ public interface NonEmptyVector<A> extends NonEmptyIterable<A>, Vector<A> {
         return Vectors.tryNonEmptyWrap(vec);
     }
 
-
     /**
      * Wraps an array in a NonEmptyVector if it is not empty, otherwise throws.
      * <p>
