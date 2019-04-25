@@ -1,6 +1,7 @@
 package dev.marksman.collectionviews;
 
 import com.jnape.palatable.lambda.adt.Maybe;
+import com.jnape.palatable.lambda.functions.Fn1;
 import com.jnape.palatable.lambda.functions.Fn3;
 import com.jnape.palatable.lambda.functions.builtin.fn2.Drop;
 import com.jnape.palatable.lambda.functions.builtin.fn2.Take;
@@ -183,6 +184,17 @@ class Vectors {
         }
     }
 
+    static <A> Maybe<ImmutableNonEmptyVector<A>> immutableTryNonEmptyWrap(ImmutableVector<A> vec) {
+        Objects.requireNonNull(vec);
+        if (vec instanceof NonEmptyVector<?>) {
+            return just((ImmutableNonEmptyVector<A>) vec);
+        } else if (!vec.isEmpty()) {
+            return just(new ImmutableVectorCons<>(vec.unsafeGet(0), vec.tail()));
+        } else {
+            return nothing();
+        }
+    }
+
     static <A> NonEmptyVector<A> nonEmptyWrapOrThrow(A[] arr) {
         return getNonEmptyOrThrow(tryNonEmptyWrap(arr));
     }
@@ -215,11 +227,32 @@ class Vectors {
         }
     }
 
+    static <A, B> Vector<B> map(Fn1<? super A, ? extends B> f, Vector<A> source) {
+        return tryNonEmptyWrap(source)
+                .match(__ -> empty(),
+                        nonEmpty -> mapNonEmpty(f, nonEmpty));
+    }
+
+    @SuppressWarnings("unchecked")
+    static <A, B> NonEmptyVector<B> mapNonEmpty(Fn1<? super A, ? extends B> f, NonEmptyVector<A> source) {
+        return new MappedVector<>(MapperChain.mapperChain(f), (NonEmptyVector<Object>) source);
+    }
+
+    static <A, B> ImmutableVector<B> immutableMap(Fn1<? super A, ? extends B> f, ImmutableVector<A> source) {
+        return immutableTryNonEmptyWrap(source)
+                .match(__ -> empty(),
+                        nonEmpty -> immutableMapNonEmpty(f, nonEmpty));
+    }
+
+    @SuppressWarnings("unchecked")
+    static <A, B> ImmutableNonEmptyVector<B> immutableMapNonEmpty(Fn1<? super A, ? extends B> f, ImmutableNonEmptyVector<A> source) {
+        return new ImmutableMappedVector<>(MapperChain.mapperChain(f), (ImmutableNonEmptyVector<Object>) source);
+    }
+
     private static <A> NonEmptyVector<A> getNonEmptyOrThrow(Maybe<NonEmptyVector<A>> maybeResult) {
         return maybeResult.orElseThrow(() -> {
             throw new IllegalArgumentException("Cannot construct NonEmptyVector from empty input");
         });
     }
-
 
 }

@@ -1,6 +1,7 @@
 package dev.marksman.collectionviews;
 
 import com.jnape.palatable.lambda.adt.Maybe;
+import com.jnape.palatable.lambda.functions.Fn1;
 
 import java.util.Iterator;
 
@@ -33,6 +34,11 @@ class EmptyVector<A> implements ImmutableVector<A> {
     @Override
     public Maybe<A> get(int index) {
         return nothing();
+    }
+
+    @Override
+    public <B> ImmutableVector<B> fmap(Fn1<? super A, ? extends B> f) {
+        return emptyVector();
     }
 
     @Override

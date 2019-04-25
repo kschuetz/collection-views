@@ -1,6 +1,7 @@
 package dev.marksman.collectionviews;
 
 import com.jnape.palatable.lambda.adt.Maybe;
+import com.jnape.palatable.lambda.functions.Fn1;
 
 import java.util.Iterator;
 import java.util.List;
@@ -58,6 +59,10 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
         } else {
             return nothing();
         }
+    }
+
+    default <B> Vector<B> fmap(Fn1<? super A, ? extends B> f) {
+        return Vectors.map(f, this);
     }
 
     default ImmutableVector<A> ensureImmutable() {

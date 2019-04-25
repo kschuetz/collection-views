@@ -1,5 +1,7 @@
 package dev.marksman.collectionviews;
 
+import com.jnape.palatable.lambda.functions.Fn1;
+
 import java.util.List;
 
 public interface ImmutableVector<A> extends Vector<A> {
@@ -12,6 +14,11 @@ public interface ImmutableVector<A> extends Vector<A> {
     @Override
     default ImmutableVector<A> tail() {
         return drop(1);
+    }
+
+    @Override
+    default <B> ImmutableVector<B> fmap(Fn1<? super A, ? extends B> f) {
+        return Vectors.immutableMap(f, this);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package dev.marksman.collectionviews;
 
 import com.jnape.palatable.lambda.adt.Maybe;
+import com.jnape.palatable.lambda.functions.Fn1;
 
 import java.util.Iterator;
 import java.util.List;
@@ -15,6 +16,11 @@ public interface NonEmptyVector<A> extends NonEmptyIterable<A>, Vector<A> {
     @Override
     default Vector<A> tail() {
         return drop(1);
+    }
+
+    @Override
+    default <B> NonEmptyVector<B> fmap(Fn1<? super A, ? extends B> f) {
+        return Vectors.mapNonEmpty(f, this);
     }
 
     @Override
