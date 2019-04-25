@@ -2,7 +2,7 @@ package dev.marksman.collectionviews;
 
 import java.util.Arrays;
 
-class WrappedArrayVector<A> implements NonEmptyVector<A> {
+class WrappedArrayVector<A> extends AbstractVector<A> implements NonEmptyVector<A> {
     /**
      * underlying must contain at least one element
      */
@@ -38,4 +38,5 @@ class WrappedArrayVector<A> implements NonEmptyVector<A> {
         A[] copied = Arrays.copyOf(underlying, underlying.length);
         return new ImmutableArrayVector<>(copied);
     }
+
 }

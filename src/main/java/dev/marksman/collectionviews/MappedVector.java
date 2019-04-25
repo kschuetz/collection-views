@@ -2,7 +2,7 @@ package dev.marksman.collectionviews;
 
 import com.jnape.palatable.lambda.functions.Fn1;
 
-class MappedVector<A> implements NonEmptyVector<A> {
+class MappedVector<A> extends AbstractVector<A> implements NonEmptyVector<A> {
     private final MapperChain mapper;
     private final NonEmptyVector<Object> underlying;
 

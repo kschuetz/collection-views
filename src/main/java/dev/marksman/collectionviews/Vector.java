@@ -219,7 +219,7 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
      * @return a NonEmptyVector that is guaranteed to be safe from mutation.
      */
     @SafeVarargs
-    static <A> NonEmptyVector<A> of(A first, A... more) {
+    static <A> ImmutableNonEmptyVector<A> of(A first, A... more) {
         return Vectors.of(first, more);
     }
 }

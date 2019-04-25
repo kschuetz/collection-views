@@ -2,7 +2,7 @@ package dev.marksman.collectionviews;
 
 import java.util.List;
 
-class ImmutableListVector<A> implements ImmutableNonEmptyVector<A> {
+class ImmutableListVector<A> extends AbstractVector<A> implements ImmutableNonEmptyVector<A> {
     /**
      * underlying must contain at least one element
      */

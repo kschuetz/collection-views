@@ -152,8 +152,8 @@ class Vectors {
     }
 
     @SafeVarargs
-    static <A> NonEmptyVector<A> of(A first, A... more) {
-        return new VectorCons<>(first, wrap(more));
+    static <A> ImmutableNonEmptyVector<A> of(A first, A... more) {
+        return new ImmutableVectorCons<>(first, immutableWrap(more));
     }
 
     static <A> Maybe<NonEmptyVector<A>> tryNonEmptyWrap(A[] arr) {
@@ -250,6 +250,21 @@ class Vectors {
     static <A, B> ImmutableNonEmptyVector<B> immutableMapNonEmpty(Fn1<? super A, ? extends B> f, ImmutableNonEmptyVector<A> source) {
         return new ImmutableMappedVector<>(mapperChain((Fn1<Object, Object>) f),
                 (ImmutableNonEmptyVector<Object>) source);
+    }
+
+    static <A> String renderToString(Vector<A> vector) {
+        StringBuilder output = new StringBuilder();
+        output.append("Vector(");
+        boolean inner = false;
+        for (A elem : vector) {
+            if (inner) {
+                output.append(", ");
+            }
+            output.append(elem.toString());
+            inner = true;
+        }
+        output.append(')');
+        return output.toString();
     }
 
     private static <A> NonEmptyVector<A> getNonEmptyOrThrow(Maybe<NonEmptyVector<A>> maybeResult) {
