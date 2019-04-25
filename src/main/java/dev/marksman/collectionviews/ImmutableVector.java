@@ -4,7 +4,7 @@ import com.jnape.palatable.lambda.functions.Fn1;
 
 import java.util.List;
 
-public interface ImmutableVector<A> extends Vector<A> {
+public interface ImmutableVector<A> extends Vector<A>, Immutable {
 
     @Override
     default ImmutableVector<A> ensureImmutable() {
