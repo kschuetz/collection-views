@@ -13,7 +13,7 @@ import static com.jnape.palatable.lambda.functions.builtin.fn2.ToCollection.toCo
 import static com.jnape.palatable.lambda.functions.builtin.fn3.FoldLeft.foldLeft;
 
 interface MapperChain {
-    MapperChain add(Function f);
+    MapperChain add(Fn1<Object, Object> f);
 
     Fn1<Object, Object> getFn();
 
@@ -25,8 +25,8 @@ interface MapperChain {
         return EmptyMapperChain.INSTANCE;
     }
 
-    static MapperChain mapperChain(Function f) {
-        return new MapperChainImpl(Collections.singletonList(f));
+    static MapperChain mapperChain(Fn1<Object, Object> f) {
+        return new MapperChainImpl(Collections.singletonList(lambdaToJava(f)));
     }
 
     class EmptyMapperChain implements MapperChain {
@@ -42,7 +42,7 @@ interface MapperChain {
         }
 
         @Override
-        public MapperChain add(Function f) {
+        public MapperChain add(Fn1<Object, Object> f) {
             return mapperChain(f);
         }
 
@@ -72,8 +72,8 @@ interface MapperChain {
             return false;
         }
 
-        public MapperChainImpl add(Function f) {
-            return new MapperChainImpl(cons(f, mappers));
+        public MapperChainImpl add(Fn1<Object, Object> f) {
+            return new MapperChainImpl(cons(lambdaToJava(f), mappers));
         }
 
         @SuppressWarnings("unchecked")
@@ -82,13 +82,15 @@ interface MapperChain {
         }
 
         public Fn1<Object, Object> getFn() {
-            // TODO: improve synchronization of getFn
-            synchronized (this) {
-                if (fnComposedOnTheHeap == null) {
-                    fnComposedOnTheHeap = build();
+            if (fnComposedOnTheHeap == null) {
+                synchronized (this) {
+                    if (fnComposedOnTheHeap == null) {
+                        fnComposedOnTheHeap = build();
+                    }
+
                 }
-                return fnComposedOnTheHeap;
             }
+            return fnComposedOnTheHeap;
         }
 
         @SuppressWarnings("unchecked")
@@ -96,6 +98,11 @@ interface MapperChain {
             ArrayList<Function> fnChain = toCollection(ArrayList::new, reverse(mappers));
             return o -> foldLeft((x, fn) -> fn.apply(x), o, fnChain);
         }
+    }
+
+    @SuppressWarnings("FunctionalExpressionCanBeFolded")
+    static Function lambdaToJava(Fn1<Object, Object> f) {
+        return f::apply;
     }
 
 }

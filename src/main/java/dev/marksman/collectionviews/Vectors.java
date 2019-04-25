@@ -13,6 +13,7 @@ import java.util.Objects;
 import static com.jnape.palatable.lambda.adt.Maybe.just;
 import static com.jnape.palatable.lambda.adt.Maybe.nothing;
 import static com.jnape.palatable.lambda.functions.builtin.fn2.ToCollection.toCollection;
+import static dev.marksman.collectionviews.MapperChain.mapperChain;
 
 class Vectors {
 
@@ -235,7 +236,8 @@ class Vectors {
 
     @SuppressWarnings("unchecked")
     static <A, B> NonEmptyVector<B> mapNonEmpty(Fn1<? super A, ? extends B> f, NonEmptyVector<A> source) {
-        return new MappedVector<>(MapperChain.mapperChain(f), (NonEmptyVector<Object>) source);
+        return new MappedVector<>(mapperChain((Fn1<Object, Object>) f),
+                (NonEmptyVector<Object>) source);
     }
 
     static <A, B> ImmutableVector<B> immutableMap(Fn1<? super A, ? extends B> f, ImmutableVector<A> source) {
@@ -246,7 +248,8 @@ class Vectors {
 
     @SuppressWarnings("unchecked")
     static <A, B> ImmutableNonEmptyVector<B> immutableMapNonEmpty(Fn1<? super A, ? extends B> f, ImmutableNonEmptyVector<A> source) {
-        return new ImmutableMappedVector<>(MapperChain.mapperChain(f), (ImmutableNonEmptyVector<Object>) source);
+        return new ImmutableMappedVector<>(mapperChain((Fn1<Object, Object>) f),
+                (ImmutableNonEmptyVector<Object>) source);
     }
 
     private static <A> NonEmptyVector<A> getNonEmptyOrThrow(Maybe<NonEmptyVector<A>> maybeResult) {

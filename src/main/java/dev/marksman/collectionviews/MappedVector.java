@@ -28,9 +28,10 @@ class MappedVector<A> implements NonEmptyVector<A> {
         return (A) mapper.apply(underlying.unsafeGet(index));
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public <B> NonEmptyVector<B> fmap(Fn1<? super A, ? extends B> f) {
-        // TODO: future proof this from upcoming lambda changes
-        return new MappedVector<>(mapper.add(f), underlying);
+        return new MappedVector<>(mapper.add((Fn1<Object, Object>) f),
+                underlying);
     }
 }

@@ -28,9 +28,11 @@ class ImmutableMappedVector<A> implements ImmutableNonEmptyVector<A> {
         return (A) mapper.apply(underlying.unsafeGet(index));
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public <B> ImmutableNonEmptyVector<B> fmap(Fn1<? super A, ? extends B> f) {
-        // TODO: future proof this from upcoming lambda changes
-        return new ImmutableMappedVector<>(mapper.add(f), underlying);
+    public <B> ImmutableMappedVector<B> fmap(Fn1<? super A, ? extends B> f) {
+        return new ImmutableMappedVector<>(mapper.add((Fn1<Object, Object>) f),
+                underlying);
     }
+
 }
