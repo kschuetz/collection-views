@@ -4,17 +4,25 @@
 
 # What is it?
 
-**collection-views** is a small Java library that facilitates creating protected views over collections and arrays with as little overhead as possible.  It provides the interfaces `Vector<A>`, `Set<A>`, `NonEmptyVector<A>`, and `NonEmptySet<A>`, and default implementations for each of these.
+**collection-views** is a small Java library that facilitates creating protected views over collections and arrays with as little overhead as possible.  It provides the interfaces `Vector<A>` and `Set<A>`, and some variations of these that provide additional guarantees. 
 
 It is intended to be used in conjunction with [lambda](https://palatable.github.io/lambda/).
 
 # Why? 
 
-To provide controlled access to the essential operations of a collection (and no more) without the need for defensive copying.
+Sometimes you might want all of the following:
+
+- To provide (or require) read-access to the essential operations of a collection (e.g., 'get by index' for arrays or lists, or 'contains' for sets), _and nothing more_.
+- Protection from mutation to the collection without making defensive copies
+- To retain the performance and locality of reference characteristics of the collection you are employing
+
+The goal of **collection-views** is to provide this functionality with as little overhead as possible.
 
 # What is it not?
 
-**collection-views** is not a persistent data structures library.  Collections are wrapped as is;  no methods are provided for updating or adding to collections.
+**collection-views** is not a persistent data structures library.  Collections are wrapped as is;  no methods are provided for updating or adding to collections.  
+
+It differs from [Guava Immutable Collections](https://github.com/google/guava/wiki/ImmutableCollectionsExplained) in that it acts as a shield over existing collections rather than being collections themselves.
 
 # Types of collection views
 
@@ -32,13 +40,30 @@ To provide controlled access to the essential operations of a collection (and no
 
 ## `Vector<A>`
 
+The bearer of a `Vector` has the following capabilities:
+
+- Random access to any element in the `Vector` using the `get` method.
+- Get the size of the `Vector` in O(1) using the `size` method.
+- Safely iterate the `Vector` or use it anywhere an `Iterable` is called for.  A `Vector` is always finite.
+- Share the `Vector` with others safely.
+- Make slices of the `Vector` using the `take`, `drop` or `slice` methods.  These slices are `Vector`s themselves, and can also be shared with others safely.
+- Map to a new `Vector` of the same size but a different type using `fmap`.
+
+The bearer of a `Vector` cannot:
+
+- Mutate the contents of the underlying collection or array. 
+- Gain access to the reference of the underlying collection or array.
+
 ### `Vector` examples
 
 #### Basics
 
-`Vector`s wrap arrays or `java.util.List`s.  They provided `O(1)` random access to elements and `O(1)` size computation.
-They hold on to a reference of the data structure they wrap and never mutate it themselves.
- They can not be mutated by the bearer, and are guaranteed to never make copies of the underlying data structure unless explicitly asked.
+`Vector`s can wrap arrays or `java.util.List`s. 
+They hold on to a reference of the data structure they wrap and never mutate it themselves, and are guaranteed to never make copies of the underlying data structure unless explicitly asked.
+
+While a Vector can be mutated elsewhere (i.e. from someone else who holds a reference to the underlying collection), it can not be mutated by someone who only holds the `Vector` itself, so it is safe to share freely.
+
+(Note: if you want complete protection from mutation _anywhere_, you can use an `ImmutabeVector` instead, which will be explained later).
 
 The following wraps an `Integer` array in a `Vector`.  No copy of the array is made:
 ```Java
@@ -138,22 +163,6 @@ System.out.println("vector6 = " + vector6);
 
 TODO - more examples
 
-
-### Using a `Vector`
-
-The bearer of a `Vector` has the following capabilities:
-
-- Random access to any element in the `Vector` using the `get` method.
-- Get the size of the `Vector` in O(1) using the `size` method.
-- Safely iterate the `Vector` or use it anywhere an `Iterable` is called for.  A `Vector` is always finite.
-- Share the `Vector` with others safely.
-- Make slices of the `Vector` using the `take`, `drop` or `slice` methods.  These slices are `Vector`s themselves, and can also be shared with others safely.
-
-The bearer of a `Vector` cannot:
-
-- Mutate the contents of the underlying collection or array. 
-- Gain access to the reference of the underlying collection or array.
-
 ### Creating a Vector
 
 #### Wrapping an existing collection
@@ -168,8 +177,6 @@ A `Vector` can be created by wrapping an existing collection or array using one 
 
 The underlying collection is protected against mutation from anyone you share the `Vector` with.  However, note that anyone who has a reference to the underlying collection is still able to mutate it.  Therefore, it is highly recommended that you do not mutate the collection or share the underlying collection with anyone else who might mutate it. 
 
-If you prefer to make a copy that is 100% safe from mutation, just clone the original collection and wrap the clone. 
-
 #### Taking from an `Iterable<A>`
 
 A `Vector` can be constructed from an `Iterable` using the `sliceFromIterable` or `takeFromIterable` methods.
@@ -178,7 +185,7 @@ A `Vector` can be constructed from an `Iterable` using the `sliceFromIterable` o
 
 #### Building using `Vector.of`
 
-Calling `Vector.of` with one or more elements will return a new `NonEmptyVector`.  Since the underlying collection in a `Vector` created this way is not exposed anywhere, it is 100% safe from mutation. 
+Calling `Vector.of` with one or more elements will return a new `ImmutableNonEmptyVector`.  Since the underlying collection in a `Vector` created this way is not exposed anywhere, it is 100% safe from mutation. 
 
 #### Creating an empty `Vector`
 
