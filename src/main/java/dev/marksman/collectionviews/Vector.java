@@ -39,6 +39,8 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
     /**
      * Returns the tail of the Vector, i.e. the same Vector with the first element dropped.
      * May be empty.
+     * <p>
+     * Does not make copies of any underlying data structures.
      *
      * @return
      */
@@ -61,18 +63,56 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
         }
     }
 
+    /**
+     * Maps a function over the elements in a Vector and returns a new Vector
+     * of the same size (but possibly a different type).
+     * <p>
+     * Does not make any copies of underlying data structures.
+     * <p>
+     * This method is stack-safe, so a Vector can be mapped as many times as the heap permits.
+     *
+     * @param f
+     * @param <B> The type of the elements contained in the output Vector.
+     * @return
+     */
     default <B> Vector<B> fmap(Fn1<? super A, ? extends B> f) {
         return Vectors.map(f, this);
     }
 
+    /**
+     * Returns an ImmutableVector containing the same elements as this one.
+     * Will make a copy of the underlying data structure if necessary to
+     * guarantee immutability.
+     * <p>
+     * If this Vector is an ImmutableVector already, no copies are made
+     * and this method is a no-op.
+     *
+     * @return
+     */
     default ImmutableVector<A> toImmutable() {
         return Vectors.ensureImmutable(this);
     }
 
+    /**
+     * Returns a NonEmptyVector containing the same elements as this one,
+     * wrapped in a Maybe.just, if this Vector is not empty.
+     * <p>
+     * If this Vector is empty, returns Maybe.nothing.
+     * <p>
+     * Does not make copies of any underlying data structures.
+     */
     default Maybe<? extends NonEmptyVector<A>> toNonEmpty() {
         return Vectors.tryNonEmptyWrap(this);
     }
 
+    /**
+     * Returns a NonEmptyVector containing the same elements as this one,
+     * if this Vector is not empty.
+     * <p>
+     * If this Vector is empty, throws an IllegalArgumentException.
+     * <p>
+     * Does not make copies of any underlying data structures.
+     */
     default NonEmptyVector<A> toNonEmptyOrThrow() {
         return Vectors.nonEmptyWrapOrThrow(this);
     }
@@ -83,9 +123,9 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
     }
 
     /**
-     * Returns a new Vector that at most the first count elements.
+     * Returns a new Vector that contains at most the first count elements of this Vector.
      * <p>
-     * Does *not* make a copy of the underlying data.
+     * Does not make copies of any underlying data structures.
      * <p>
      * Use caution when taking a small slice of a huge Vector, as the smaller slice
      * will hold onto a reference of the larger one, and will prevent it from being GC'ed.
@@ -100,11 +140,11 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
 
     /**
      * Returns a new Vector that drops the first count elements.
-     * Does *not* make a copy of the underlying data.
      * <p>
-     * Use caution when taking a small slice of a huge Vector, as the smaller slice
+     * Does not make copies of any underlying data structures.
+     * <p>
+     * Use caution when taking a small slice of a huge Vector that you no longer need, as the smaller slice
      * will hold onto a reference of the larger one, and will prevent it from being GC'ed.
-     *
      * @param count the number of elements to drop from the Vector.  Must be >= 0.
      *              May exceed size of Vector, in which case, the result will be an
      *              empty Vector.
@@ -116,10 +156,12 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
 
     /**
      * Create a slice of an existing Vector.
-     * Does *not* make a copy of the underlying data.
      * <p>
-     * Use caution when taking a small slice of a huge Vector, as the smaller slice
+     * Does not make copies of any underlying data structures.
+     * <p>
+     * Use caution when taking a small slice of a huge Vector that you no longer need, as the smaller slice
      * will hold onto a reference of the larger one, and will prevent it from being GC'ed.
+     * To avoid this situation, use {@link Vector#copyTakeFromIterable} instead.
      *
      * @param startIndex        the index of the element to begin the slice.  Must be >= 0.
      *                          May exceed the size of the Vector, in which case an empty Vector will be returned.
@@ -145,7 +187,7 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
     /**
      * Creates a {@link Vector} that wraps an array.
      * <p>
-     * Does *not* make a copy of the given array.
+     * Does not make any copies of the given array.
      * The Vector will hold a reference to the given array, but will not alter it in any way.
      * <p>
      * Since bearers of this Vector will be unable to mutate or gain access to the underlying array,
@@ -165,15 +207,15 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
     /**
      * Creates a {@link Vector} that wraps a {@link java.util.List}.
      * <p>
-     * Does *not* make a copy of the underlying list or alter it in any way.
-     * Will hold a reference to the given List.
+     * Does not make any copies of the given List.
+     * The Vector will hold a reference to the given List, but will not alter it in any way.
      * <p>
      * Since bearers of this Vector will be unable to mutate or gain access to the underlying List,
      * it is safe to share.
      * <p>
      * Since this does not make a copy of the List, be aware that anyone that holds a direct reference to
      * the List can still mutate it.  Mutating the List is not advised.  Operations that change the size
-     * of the underlying List will result in unpredictabe behavior.
+     * of the underlying List will result in unpredictable behavior.
      *
      * @param underlying {@link List} to wrap
      * @param <A>
@@ -189,7 +231,7 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
      * Will only make a copy of the data if necessary.
      * If source is a {@link java.util.List} or another {@link Vector},
      * the data won't be copied.
-     *
+     * <p>
      * If you require an ImmutableVector, see {@link Vector#copyTakeFromIterable}, which
      * will always perform a copy instead of wrapping.
      *
@@ -210,7 +252,7 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
      * Will only make a copy of the data if necessary to guarantee Vector characteristics.
      * If source is a {@link java.util.List} or another Vector,
      * the data won't be copied.
-     *
+     * <p>
      * If you require an ImmutableVector, see {@link Vector#copySliceFromIterable}, which
      * will always perform a copy instead of wrapping.
      *
@@ -230,7 +272,7 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
      * @param first the first element
      * @param more  the remaining elements
      * @param <A>
-     * @return a ImmutableNonEmptyVector, which is guaranteed to be non-empty and to be safe from mutation.
+     * @return an ImmutableNonEmptyVector, which is guaranteed to be non-empty and to be safe from mutation.
      */
     @SafeVarargs
     static <A> ImmutableNonEmptyVector<A> of(A first, A... more) {
@@ -261,8 +303,13 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
      * elements.  If <code>count</code> elements are not available, then the all of the elements
      * available will be returned.
      * <p>
-     * If necessary to guarantee immutability, this method will make a copy of the data provided.
-     * If <code>source</code> already is an ImmutableVector, a slice of it will be returned without making a copy.
+     * This method will make a copy of the data provided, unless <code>source</code> is
+     * an ImmutableVector and its size is less than or equal to <code>count</code>,
+     * in which case it will be returned directly.
+     *
+     * If <code>source</code> is an ImmutableVector that is greater than <code>count</code> in size,
+     * a copy will always be made, therefore making it memory-safe to take a small slice of
+     * a huge Vector that you no longer need.
      *
      * @param count  the maximum number of elements to consume from the source.  Must be >= 0.
      * @param source an Iterable<A> that will be iterated eagerly for up to <code>count</code> elements.
