@@ -1,5 +1,6 @@
 package dev.marksman.collectionviews;
 
+import com.jnape.palatable.lambda.adt.Maybe;
 import com.jnape.palatable.lambda.functions.Fn1;
 
 import java.util.List;
@@ -7,8 +8,18 @@ import java.util.List;
 public interface ImmutableVector<A> extends Vector<A>, Immutable {
 
     @Override
-    default ImmutableVector<A> ensureImmutable() {
+    default ImmutableVector<A> toImmutable() {
         return this;
+    }
+
+    @Override
+    default Maybe<? extends ImmutableNonEmptyVector<A>> toNonEmpty() {
+        return null;
+    }
+
+    @Override
+    default ImmutableNonEmptyVector<A> toNonEmptyOrThrow() {
+        return null;
     }
 
     @Override

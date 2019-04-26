@@ -34,7 +34,7 @@ class WrappedArrayVector<A> extends AbstractVector<A> implements NonEmptyVector<
     }
 
     @Override
-    public ImmutableNonEmptyVector<A> ensureImmutable() {
+    public ImmutableNonEmptyVector<A> toImmutable() {
         A[] copied = Arrays.copyOf(underlying, underlying.length);
         return new ImmutableArrayVector<>(copied);
     }

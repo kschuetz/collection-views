@@ -65,8 +65,16 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
         return Vectors.map(f, this);
     }
 
-    default ImmutableVector<A> ensureImmutable() {
+    default ImmutableVector<A> toImmutable() {
         return Vectors.ensureImmutable(this);
+    }
+
+    default Maybe<? extends NonEmptyVector<A>> toNonEmpty() {
+        return Vectors.tryNonEmptyWrap(this);
+    }
+
+    default NonEmptyVector<A> toNonEmptyOrThrow() {
+        return Vectors.nonEmptyWrapOrThrow(this);
     }
 
     @Override
@@ -182,6 +190,9 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
      * If source is a {@link java.util.List} or another {@link Vector},
      * the data won't be copied.
      *
+     * If you require an ImmutableVector, see {@link Vector#copyTakeFromIterable}, which
+     * will always perform a copy instead of wrapping.
+     *
      * @param count  maximum number of elements to take from source.  Must be >= 0.
      *               May exceed the number of elements in source, in which case,
      *               all of the elements available will be taken.
@@ -196,9 +207,12 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
     /**
      * Builds a Vector from an {@link Iterable}.
      * <p>
-     * Will only make a copy of the data if necessary.
+     * Will only make a copy of the data if necessary to guarantee Vector characteristics.
      * If source is a {@link java.util.List} or another Vector,
      * the data won't be copied.
+     *
+     * If you require an ImmutableVector, see {@link Vector#copySliceFromIterable}, which
+     * will always perform a copy instead of wrapping.
      *
      * @param startIndex
      * @param endIndexExclusive
@@ -216,10 +230,69 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
      * @param first the first element
      * @param more  the remaining elements
      * @param <A>
-     * @return a NonEmptyVector that is guaranteed to be safe from mutation.
+     * @return a ImmutableNonEmptyVector, which is guaranteed to be non-empty and to be safe from mutation.
      */
     @SafeVarargs
     static <A> ImmutableNonEmptyVector<A> of(A first, A... more) {
         return Vectors.of(first, more);
+    }
+
+    /**
+     * Constructs a new ImmutableVector from any {@link Iterable}.
+     * <p>
+     * The entire Iterable will be eagerly iterated, so be careful not
+     * to pass in an infinite Iterable or this method will not terminate.
+     * <p>
+     * If necessary to guarantee immutability, this method will make a copy of the data provided.
+     * If <code>source</code> already is an ImmutableVector, it will be returned directly.
+     *
+     * @param source an Iterable<A> that will be iterated eagerly in its entirety
+     * @param <A>
+     * @return
+     */
+    static <A> ImmutableVector<A> copyAllFromIterable(Iterable<A> source) {
+        return Vectors.copyAllFromIterable(source);
+    }
+
+    /**
+     * Constructs a new ImmutableVector from any {@link Iterable}, but consuming a maximum number of elements.
+     * <p>
+     * The Iterable will be eagerly iterated, but only up to a maximum of <code>count</code>
+     * elements.  If <code>count</code> elements are not available, then the all of the elements
+     * available will be returned.
+     * <p>
+     * If necessary to guarantee immutability, this method will make a copy of the data provided.
+     * If <code>source</code> already is an ImmutableVector, a slice of it will be returned without making a copy.
+     *
+     * @param count  the maximum number of elements to consume from the source.  Must be >= 0.
+     * @param source an Iterable<A> that will be iterated eagerly for up to <code>count</code> elements.
+     *               It is safe for <code>source</code> to be infinite.
+     * @param <A>
+     * @return an ImmutableVector that contains at most <code>count</code> elements.
+     */
+    static <A> ImmutableVector<A> copyTakeFromIterable(int count, Iterable<A> source) {
+        return Vectors.copyTakeFromIterable(count, source);
+    }
+
+    /**
+     * Constructs a new ImmutableVector slice from an {@link Iterable}.
+     * <p>
+     * The Iterable will be eagerly iterated, but only for the number of elements
+     * needed to fulfill the requested slice.
+     * If not enough elements are not available, then the this method yields as many
+     * elements that were available.
+     * <p>
+     * If necessary to guarantee immutability, this method will make a copy of the data provided.
+     * If <code>source</code> already is an ImmutableVector, a slice of it will be returned without making a copy.
+     *
+     * @param startIndex
+     * @param endIndexExclusive
+     * @param source            an Iterable<A> that will be iterated eagerly for up to <code>endIndexExclusive</code> elements.
+     *                          It is safe for <code>source</code> to be infinite.
+     * @param <A>
+     * @return an ImmutableVector that contains at most <code>endIndexExclusive - startIndex</code> elements.
+     */
+    static <A> ImmutableVector<A> copySliceFromIterable(int startIndex, int endIndexExclusive, Iterable<A> source) {
+        return Vectors.copySliceFromIterable(startIndex, endIndexExclusive, source);
     }
 }

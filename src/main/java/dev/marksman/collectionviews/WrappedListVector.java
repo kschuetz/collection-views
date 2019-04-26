@@ -36,7 +36,7 @@ class WrappedListVector<A> extends AbstractVector<A> implements NonEmptyVector<A
     }
 
     @Override
-    public ImmutableNonEmptyVector<A> ensureImmutable() {
+    public ImmutableNonEmptyVector<A> toImmutable() {
         ArrayList<A> copied = toCollection(ArrayList::new, underlying);
         return new ImmutableListVector<>(copied);
     }

@@ -267,6 +267,40 @@ class Vectors {
         return output.toString();
     }
 
+    static <A> ImmutableVector<A> copyAllFromIterable(Iterable<A> source) {
+        Objects.requireNonNull(source);
+        if (source instanceof ImmutableVector<?>) {
+            return (ImmutableVector<A>) source;
+        } else if (!source.iterator().hasNext()) {
+            return empty();
+        } else {
+            ArrayList<A> copied = toCollection(ArrayList::new, source);
+            return immutableWrap(copied);
+        }
+    }
+
+    static <A> ImmutableVector<A> copyTakeFromIterable(int maxCount, Iterable<A> source) {
+        Objects.requireNonNull(source);
+        if (maxCount < 0) throw new IllegalArgumentException("maxCount must be >= 0");
+        if (maxCount == 0) return empty();
+        if (source instanceof ImmutableVector<?>) {
+            return ((ImmutableVector<A>) source).take(maxCount);
+        } else {
+            return copyAllFromIterable(Take.take(maxCount, source));
+        }
+    }
+
+    static <A> ImmutableVector<A> copySliceFromIterable(int startIndex, int endIndexExclusive, Iterable<A> source) {
+        if (startIndex < 0) throw new IllegalArgumentException("startIndex must be >= 0");
+        if (endIndexExclusive < 0) throw new IllegalArgumentException("endIndex must be >= 0");
+        Objects.requireNonNull(source);
+        if (source instanceof ImmutableVector<?>) {
+            return ((ImmutableVector<A>) source).slice(startIndex, endIndexExclusive);
+        } else {
+            return sliceFromIterable(startIndex, endIndexExclusive, source).toImmutable();
+        }
+    }
+
     private static <A> NonEmptyVector<A> getNonEmptyOrThrow(Maybe<NonEmptyVector<A>> maybeResult) {
         return maybeResult.orElseThrow(() -> {
             throw new IllegalArgumentException("Cannot construct NonEmptyVector from empty input");

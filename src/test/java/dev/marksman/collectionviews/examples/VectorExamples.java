@@ -90,10 +90,10 @@ public class VectorExamples {
 
         // If you want to be sure you are complete protected from mutation, you can
         // upgrade to an `ImmutableVector`:
-        ImmutableVector<Integer> vector7 = vector1.ensureImmutable();
+        ImmutableVector<Integer> vector7 = vector1.toImmutable();
 
-        // Note that `ensureImmutable` may make a copy of the underlying structure,
-        // but only if it is necessary.  Calling `ensureImmutable` on a Vector that
+        // Note that `toImmutable` may make a copy of the underlying structure,
+        // but only if it is necessary.  Calling `toImmutable` on a Vector that
         // is already immutable is a no-op.
 
         System.out.println("vector7 = " + vector7);

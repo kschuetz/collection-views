@@ -6,6 +6,8 @@ import com.jnape.palatable.lambda.functions.Fn1;
 import java.util.Iterator;
 import java.util.List;
 
+import static com.jnape.palatable.lambda.adt.Maybe.just;
+
 public interface NonEmptyVector<A> extends NonEmptyIterable<A>, Vector<A> {
 
     @Override
@@ -24,8 +26,18 @@ public interface NonEmptyVector<A> extends NonEmptyIterable<A>, Vector<A> {
     }
 
     @Override
-    default ImmutableNonEmptyVector<A> ensureImmutable() {
+    default ImmutableNonEmptyVector<A> toImmutable() {
         return Vectors.ensureImmutable(this);
+    }
+
+    @Override
+    default Maybe<? extends NonEmptyVector<A>> toNonEmpty() {
+        return just(this);
+    }
+
+    @Override
+    default NonEmptyVector<A> toNonEmptyOrThrow() {
+        return this;
     }
 
     @Override
