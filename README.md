@@ -16,22 +16,128 @@ To provide controlled access to the essential operations of a collection (and no
 
 **collection-views** is not a persistent data structures library.  Collections are wrapped as is;  no methods are provided for updating or adding to collections.
 
-
 # Types of collection views
 
 | Interface | Immutable to bearer | Guaranteed safe from mutation anywhere | Guaranteed non-empty |
 |---|---|---|---|
 | `Vector<A>` | yes | no | no |
 | `NonEmptyVector<A>` | yes | no | yes |
-| `ProtectedVector<A>` | yes | yes | no |
-| `ProtectedNonEmptyVector<A>` | yes | yes | yes |
+| `ImmutableVector<A>` | yes | yes | no |
+| `ImmutableNonEmptyVector<A>` | yes | yes | yes |
 | `Set<A>` | yes | no | no |
 | `NonEmptySet<A>` | yes | no | yes |
-| `ProtectedSet<A>` | yes | yes | no |
-| `ProtectedNonEmptySet<A>` | yes | yes | yes |
+| `ImmutableSet<A>` | yes | yes | no |
+| `ImmutableNonEmptySet<A>` | yes | yes | yes |
 
 
 ## `Vector<A>`
+
+### `Vector` examples
+
+#### Basics
+
+`Vector`s wrap arrays or `java.util.List`s.  They provided `O(1)` random access to elements and `O(1)` size computation.
+They hold on to a reference of the data structure they wrap and never mutate it themselves.
+ They can not be mutated by the bearer, and are guaranteed to never make copies of the underlying data structure unless explicitly asked.
+
+The following wraps an `Integer` array in a `Vector`.  No copy of the array is made:
+```Java
+Integer[] arr = new Integer[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+
+Vector<Integer> vector1 = Vector.wrap(arr);
+```
+
+You can also wrap an instance of `java.util.List<A>`, but for this
+example we will wrap an array.
+
+```Java
+System.out.println("vector1 = " + vector1);
+    // *** vector1 = Vector(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+```
+
+Get the size of the `Vector` in O(1) using the `size` method:
+
+```Java
+System.out.println("vector1.size() = " + vector1.size());
+    // *** vector1.size() = 10
+```
+
+You can safely get an element at any index in O(1) using the `get` method:
+
+```Java
+System.out.println("vector1.get(0) = " + vector1.get(0));
+    // *** vector1.get(0) = Just 1
+
+System.out.println("vector1.get(9) = " + vector1.get(9));
+    // *** vector1.get(9) = Just 10
+
+System.out.println("vector1.get(100) = " + vector1.get(100));
+    // *** vector1.get(100) = Nothing
+```
+
+Note that `get` returns a `Maybe<A>`.  If you pass get an invalid index, it will return `Maybe.nothing`:
+
+```Java
+System.out.println("vector1.get(100) = " + vector1.get(100));
+    // *** vector1.get(100) = Nothing
+```
+
+`get` is also guaranteed to never return `null`.  If the underlying collection contains a `null` at the index requested, `get` will return `Maybe.nothing`.
+
+You can also use the `unsafeGet` method if you want avoid the overhead of wrapping the result in a `Maybe`...
+
+```Java
+System.out.println("vector1.unsafeGet(5) = " + vector1.unsafeGet(5));
+// *** vector1.unsafeGet(5) = 6
+
+```
+
+...but be aware, this method will throw an `IndexOutOfBoundsException` if you provide it an invalid index:
+```Java
+System.out.println("vector1.unsafeGet(1000) = "  + vector1.unsafeGet(1000));
+// *** throws IndexOutOfBoundsException
+```
+
+Also, `unsafeGet` may return `null` if that is what the underlying collection contains.
+
+#### Slices
+
+You can create slices of another `Vector` using `take`, `drop`, or `slice`.  The results of these methods are also `Vectors`,
+and none of them make copies of the original underlying data structure.
+
+```Java
+Vector<Integer> vector2 = vector1.take(5);
+System.out.println("vector2 = " + vector2);
+    // *** vector2 = Vector(1, 2, 3, 4, 5)
+
+Vector<Integer> vector3 = vector1.drop(2);
+System.out.println("vector3 = " + vector3);
+    // *** vector3 = Vector(3, 4, 5, 6, 7, 8, 9, 10)
+
+Vector<Integer> vector4 = vector1.slice(3, 7);
+System.out.println("vector4 = " + vector4);
+    // *** vector4 = Vector(4, 5, 6, 7)
+```
+
+#### Mapping
+
+You can map to a new `Vector` using `fmap`.  This returns a new `Vector` and leaves the original `Vector` unaffected.
+`fmap` never makes copies, and is stack-safe.
+
+```Java
+Vector<Integer> vector5 = vector1.fmap(n -> n * 100);
+
+System.out.println("vector5 = " + vector5);
+    // *** vector5 = Vector(100, 200, 300, 400, 500, 600, 700, 800, 900, 1000)
+
+Vector<String> vector6 = vector5.fmap(n -> "a" + n + "z");
+
+System.out.println("vector6 = " + vector6);
+    // *** vector6 = Vector(a100z, a200z, a300z, a400z, a500z, a600z, a700z, a800z, a900z, a1000z)
+```
+
+TODO - more examples
+
 
 ### Using a `Vector`
 
