@@ -6,6 +6,13 @@
     <artifactId>collection-views</artifactId>
     <version>0.1.2-SNAPSHOT</version>
 
+    <name>collection-views</name>
+    <description>
+        Low overhead, protected views over Java collections
+    </description>
+
+    <url>http://www.github.com/kschuetz/collection-views</url>
+
     <properties>
         <lambda.version>3.3.0</lambda.version>
         <junit.version>5.4.0</junit.version>
