@@ -101,11 +101,6 @@ public interface NonEmptyVector<A> extends NonEmptyIterable<A>, Vector<A> {
         return Vectors.tryNonEmptyWrap(underlying);
     }
 
-    // TODO: remove this
-    static <A> Maybe<NonEmptyVector<A>> tryWrap(Vector<A> vec) {
-        return Vectors.tryNonEmptyWrap(vec);
-    }
-
     /**
      * Attempts to create a {@link NonEmptyVector} that wraps an array.
      * If it is not possible, throws an {@link IllegalArgumentException}.
@@ -150,14 +145,4 @@ public interface NonEmptyVector<A> extends NonEmptyIterable<A>, Vector<A> {
         return Vectors.nonEmptyWrapOrThrow(underlying);
     }
 
-    // TODO: remove this
-    static <A> NonEmptyVector<A> wrapOrThrow(Vector<A> vec) {
-        return Vectors.nonEmptyWrapOrThrow(vec);
-    }
-
-    // TODO: remove this
-    @SafeVarargs
-    static <A> ImmutableNonEmptyVector<A> of(A first, A... more) {
-        return Vectors.of(first, more);
-    }
 }

@@ -1,6 +1,5 @@
 package dev.marksman.collectionviews.examples;
 
-import com.jnape.palatable.lambda.adt.Maybe;
 import dev.marksman.collectionviews.ImmutableNonEmptyVector;
 import dev.marksman.collectionviews.ImmutableVector;
 import dev.marksman.collectionviews.NonEmptyVector;
@@ -155,17 +154,7 @@ public class VectorExamples {
         // Nor will this compile, since `Vector<String>` hasn't been proven non-empty at compile-time:
         // NonEmptyVector<String> vector20 = vector19;
 
-        // If you want to upgrade to a `NonEmptyVector` at run-time, use `NonEmptyVector.tryWrap'
 
-        Maybe<NonEmptyVector<String>> vector21 = NonEmptyVector.tryWrap(vector19);
-
-        System.out.println("vector21 = " + vector21);
-        // *** vector21 = Just Vector(foo, bar, baz)
-
-        Maybe<NonEmptyVector<String>> vector22 = NonEmptyVector.tryWrap(vector17);
-
-        System.out.println("vector22 = " + vector22);
-        // *** vector22 = Nothing
     }
 
     
