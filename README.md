@@ -71,11 +71,11 @@ In contrast, if a `Vector` is to be constructed from an `Iterable` that is not k
 
 If you simply prefer to work with `Vector`s or `Set`s and not think about non-emptiness or immutability, you can do so.  For example, since `NonEmptyVector<A>`, `ImmutableVector<A>`, and `ImmutableNonEmptyVector<A>` are all subtypes of `Vector<A>`, you can use them anywhere a `Vector<A>` is called for.
 
-## Transformations are available only if they don't violate other principles
+## Provide transformations, but only if they don't violate other principles
 
 Although methods for updating and adding to collections are not available, some transformations that can be performed without violating other design principles (e.g. don't make copies), and can be done so with low overhead, are provided.
 
-Examples include `fmap`, `take`, `drop`, and `slice` on `Vectors`.  Each of these transforms a view of a collection without making copies, or violating any guarantees.
+Examples include `fmap`, `take`, `drop`, and `slice` on `Vector`s.  Each of these transforms a view of a collection without making copies, or violating any guarantees.
 
 The views yielded by these transformation are new, independent views, and do not affect the original in any way. 
 
@@ -110,6 +110,26 @@ The bearer of a `Vector` cannot:
 
 ### <a name="creating-vectors">Creating `Vectors`</a>
 
+Several static methods are available for creating `Vector`s:
+
+| Method | Returns | Makes a copy | Caveats |
+|---|---|---|---|
+| `Vector.empty` | `ImmutableVector<A>` | N/A |  |  
+| `Vector.of` | `ImmutableNonEmptyVector<A>` | N/A |  |  
+| `Vector.wrap` | `Vector<A>` | never |  |  
+| `Vector.copyFrom` | `ImmutableVector<A>` | always| may not terminate if input is infinite | 
+| `Vector.copyFromArray` |`ImmutableVector<A>`  |always |  | 
+| `Vector.takeFromIterable ` |`Vector<A>` | sometimes | only makes copy if necessary | 
+| `Vector.sliceFromIterable` |`Vector<A>` | sometimes | only makes copy if necessary |
+| `Vector.copyTakeFromIterable` |`ImmutableVector<A>` | always |  |
+| `Vector.copySliceFromIterable` |`ImmutableVector<A>` | always |  |
+| `NonEmptyVector.tryWrap` |`Maybe<NonEmptyVector<A>>` | never |  |
+| `NonEmptyVector.wrapOrThrow` |`NonEmptyVector<A>` | never | may throw exceptions |
+| `NonEmptyVector.tryCopyFrom` |`Maybe<ImmutableNonEmptyVector<A>>` |always |  |
+| `NonEmptyVector.tryCopyFromArray` | `Maybe<ImmutableNonEmptyVector<A>>`|always |  |
+| `NonEmptyVector.copyFromOrThrow` |`ImmutableNonEmptyVector<A>` | always | may throw exceptions |
+| `NonEmptyVector.copyFromArrayOrThrow` |`ImmutableNonEmptyVector<A>` |always | may throw exceptions |
+
 #### <a name="vector-wrapping">Wrapping an existing collection</a>
 
 A `Vector` can be created by wrapping an existing collection or array using one of the `Vector.wrap` static methods. 
@@ -134,11 +154,11 @@ Calling `Vector.of` with one or more elements will return a new `ImmutableNonEmp
 
 #### <a name="vector-empty">Creating an empty `Vector`</a>
 
-The `Vector.empty` static method will return an empty ``ImmutableVector_<A>``.
+The `Vector.empty` static method will return an empty ``ImmutableVector<A>``.
 
 ## <a name="non-empty-vector">`NonEmptyVector<A>`</a>
 
-A `NonEmptyVector<A>` is a `Vector<A>` that is guaranteed to contain at least one element.  It is not possible to construct a `NonEmptyVector` that is empty.  Since it is also a ``Vector<A>``, it can be used anywhere a ``Vector<A>`` is called for.
+A `NonEmptyVector<A>` is a `Vector<A>` that is known at compile-time to contain at least one element.  It is not possible to construct a `NonEmptyVector` that is empty.  Since it is also a ``Vector<A>``, it can be used anywhere a ``Vector<A>`` is called for.
 `NonEmptyVector<A>` subtypes `NonEmptyIterable<A>`, providing a `head` method that is guaranteed to yield an element.
 
 ### <a name="creating-non-empty-vectors">Creating a `NonEmptyVector`</a>
