@@ -8,6 +8,18 @@ import java.util.List;
 
 import static com.jnape.palatable.lambda.adt.Maybe.just;
 
+/**
+ * A {@link Vector} that is guaranteed at compile-time to contain at least one element.
+ * <p>
+ * In addition to guarantees of {@link Vector}, provides the following benefits :
+ * <ul>
+ * <li>{@link NonEmptyVector#head} method that returns the first element.</li>
+ * <li>Implements {@link NonEmptyIterable}.</li>
+ * <li>{@link NonEmptyVector#fmap} always returns a {@code NonEmptyVector}.</li>
+ * </ul>
+ *
+ * @param <A> the element type
+ */
 public interface NonEmptyVector<A> extends NonEmptyIterable<A>, Vector<A> {
 
     @Override
@@ -45,50 +57,105 @@ public interface NonEmptyVector<A> extends NonEmptyIterable<A>, Vector<A> {
         return new VectorIterator<>(this);
     }
 
-    static <A> Maybe<NonEmptyVector<A>> tryWrap(A[] arr) {
-        return Vectors.tryNonEmptyWrap(arr);
-    }
-
-    static <A> Maybe<NonEmptyVector<A>> tryWrap(List<A> list) {
-        return Vectors.tryNonEmptyWrap(list);
+    /**
+     * Attempts to create a {@link NonEmptyVector} that wraps an array.
+     * <p>
+     * Does not make any copies of the given array.
+     * The {@link NonEmptyVector} will hold on to a reference to the array, but will never alter it in any way.
+     * <p>
+     * Since bearers of this {@link NonEmptyVector} will be unable to mutate or gain access to the underlying array,
+     * it is safe to share.
+     * <p>
+     * Since this does not make a copy of the array, be aware that anyone that holds a direct reference to
+     * the array can still mutate it.  Use {@link Vector#copyFromArray} instead if you want to avoid this situation.
+     *
+     * @param underlying array to wrap
+     * @param <A>        the element type
+     * @return a {@code NonEmptyVector<A>} wrapped in a {@link Maybe#just} is the {@code underlying} is non-empty;
+     * {@link Maybe#nothing} otherwise.
+     */
+    static <A> Maybe<NonEmptyVector<A>> tryWrap(A[] underlying) {
+        return Vectors.tryNonEmptyWrap(underlying);
     }
 
     /**
-     * Converts a Vector to a NonEmptyVector if it is not empty.
-     * Does not copy underlying data.
+     * Attempts to create a {@link NonEmptyVector} that wraps a {@link java.util.List}.
+     * <p>
+     * Does not make any copies of the given {@link java.util.List}.
+     * The {@link NonEmptyVector} will hold a reference to the given {@link java.util.List}, but will not alter it in any way.
+     * <p>
+     * Since bearers of this {@link NonEmptyVector} will be unable to mutate or gain access to the underlying {@link java.util.List},
+     * it is safe to share.
+     * <p>
+     * Since this does not make a copy of the {@link java.util.List}, be aware that anyone that holds a direct reference to
+     * the {@link java.util.List} can still mutate it.  Mutating the {@link java.util.List} is not advised.
+     * Operations that change the size of the underlying {@link java.util.List} will result in unpredictable behavior.
+     * Use {@link Vector#copyAllFromIterable} if you want to avoid this situation.
      *
-     * @param vec
-     * @param <A>
-     * @return a NonEmptyVector wrapped in Maybe.just if the input is non-empty,
-     * otherwise Maybe.nothing
+     * @param underlying {@link List} to wrap
+     * @param <A>        the element type
+     * @return a {@code NonEmptyVector<A>} wrapped in a {@link Maybe#just} is the {@code underlying} is non-empty;
+     * {@link Maybe#nothing} otherwise.
      */
+    static <A> Maybe<NonEmptyVector<A>> tryWrap(List<A> underlying) {
+        return Vectors.tryNonEmptyWrap(underlying);
+    }
+
+    // TODO: remove this
     static <A> Maybe<NonEmptyVector<A>> tryWrap(Vector<A> vec) {
         return Vectors.tryNonEmptyWrap(vec);
     }
 
     /**
-     * Wraps an array in a NonEmptyVector if it is not empty, otherwise throws.
+     * Attempts to create a {@link NonEmptyVector} that wraps an array.
+     * If it is not possible, throws an {@link IllegalArgumentException}.
      * <p>
-     * Useful if you already know that the array is not empty.
+     * Does not make any copies of the given array.
+     * The {@link NonEmptyVector} will hold on to a reference to the array, but will never alter it in any way.
      * <p>
-     * Does not copy underlying data.
+     * Since bearers of this {@link NonEmptyVector} will be unable to mutate or gain access to the underlying array,
+     * it is safe to share.
+     * <p>
+     * Since this does not make a copy of the array, be aware that anyone that holds a direct reference to
+     * the array can still mutate it.  Use {@link Vector#copyFromArray} instead if you want to avoid this situation.
      *
-     * @param arr an array of 1 or more elements.  Throws IllegalArgumentException otherwise.
-     * @param <A>
-     * @return
+     * @param underlying array to wrap
+     * @param <A>        the element type
+     * @return a {@code NonEmptyVector<A>} if {@code underlying} is non-empty; throws an {@link IllegalArgumentException} otherwise
      */
-    static <A> NonEmptyVector<A> wrapOrThrow(A[] arr) {
-        return Vectors.nonEmptyWrapOrThrow(arr);
+    static <A> NonEmptyVector<A> wrapOrThrow(A[] underlying) {
+        return Vectors.nonEmptyWrapOrThrow(underlying);
     }
 
-    static <A> NonEmptyVector<A> wrapOrThrow(List<A> list) {
-        return Vectors.nonEmptyWrapOrThrow(list);
+    /**
+     * Attempts to create a {@link NonEmptyVector} that wraps a {@link java.util.List}.
+     * If it is not possible, throws an {@link IllegalArgumentException}.
+     * <p>
+     * Does not make any copies of the given {@link java.util.List}.
+     * The {@link NonEmptyVector} will hold a reference to the given {@link java.util.List}, but will not alter it in any way.
+     * <p>
+     * Since bearers of this {@link NonEmptyVector} will be unable to mutate or gain access to the underlying {@link java.util.List},
+     * it is safe to share.
+     * <p>
+     * Since this does not make a copy of the {@link java.util.List}, be aware that anyone that holds a direct reference to
+     * the {@link java.util.List} can still mutate it.  Mutating the {@link java.util.List} is not advised.
+     * Operations that change the size of the underlying {@link java.util.List} will result in unpredictable behavior.
+     * Use {@link Vector#copyAllFromIterable} if you want to avoid this situation.
+     *
+     * @param underlying {@link List} to wrap
+     * @param <A>        the element type
+     * @return a {@code NonEmptyVector<A>} if {@code underlying} is non-empty; throws an {@link IllegalArgumentException} otherwise
+     */
+    static <A> NonEmptyVector<A> wrapOrThrow(List<A> underlying) {
+        return Vectors.nonEmptyWrapOrThrow(underlying);
     }
 
+    // TODO: remove this
     static <A> NonEmptyVector<A> wrapOrThrow(Vector<A> vec) {
         return Vectors.nonEmptyWrapOrThrow(vec);
     }
 
+    // TODO: remove this
     @SafeVarargs
     static <A> ImmutableNonEmptyVector<A> of(A first, A... more) {
         return Vectors.of(first, more);

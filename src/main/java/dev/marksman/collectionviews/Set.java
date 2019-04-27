@@ -27,7 +27,7 @@ public interface Set<A> extends Iterable<A> {
      * direct reference to it the java.util.Set can still mutate it.
      *
      * @param underlying
-     * @param <A>
+     * @param <A> the element type
      * @return
      */
     static <A> Set<A> wrap(java.util.Set<A> underlying) {

@@ -7,6 +7,7 @@ import com.jnape.palatable.lambda.functions.builtin.fn2.Drop;
 import com.jnape.palatable.lambda.functions.builtin.fn2.Take;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -154,6 +155,12 @@ class Vectors {
     @SafeVarargs
     static <A> ImmutableNonEmptyVector<A> of(A first, A... more) {
         return new ImmutableVectorCons<>(first, immutableWrap(more));
+    }
+
+    static <A> ImmutableVector<A> copyFromArray(A[] source) {
+        Objects.requireNonNull(source);
+        A[] copied = Arrays.copyOf(source, source.length);
+        return immutableWrap(copied);
     }
 
     static <A> Maybe<NonEmptyVector<A>> tryNonEmptyWrap(A[] arr) {
