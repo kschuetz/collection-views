@@ -4,7 +4,7 @@
 
     <groupId>dev.marksman</groupId>
     <artifactId>collection-views</artifactId>
-    <version>0.1.3-SNAPSHOT</version>
+    <version>0.1.3</version>
 
     <name>collection-views</name>
     <description>
