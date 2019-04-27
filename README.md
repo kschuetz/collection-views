@@ -1,6 +1,7 @@
 # collection-views
 
 [![Build Status](https://travis-ci.org/kschuetz/collection-views.svg?branch=master)](https://travis-ci.org/kschuetz/collection-views)
+[![collection-views](https://img.shields.io/maven-central/v/dev.marksman/collection-views.svg)](http://search.maven.org/#search%7Cga%7C1%7Cdev.marksman.collection-views)
 
 This library has not yet been released.
 
