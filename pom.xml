@@ -4,7 +4,7 @@
 
     <groupId>dev.marksman</groupId>
     <artifactId>collection-views</artifactId>
-    <version>0.1.2-SNAPSHOT</version>
+    <version>0.1.2</version>
 
     <name>collection-views</name>
     <description>
@@ -32,7 +32,7 @@
         <connection>scm:git:git@github.com:kschuetz/collection-views.git</connection>
         <developerConnection>scm:git:git@github.com:kschuetz/collection-views.git</developerConnection>
         <url>git@github.com:kschuetz/collection-views.git</url>
-      <tag>HEAD</tag>
+      <tag>collection-views-0.1.2</tag>
   </scm>
 
     <distributionManagement>
