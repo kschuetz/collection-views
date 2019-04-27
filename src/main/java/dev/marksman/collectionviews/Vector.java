@@ -222,6 +222,19 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
     }
 
     /**
+     * Constructs a new {@link ImmutableNonEmptyVector} with the given elements.
+     *
+     * @param first the first element
+     * @param more  the remaining elements
+     * @param <A>   the element type
+     * @return an {@code ImmutableNonEmptyVector<A>}, which is guaranteed to be non-empty and to be safe from mutation.
+     */
+    @SafeVarargs
+    static <A> ImmutableNonEmptyVector<A> of(A first, A... more) {
+        return Vectors.of(first, more);
+    }
+
+    /**
      * Creates a {@link Vector} that wraps an array.
      * <p>
      * Does not make any copies of the given array.
@@ -253,7 +266,7 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
      * Since this does not make a copy of the {@link java.util.List}, be aware that anyone that holds a direct reference to
      * the {@link java.util.List} can still mutate it.  Mutating the {@link java.util.List} is not advised.
      * Operations that change the size of the underlying {@link java.util.List} will result in unpredictable behavior.
-     * Use {@link Vector#copyAllFromIterable} if you want to avoid this situation.
+     * Use {@link Vector#copyFrom} if you want to avoid this situation.
      *
      * @param underlying {@link List} to wrap
      * @param <A>        the element type
@@ -308,31 +321,6 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
     }
 
     /**
-     * Constructs a new {@link ImmutableNonEmptyVector} with the given elements.
-     *
-     * @param first the first element
-     * @param more  the remaining elements
-     * @param <A>   the element type
-     * @return an {@code ImmutableNonEmptyVector<A>}, which is guaranteed to be non-empty and to be safe from mutation.
-     */
-    @SafeVarargs
-    static <A> ImmutableNonEmptyVector<A> of(A first, A... more) {
-        return Vectors.of(first, more);
-    }
-
-    /**
-     * Returns a new {@link ImmutableVector} that is copied from an array.
-     *
-     * @param source the array to copy from.
-     *               This method will not alter or hold on to a reference of this array.
-     * @param <A>    the element type
-     * @return an {@code ImmutableVector<A>}
-     */
-    static <A> ImmutableVector<A> copyFromArray(A[] source) {
-        return Vectors.copyFromArray(source);
-    }
-
-    /**
      * Constructs a new {@link ImmutableVector} from any {@link Iterable}.
      * <p>
      * The entire {@link Iterable} will be eagerly iterated, so be careful not
@@ -345,8 +333,20 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
      * @param <A>    the element type
      * @return an {@code ImmutableVector<A>}
      */
-    static <A> ImmutableVector<A> copyAllFromIterable(Iterable<A> source) {
+    static <A> ImmutableVector<A> copyFrom(Iterable<A> source) {
         return Vectors.copyAllFromIterable(source);
+    }
+
+    /**
+     * Returns a new {@link ImmutableVector} that is copied from an array.
+     *
+     * @param source the array to copy from.
+     *               This method will not alter or hold on to a reference of this array.
+     * @param <A>    the element type
+     * @return an {@code ImmutableVector<A>}
+     */
+    static <A> ImmutableVector<A> copyFromArray(A[] source) {
+        return Vectors.copyFromArray(source);
     }
 
     /**

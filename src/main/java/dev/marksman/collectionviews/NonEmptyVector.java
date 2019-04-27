@@ -90,7 +90,7 @@ public interface NonEmptyVector<A> extends NonEmptyIterable<A>, Vector<A> {
      * Since this does not make a copy of the {@link java.util.List}, be aware that anyone that holds a direct reference to
      * the {@link java.util.List} can still mutate it.  Mutating the {@link java.util.List} is not advised.
      * Operations that change the size of the underlying {@link java.util.List} will result in unpredictable behavior.
-     * Use {@link Vector#copyAllFromIterable} if you want to avoid this situation.
+     * Use {@link Vector#copyFrom} if you want to avoid this situation.
      *
      * @param underlying {@link List} to wrap
      * @param <A>        the element type
@@ -135,7 +135,7 @@ public interface NonEmptyVector<A> extends NonEmptyIterable<A>, Vector<A> {
      * Since this does not make a copy of the {@link java.util.List}, be aware that anyone that holds a direct reference to
      * the {@link java.util.List} can still mutate it.  Mutating the {@link java.util.List} is not advised.
      * Operations that change the size of the underlying {@link java.util.List} will result in unpredictable behavior.
-     * Use {@link Vector#copyAllFromIterable} if you want to avoid this situation.
+     * Use {@link Vector#copyFrom} if you want to avoid this situation.
      *
      * @param underlying {@link List} to wrap
      * @param <A>        the element type
@@ -149,7 +149,7 @@ public interface NonEmptyVector<A> extends NonEmptyIterable<A>, Vector<A> {
         return Vectors.tryNonEmptyCopyFromArray(source);
     }
 
-    static <A> Maybe<ImmutableNonEmptyVector<A>> tryCopyAllFromIterable(Iterable<A> source) {
+    static <A> Maybe<ImmutableNonEmptyVector<A>> tryCopyFrom(Iterable<A> source) {
         return Vectors.tryNonEmptyCopyAllFromIterable(source);
     }
 
@@ -157,7 +157,7 @@ public interface NonEmptyVector<A> extends NonEmptyIterable<A>, Vector<A> {
         return Vectors.nonEmptyCopyFromArrayOrThrow(source);
     }
 
-    static <A> ImmutableNonEmptyVector<A> copyAllFromIterableOrThrow(Iterable<A> source) {
+    static <A> ImmutableNonEmptyVector<A> copyFromOrThrow(Iterable<A> source) {
         return Vectors.nonEmptyCopyAllFromIterableOrThrow(source);
     }
 
