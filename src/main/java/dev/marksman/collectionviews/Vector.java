@@ -130,7 +130,7 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
      * Use caution when taking a small slice of a huge Vector, as the smaller slice
      * will hold onto a reference of the larger one, and will prevent it from being GC'ed.
      *
-     * @param count the maximum number of elements to take from the Vector.  Must be >= 0.
+     * @param count the maximum number of elements to take from the Vector.  Must be &gt;= 0.
      *              May exceed size of Vector.
      * @return
      */
@@ -145,7 +145,7 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
      * <p>
      * Use caution when taking a small slice of a huge Vector that you no longer need, as the smaller slice
      * will hold onto a reference of the larger one, and will prevent it from being GC'ed.
-     * @param count the number of elements to drop from the Vector.  Must be >= 0.
+     * @param count the number of elements to drop from the Vector.  Must be &gt;= 0.
      *              May exceed size of Vector, in which case, the result will be an
      *              empty Vector.
      * @return
@@ -163,9 +163,9 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
      * will hold onto a reference of the larger one, and will prevent it from being GC'ed.
      * To avoid this situation, use {@link Vector#copyTakeFromIterable} instead.
      *
-     * @param startIndex        the index of the element to begin the slice.  Must be >= 0.
+     * @param startIndex        the index of the element to begin the slice.  Must be &gt;= 0.
      *                          May exceed the size of the Vector, in which case an empty Vector will be returned.
-     * @param endIndexExclusive the end index (exclusive) of the slice.  Must be >= startIndex.
+     * @param endIndexExclusive the end index (exclusive) of the slice.  Must be &gt;= startIndex.
      *                          May exceed the size of the Vector, in which case the slice will
      *                          contain as many elements as available.
      * @return
@@ -235,7 +235,7 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
      * If you require an ImmutableVector, see {@link Vector#copyTakeFromIterable}, which
      * will always perform a copy instead of wrapping.
      *
-     * @param count  maximum number of elements to take from source.  Must be >= 0.
+     * @param count  maximum number of elements to take from source.  Must be &gt;= 0.
      *               May exceed the number of elements in source, in which case,
      *               all of the elements available will be taken.
      * @param source any {@link Iterable}, even those that are potentially infinite
@@ -288,7 +288,7 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
      * If necessary to guarantee immutability, this method will make a copy of the data provided.
      * If <code>source</code> already is an ImmutableVector, it will be returned directly.
      *
-     * @param source an Iterable<A> that will be iterated eagerly in its entirety
+     * @param source an Iterable&gt;A&lt; that will be iterated eagerly in its entirety
      * @param <A>
      * @return
      */
@@ -311,8 +311,8 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
      * a copy will always be made, therefore making it memory-safe to take a small slice of
      * a huge Vector that you no longer need.
      *
-     * @param count  the maximum number of elements to consume from the source.  Must be >= 0.
-     * @param source an Iterable<A> that will be iterated eagerly for up to <code>count</code> elements.
+     * @param count  the maximum number of elements to consume from the source.  Must be &gt;= 0.
+     * @param source an Iterable&gt;A&lt; that will be iterated eagerly for up to <code>count</code> elements.
      *               It is safe for <code>source</code> to be infinite.
      * @param <A>
      * @return an ImmutableVector that contains at most <code>count</code> elements.
@@ -334,7 +334,7 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
      *
      * @param startIndex
      * @param endIndexExclusive
-     * @param source            an Iterable<A> that will be iterated eagerly for up to <code>endIndexExclusive</code> elements.
+     * @param source            an Iterable&gt;A&lt; that will be iterated eagerly for up to <code>endIndexExclusive</code> elements.
      *                          It is safe for <code>source</code> to be infinite.
      * @param <A>
      * @return an ImmutableVector that contains at most <code>endIndexExclusive - startIndex</code> elements.
