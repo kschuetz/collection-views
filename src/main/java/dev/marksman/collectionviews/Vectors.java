@@ -181,6 +181,23 @@ class Vectors {
         }
     }
 
+    @SuppressWarnings("unchecked")
+    static <A> Maybe<ImmutableNonEmptyVector<A>> tryNonEmptyCopyFromArray(A[] arr) {
+        Objects.requireNonNull(arr);
+        if (arr.length == 0) {
+            return nothing();
+        } else {
+            return (Maybe<ImmutableNonEmptyVector<A>>) copyFromArray(arr).toNonEmpty();
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    static <A> Maybe<ImmutableNonEmptyVector<A>> tryNonEmptyCopyAllFromIterable(Iterable<A> source) {
+        Objects.requireNonNull(source);
+        if (source.iterator().hasNext()) return nothing();
+        return (Maybe<ImmutableNonEmptyVector<A>>) copyAllFromIterable(source).toNonEmpty();
+    }
+
     static <A> Maybe<NonEmptyVector<A>> tryNonEmptyWrap(Vector<A> vec) {
         Objects.requireNonNull(vec);
         if (vec instanceof NonEmptyVector<?>) {
@@ -213,6 +230,14 @@ class Vectors {
 
     static <A> NonEmptyVector<A> nonEmptyWrapOrThrow(Vector<A> vec) {
         return getNonEmptyOrThrow(tryNonEmptyWrap(vec));
+    }
+
+    static <A> ImmutableNonEmptyVector<A> nonEmptyCopyFromArrayOrThrow(A[] source) {
+        return immutableGetNonEmptyOrThrow(tryNonEmptyCopyFromArray(source));
+    }
+
+    static <A> ImmutableNonEmptyVector<A> nonEmptyCopyAllFromIterableOrThrow(Iterable<A> source) {
+        return immutableGetNonEmptyOrThrow(tryNonEmptyCopyAllFromIterable(source));
     }
 
     static <A> ImmutableVector<A> ensureImmutable(Vector<A> vector) {
@@ -309,6 +334,12 @@ class Vectors {
     }
 
     private static <A> NonEmptyVector<A> getNonEmptyOrThrow(Maybe<NonEmptyVector<A>> maybeResult) {
+        return maybeResult.orElseThrow(() -> {
+            throw new IllegalArgumentException("Cannot construct NonEmptyVector from empty input");
+        });
+    }
+
+    private static <A> ImmutableNonEmptyVector<A> immutableGetNonEmptyOrThrow(Maybe<ImmutableNonEmptyVector<A>> maybeResult) {
         return maybeResult.orElseThrow(() -> {
             throw new IllegalArgumentException("Cannot construct NonEmptyVector from empty input");
         });

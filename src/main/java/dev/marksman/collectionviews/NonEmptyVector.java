@@ -145,4 +145,20 @@ public interface NonEmptyVector<A> extends NonEmptyIterable<A>, Vector<A> {
         return Vectors.nonEmptyWrapOrThrow(underlying);
     }
 
+    static <A> Maybe<ImmutableNonEmptyVector<A>> tryCopyFromArray(A[] source) {
+        return Vectors.tryNonEmptyCopyFromArray(source);
+    }
+
+    static <A> Maybe<ImmutableNonEmptyVector<A>> tryCopyAllFromIterable(Iterable<A> source) {
+        return Vectors.tryNonEmptyCopyAllFromIterable(source);
+    }
+
+    static <A> ImmutableNonEmptyVector<A> copyFromArrayOrThrow(A[] source) {
+        return Vectors.nonEmptyCopyFromArrayOrThrow(source);
+    }
+
+    static <A> ImmutableNonEmptyVector<A> copyAllFromIterableOrThrow(Iterable<A> source) {
+        return Vectors.nonEmptyCopyAllFromIterableOrThrow(source);
+    }
+
 }

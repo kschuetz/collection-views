@@ -3,8 +3,6 @@ package dev.marksman.collectionviews;
 import com.jnape.palatable.lambda.adt.Maybe;
 import com.jnape.palatable.lambda.functions.Fn1;
 
-import java.util.List;
-
 /**
  * A {@link Vector} that is guaranteed at compile-time to safe from mutation anywhere.  In other words,
  * it owns the sole reference to the underlying collection.
@@ -61,13 +59,5 @@ public interface ImmutableVector<A> extends Vector<A>, Immutable {
     @Override
     default ImmutableVector<A> slice(int startIndex, int endIndexExclusive) {
         return Vectors.immutableSlice(startIndex, endIndexExclusive, this);
-    }
-
-    static <A> ImmutableVector<A> wrapAndVouchFor(A[] underlying) {
-        return Vectors.immutableWrap(underlying);
-    }
-
-    static <A> ImmutableVector<A> wrapAndVouchFor(List<A> underlying) {
-        return Vectors.immutableWrap(underlying);
     }
 }
