@@ -43,12 +43,12 @@ public interface ImmutableVector<A> extends Vector<A>, Immutable {
 
     @Override
     default <B> ImmutableVector<B> fmap(Fn1<? super A, ? extends B> f) {
-        return Vectors.immutableMap(f, this);
+        return ImmutableVectors.map(f, this);
     }
 
     @Override
     default ImmutableVector<A> take(int count) {
-        return Vectors.immutableTake(count, this);
+        return ImmutableVectors.take(count, this);
     }
 
     @Override
@@ -58,6 +58,6 @@ public interface ImmutableVector<A> extends Vector<A>, Immutable {
 
     @Override
     default ImmutableVector<A> slice(int startIndex, int endIndexExclusive) {
-        return Vectors.immutableSlice(startIndex, endIndexExclusive, this);
+        return ImmutableVectors.slice(startIndex, endIndexExclusive, this);
     }
 }

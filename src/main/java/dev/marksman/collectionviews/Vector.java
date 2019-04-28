@@ -164,7 +164,7 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
      * <p>
      * Use caution when taking a small slice of a huge {@link Vector}, as the smaller slice
      * will hold onto a reference of the larger one, and will prevent it from being GC'ed.
-     * To avoid this situation, use {@link Vector#copyTakeFromIterable} instead.
+     * To avoid this situation, use {@link Vector#copyFrom} instead.
      *
      * @param count the maximum number of elements to take from the {@link Vector}.  Must be &gt;= 0.
      *              May exceed size of {@link Vector}.
@@ -198,7 +198,7 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
      * <p>
      * Use caution when taking a small slice of a huge Vector that you no longer need, as the smaller slice
      * will hold onto a reference of the larger one, and will prevent it from being GC'ed.
-     * To avoid this situation, use {@link Vector#copySliceFromIterable} instead.
+     * To avoid this situation, use {@link Vector#copySliceFrom} instead.
      *
      * @param startIndex        the index of the element to begin the slice.  Must be &gt;= 0.
      *                          May exceed the size of the {@link Vector}, in which case an empty {@link Vector} will be returned.
@@ -244,7 +244,7 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
      * it is safe to share.
      * <p>
      * Since this does not make a copy of the array, be aware that anyone that holds a direct reference to
-     * the array can still mutate it.  Use {@link Vector#copyFromArray} instead if you want to avoid this situation.
+     * the array can still mutate it.  Use {@link Vector#copyFrom} instead if you want to avoid this situation.
      *
      * @param underlying array to wrap
      * @param <A>        the element type
@@ -277,50 +277,6 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
     }
 
     /**
-     * Builds a {@link Vector} from an {@link Iterable}.
-     * <p>
-     * Will only make a copy of the data if necessary.
-     * If source is a {@link java.util.List} or another {@link Vector},
-     * the data won't be copied.
-     * <p>
-     * If you require an {@link ImmutableVector}, see {@link Vector#copyTakeFromIterable}, which
-     * will always perform a copy instead of wrapping.
-     *
-     * @param count  maximum number of elements to take from source.  Must be &gt;= 0.
-     *               May exceed the number of elements in source, in which case,
-     *               all of the elements available will be taken.
-     * @param source any {@link Iterable}, even those that are potentially infinite
-     * @param <A>    the element type
-     * @return a {@code Vector<A>}
-     */
-    static <A> Vector<A> takeFromIterable(int count, Iterable<A> source) {
-        return Vectors.takeFromIterable(count, source);
-    }
-
-    /**
-     * Builds a {@link Vector} from an {@link Iterable}.
-     * <p>
-     * Will only make a copy of the data if necessary.
-     * If source is a {@link java.util.List} or another {@link Vector},
-     * the data won't be copied.
-     * <p>
-     * If you require an {@link ImmutableVector}, see {@link Vector#copySliceFromIterable}, which
-     * will always perform a copy instead of wrapping.
-     *
-     * @param startIndex        the index of the element to begin the slice.  Must be &gt;= 0.
-     *                          May exceed the size of the {@link Vector}, in which case an empty {@link Vector} will be returned.
-     * @param endIndexExclusive the end index (exclusive) of the slice.  Must be &gt;= {@code startIndex}.
-     *                          May exceed the size of the {@link Vector}, in which case the slice will
-     *                          contain as many elements as available.
-     * @param source            any {@link Iterable}, even those that are potentially infinite
-     * @param <A>               the element type
-     * @return a {@code Vector<A>}
-     */
-    static <A> Vector<A> sliceFromIterable(int startIndex, int endIndexExclusive, Iterable<A> source) {
-        return Vectors.sliceFromIterable(startIndex, endIndexExclusive, source);
-    }
-
-    /**
      * Constructs a new {@link ImmutableVector} from any {@link Iterable}.
      * <p>
      * The entire {@link Iterable} will be eagerly iterated, so be careful not
@@ -334,7 +290,7 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
      * @return an {@code ImmutableVector<A>}
      */
     static <A> ImmutableVector<A> copyFrom(Iterable<A> source) {
-        return Vectors.copyAllFromIterable(source);
+        return Vectors.copyFrom(source);
     }
 
     /**
@@ -345,33 +301,46 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
      * @param <A>    the element type
      * @return an {@code ImmutableVector<A>}
      */
-    static <A> ImmutableVector<A> copyFromArray(A[] source) {
+    static <A> ImmutableVector<A> copyFrom(A[] source) {
         return Vectors.copyFromArray(source);
     }
 
     /**
      * Constructs a new {@link ImmutableVector} from any {@link Iterable}, but consuming a maximum number of elements.
      * <p>
-     * The {@link Iterable} will be eagerly iterated, but only up to a maximum of {@code count}
-     * elements.  If {@code count} elements are not available, then the all of the elements
+     * The {@link Iterable} will be eagerly iterated, but only up to a maximum of {@code maxCount}
+     * elements.  If {@code maxCount} elements are not available, then the all of the elements
      * available will be returned.
      * <p>
      * This method will make a copy of the data provided, unless {@code source} is
-     * an {@link ImmutableVector} and its size is less than or equal to {@code count},
+     * an {@link ImmutableVector} and its size is less than or equal to {@code maxCount},
      * in which case it will be returned directly.
      * <p>
-     * If {@code source} is an {@link ImmutableVector} that is greater than {@code count} in size,
+     * If {@code source} is an {@link ImmutableVector} that is greater than {@code maxCount} in size,
      * a copy will always be made, therefore making it memory-safe to take a small slice of
      * a huge {@link Vector} that you no longer need.
      *
-     * @param count  the maximum number of elements to consume from the source.  Must be &gt;= 0.
-     * @param source an {@code Iterable<A>} that will be iterated eagerly for up to {@code count} elements.
-     *               It is safe for {@code source} to be infinite.
-     * @param <A>    the element type
-     * @return an {@link ImmutableVector} that contains at most {@code count} elements.
+     * @param maxCount the maximum number of elements to consume from the source.  Must be &gt;= 0.
+     * @param source   an {@code Iterable<A>} that will be iterated eagerly for up to {@code maxCount} elements.
+     *                 It is safe for {@code source} to be infinite.
+     * @param <A>      the element type
+     * @return an {@link ImmutableVector} that contains at most {@code maxCount} elements.
      */
-    static <A> ImmutableVector<A> copyTakeFromIterable(int count, Iterable<A> source) {
-        return Vectors.copyTakeFromIterable(count, source);
+    static <A> ImmutableVector<A> copyFrom(int maxCount, Iterable<A> source) {
+        return Vectors.copyFrom(maxCount, source);
+    }
+
+    /**
+     * Returns a new {@link ImmutableVector} that is copied from an array.
+     *
+     * @param maxCount the maximum number of elements to copy from the array. Must be &gt;= 0.
+     * @param source   the array to copy from.
+     *                 This method will not alter or hold on to a reference of this array.
+     * @param <A>      the element type
+     * @return an {@code ImmutableVector<A>}
+     */
+    static <A> ImmutableVector<A> copyFrom(int maxCount, A[] source) {
+        return Vectors.copyFromArray(maxCount, source);
     }
 
     /**
@@ -398,7 +367,8 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
      * @param <A>               the element type
      * @return an {@code ImmutableVector<A>} that contains at most <code>endIndexExclusive - startIndex</code> elements.
      */
-    static <A> ImmutableVector<A> copySliceFromIterable(int startIndex, int endIndexExclusive, Iterable<A> source) {
-        return Vectors.copySliceFromIterable(startIndex, endIndexExclusive, source);
+    static <A> ImmutableVector<A> copySliceFrom(int startIndex, int endIndexExclusive, Iterable<A> source) {
+        return Vectors.copySliceFrom(startIndex, endIndexExclusive, source);
     }
+
 }

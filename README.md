@@ -116,19 +116,13 @@ Several static methods are available for creating `Vector`s:
 |---|---|---|---|
 | `Vector.empty` | `ImmutableVector<A>` | N/A |  |  
 | `Vector.of` | `ImmutableNonEmptyVector<A>` | N/A |  |  
-| `Vector.wrap` | `Vector<A>` | never |  |  
-| `Vector.copyFrom` | `ImmutableVector<A>` | always| may not terminate if input is infinite | 
-| `Vector.copyFromArray` |`ImmutableVector<A>`  |always |  | 
-| `Vector.takeFromIterable ` |`Vector<A>` | sometimes | only makes copy if necessary | 
-| `Vector.sliceFromIterable` |`Vector<A>` | sometimes | only makes copy if necessary |
-| `Vector.copyTakeFromIterable` |`ImmutableVector<A>` | always |  |
-| `Vector.copySliceFromIterable` |`ImmutableVector<A>` | always |  |
-| `NonEmptyVector.tryWrap` |`Maybe<NonEmptyVector<A>>` | never |  |
-| `NonEmptyVector.wrapOrThrow` |`NonEmptyVector<A>` | never | may throw exceptions |
-| `NonEmptyVector.tryCopyFrom` |`Maybe<ImmutableNonEmptyVector<A>>` |always |  |
-| `NonEmptyVector.tryCopyFromArray` | `Maybe<ImmutableNonEmptyVector<A>>`|always |  |
-| `NonEmptyVector.copyFromOrThrow` |`ImmutableNonEmptyVector<A>` | always | may throw exceptions |
-| `NonEmptyVector.copyFromArrayOrThrow` |`ImmutableNonEmptyVector<A>` |always | may throw exceptions |
+| `Vector.wrap` | `Vector<A>` | no |  |  
+| `Vector.copyFrom` | `ImmutableVector<A>` | yes| may not terminate if input is infinite | 
+| `Vector.copySliceFrom` |`ImmutableVector<A>` | yes |  |
+| `NonEmptyVector.tryWrap` |`Maybe<NonEmptyVector<A>>` | no |  |
+| `NonEmptyVector.wrapOrThrow` |`NonEmptyVector<A>` | no | may throw exceptions |
+| `NonEmptyVector.tryCopyFrom` |`Maybe<ImmutableNonEmptyVector<A>>` | yes |  |
+| `NonEmptyVector.copyFromOrThrow` |`ImmutableNonEmptyVector<A>` | yes | may throw exceptions |
 
 #### <a name="vector-wrapping">Wrapping an existing collection</a>
 

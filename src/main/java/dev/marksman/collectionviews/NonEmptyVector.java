@@ -67,7 +67,7 @@ public interface NonEmptyVector<A> extends NonEmptyIterable<A>, Vector<A> {
      * it is safe to share.
      * <p>
      * Since this does not make a copy of the array, be aware that anyone that holds a direct reference to
-     * the array can still mutate it.  Use {@link Vector#copyFromArray} instead if you want to avoid this situation.
+     * the array can still mutate it.  Use {@link Vector#copyFrom} instead if you want to avoid this situation.
      *
      * @param underlying array to wrap
      * @param <A>        the element type
@@ -112,7 +112,7 @@ public interface NonEmptyVector<A> extends NonEmptyIterable<A>, Vector<A> {
      * it is safe to share.
      * <p>
      * Since this does not make a copy of the array, be aware that anyone that holds a direct reference to
-     * the array can still mutate it.  Use {@link Vector#copyFromArray} instead if you want to avoid this situation.
+     * the array can still mutate it.  Use {@link Vector#copyFrom} instead if you want to avoid this situation.
      *
      * @param underlying array to wrap
      * @param <A>        the element type
@@ -149,7 +149,7 @@ public interface NonEmptyVector<A> extends NonEmptyIterable<A>, Vector<A> {
         return Vectors.tryNonEmptyCopyAllFromIterable(source);
     }
 
-    static <A> Maybe<ImmutableNonEmptyVector<A>> tryCopyFromArray(A[] source) {
+    static <A> Maybe<ImmutableNonEmptyVector<A>> tryCopyFrom(A[] source) {
         return Vectors.tryNonEmptyCopyFromArray(source);
     }
 
@@ -157,7 +157,7 @@ public interface NonEmptyVector<A> extends NonEmptyIterable<A>, Vector<A> {
         return Vectors.nonEmptyCopyAllFromIterableOrThrow(source);
     }
 
-    static <A> ImmutableNonEmptyVector<A> copyFromArrayOrThrow(A[] source) {
+    static <A> ImmutableNonEmptyVector<A> copyFromOrThrow(A[] source) {
         return Vectors.nonEmptyCopyFromArrayOrThrow(source);
     }
 
