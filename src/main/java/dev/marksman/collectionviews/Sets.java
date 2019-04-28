@@ -3,14 +3,16 @@ package dev.marksman.collectionviews;
 import com.jnape.palatable.lambda.adt.Maybe;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Objects;
 
 import static com.jnape.palatable.lambda.adt.Maybe.just;
 import static com.jnape.palatable.lambda.adt.Maybe.nothing;
+import static com.jnape.palatable.lambda.functions.builtin.fn2.ToCollection.toCollection;
 
 class Sets {
 
-    static <A> Set<A> empty() {
+    static <A> ImmutableSet<A> empty() {
         return EmptySet.emptySet();
     }
 
@@ -24,33 +26,11 @@ class Sets {
     }
 
     @SafeVarargs
-    static <A> NonEmptySet<A> nonEmptySetOf(A first, A... more) {
+    static <A> ImmutableNonEmptySet<A> nonEmptySetOf(A first, A... more) {
         java.util.Set<A> underlying = new java.util.HashSet<>();
         underlying.add(first);
         underlying.addAll(Arrays.asList(more));
-        return new WrappedSet<>(underlying);
-    }
-
-    static <A> NonEmptySet<A> nonEmptyWrap(A first, java.util.Set<A> more) {
-        Objects.requireNonNull(first);
-        Objects.requireNonNull(more);
-        WrappedSet<A> tail = new WrappedSet<>(more);
-        if (more.contains(first)) {
-            return tail;
-        } else {
-            return new SetCons<>(first, tail);
-        }
-    }
-
-    static <A> NonEmptySet<A> nonEmptyWrap(A first, Set<A> more) {
-        Objects.requireNonNull(first);
-        Objects.requireNonNull(more);
-        if (more.contains(first)) {
-            // we know it's non-empty, so it this is safe:
-            return nonEmptyWrapOrThrow(more);
-        } else {
-            return new SetCons<>(first, more);
-        }
+        return new ImmutableWrappedSet<>(underlying);
     }
 
     static <A> Maybe<NonEmptySet<A>> tryNonEmptyWrap(java.util.Set<A> underlying) {
@@ -78,6 +58,26 @@ class Sets {
 
     static <A> NonEmptySet<A> nonEmptyWrapOrThrow(Set<A> underlying) {
         return getNonEmptyOrThrow(tryNonEmptyWrap(underlying));
+    }
+
+    static <A> ImmutableSet<A> ensureImmutable(Set<A> set) {
+        if (set instanceof ImmutableSet<?>) {
+            return (ImmutableSet<A>) set;
+        } else if (set.isEmpty()) {
+            return empty();
+        } else {
+            HashSet<A> copied = toCollection(HashSet::new, set);
+            return new ImmutableWrappedSet<>(copied);
+        }
+    }
+
+    static <A> ImmutableNonEmptySet<A> ensureImmutable(NonEmptySet<A> set) {
+        if (set instanceof ImmutableNonEmptySet<?>) {
+            return (ImmutableNonEmptySet<A>) set;
+        } else {
+            HashSet<A> copied = toCollection(HashSet::new, set);
+            return new ImmutableWrappedSet<>(copied);
+        }
     }
 
     private static <A> NonEmptySet<A> getNonEmptyOrThrow(Maybe<NonEmptySet<A>> maybeResult) {

@@ -2,6 +2,8 @@ package dev.marksman.collectionviews;
 
 import com.jnape.palatable.lambda.adt.Maybe;
 
+import static com.jnape.palatable.lambda.adt.Maybe.just;
+
 public interface NonEmptySet<A> extends NonEmptyIterable<A>, Set<A> {
 
     @Override
@@ -9,12 +11,19 @@ public interface NonEmptySet<A> extends NonEmptyIterable<A>, Set<A> {
         return false;
     }
 
-    static <A> NonEmptySet<A> wrap(A first, java.util.Set<A> more) {
-        return Sets.nonEmptyWrap(first, more);
+    @Override
+    default ImmutableNonEmptySet<A> toImmutable() {
+        return Sets.ensureImmutable(this);
     }
 
-    static <A> NonEmptySet<A> wrap(A first, Set<A> more) {
-        return Sets.nonEmptyWrap(first, more);
+    @Override
+    default Maybe<? extends NonEmptySet<A>> toNonEmpty() {
+        return just(this);
+    }
+
+    @Override
+    default NonEmptySet<A> toNonEmptyOrThrow() {
+        return this;
     }
 
     static <A> Maybe<NonEmptySet<A>> tryWrap(java.util.Set<A> underlying) {

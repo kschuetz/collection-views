@@ -4,7 +4,7 @@ import java.util.Iterator;
 
 import static java.util.Collections.emptyIterator;
 
-class EmptySet<A> implements Set<A> {
+class EmptySet<A> implements ImmutableSet<A> {
     private static final EmptySet<?> INSTANCE = new EmptySet<>();
 
     @Override
