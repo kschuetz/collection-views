@@ -46,4 +46,5 @@ public interface NonEmptySet<A> extends NonEmptyIterable<A>, Set<A> {
     static <A> NonEmptySet<A> of(A first, A... more) {
         return Sets.nonEmptySetOf(first, more);
     }
+
 }

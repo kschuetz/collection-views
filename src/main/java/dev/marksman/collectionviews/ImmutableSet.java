@@ -18,4 +18,5 @@ public interface ImmutableSet<A> extends Set<A>, Immutable {
     default NonEmptySet<A> toNonEmptyOrThrow() {
         return null;
     }
+
 }

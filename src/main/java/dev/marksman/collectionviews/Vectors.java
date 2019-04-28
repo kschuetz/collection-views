@@ -151,14 +151,25 @@ class Vectors {
     }
 
     @SuppressWarnings("unchecked")
-    static <A> Maybe<ImmutableNonEmptyVector<A>> tryNonEmptyCopyAllFromIterable(Iterable<A> source) {
+    static <A> Maybe<ImmutableNonEmptyVector<A>> tryNonEmptyCopyFromArray(int maxCount, A[] arr) {
+        Objects.requireNonNull(arr);
+        if (maxCount < 0) throw new IllegalArgumentException("maxCount must be >= 0");
+        if (arr.length == 0 || maxCount == 0) {
+            return nothing();
+        } else {
+            return (Maybe<ImmutableNonEmptyVector<A>>) copyFromArray(maxCount, arr).toNonEmpty();
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    static <A> Maybe<ImmutableNonEmptyVector<A>> tryNonEmptyCopyFrom(Iterable<A> source) {
         Objects.requireNonNull(source);
         if (source.iterator().hasNext()) return nothing();
         return (Maybe<ImmutableNonEmptyVector<A>>) copyFrom(source).toNonEmpty();
     }
 
     @SuppressWarnings("unchecked")
-    static <A> Maybe<ImmutableNonEmptyVector<A>> tryNonEmptyCopyFromIterable(int maxCount, Iterable<A> source) {
+    static <A> Maybe<ImmutableNonEmptyVector<A>> tryNonEmptyCopyFrom(int maxCount, Iterable<A> source) {
         Objects.requireNonNull(source);
         if (maxCount < 0) throw new IllegalArgumentException("maxCount must be >= 0");
         if (maxCount == 0) return nothing();
@@ -189,12 +200,20 @@ class Vectors {
         return getNonEmptyOrThrow(tryNonEmptyWrap(vec));
     }
 
+    static <A> ImmutableNonEmptyVector<A> nonEmptyCopyFromOrThrow(Iterable<A> source) {
+        return ImmutableVectors.getNonEmptyOrThrow(tryNonEmptyCopyFrom(source));
+    }
+
+    static <A> ImmutableNonEmptyVector<A> nonEmptyCopyFromOrThrow(int maxCount, Iterable<A> source) {
+        return ImmutableVectors.getNonEmptyOrThrow(tryNonEmptyCopyFrom(maxCount, source));
+    }
+
     static <A> ImmutableNonEmptyVector<A> nonEmptyCopyFromArrayOrThrow(A[] source) {
         return ImmutableVectors.getNonEmptyOrThrow(tryNonEmptyCopyFromArray(source));
     }
 
-    static <A> ImmutableNonEmptyVector<A> nonEmptyCopyAllFromIterableOrThrow(Iterable<A> source) {
-        return ImmutableVectors.getNonEmptyOrThrow(tryNonEmptyCopyAllFromIterable(source));
+    static <A> ImmutableNonEmptyVector<A> nonEmptyCopyFromArrayOrThrow(int maxCount, A[] source) {
+        return ImmutableVectors.getNonEmptyOrThrow(tryNonEmptyCopyFromArray(maxCount, source));
     }
 
     static <A> ImmutableVector<A> ensureImmutable(Vector<A> vector) {

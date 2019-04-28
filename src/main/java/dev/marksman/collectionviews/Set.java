@@ -3,9 +3,10 @@ package dev.marksman.collectionviews;
 import com.jnape.palatable.lambda.adt.Maybe;
 
 public interface Set<A> extends Iterable<A> {
-    int size();
 
     boolean contains(A element);
+
+    int size();
 
     default boolean isEmpty() {
         return size() == 0;
@@ -68,7 +69,7 @@ public interface Set<A> extends Iterable<A> {
      * direct reference to it the underlying {@link java.util.Set} can still mutate it.
      *
      * @param underlying
-     * @param <A> the element type
+     * @param <A>        the element type
      * @return
      */
     static <A> Set<A> wrap(java.util.Set<A> underlying) {

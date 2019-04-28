@@ -37,6 +37,7 @@ import static com.jnape.palatable.lambda.adt.Maybe.nothing;
  * @param <A> the element type
  */
 public interface Vector<A> extends Iterable<A>, RandomAccess {
+
     /**
      * The size of the {@link Vector}.  Executes in O(1).
      *
@@ -54,24 +55,38 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
     A unsafeGet(int index);
 
     /**
-     * Tests whether the {@link Vector} is empty.  Executes in O(1).
+     * Returns a new {@link Vector} that drops the first {@code count} elements.
+     * <p>
+     * Does not make copies of any underlying data structures.
+     * <p>
+     * Use caution when taking a small slice of a huge {@link Vector}, as the smaller slice
+     * will hold onto a reference of the larger one, and will prevent it from being GC'ed.
      *
-     * @return {@code true} if the {@link Vector} is empty, {@code false} otherwise.
+     * @param count the number of elements to drop from the {@link Vector}.  Must be &gt;= 0.
+     *              May exceed size of {@link Vector}, in which case, the result will be an
+     *              empty {@link Vector}.
+     * @return a {@code Vector<A>}
      */
-    default boolean isEmpty() {
-        return size() == 0;
+    default Vector<A> drop(int count) {
+        return Vectors.drop(count, this);
     }
 
     /**
-     * Returns the tail of the {@link Vector}, i.e. the same {@link Vector} with the first element dropped.
-     * May be empty.
+     * Maps a function over the elements in a {@link Vector} and returns a new {@link Vector}
+     * of the same size (but possibly a different type).
      * <p>
-     * Does not make copies of any underlying data structures.
+     * Does not make any copies of underlying data structures.
+     * <p>
+     * This method is stack-safe, so a Vector can be mapped as many times as the heap permits.
      *
-     * @return a {@link Vector} of the same type
+     * @param f   a function from {@code A} to {@code B}.
+     *            This function should be referentially transparent and not perform side-effects.
+     *            It may be called zero or more times for each element.
+     * @param <B> The type of the elements contained in the output Vector.
+     * @return a {@code Vector<B>} of the same size
      */
-    default Vector<A> tail() {
-        return drop(1);
+    default <B> Vector<B> fmap(Fn1<? super A, ? extends B> f) {
+        return Vectors.map(f, this);
     }
 
     /**
@@ -91,21 +106,71 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
     }
 
     /**
-     * Maps a function over the elements in a {@link Vector} and returns a new {@link Vector}
-     * of the same size (but possibly a different type).
-     * <p>
-     * Does not make any copies of underlying data structures.
-     * <p>
-     * This method is stack-safe, so a Vector can be mapped as many times as the heap permits.
+     * Tests whether the {@link Vector} is empty.  Executes in O(1).
      *
-     * @param f   a function from {@code A} to {@code B}.
-     *            This function should be referentially transparent and not perform side-effects.
-     *            It may be called zero or more times for each element.
-     * @param <B> The type of the elements contained in the output Vector.
-     * @return a {@code Vector<B>} of the same size
+     * @return {@code true} if the {@link Vector} is empty, {@code false} otherwise.
      */
-    default <B> Vector<B> fmap(Fn1<? super A, ? extends B> f) {
-        return Vectors.map(f, this);
+    default boolean isEmpty() {
+        return size() == 0;
+    }
+
+    /**
+     * Returns an iterator over elements of type {@code A}.
+     *
+     * @return an Iterator.
+     */
+    @Override
+    default Iterator<A> iterator() {
+        return new VectorIterator<>(this);
+    }
+
+    /**
+     * Create a slice of an existing {@link Vector}.
+     * <p>
+     * Does not make copies of any underlying data structures.
+     * <p>
+     * Use caution when taking a small slice of a huge Vector that you no longer need, as the smaller slice
+     * will hold onto a reference of the larger one, and will prevent it from being GC'ed.
+     * To avoid this situation, use {@link Vector#copySliceFrom} instead.
+     *
+     * @param startIndex        the index of the element to begin the slice.  Must be &gt;= 0.
+     *                          May exceed the size of the {@link Vector}, in which case an empty {@link Vector} will be returned.
+     * @param endIndexExclusive the end index (exclusive) of the slice.  Must be &gt;= {@code startIndex}.
+     *                          May exceed the size of the {@link Vector}, in which case the slice will
+     *                          contain as many elements as available.
+     * @return a {@code Vector<A>}
+     */
+    default Vector<A> slice(int startIndex, int endIndexExclusive) {
+        return Vectors.sliceFromIterable(startIndex, endIndexExclusive, this);
+    }
+
+    /**
+     * Returns the tail of the {@link Vector}, i.e. the same {@link Vector} with the first element dropped.
+     * May be empty.
+     * <p>
+     * Does not make copies of any underlying data structures.
+     *
+     * @return a {@link Vector} of the same type
+     */
+    default Vector<A> tail() {
+        return drop(1);
+    }
+
+    /**
+     * Returns a new {@link Vector} that contains at most the first {@code count} elements of this {@link Vector}.
+     * <p>
+     * Does not make copies of any underlying data structures.
+     * <p>
+     * Use caution when taking a small slice of a huge {@link Vector}, as the smaller slice
+     * will hold onto a reference of the larger one, and will prevent it from being GC'ed.
+     * To avoid this situation, use {@link Vector#copyFrom} instead.
+     *
+     * @param count the maximum number of elements to take from the {@link Vector}.  Must be &gt;= 0.
+     *              May exceed size of {@link Vector}.
+     * @return a {@code Vector<A>} containing between 0 and {@code count} elements
+     */
+    default Vector<A> take(int count) {
+        return Vectors.take(count, this);
     }
 
     /**
@@ -145,70 +210,6 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
      */
     default NonEmptyVector<A> toNonEmptyOrThrow() {
         return Vectors.nonEmptyWrapOrThrow(this);
-    }
-
-    /**
-     * Returns an iterator over elements of type {@code A}.
-     *
-     * @return an Iterator.
-     */
-    @Override
-    default Iterator<A> iterator() {
-        return new VectorIterator<>(this);
-    }
-
-    /**
-     * Returns a new {@link Vector} that contains at most the first {@code count} elements of this {@link Vector}.
-     * <p>
-     * Does not make copies of any underlying data structures.
-     * <p>
-     * Use caution when taking a small slice of a huge {@link Vector}, as the smaller slice
-     * will hold onto a reference of the larger one, and will prevent it from being GC'ed.
-     * To avoid this situation, use {@link Vector#copyFrom} instead.
-     *
-     * @param count the maximum number of elements to take from the {@link Vector}.  Must be &gt;= 0.
-     *              May exceed size of {@link Vector}.
-     * @return a {@code Vector<A>} containing between 0 and {@code count} elements
-     */
-    default Vector<A> take(int count) {
-        return Vectors.take(count, this);
-    }
-
-    /**
-     * Returns a new {@link Vector} that drops the first {@code count} elements.
-     * <p>
-     * Does not make copies of any underlying data structures.
-     * <p>
-     * Use caution when taking a small slice of a huge {@link Vector}, as the smaller slice
-     * will hold onto a reference of the larger one, and will prevent it from being GC'ed.
-     *
-     * @param count the number of elements to drop from the {@link Vector}.  Must be &gt;= 0.
-     *              May exceed size of {@link Vector}, in which case, the result will be an
-     *              empty {@link Vector}.
-     * @return a {@code Vector<A>}
-     */
-    default Vector<A> drop(int count) {
-        return Vectors.drop(count, this);
-    }
-
-    /**
-     * Create a slice of an existing {@link Vector}.
-     * <p>
-     * Does not make copies of any underlying data structures.
-     * <p>
-     * Use caution when taking a small slice of a huge Vector that you no longer need, as the smaller slice
-     * will hold onto a reference of the larger one, and will prevent it from being GC'ed.
-     * To avoid this situation, use {@link Vector#copySliceFrom} instead.
-     *
-     * @param startIndex        the index of the element to begin the slice.  Must be &gt;= 0.
-     *                          May exceed the size of the {@link Vector}, in which case an empty {@link Vector} will be returned.
-     * @param endIndexExclusive the end index (exclusive) of the slice.  Must be &gt;= {@code startIndex}.
-     *                          May exceed the size of the {@link Vector}, in which case the slice will
-     *                          contain as many elements as available.
-     * @return a {@code Vector<A>}
-     */
-    default Vector<A> slice(int startIndex, int endIndexExclusive) {
-        return Vectors.sliceFromIterable(startIndex, endIndexExclusive, this);
     }
 
     /**

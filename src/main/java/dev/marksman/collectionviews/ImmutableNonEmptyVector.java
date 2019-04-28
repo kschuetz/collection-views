@@ -20,13 +20,13 @@ import static com.jnape.palatable.lambda.adt.Maybe.just;
 public interface ImmutableNonEmptyVector<A> extends NonEmptyVector<A>, ImmutableVector<A> {
 
     @Override
-    default ImmutableVector<A> tail() {
-        return drop(1);
+    default <B> ImmutableNonEmptyVector<B> fmap(Fn1<? super A, ? extends B> f) {
+        return ImmutableVectors.mapNonEmpty(f, this);
     }
 
     @Override
-    default <B> ImmutableNonEmptyVector<B> fmap(Fn1<? super A, ? extends B> f) {
-        return ImmutableVectors.mapNonEmpty(f, this);
+    default ImmutableVector<A> tail() {
+        return drop(1);
     }
 
     @Override
@@ -43,4 +43,5 @@ public interface ImmutableNonEmptyVector<A> extends NonEmptyVector<A>, Immutable
     default ImmutableNonEmptyVector<A> toNonEmptyOrThrow() {
         return this;
     }
+
 }

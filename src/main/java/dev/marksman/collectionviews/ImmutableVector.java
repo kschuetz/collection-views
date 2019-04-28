@@ -22,6 +22,31 @@ import com.jnape.palatable.lambda.functions.Fn1;
 public interface ImmutableVector<A> extends Vector<A>, Immutable {
 
     @Override
+    default ImmutableVector<A> drop(int count) {
+        return Vectors.immutableDrop(count, this);
+    }
+
+    @Override
+    default <B> ImmutableVector<B> fmap(Fn1<? super A, ? extends B> f) {
+        return ImmutableVectors.map(f, this);
+    }
+
+    @Override
+    default ImmutableVector<A> slice(int startIndex, int endIndexExclusive) {
+        return ImmutableVectors.slice(startIndex, endIndexExclusive, this);
+    }
+
+    @Override
+    default ImmutableVector<A> tail() {
+        return drop(1);
+    }
+
+    @Override
+    default ImmutableVector<A> take(int count) {
+        return ImmutableVectors.take(count, this);
+    }
+
+    @Override
     default ImmutableVector<A> toImmutable() {
         return this;
     }
@@ -36,28 +61,4 @@ public interface ImmutableVector<A> extends Vector<A>, Immutable {
         return null;
     }
 
-    @Override
-    default ImmutableVector<A> tail() {
-        return drop(1);
-    }
-
-    @Override
-    default <B> ImmutableVector<B> fmap(Fn1<? super A, ? extends B> f) {
-        return ImmutableVectors.map(f, this);
-    }
-
-    @Override
-    default ImmutableVector<A> take(int count) {
-        return ImmutableVectors.take(count, this);
-    }
-
-    @Override
-    default ImmutableVector<A> drop(int count) {
-        return Vectors.immutableDrop(count, this);
-    }
-
-    @Override
-    default ImmutableVector<A> slice(int startIndex, int endIndexExclusive) {
-        return ImmutableVectors.slice(startIndex, endIndexExclusive, this);
-    }
 }

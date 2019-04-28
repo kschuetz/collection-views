@@ -23,18 +23,23 @@ import static com.jnape.palatable.lambda.adt.Maybe.just;
 public interface NonEmptyVector<A> extends NonEmptyIterable<A>, Vector<A> {
 
     @Override
+    default <B> NonEmptyVector<B> fmap(Fn1<? super A, ? extends B> f) {
+        return Vectors.mapNonEmpty(f, this);
+    }
+
+    @Override
     default boolean isEmpty() {
         return false;
     }
 
     @Override
-    default Vector<A> tail() {
-        return drop(1);
+    default Iterator<A> iterator() {
+        return new VectorIterator<>(this);
     }
 
     @Override
-    default <B> NonEmptyVector<B> fmap(Fn1<? super A, ? extends B> f) {
-        return Vectors.mapNonEmpty(f, this);
+    default Vector<A> tail() {
+        return drop(1);
     }
 
     @Override
@@ -50,11 +55,6 @@ public interface NonEmptyVector<A> extends NonEmptyIterable<A>, Vector<A> {
     @Override
     default NonEmptyVector<A> toNonEmptyOrThrow() {
         return this;
-    }
-
-    @Override
-    default Iterator<A> iterator() {
-        return new VectorIterator<>(this);
     }
 
     /**
@@ -146,19 +146,35 @@ public interface NonEmptyVector<A> extends NonEmptyIterable<A>, Vector<A> {
     }
 
     static <A> Maybe<ImmutableNonEmptyVector<A>> tryCopyFrom(Iterable<A> source) {
-        return Vectors.tryNonEmptyCopyAllFromIterable(source);
+        return Vectors.tryNonEmptyCopyFrom(source);
     }
 
     static <A> Maybe<ImmutableNonEmptyVector<A>> tryCopyFrom(A[] source) {
         return Vectors.tryNonEmptyCopyFromArray(source);
     }
 
+    static <A> Maybe<ImmutableNonEmptyVector<A>> tryCopyFrom(int maxCount, Iterable<A> source) {
+        return Vectors.tryNonEmptyCopyFrom(maxCount, source);
+    }
+
+    static <A> Maybe<ImmutableNonEmptyVector<A>> tryCopyFrom(int maxCount, A[] source) {
+        return Vectors.tryNonEmptyCopyFromArray(maxCount, source);
+    }
+
     static <A> ImmutableNonEmptyVector<A> copyFromOrThrow(Iterable<A> source) {
-        return Vectors.nonEmptyCopyAllFromIterableOrThrow(source);
+        return Vectors.nonEmptyCopyFromOrThrow(source);
     }
 
     static <A> ImmutableNonEmptyVector<A> copyFromOrThrow(A[] source) {
         return Vectors.nonEmptyCopyFromArrayOrThrow(source);
+    }
+
+    static <A> ImmutableNonEmptyVector<A> copyFromOrThrow(int maxCount, Iterable<A> source) {
+        return Vectors.nonEmptyCopyFromOrThrow(maxCount, source);
+    }
+
+    static <A> ImmutableNonEmptyVector<A> copyFromOrThrow(int maxCount, A[] source) {
+        return Vectors.nonEmptyCopyFromArrayOrThrow(maxCount, source);
     }
 
 }
