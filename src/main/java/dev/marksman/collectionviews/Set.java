@@ -12,10 +12,6 @@ public interface Set<A> extends Iterable<A> {
         return size() == 0;
     }
 
-    static <A> Set<A> empty() {
-        return Sets.empty();
-    }
-
     /**
      * Returns an {@link ImmutableSet} containing the same elements as this one.
      * This method will make a copy of the underlying data structure if necessary to
@@ -55,6 +51,15 @@ public interface Set<A> extends Iterable<A> {
         return Sets.nonEmptyWrapOrThrow(this);
     }
 
+    static <A> Set<A> empty() {
+        return Sets.empty();
+    }
+
+    @SafeVarargs
+    static <A> ImmutableNonEmptySet<A> of(A first, A... more) {
+        return Sets.nonEmptySetOf(first, more);
+    }
+
     /**
      * Wraps a {@link java.util.Set} in a {@link Set}.
      *
@@ -76,8 +81,4 @@ public interface Set<A> extends Iterable<A> {
         return Sets.wrap(underlying);
     }
 
-    @SafeVarargs
-    static <A> ImmutableNonEmptySet<A> of(A first, A... more) {
-        return Sets.nonEmptySetOf(first, more);
-    }
 }

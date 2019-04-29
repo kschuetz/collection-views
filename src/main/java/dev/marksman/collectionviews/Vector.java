@@ -184,7 +184,7 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
      * @return an {@link ImmutableVector} of the same type and containing the same elements
      */
     default ImmutableVector<A> toImmutable() {
-        return Vectors.ensureImmutable(this);
+        return ImmutableVectors.ensureImmutable(this);
     }
 
     /**
@@ -196,7 +196,7 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
      * Does not make copies of any underlying data structures.
      */
     default Maybe<? extends NonEmptyVector<A>> toNonEmpty() {
-        return Vectors.tryNonEmptyWrap(this);
+        return ImmutableVectors.tryNonEmptyWrap(this);
     }
 
     /**
@@ -291,7 +291,7 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
      * @return an {@code ImmutableVector<A>}
      */
     static <A> ImmutableVector<A> copyFrom(Iterable<A> source) {
-        return Vectors.copyFrom(source);
+        return ImmutableVectors.copyFrom(source);
     }
 
     /**
@@ -303,7 +303,7 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
      * @return an {@code ImmutableVector<A>}
      */
     static <A> ImmutableVector<A> copyFrom(A[] source) {
-        return Vectors.copyFromArray(source);
+        return ImmutableVectors.copyFromArray(source);
     }
 
     /**
@@ -328,7 +328,7 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
      * @return an {@link ImmutableVector} that contains at most {@code maxCount} elements.
      */
     static <A> ImmutableVector<A> copyFrom(int maxCount, Iterable<A> source) {
-        return Vectors.copyFrom(maxCount, source);
+        return ImmutableVectors.copyFrom(maxCount, source);
     }
 
     /**
@@ -341,7 +341,7 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
      * @return an {@code ImmutableVector<A>}
      */
     static <A> ImmutableVector<A> copyFrom(int maxCount, A[] source) {
-        return Vectors.copyFromArray(maxCount, source);
+        return ImmutableVectors.copyFromArray(maxCount, source);
     }
 
     /**
@@ -369,7 +369,7 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
      * @return an {@code ImmutableVector<A>} that contains at most <code>endIndexExclusive - startIndex</code> elements.
      */
     static <A> ImmutableVector<A> copySliceFrom(int startIndex, int endIndexExclusive, Iterable<A> source) {
-        return Vectors.copySliceFrom(startIndex, endIndexExclusive, source);
+        return ImmutableVectors.copySliceFrom(startIndex, endIndexExclusive, source);
     }
 
 }

@@ -44,7 +44,7 @@ public interface NonEmptyVector<A> extends NonEmptyIterable<A>, Vector<A> {
 
     @Override
     default ImmutableNonEmptyVector<A> toImmutable() {
-        return Vectors.ensureImmutable(this);
+        return ImmutableVectors.ensureImmutable(this);
     }
 
     @Override
@@ -146,35 +146,35 @@ public interface NonEmptyVector<A> extends NonEmptyIterable<A>, Vector<A> {
     }
 
     static <A> Maybe<ImmutableNonEmptyVector<A>> tryCopyFrom(Iterable<A> source) {
-        return Vectors.tryNonEmptyCopyFrom(source);
+        return ImmutableVectors.tryNonEmptyCopyFrom(source);
     }
 
     static <A> Maybe<ImmutableNonEmptyVector<A>> tryCopyFrom(A[] source) {
-        return Vectors.tryNonEmptyCopyFromArray(source);
+        return ImmutableVectors.tryNonEmptyCopyFromArray(source);
     }
 
     static <A> Maybe<ImmutableNonEmptyVector<A>> tryCopyFrom(int maxCount, Iterable<A> source) {
-        return Vectors.tryNonEmptyCopyFrom(maxCount, source);
+        return ImmutableVectors.tryNonEmptyCopyFrom(maxCount, source);
     }
 
     static <A> Maybe<ImmutableNonEmptyVector<A>> tryCopyFrom(int maxCount, A[] source) {
-        return Vectors.tryNonEmptyCopyFromArray(maxCount, source);
+        return ImmutableVectors.tryNonEmptyCopyFromArray(maxCount, source);
     }
 
     static <A> ImmutableNonEmptyVector<A> copyFromOrThrow(Iterable<A> source) {
-        return Vectors.nonEmptyCopyFromOrThrow(source);
+        return ImmutableVectors.nonEmptyCopyFromOrThrow(source);
     }
 
     static <A> ImmutableNonEmptyVector<A> copyFromOrThrow(A[] source) {
-        return Vectors.nonEmptyCopyFromArrayOrThrow(source);
+        return ImmutableVectors.nonEmptyCopyFromArrayOrThrow(source);
     }
 
     static <A> ImmutableNonEmptyVector<A> copyFromOrThrow(int maxCount, Iterable<A> source) {
-        return Vectors.nonEmptyCopyFromOrThrow(maxCount, source);
+        return ImmutableVectors.nonEmptyCopyFromOrThrow(maxCount, source);
     }
 
     static <A> ImmutableNonEmptyVector<A> copyFromOrThrow(int maxCount, A[] source) {
-        return Vectors.nonEmptyCopyFromArrayOrThrow(maxCount, source);
+        return ImmutableVectors.nonEmptyCopyFromArrayOrThrow(maxCount, source);
     }
 
 }
