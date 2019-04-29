@@ -9,6 +9,7 @@ import com.jnape.palatable.lambda.functions.builtin.fn2.Take;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Supplier;
 
 import static com.jnape.palatable.lambda.adt.Maybe.just;
 import static com.jnape.palatable.lambda.adt.Maybe.nothing;
@@ -171,9 +172,11 @@ class Vectors {
     }
 
     private static <A> NonEmptyVector<A> getNonEmptyOrThrow(Maybe<NonEmptyVector<A>> maybeResult) {
-        return maybeResult.orElseThrow(() -> {
-            throw new IllegalArgumentException("Cannot construct NonEmptyVector from empty input");
-        });
+        return maybeResult.orElseThrow(Vectors.nonEmptyError());
+    }
+
+    static Supplier<IllegalArgumentException> nonEmptyError() {
+        return () -> new IllegalArgumentException("Cannot construct NonEmptyVector from empty input");
     }
 
 }

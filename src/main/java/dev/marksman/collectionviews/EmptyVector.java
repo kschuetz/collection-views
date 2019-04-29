@@ -46,8 +46,19 @@ class EmptyVector<A> extends AbstractVector<A> implements ImmutableVector<A> {
         return emptyIterator();
     }
 
+    @Override
+    public Maybe<? extends ImmutableNonEmptyVector<A>> toNonEmpty() {
+        return nothing();
+    }
+
+    @Override
+    public ImmutableNonEmptyVector<A> toNonEmptyOrThrow() {
+        throw Vectors.nonEmptyError().get();
+    }
+
     @SuppressWarnings("unchecked")
     static <A> EmptyVector<A> emptyVector() {
         return (EmptyVector<A>) INSTANCE;
     }
+
 }

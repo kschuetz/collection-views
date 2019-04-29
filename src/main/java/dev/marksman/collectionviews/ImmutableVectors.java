@@ -83,9 +83,7 @@ class ImmutableVectors {
     }
 
     private static <A> ImmutableNonEmptyVector<A> getNonEmptyOrThrow(Maybe<ImmutableNonEmptyVector<A>> maybeResult) {
-        return maybeResult.orElseThrow(() -> {
-            throw new IllegalArgumentException("Cannot construct NonEmptyVector from empty input");
-        });
+        return maybeResult.orElseThrow(Vectors.nonEmptyError());
     }
 
     static <A> ImmutableVector<A> copyFromArray(int maxCount, A[] source) {
