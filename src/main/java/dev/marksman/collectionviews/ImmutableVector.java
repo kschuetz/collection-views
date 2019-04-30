@@ -53,12 +53,12 @@ public interface ImmutableVector<A> extends Vector<A>, Immutable {
 
     @Override
     default Maybe<? extends ImmutableNonEmptyVector<A>> toNonEmpty() {
-        return null;
+        return ImmutableVectors.tryNonEmptyConvert(this);
     }
 
     @Override
     default ImmutableNonEmptyVector<A> toNonEmptyOrThrow() {
-        return null;
+        return ImmutableVectors.nonEmptyConvertOrThrow(this);
     }
 
 }

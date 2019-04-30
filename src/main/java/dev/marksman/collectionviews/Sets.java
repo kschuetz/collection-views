@@ -3,12 +3,11 @@ package dev.marksman.collectionviews;
 import com.jnape.palatable.lambda.adt.Maybe;
 
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Objects;
+import java.util.function.Supplier;
 
 import static com.jnape.palatable.lambda.adt.Maybe.just;
 import static com.jnape.palatable.lambda.adt.Maybe.nothing;
-import static com.jnape.palatable.lambda.functions.builtin.fn2.ToCollection.toCollection;
 
 class Sets {
 
@@ -60,29 +59,12 @@ class Sets {
         return getNonEmptyOrThrow(tryNonEmptyWrap(underlying));
     }
 
-    static <A> ImmutableSet<A> ensureImmutable(Set<A> set) {
-        if (set instanceof ImmutableSet<?>) {
-            return (ImmutableSet<A>) set;
-        } else if (set.isEmpty()) {
-            return empty();
-        } else {
-            HashSet<A> copied = toCollection(HashSet::new, set);
-            return new ImmutableWrappedSet<>(copied);
-        }
-    }
-
-    static <A> ImmutableNonEmptySet<A> ensureImmutable(NonEmptySet<A> set) {
-        if (set instanceof ImmutableNonEmptySet<?>) {
-            return (ImmutableNonEmptySet<A>) set;
-        } else {
-            HashSet<A> copied = toCollection(HashSet::new, set);
-            return new ImmutableWrappedSet<>(copied);
-        }
-    }
-
     private static <A> NonEmptySet<A> getNonEmptyOrThrow(Maybe<NonEmptySet<A>> maybeResult) {
-        return maybeResult.orElseThrow(() -> {
-            throw new IllegalArgumentException("Cannot construct NonEmptySet from empty input");
-        });
+        return maybeResult.orElseThrow(nonEmptyError());
     }
+
+    static Supplier<IllegalArgumentException> nonEmptyError() {
+        return () -> new IllegalArgumentException("Cannot construct NonEmptySet from empty input");
+    }
+
 }

@@ -150,7 +150,7 @@ public interface NonEmptyVector<A> extends NonEmptyIterable<A>, Vector<A> {
     }
 
     static <A> Maybe<ImmutableNonEmptyVector<A>> tryCopyFrom(A[] source) {
-        return ImmutableVectors.tryNonEmptyCopyFromArray(source);
+        return ImmutableVectors.tryNonEmptyCopyFrom(source);
     }
 
     static <A> Maybe<ImmutableNonEmptyVector<A>> tryCopyFrom(int maxCount, Iterable<A> source) {
@@ -158,7 +158,7 @@ public interface NonEmptyVector<A> extends NonEmptyIterable<A>, Vector<A> {
     }
 
     static <A> Maybe<ImmutableNonEmptyVector<A>> tryCopyFrom(int maxCount, A[] source) {
-        return ImmutableVectors.tryNonEmptyCopyFromArray(maxCount, source);
+        return ImmutableVectors.tryNonEmptyCopyFrom(maxCount, source);
     }
 
     static <A> ImmutableNonEmptyVector<A> copyFromOrThrow(Iterable<A> source) {
@@ -166,7 +166,7 @@ public interface NonEmptyVector<A> extends NonEmptyIterable<A>, Vector<A> {
     }
 
     static <A> ImmutableNonEmptyVector<A> copyFromOrThrow(A[] source) {
-        return ImmutableVectors.nonEmptyCopyFromArrayOrThrow(source);
+        return ImmutableVectors.nonEmptyCopyFromOrThrow(source);
     }
 
     static <A> ImmutableNonEmptyVector<A> copyFromOrThrow(int maxCount, Iterable<A> source) {
@@ -174,7 +174,7 @@ public interface NonEmptyVector<A> extends NonEmptyIterable<A>, Vector<A> {
     }
 
     static <A> ImmutableNonEmptyVector<A> copyFromOrThrow(int maxCount, A[] source) {
-        return ImmutableVectors.nonEmptyCopyFromArrayOrThrow(maxCount, source);
+        return ImmutableVectors.nonEmptyCopyFromOrThrow(maxCount, source);
     }
 
 }

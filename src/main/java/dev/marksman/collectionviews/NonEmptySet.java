@@ -13,7 +13,7 @@ public interface NonEmptySet<A> extends NonEmptyIterable<A>, Set<A> {
 
     @Override
     default ImmutableNonEmptySet<A> toImmutable() {
-        return Sets.ensureImmutable(this);
+        return ImmutableSets.ensureImmutable(this);
     }
 
     @Override
@@ -42,9 +42,36 @@ public interface NonEmptySet<A> extends NonEmptyIterable<A>, Set<A> {
         return Sets.nonEmptyWrapOrThrow(underlying);
     }
 
-    @SafeVarargs
-    static <A> NonEmptySet<A> of(A first, A... more) {
-        return Sets.nonEmptySetOf(first, more);
+    static <A> Maybe<ImmutableNonEmptySet<A>> tryCopyFrom(Iterable<A> source) {
+        return ImmutableSets.tryNonEmptyCopyFrom(source);
+    }
+
+    static <A> Maybe<ImmutableNonEmptySet<A>> tryCopyFrom(A[] source) {
+        return ImmutableSets.tryNonEmptyCopyFrom(source);
+    }
+
+    static <A> Maybe<ImmutableNonEmptySet<A>> tryCopyFrom(int maxCount, Iterable<A> source) {
+        return ImmutableSets.tryNonEmptyCopyFrom(maxCount, source);
+    }
+
+    static <A> Maybe<ImmutableNonEmptySet<A>> tryCopyFrom(int maxCount, A[] source) {
+        return ImmutableSets.tryNonEmptyCopyFrom(maxCount, source);
+    }
+
+    static <A> ImmutableNonEmptySet<A> copyFromOrThrow(Iterable<A> source) {
+        return ImmutableSets.nonEmptyCopyFromOrThrow(source);
+    }
+
+    static <A> ImmutableNonEmptySet<A> copyFromOrThrow(A[] source) {
+        return ImmutableSets.nonEmptyCopyFromOrThrow(source);
+    }
+
+    static <A> ImmutableNonEmptySet<A> copyFromOrThrow(int maxCount, Iterable<A> source) {
+        return ImmutableSets.nonEmptyCopyFromOrThrow(maxCount, source);
+    }
+
+    static <A> ImmutableNonEmptySet<A> copyFromOrThrow(int maxCount, A[] source) {
+        return ImmutableSets.nonEmptyCopyFromOrThrow(maxCount, source);
     }
 
 }

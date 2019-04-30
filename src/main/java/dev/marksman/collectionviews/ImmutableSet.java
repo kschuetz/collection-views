@@ -11,12 +11,12 @@ public interface ImmutableSet<A> extends Set<A>, Immutable {
 
     @Override
     default Maybe<? extends ImmutableNonEmptySet<A>> toNonEmpty() {
-        return null;
+        return ImmutableSets.tryNonEmptyConvert(this);
     }
 
     @Override
     default NonEmptySet<A> toNonEmptyOrThrow() {
-        return null;
+        return ImmutableSets.nonEmptyConvertOrThrow(this);
     }
 
 }

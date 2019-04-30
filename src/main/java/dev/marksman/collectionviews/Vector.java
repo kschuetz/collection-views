@@ -141,7 +141,7 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
      * @return a {@code Vector<A>}
      */
     default Vector<A> slice(int startIndex, int endIndexExclusive) {
-        return Vectors.sliceFromIterable(startIndex, endIndexExclusive, this);
+        return Vectors.slice(startIndex, endIndexExclusive, this);
     }
 
     /**
@@ -303,7 +303,7 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
      * @return an {@code ImmutableVector<A>}
      */
     static <A> ImmutableVector<A> copyFrom(A[] source) {
-        return ImmutableVectors.copyFromArray(source);
+        return ImmutableVectors.copyFrom(source);
     }
 
     /**
@@ -341,7 +341,7 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
      * @return an {@code ImmutableVector<A>}
      */
     static <A> ImmutableVector<A> copyFrom(int maxCount, A[] source) {
-        return ImmutableVectors.copyFromArray(maxCount, source);
+        return ImmutableVectors.copyFrom(maxCount, source);
     }
 
     /**

@@ -27,7 +27,7 @@ class NonEmptySetTest {
 
             @BeforeEach
             void beforeEach() {
-                subject = NonEmptySet.of("foo", "bar", "baz");
+                subject = Set.of("foo", "bar", "baz");
             }
 
             @Test
@@ -67,7 +67,7 @@ class NonEmptySetTest {
 
             @BeforeEach
             void beforeEach() {
-                subject = NonEmptySet.of("foo");
+                subject = Set.of("foo");
             }
 
             @Test
