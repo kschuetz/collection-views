@@ -5,9 +5,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+import static com.jnape.palatable.lambda.functions.builtin.fn2.ToCollection.toCollection;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptySet;
 import static java.util.Collections.singleton;
@@ -42,6 +44,11 @@ class SetTest {
         @Test
         void iteratesCorrectly() {
             assertThat(Set.empty(), emptyIterable());
+        }
+
+        @Test
+        void equalToItself() {
+            assertEquals(Set.empty(), Set.empty());
         }
     }
 
@@ -98,7 +105,7 @@ class SetTest {
 
             @BeforeEach
             void beforeEach() {
-                underlying = new java.util.HashSet<String>();
+                underlying = new java.util.HashSet<>();
                 underlying.addAll(asList("foo", "bar", "baz"));
                 subject = Set.wrap(underlying);
             }
@@ -138,6 +145,45 @@ class SetTest {
                 assertTrue(subject.contains("don't do this!"));
                 underlying.remove("foo");
                 assertFalse(subject.contains("foo"));
+            }
+
+            @Test
+            void equalToSelf() {
+                assertEquals(subject, subject);
+            }
+
+            @Test
+            void equalToOtherSetWrappingEquivalentUnderlying() {
+                HashSet<String> otherUnderlying = toCollection(HashSet::new, asList("baz", "bar", "foo"));
+                Set<String> other = Set.wrap(otherUnderlying);
+                assertEquals(subject, other);
+                assertEquals(other, subject);
+            }
+
+            @Test
+            void equalToSameSetConstructedImmutably() {
+                assertEquals(subject, Set.of("foo", "bar", "baz"));
+                assertEquals(Set.of("baz", "bar", "foo"), subject);
+            }
+
+            @Test
+            void notEqualToNull() {
+                assertNotEquals(subject, null);
+                assertNotEquals(null, subject);
+            }
+
+            @Test
+            void notEqualToStrictSubset() {
+                Set<String> subset = Set.of("foo", "bar");
+                assertNotEquals(subject, subset);
+                assertNotEquals(subset, subject);
+            }
+
+            @Test
+            void notEqualToStrictSuperset() {
+                Set<String> superset = Set.of("foo", "bar", "baz", "quux");
+                assertNotEquals(subject, superset);
+                assertNotEquals(superset, subject);
             }
 
         }
@@ -180,10 +226,48 @@ class SetTest {
                 assertThat(subject, containsInAnyOrder("foo"));
             }
 
+            @Test
+            void equalToSelf() {
+                assertEquals(subject, subject);
+            }
+
+            @Test
+            void equalToOtherSetWrappingEquivalentUnderlying() {
+                java.util.Set<String> otherUnderlying = singleton("foo");
+                Set<String> other = Set.wrap(otherUnderlying);
+                assertEquals(subject, other);
+                assertEquals(other, subject);
+            }
+
+            @Test
+            void equalToSameSetConstructedImmutably() {
+                assertEquals(subject, Set.of("foo"));
+                assertEquals(Set.of("foo"), subject);
+            }
+
+            @Test
+            void notEqualToNull() {
+                assertNotEquals(subject, null);
+                assertNotEquals(null, subject);
+            }
+
+            @Test
+            void notEqualToEmpty() {
+                assertNotEquals(subject, Set.empty());
+                assertNotEquals(Set.empty(), subject);
+            }
+
+            @Test
+            void notEqualToStrictSuperset() {
+                Set<String> superset = Set.of("foo", "bar", "baz");
+                assertNotEquals(subject, superset);
+                assertNotEquals(superset, subject);
+            }
+
         }
 
         @Nested
-        @DisplayName("wrap size 3 java.util.Set")
+        @DisplayName("wrap empty java.util.Set")
         class WrapEmptySetTests {
             private Set<String> subject;
 
@@ -217,7 +301,65 @@ class SetTest {
                 assertThat(subject, emptyIterable());
             }
 
+            @Test
+            void equalToSelf() {
+                assertEquals(subject, subject);
+            }
+
+            @Test
+            void equalToEmptySet() {
+                assertEquals(subject, subject);
+            }
+
+            @Test
+            void notEqualToNull() {
+                assertNotEquals(subject, null);
+                assertNotEquals(null, subject);
+            }
+
+            @Test
+            void notEqualToStrictSuperset() {
+                Set<String> superset = Set.of("foo");
+                assertNotEquals(subject, superset);
+                assertNotEquals(superset, subject);
+            }
+
         }
 
     }
+
+    @Nested
+    @DisplayName("equality")
+    class EqualityTests {
+
+        @Test
+        void setsWithSameElementsEqual() {
+            ImmutableNonEmptySet<Integer> set1 = Set.of(1, 2, 3);
+            Set<Integer> set2 = Set.wrap(new java.util.HashSet<Integer>() {{
+                addAll(asList(3, 2, 1));
+            }});
+
+            assertEquals(set1, set2);
+            assertEquals(set2, set1);
+        }
+
+        @Test
+        void differentTypesNotEqual() {
+            Set<String> set1 = Set.of("foo", "bar", "baz");
+            Set<Integer> set2 = Set.of(1, 2, 3);
+            assertNotEquals(set1, set2);
+        }
+
+        @Test
+        void nestedEquality() {
+            Set<Integer> set1 = Set.of(1, 2, 3);
+            Set<Integer> set2 = Set.of(4, 5, 6);
+            ImmutableNonEmptySet<Set<Integer>> set3 = Set.of(set1, set2);
+            ImmutableNonEmptySet<Set<Integer>> set4 = Set.of(set2, set1);
+            assertEquals(set3, set4);
+            assertEquals(set4, set3);
+        }
+
+    }
+
 }
