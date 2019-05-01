@@ -27,7 +27,7 @@ This library has not yet been released.
 
 It is intended to be used in conjunction with [lambda](https://palatable.github.io/lambda/).
 
-Check out the [javadoc](https://kschuetz.github.io/collection-views/javadoc/).
+For more details, check out the [javadoc](https://kschuetz.github.io/collection-views/javadoc/).
 
 # <a name="why">Why?</a> 
 
