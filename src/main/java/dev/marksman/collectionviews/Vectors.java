@@ -151,21 +151,6 @@ class Vectors {
                 (NonEmptyVector<Object>) source);
     }
 
-    static <A> String renderToString(Vector<A> vector) {
-        StringBuilder output = new StringBuilder();
-        output.append("Vector(");
-        boolean inner = false;
-        for (A elem : vector) {
-            if (inner) {
-                output.append(", ");
-            }
-            output.append(elem.toString());
-            inner = true;
-        }
-        output.append(')');
-        return output.toString();
-    }
-
     private static <A> Vector<A> takeFromIterable(int count, Iterable<A> source) {
         if (count < 0) throw new IllegalArgumentException("count must be >= 0");
         return sliceFromIterable(0, count, source);
