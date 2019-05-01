@@ -1,6 +1,6 @@
 package dev.marksman.collectionviews;
 
-class ImmutableVectorCons<A> extends AbstractVector<A> implements ImmutableNonEmptyVector<A> {
+class ImmutableVectorCons<A> extends ConcreteVector<A> implements ImmutableNonEmptyVector<A> {
     private final A head;
     private final ImmutableVector<A> tail;
 

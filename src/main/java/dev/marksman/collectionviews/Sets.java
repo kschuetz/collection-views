@@ -63,6 +63,21 @@ class Sets {
         return maybeResult.orElseThrow(nonEmptyError());
     }
 
+    static <A> String renderToString(Set<A> set) {
+        StringBuilder output = new StringBuilder();
+        output.append("Set(");
+        boolean inner = false;
+        for (A elem : set) {
+            if (inner) {
+                output.append(", ");
+            }
+            output.append(elem.toString());
+            inner = true;
+        }
+        output.append(')');
+        return output.toString();
+    }
+
     static Supplier<IllegalArgumentException> nonEmptyError() {
         return () -> new IllegalArgumentException("Cannot construct NonEmptySet from empty input");
     }

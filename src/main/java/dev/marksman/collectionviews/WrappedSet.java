@@ -5,7 +5,7 @@ import java.util.Set;
 
 import static dev.marksman.collectionviews.ProtectedIterator.protectedIterator;
 
-class WrappedSet<A> implements NonEmptySet<A> {
+class WrappedSet<A> extends ConcreteSet<A> implements NonEmptySet<A> {
 
     /**
      * underlying must contain at least one element
@@ -47,4 +47,5 @@ class WrappedSet<A> implements NonEmptySet<A> {
     public Iterator<A> iterator() {
         return protectedIterator(underlying.iterator());
     }
+
 }

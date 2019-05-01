@@ -2,7 +2,7 @@ package dev.marksman.collectionviews;
 
 import java.util.Iterator;
 
-abstract class AbstractVector<A> implements Vector<A> {
+abstract class ConcreteVector<A> implements Vector<A> {
 
     @Override
     public boolean equals(Object o) {

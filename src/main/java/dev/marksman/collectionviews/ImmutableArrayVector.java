@@ -1,6 +1,6 @@
 package dev.marksman.collectionviews;
 
-class ImmutableArrayVector<A> extends AbstractVector<A> implements ImmutableNonEmptyVector<A> {
+class ImmutableArrayVector<A> extends ConcreteVector<A> implements ImmutableNonEmptyVector<A> {
     /**
      * underlying must contain at least one element
      */

@@ -4,7 +4,7 @@ import java.util.Iterator;
 
 import static dev.marksman.collectionviews.ProtectedIterator.protectedIterator;
 
-class NonEmptySetAdapter<A> implements NonEmptySet<A> {
+class NonEmptySetAdapter<A> extends ConcreteSet<A> implements NonEmptySet<A> {
     private final Set<A> underlying;
 
     NonEmptySetAdapter(Set<A> underlying) {
