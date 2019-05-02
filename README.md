@@ -18,8 +18,9 @@ This library has not yet been released.
    - [`ImmutableNonEmptyVector<A>`](#immutable-non-empty-vector)
  - [Examples](#examples)
    - [`Vector`](#vector-examples)
+   - [`Set`](#vector-examples)
  - [Non-goals and trade-offs](#non-goals-and-trade-offs)
- - [Customizing](#customizing)
+ - [Custom views](#custom-views)
  - [License](#license)   
        
 
@@ -63,7 +64,7 @@ A collection view can be shared safely without making a defensive copy.  There i
 
 It should be impossible to construct an instance of an interface that does not uphold its guarantees.  For example, there is no way to create `NonEmptyVector` that contains no elements.  Therefore, you can be assured at compile-time that if you require a `NonEmptyVector`, you will not need to check at run-time if it is non-empty.
 
-## Don't make copies
+## Doesn't make copies
 
 Methods should never make a copy of an underlying collection unless explicitly asked to, or if it is necessary to uphold the guarantees of its interface.  For example, there is no reason `fmap`, `take`, or `slice` on a `Vector` should need to make a copy of the underlying collection to uphold the random access guarantee on a `Vector`.   
 
@@ -83,7 +84,7 @@ The views yielded by these transformation are new, independent views, and do not
 
 ## Easy to construct on the fly
 
-Collection views should be easy to create on the fly without the need for a pre-existing collection, and views constructed this way should be first-class and have the same capabilities of all other views.
+For convenience, collection views should be easy to create on the fly without the need for a pre-existing collection.  Views constructed this way should be first-class and have the same capabilities of all other views.  
 
 # <a name="types">Types of collection views</a>
 
@@ -114,7 +115,7 @@ The bearer of a `Vector` cannot:
 - Mutate the contents of the underlying collection or array. 
 - Gain access to the reference of the underlying collection or array.
 
-### <a name="creating-vectors">Creating `Vectors`</a>
+### <a name="creating-vectors">Creating `Vector`s</a>
 
 Several static methods are available for creating `Vector`s, with various levels of guarantees:
 
@@ -161,7 +162,7 @@ The copying of the input is a one-time cost, but in return you get an `Immutable
 
 <super>*</super> <small>if the input is an `ImmutableVector`, no copying will be performed.</small>
 
-#### <a name="vector-of">Building `Vectors`s directly</a>
+#### <a name="vector-of">Building `Vector`s directly</a>
 
 Calling `Vector.of` with one or more elements will return a new `ImmutableNonEmptyVector`. 
 
@@ -169,7 +170,7 @@ Calling `Vector.of` with one or more elements will return a new `ImmutableNonEmp
 
 #### <a name="vector-empty">Creating an empty `Vector`</a>
 
-The `Vector.empty` static method will return an empty ``ImmutableVector<A>``.
+The `Vector.empty` static method will return an `ImmutableVector<A>` that is empty.
 
 ## <a name="non-empty-vector">`NonEmptyVector<A>`</a>
 
@@ -205,6 +206,68 @@ An `ImmutableNonEmptyVector<A>` is a `Vector<A>` that also has all the guarantee
 
 ## <a name="set">`Set<A>`</a>
 
+The bearer of a `Set` has the following capabilities:
+
+- Get the size of the `Set` in O(1) using the `size` method.
+- Test for membership in the `Set` using the `contains`method.
+- Safely iterate the `Set` or use it anywhere an `Iterable` is called for.  A `Set` is always finite.
+- Share the `Set` with others safely.
+
+The bearer of a `Set` cannot:
+
+- Mutate the contents of the underlying collection. 
+- Gain access to the reference of the underlying collection.
+
+### <a name="creating-sets">Creating `Set`s</a>
+
+Several static methods are available for creating `Set`s, with various levels of guarantees:
+
+| Method | Returns | Makes a copy | Caveats |
+|---|---|---|---|
+| `Set.empty` | `ImmutableSet<A>` | N/A |  |  
+| `Set.of` | `ImmutableNonEmptySet<A>` | N/A |  |  
+| `Set.wrap` | `Set<A>` | no |  |  
+| `Set.copyFrom` | `ImmutableSet<A>` | yes| may not terminate if input is infinite | 
+| `NonEmptySet.tryWrap` |`Maybe<NonEmptySet<A>>` | no |  |
+| `NonEmptySet.wrapOrThrow` |`NonEmptySet<A>` | no | may throw exceptions |
+| `NonEmptySet.tryCopyFrom` |`Maybe<ImmutableNonEmptySet<A>>` | yes | may not terminate if input is infinite |
+| `NonEmptySet.copyFromOrThrow` |`ImmutableNonEmptySet<A>` | yes | may throw exceptions |
+
+#### <a name="set-wrapping">Wrapping an existing `java.util.Set`</a>
+
+A `Set` can be created by wrapping an existing `java.util.Set` using the `Set.wrap` static methods. 
+
+`Set.wrap`:
+
+- Does not make a copy of the underlying collection.
+- Will not alter the underlying collection in any way.
+- Will maintain a reference to the collection you wrap.
+
+The underlying collection is protected against mutation from anyone you share the `Set` with.  However, note that anyone who has a reference to the underlying collection is still able to mutate it.  Therefore, it is highly recommended that you do not mutate the collection or share the underlying collection with anyone else who might mutate it.
+If you prefer to avoid this, you can construct an `ImmutableSet` using `copyFrom` instead.
+
+#### <a name="set-copy-from">Copying from an `Iterable<A>`</a>
+
+A `Set` can be constructed from an `Iterable` or array using the `copyFrom` or `copySliceFrom` methods.
+
+`Set.copyFrom`:
+
+- Makes a copy of the input if necessary<super>*</super>.
+- Will not alter the input in any way.
+- Will not maintain a reference to the input.
+
+The copying of the input is a one-time cost, but in return you get an `ImmutableSet` that is guaranteed safe from mutation.
+
+<super>*</super> <small>if the input is an `ImmutableSet`, no copying will be performed.</small>
+
+#### <a name="set-of">Building `Set`s directly</a>
+
+Calling `Set.of` with one or more elements will return a new `ImmutableNonEmptySet`. 
+
+#### <a name="vector-empty">Creating an empty `Set`</a>
+
+The `Set.empty` static method will return an `ImmutableSet<A>` that is empty.
+
 ## <a name="non-empty-set">`NonEmptySet<A>`</a>
 
 ## <a name="immutable-set">`ImmutableSet<A>`</a>
@@ -213,7 +276,7 @@ An `ImmutableNonEmptyVector<A>` is a `Vector<A>` that also has all the guarantee
 
 # <a name="examples">Examples</a>
 
-##<a name="vector-examples">`Vector` examples</a>
+## <a name="vector-examples">`Vector` examples</a>
 
 ### Basics
 
@@ -286,7 +349,7 @@ Also, `unsafeGet` may return `null` if that is what the underlying collection co
 
 ### Slices
 
-You can create slices of another `Vector` using `take`, `drop`, or `slice`.  The results of these methods are also `Vectors`,
+You can create slices of another `Vector` using `take`, `drop`, or `slice`.  The results of these methods are also `Vector`s,
 and none of them make copies of the original underlying data structure.
 
 ```Java
@@ -436,31 +499,33 @@ System.out.println("vector23 = " + vector23);
     // *** vector23 = Nothing
 ```
 
+## <a name="set-examples">`Set` examples</a>
+
 # <a name="non-goals-and-trade-offs">Non-goals and trade-offs</a>
 
 The following are either explicitly non-goals, or trade-offs made in the design of this library:
 
-## Adding elements or updating elements
+## Adding or updating elements
 
 To support updating, or even adding of elements would require sacrificing other guarantees.  Therefore these are not supported.  
 
 Even something as simple as adding an element to the end of a `Vector` is not supported, as this would either require making a copy, sacrificing O(1) random access, or compromising locality of reference.
 
-## Full `null` protection
+## Protection from `null`s
 
-**collection-views** does not provide full `null` protection like [Guava Immutable Collections](https://github.com/google/guava/wiki/ImmutableCollectionsExplained), which doesn't allow construction of a collection that contains any `null`s.
+**collection-views** does not offer full `null` protection like [Guava Immutable Collections](https://github.com/google/guava/wiki/ImmutableCollectionsExplained), which doesn't allow construction of a collection that contains any `null`s.
 
-Though highly unrecommended, you are able to construct `Vector`s and `Set`s that contain `null` elements.  
+Though unrecommended, you are able to construct `Vector`s and `Set`s that contain `null` elements.  
 
 To prevent construction of, say, a `Vector` that contains no `null`s would require examining every element of the collection you are trying to wrap.  This goes beyond what can be deemed "low overhead".
 
 `Vector` *does* however have a `get` method which guarantees to never return `null`, so there is _some_ level of `null` protection.  
 
-## Implementing `java.util.Collection`
+## `java.util.Collection`
 
 It is non-goal to make **collection-views** compatible with `java.util.Collection`.  If you need to convert to a `java.util.Collection`, you can easily accomplish this with [lambda](https://palatable.github.io/lambda/)'s `toCollection` function. 
 
-# <a name="customizing">Customizing</a>
+# <a name="custom-views">Custom views</a>
 
 Since `Vector` and `Set` are interfaces, you can create your own custom implementations by subtyping them.
   
@@ -469,3 +534,13 @@ By design, no concrete classes in this library are exposed for direct instantiat
 # <a name="license">License</a>
 
 **collection-views** is distributed under [The MIT License](http://choosealicense.com/licenses/mit/).
+
+The MIT License (MIT)
+
+Copyright © 2019 Kevin Schuetz
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
