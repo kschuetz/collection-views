@@ -18,6 +18,8 @@ This library has not yet been released.
    - [`ImmutableNonEmptyVector<A>`](#immutable-non-empty-vector)
  - [Examples](#examples)
    - [`Vector`](#vector-examples)
+ - [Non-goals and trade-offs](#non-goals-and-trade-offs)
+ - [Customizing](#customizing)
  - [License](#license)   
        
 
@@ -79,6 +81,10 @@ Examples include `fmap`, `take`, `drop`, and `slice` on `Vector`s.  Each of thes
 
 The views yielded by these transformation are new, independent views, and do not affect the original in any way. 
 
+## Easy to construct on the fly
+
+Collection views should be easy to create on the fly without the need for a pre-existing collection, and views constructed this way should be first-class and have the same capabilities of all other views.
+
 # <a name="types">Types of collection views</a>
 
 | Interface | Immutable to bearer | Guaranteed safe from mutation anywhere | Guaranteed non-empty |
@@ -110,7 +116,7 @@ The bearer of a `Vector` cannot:
 
 ### <a name="creating-vectors">Creating `Vectors`</a>
 
-Several static methods are available for creating `Vector`s:
+Several static methods are available for creating `Vector`s, with various levels of guarantees:
 
 | Method | Returns | Makes a copy | Caveats |
 |---|---|---|---|
@@ -119,10 +125,14 @@ Several static methods are available for creating `Vector`s:
 | `Vector.wrap` | `Vector<A>` | no |  |  
 | `Vector.copyFrom` | `ImmutableVector<A>` | yes| may not terminate if input is infinite | 
 | `Vector.copySliceFrom` |`ImmutableVector<A>` | yes |  |
+| `Vector.fill` | `ImmutableVector<A>` | N/A | |
+| `Vector.lazyFill` | `ImmutableVector<A>` | N/A | |
 | `NonEmptyVector.tryWrap` |`Maybe<NonEmptyVector<A>>` | no |  |
 | `NonEmptyVector.wrapOrThrow` |`NonEmptyVector<A>` | no | may throw exceptions |
-| `NonEmptyVector.tryCopyFrom` |`Maybe<ImmutableNonEmptyVector<A>>` | yes |  |
+| `NonEmptyVector.tryCopyFrom` |`Maybe<ImmutableNonEmptyVector<A>>` | yes | may not terminate if input is infinite |
 | `NonEmptyVector.copyFromOrThrow` |`ImmutableNonEmptyVector<A>` | yes | may throw exceptions |
+| `NonEmptyVector.fill` | `ImmutableNonEmptyVector<A>` | N/A | |
+| `NonEmptyVector.lazyFill` | `ImmutableNonEmptyVector<A>` | N/A | |
 
 #### <a name="vector-wrapping">Wrapping an existing collection</a>
 
@@ -130,21 +140,32 @@ A `Vector` can be created by wrapping an existing collection or array using one 
 
 `Vector.wrap`:
 
-- Does *not* make a copy of the underlying collection.
+- Does not make a copy of the underlying collection.
 - Will not alter the underlying collection in any way.
 - Will maintain a reference to the collection you wrap.
 
-The underlying collection is protected against mutation from anyone you share the `Vector` with.  However, note that anyone who has a reference to the underlying collection is still able to mutate it.  Therefore, it is highly recommended that you do not mutate the collection or share the underlying collection with anyone else who might mutate it. 
+The underlying collection is protected against mutation from anyone you share the `Vector` with.  However, note that anyone who has a reference to the underlying collection is still able to mutate it.  Therefore, it is highly recommended that you do not mutate the collection or share the underlying collection with anyone else who might mutate it.
+If you prefer to avoid this, you can construct an `ImmutableVector` using `copyFrom` instead.
 
-#### <a name="vector-from-iterable">Taking from an `Iterable<A>`</a>
+#### <a name="vector-copy-from">Copying from an `Iterable<A>`</a>
 
-A `Vector` can be constructed from an `Iterable` using the `sliceFromIterable` or `takeFromIterable` methods.
+A `Vector` can be constructed from an `Iterable` or array using the `copyFrom` or `copySliceFrom` methods.
 
-`sliceFromIterable` or `takeFromIterable` may make a copy of the data, but will only do so if necessary.  If passed a `java.util.List` or another `Vector`, it will create the appropriate sized view of that collection without making a copy.  For other `Iterable`s that can't guarantee random access, these methods may make a copy internally before wrapping it.
+`Vector.copyFrom`:
 
-#### <a name="vector-of">Building using `Vector.of`</a>
+- Makes a copy of the input if necessary<super>*</super>.
+- Will not alter the input in any way.
+- Will not maintain a reference to the input.
 
-Calling `Vector.of` with one or more elements will return a new `ImmutableNonEmptyVector`.  Since the underlying collection in a `Vector` created this way is not exposed anywhere, it is 100% safe from mutation. 
+The copying of the input is a one-time cost, but in return you get an `ImmutableVector` that is guaranteed safe from mutation.
+
+<super>*</super> <small>if the input is an `ImmutableVector`, no copying will be performed.</small>
+
+#### <a name="vector-of">Building `Vectors`s directly</a>
+
+Calling `Vector.of` with one or more elements will return a new `ImmutableNonEmptyVector`. 
+
+`Vector.fill` and `Vector.lazyFill` also create `ImmutableVector`s directly.
 
 #### <a name="vector-empty">Creating an empty `Vector`</a>
 
@@ -168,9 +189,11 @@ Alternatively, if you know for sure that the collection you are passing is not e
 #### <a name="non-empty-vector-converting">Converting an existing `Vector`</a>
 A `Vector` has the methods `toNonEmpty` and `toNonEmptyOrThrow` that will attempt to convert the `Vector` to a `NonEmptyVector` at run-time.  They will do so without making copies of any underlying data structures.
 
-#### <a name="non-empty-vector-of">Building using `Vector.of`</a>
+#### <a name="non-empty-vector-of">Building `NonEmptyVector`s directly</a>
 
 `Vector.of` always returns a `ImmutableNonEmptyVector`, so all `Vector`s constructed this way are compatible with `NonEmptyVector`.
+
+`NonEmptyVector.fill` and `NonEmptyVector.lazyFill` are variations of `Vector.fill` and `Vector.lazyFill` that yield `ImmutableNonEmptyVector`s.
 
 ## <a name="immutable-vector">`ImmutableVector<A>`</a>
 
@@ -413,7 +436,36 @@ System.out.println("vector23 = " + vector23);
     // *** vector23 = Nothing
 ```
 
+# <a name="non-goals-and-trade-offs">Non-goals and trade-offs</a>
+
+The following are either explicitly non-goals, or trade-offs made in the design of this library:
+
+## Adding elements or updating elements
+
+To support updating, or even adding of elements would require sacrificing other guarantees.  Therefore these are not supported.  
+
+Even something as simple as adding an element to the end of a `Vector` is not supported, as this would either require making a copy, sacrificing O(1) random access, or compromising locality of reference.
+
+## Full `null` protection
+
+**collection-views** does not provide full `null` protection like [Guava Immutable Collections](https://github.com/google/guava/wiki/ImmutableCollectionsExplained), which doesn't allow construction of a collection that contains any `null`s.
+
+Though highly unrecommended, you are able to construct `Vector`s and `Set`s that contain `null` elements.  
+
+To prevent construction of, say, a `Vector` that contains no `null`s would require examining every element of the collection you are trying to wrap.  This goes beyond what can be deemed "low overhead".
+
+`Vector` *does* however have a `get` method which guarantees to never return `null`, so there is _some_ level of `null` protection.  
+
+## Implementing `java.util.Collection`
+
+It is non-goal to make **collection-views** compatible with `java.util.Collection`.  If you need to convert to a `java.util.Collection`, you can easily accomplish this with [lambda](https://palatable.github.io/lambda/)'s `toCollection` function. 
+
+# <a name="customizing">Customizing</a>
+
+Since `Vector` and `Set` are interfaces, you can create your own custom implementations by subtyping them.
+  
+By design, no concrete classes in this library are exposed for direct instantiation or extension.  However, some useful methods have been made available in `VectorHelpers` and `SetHelpers` to which you can delegate to handle some of the administrivia (e.g., `equals`, `toString`) in your custom implementation.
+
 # <a name="license">License</a>
 
 **collection-views** is distributed under [The MIT License](http://choosealicense.com/licenses/mit/).
-
