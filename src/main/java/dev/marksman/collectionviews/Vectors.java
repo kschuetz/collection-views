@@ -109,6 +109,28 @@ class Vectors {
         return new ImmutableVectorCons<>(first, ImmutableVectors.wrapAndVouchFor(more));
     }
 
+    static <A> ImmutableVector<A> fill(int size, A value) {
+        if (size < 0) throw new IllegalArgumentException("size must be >= 0");
+        if (size == 0) return empty();
+        else return nonEmptyFill(size, value);
+    }
+
+    static <A> ImmutableVector<A> lazyFill(int size, Fn1<Integer, A> valueSupplier) {
+        if (size < 0) throw new IllegalArgumentException("size must be >= 0");
+        if (size == 0) return empty();
+        else return nonEmptyLazyFill(size, valueSupplier);
+    }
+
+    static <A> ImmutableNonEmptyVector<A> nonEmptyFill(int size, A value) {
+        if (size < 0) throw new IllegalArgumentException("size must be >= 1");
+        return new RepeatingVector<>(size, value);
+    }
+
+    static <A> ImmutableNonEmptyVector<A> nonEmptyLazyFill(int size, Fn1<Integer, A> valueSupplier) {
+        if (size < 0) throw new IllegalArgumentException("size must be >= 1");
+        return new LazyVector<>(size, valueSupplier);
+    }
+
     static <A> Maybe<NonEmptyVector<A>> tryNonEmptyWrap(A[] arr) {
         Objects.requireNonNull(arr);
         if (arr.length == 0) {

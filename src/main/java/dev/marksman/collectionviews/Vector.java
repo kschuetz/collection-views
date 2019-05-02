@@ -236,6 +236,39 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
     }
 
     /**
+     * Constructs a new {@link ImmutableVector} of size {@code size} containing {@code value} at
+     * each index, using O(1) memory.
+     * <p>
+     * See {@link NonEmptyVector#fill} if you require an {@link ImmutableNonEmptyVector} to be returned.
+     *
+     * @param size  the number of elements.  Must be &gt;= 0.
+     * @param value the value that will be occupy all elements of the {@link Vector}
+     * @param <A>   the element type
+     * @return an {@code ImmutableVector<A>} of {@code size} elements, with each element having
+     * the value {@code value}
+     */
+    static <A> ImmutableVector<A> fill(int size, A value) {
+        return Vectors.fill(size, value);
+    }
+
+    /**
+     * Constructs a new {@link ImmutableVector} of size {@code size} with elements computed by their
+     * indices using a provided function.  Uses O(1) memory.
+     * <p>
+     * See {@link NonEmptyVector#lazyFill} if you require a {@link ImmutableNonEmptyVector} to be returned.
+     *
+     * @param size          the number of elements.  Must be &gt;= 0.
+     * @param valueSupplier a function that accepts an index and returns the computed value for
+     *                      that index.   This function should be referentially transparent and not
+     *                      perform side-effects. It may be called zero or more times for each element.
+     * @param <A>           the element type
+     * @return an {@code ImmutableVector<A>} of {@code size} elements
+     */
+    static <A> ImmutableVector<A> lazyFill(int size, Fn1<Integer, A> valueSupplier) {
+        return Vectors.lazyFill(size, valueSupplier);
+    }
+
+    /**
      * Creates a {@link Vector} that wraps an array.
      * <p>
      * Does not make any copies of the given array.

@@ -177,4 +177,33 @@ public interface NonEmptyVector<A> extends NonEmptyIterable<A>, Vector<A> {
         return ImmutableVectors.nonEmptyCopyFromOrThrow(maxCount, source);
     }
 
+    /**
+     * Constructs a new {@link ImmutableNonEmptyVector} of size {@code size} containing {@code value} at
+     * each index, using O(1) memory.
+     *
+     * @param size  the number of elements.  Must be &gt;= 1.
+     * @param value the value that will be occupy all elements of the {@link Vector}
+     * @param <A>   the element type
+     * @return an {@code ImmutableVector<A>} of {@code size} elements, with each element having
+     * the value {@code value}
+     */
+    static <A> ImmutableNonEmptyVector<A> fill(int size, A value) {
+        return Vectors.nonEmptyFill(size, value);
+    }
+
+    /**
+     * Constructs a new {@link ImmutableNonEmptyVector} of size {@code size} with elements computed by their
+     * indices using a provided function.  Uses O(1) memory.
+     *
+     * @param size          the number of elements.  Must be &gt;= 1.
+     * @param valueSupplier a function that accepts an index and returns the computed value for
+     *                      that index.   This function should be referentially transparent and not
+     *                      perform side-effects. It may be called zero or more times for each element.
+     * @param <A>           the element type
+     * @return an {@code ImmutableVector<A>} of {@code size} elements
+     */
+    static <A> ImmutableNonEmptyVector<A> lazyFill(int size, Fn1<Integer, A> valueSupplier) {
+        return Vectors.nonEmptyLazyFill(size, valueSupplier);
+    }
+
 }
