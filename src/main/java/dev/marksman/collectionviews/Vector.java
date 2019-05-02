@@ -121,7 +121,7 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
      */
     @Override
     default Iterator<A> iterator() {
-        return new VectorIterator<>(this);
+        return VectorHelpers.vectorIterator(this);
     }
 
     /**
@@ -178,7 +178,7 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
      * This method will make a copy of the underlying data structure if necessary to
      * guarantee immutability.
      * <p>
-     * If this {@link Vector} is an {@link ImmutableVector} already, no copies are made
+     * If this {@link Vector} is already an {@link ImmutableVector}, no copies are made
      * and this method is a no-op.
      *
      * @return an {@link ImmutableVector} of the same type and containing the same elements
@@ -188,8 +188,9 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
     }
 
     /**
-     * Returns a {@link NonEmptyVector} containing the same elements as this one,
-     * wrapped in a {@link Maybe#just}, if this {@link Vector} is not empty.
+     * Attempts to convert this {@link Vector} to a {@link NonEmptyVector}.
+     * If successful, returns a {@link NonEmptyVector} containing the same elements as this one,
+     * wrapped in a {@link Maybe#just}.
      * <p>
      * If this {@link Vector} is empty, returns {@link Maybe#nothing}.
      * <p>
@@ -200,9 +201,9 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
     }
 
     /**
-     * Returns a {@link NonEmptyVector} containing the same elements as this one,
-     * if this {@link Vector} is not empty.  Use this if you are confident that this {@link Vector}
-     * is not empty.
+     * Attempts to convert this {@link Vector} to a {@link NonEmptyVector}.
+     * If successful, returns a {@link NonEmptyVector} containing the same elements as this one.
+     * Use this if you are confident that this {@link Vector} is not empty.
      * <p>
      * If this {@link Vector} is empty, throws an {@link IllegalArgumentException}.
      * <p>

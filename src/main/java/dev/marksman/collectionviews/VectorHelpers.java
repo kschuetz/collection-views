@@ -42,6 +42,10 @@ public class VectorHelpers {
         return hashCode;
     }
 
+    public static <A> Iterator<A> vectorIterator(Vector<A> vector) {
+        return new VectorIterator<>(vector);
+    }
+
     public static String vectorToString(Vector<?> vector) {
         StringBuilder output = new StringBuilder();
         output.append("Vector(");

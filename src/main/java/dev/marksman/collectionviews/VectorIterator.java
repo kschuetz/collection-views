@@ -3,11 +3,11 @@ package dev.marksman.collectionviews;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public final class VectorIterator<A> implements Iterator<A> {
+class VectorIterator<A> implements Iterator<A> {
     private final Vector<A> underlying;
     private int index;
 
-    public VectorIterator(Vector<A> underlying) {
+    VectorIterator(Vector<A> underlying) {
         this.underlying = underlying;
         index = 0;
     }

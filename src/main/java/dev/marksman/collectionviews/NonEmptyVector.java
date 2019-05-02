@@ -11,7 +11,7 @@ import static com.jnape.palatable.lambda.adt.Maybe.just;
 /**
  * A {@link Vector} that is guaranteed at compile-time to contain at least one element.
  * <p>
- * In addition to guarantees of {@link Vector}, provides the following benefits :
+ * In addition to guarantees of {@link Vector}, provides the following benefits:
  * <ul>
  * <li>{@link NonEmptyVector#head} method that returns the first element.</li>
  * <li>Implements {@link NonEmptyIterable}.</li>
@@ -22,11 +22,32 @@ import static com.jnape.palatable.lambda.adt.Maybe.just;
  */
 public interface NonEmptyVector<A> extends NonEmptyIterable<A>, Vector<A> {
 
+    /**
+     * Maps a function over the elements in a {@link NonEmptyVector} and returns a new {@link NonEmptyVector}
+     * of the same size (but possibly a different type).
+     * <p>
+     * Does not make any copies of underlying data structures.
+     * <p>
+     * This method is stack-safe, so a Vector can be mapped as many times as the heap permits.
+     *
+     * @param f   a function from {@code A} to {@code B}.
+     *            This function should be referentially transparent and not perform side-effects.
+     *            It may be called zero or more times for each element.
+     * @param <B> The type of the elements contained in the output Vector.
+     * @return a {@code NonEmptyVector<B>} of the same size
+     */
     @Override
     default <B> NonEmptyVector<B> fmap(Fn1<? super A, ? extends B> f) {
         return Vectors.mapNonEmpty(f, this);
     }
 
+    /**
+     * Tests whether the {@link Vector} is empty.  Executes in O(1).
+     * <p>
+     * Always returns {@code false} for {@link NonEmptyVector}s.
+     *
+     * @return always {@code false}
+     */
     @Override
     default boolean isEmpty() {
         return false;
@@ -34,7 +55,7 @@ public interface NonEmptyVector<A> extends NonEmptyIterable<A>, Vector<A> {
 
     @Override
     default Iterator<A> iterator() {
-        return new VectorIterator<>(this);
+        return VectorHelpers.vectorIterator(this);
     }
 
     @Override
@@ -42,16 +63,40 @@ public interface NonEmptyVector<A> extends NonEmptyIterable<A>, Vector<A> {
         return drop(1);
     }
 
+    /**
+     * Returns an {@link ImmutableNonEmptyVector} containing the same elements as this one.
+     * This method will make a copy of the underlying data structure if necessary to
+     * guarantee immutability.
+     * <p>
+     * If this {@link NonEmptyVector} is already an {@link ImmutableNonEmptyVector}, no copies are made
+     * and this method is a no-op.
+     *
+     * @return an {@link ImmutableNonEmptyVector} of the same type and containing the same elements
+     */
     @Override
     default ImmutableNonEmptyVector<A> toImmutable() {
         return ImmutableVectors.ensureImmutable(this);
     }
 
+    /**
+     * Attempts to convert this {@link Vector} to a {@link NonEmptyVector}.
+     * Since this will always be successful for {@link NonEmptyVector}s,
+     * this method always returns itself wrapped in a {@link Maybe#just}.
+     * <p>
+     * Does not make copies of any underlying data structures.
+     */
     @Override
     default Maybe<? extends NonEmptyVector<A>> toNonEmpty() {
         return just(this);
     }
 
+    /**
+     * Attempts to convert this {@link Vector} to a {@link NonEmptyVector}.
+     * Since this will always be successful for {@link NonEmptyVector}s,
+     * this method always returns itself.
+     * <p>
+     * Does not make copies of any underlying data structures.
+     */
     @Override
     default NonEmptyVector<A> toNonEmptyOrThrow() {
         return this;

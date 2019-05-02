@@ -26,6 +26,20 @@ public interface ImmutableVector<A> extends Vector<A>, Immutable {
         return Vectors.immutableDrop(count, this);
     }
 
+    /**
+     * Maps a function over the elements in an {@link ImmutableVector} and returns
+     * a new {@link ImmutableVector} of the same size (but possibly a different type).
+     * <p>
+     * Does not make any copies of underlying data structures.
+     * <p>
+     * This method is stack-safe, so a Vector can be mapped as many times as the heap permits.
+     *
+     * @param f   a function from {@code A} to {@code B}.
+     *            This function should be referentially transparent and not perform side-effects.
+     *            It may be called zero or more times for each element.
+     * @param <B> The type of the elements contained in the output Vector.
+     * @return an {@code ImmutableVector<B>} of the same size
+     */
     @Override
     default <B> ImmutableVector<B> fmap(Fn1<? super A, ? extends B> f) {
         return ImmutableVectors.map(f, this);
@@ -36,6 +50,14 @@ public interface ImmutableVector<A> extends Vector<A>, Immutable {
         return ImmutableVectors.slice(startIndex, endIndexExclusive, this);
     }
 
+    /**
+     * Returns the tail of the {@link ImmutableVector}, i.e. the same {@link ImmutableVector} with the first element dropped.
+     * May be empty.
+     * <p>
+     * Does not make copies of any underlying data structures.
+     *
+     * @return an {@link ImmutableVector} of the same type
+     */
     @Override
     default ImmutableVector<A> tail() {
         return drop(1);
