@@ -32,4 +32,19 @@ class RepeatingVector<A> extends ConcreteVector<A> implements ImmutableNonEmptyV
         return new RepeatingVector<>(size, f.apply(value));
     }
 
+    @SuppressWarnings("unchecked")
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof RepeatingVector<?>) {
+            RepeatingVector<Object> other = (RepeatingVector<Object>) o;
+            return other.size == size &&
+                    (value == null
+                            ? other.value == null
+                            : value.equals(other.value));
+        } else {
+            return super.equals(o);
+        }
+
+    }
+
 }
