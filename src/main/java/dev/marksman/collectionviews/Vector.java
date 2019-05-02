@@ -59,8 +59,8 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
      * <p>
      * Does not make copies of any underlying data structures.
      * <p>
-     * Use caution when taking a small slice of a huge {@link Vector}, as the smaller slice
-     * will hold onto a reference of the larger one, and will prevent it from being GC'ed.
+     * Use caution when taking a small slice of a huge {@link Vector} that you no longer need,
+     * as the smaller slice will hold onto a reference of the larger one, and will prevent it from being GC'ed.
      *
      * @param count the number of elements to drop from the {@link Vector}.  Must be &gt;= 0.
      *              May exceed size of {@link Vector}, in which case, the result will be an
@@ -129,8 +129,8 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
      * <p>
      * Does not make copies of any underlying data structures.
      * <p>
-     * Use caution when taking a small slice of a huge Vector that you no longer need, as the smaller slice
-     * will hold onto a reference of the larger one, and will prevent it from being GC'ed.
+     * Use caution when taking a small slice of a huge {@link Vector} that you no longer need,
+     * as the smaller slice will hold onto a reference of the larger one, and will prevent it from being GC'ed.
      * To avoid this situation, use {@link Vector#copySliceFrom} instead.
      *
      * @param startIndex        the index of the element to begin the slice.  Must be &gt;= 0.
@@ -161,9 +161,9 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
      * <p>
      * Does not make copies of any underlying data structures.
      * <p>
-     * Use caution when taking a small slice of a huge {@link Vector}, as the smaller slice
-     * will hold onto a reference of the larger one, and will prevent it from being GC'ed.
-     * To avoid this situation, use {@link Vector#copyFrom} instead.
+     * Use caution when taking a small slice of a huge {@link Vector} that you no longer need,
+     * as the smaller slice will hold onto a reference of the larger one, and will prevent it from being GC'ed.
+     * To avoid this situation, use {@link Vector#copyFrom(int, Iterable)} instead.
      *
      * @param count the maximum number of elements to take from the {@link Vector}.  Must be &gt;= 0.
      *              May exceed size of {@link Vector}.

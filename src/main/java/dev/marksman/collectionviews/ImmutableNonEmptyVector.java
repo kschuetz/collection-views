@@ -63,11 +63,25 @@ public interface ImmutableNonEmptyVector<A> extends NonEmptyVector<A>, Immutable
         return this;
     }
 
+    /**
+     * Attempts to convert this {@link Vector} to a {@link NonEmptyVector}.
+     * Since this will always be successful for {@link ImmutableNonEmptyVector}s,
+     * this method always returns itself wrapped in a {@link Maybe#just}.
+     * <p>
+     * Does not make copies of any underlying data structures.
+     */
     @Override
     default Maybe<? extends ImmutableNonEmptyVector<A>> toNonEmpty() {
         return just(this);
     }
 
+    /**
+     * Attempts to convert this {@link Vector} to a {@link NonEmptyVector}.
+     * Since this will always be successful for {@link ImmutableNonEmptyVector}s,
+     * this method always returns itself.
+     * <p>
+     * Does not make copies of any underlying data structures.
+     */
     @Override
     default ImmutableNonEmptyVector<A> toNonEmptyOrThrow() {
         return this;

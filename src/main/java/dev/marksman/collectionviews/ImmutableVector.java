@@ -21,6 +21,19 @@ import com.jnape.palatable.lambda.functions.Fn1;
  */
 public interface ImmutableVector<A> extends Vector<A>, Immutable {
 
+    /**
+     * Returns a new {@link ImmutableVector} that drops the first {@code count} elements.
+     * <p>
+     * Does not make copies of any underlying data structures.
+     * <p>
+     * Use caution when taking a small slice of a huge {@link ImmutableVector} that you no longer need,
+     * as the smaller slice will hold onto a reference of the larger one, and will prevent it from being GC'ed.
+     *
+     * @param count the number of elements to drop from the {@link ImmutableVector}.  Must be &gt;= 0.
+     *              May exceed size of {@link ImmutableVector}, in which case, the result will be an
+     *              empty {@link ImmutableVector}.
+     * @return an {@code ImmutableVector<A>}
+     */
     @Override
     default ImmutableVector<A> drop(int count) {
         return Vectors.immutableDrop(count, this);
@@ -45,6 +58,22 @@ public interface ImmutableVector<A> extends Vector<A>, Immutable {
         return ImmutableVectors.map(f, this);
     }
 
+    /**
+     * Create a slice of an existing {@link ImmutableVector}.
+     * <p>
+     * Does not make copies of any underlying data structures.
+     * <p>
+     * Use caution when taking a small slice of a huge {@link ImmutableVector} that you no longer need,
+     * as the smaller slice will hold onto a reference of the larger one, and will prevent it from being GC'ed.
+     * To avoid this situation, use {@link Vector#copySliceFrom} instead.
+     *
+     * @param startIndex        the index of the element to begin the slice.  Must be &gt;= 0.
+     *                          May exceed the size of the {@link Vector}, in which case an empty {@link Vector} will be returned.
+     * @param endIndexExclusive the end index (exclusive) of the slice.  Must be &gt;= {@code startIndex}.
+     *                          May exceed the size of the {@link Vector}, in which case the slice will
+     *                          contain as many elements as available.
+     * @return a {@code ImmutableVector<A>}
+     */
     @Override
     default ImmutableVector<A> slice(int startIndex, int endIndexExclusive) {
         return ImmutableVectors.slice(startIndex, endIndexExclusive, this);
@@ -63,21 +92,60 @@ public interface ImmutableVector<A> extends Vector<A>, Immutable {
         return drop(1);
     }
 
+    /**
+     * Returns a new {@link ImmutableVector} that contains at most the first {@code count}
+     * elements of this {@link ImmutableVector}.
+     * <p>
+     * Does not make copies of any underlying data structures.
+     * <p>
+     * Use caution when taking a small slice of a huge {@link ImmutableVector} that you no longer need,
+     * as the smaller slice will hold onto a reference of the larger one, and will prevent it from being GC'ed.
+     * To avoid this situation, use {@link Vector#copyFrom(int, Iterable)} instead.
+     *
+     * @param count the maximum number of elements to take from the {@link ImmutableVector}.  Must be &gt;= 0.
+     *              May exceed size of {@link ImmutableVector}.
+     * @return a {@code ImmutableVector<A>} containing between 0 and {@code count} elements
+     */
     @Override
     default ImmutableVector<A> take(int count) {
         return ImmutableVectors.take(count, this);
     }
 
+    /**
+     * Returns an {@link ImmutableVector} containing the same elements as this one.
+     * Since this is an {@link ImmutableVector} already, this method simply returns
+     * itself.
+     *
+     * @return itself
+     */
     @Override
     default ImmutableVector<A> toImmutable() {
         return this;
     }
 
+    /**
+     * Attempts to convert this {@link ImmutableVector} to a {@link ImmutableNonEmptyVector}.
+     * If successful, returns a {@link ImmutableNonEmptyVector} containing the same elements as this one,
+     * wrapped in a {@link Maybe#just}.
+     * <p>
+     * If this {@link Vector} is empty, returns {@link Maybe#nothing}.
+     * <p>
+     * Does not make copies of any underlying data structures.
+     */
     @Override
     default Maybe<? extends ImmutableNonEmptyVector<A>> toNonEmpty() {
         return ImmutableVectors.tryNonEmptyConvert(this);
     }
 
+    /**
+     * Attempts to convert this {@link ImmutableVector} to a {@link ImmutableNonEmptyVector}.
+     * If successful, returns a {@link ImmutableNonEmptyVector} containing the same elements as this one.
+     * Use this if you are confident that this {@link ImmutableVector} is not empty.
+     * <p>
+     * If this {@link ImmutableVector} is empty, throws an {@link IllegalArgumentException}.
+     * <p>
+     * Does not make copies of any underlying data structures.
+     */
     @Override
     default ImmutableNonEmptyVector<A> toNonEmptyOrThrow() {
         return ImmutableVectors.nonEmptyConvertOrThrow(this);

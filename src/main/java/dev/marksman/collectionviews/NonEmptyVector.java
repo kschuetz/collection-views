@@ -53,11 +53,24 @@ public interface NonEmptyVector<A> extends NonEmptyIterable<A>, Vector<A> {
         return false;
     }
 
+    /**
+     * Returns an iterator over elements of type {@code A}.
+     *
+     * @return an Iterator.
+     */
     @Override
     default Iterator<A> iterator() {
         return VectorHelpers.vectorIterator(this);
     }
 
+    /**
+     * Returns the tail of the {@link Vector}, i.e. the same {@link Vector} with the first element dropped.
+     * May be empty.
+     * <p>
+     * Does not make copies of any underlying data structures.
+     *
+     * @return a {@link Vector} of the same type
+     */
     @Override
     default Vector<A> tail() {
         return drop(1);
@@ -116,7 +129,7 @@ public interface NonEmptyVector<A> extends NonEmptyIterable<A>, Vector<A> {
      *
      * @param underlying array to wrap
      * @param <A>        the element type
-     * @return a {@code NonEmptyVector<A>} wrapped in a {@link Maybe#just} is the {@code underlying} is non-empty;
+     * @return a {@code NonEmptyVector<A>} wrapped in a {@link Maybe#just} if {@code underlying} is non-empty;
      * {@link Maybe#nothing} otherwise.
      */
     static <A> Maybe<NonEmptyVector<A>> tryWrap(A[] underlying) {
@@ -139,7 +152,7 @@ public interface NonEmptyVector<A> extends NonEmptyIterable<A>, Vector<A> {
      *
      * @param underlying {@link List} to wrap
      * @param <A>        the element type
-     * @return a {@code NonEmptyVector<A>} wrapped in a {@link Maybe#just} is the {@code underlying} is non-empty;
+     * @return a {@code NonEmptyVector<A>} wrapped in a {@link Maybe#just} if {@code underlying} is non-empty;
      * {@link Maybe#nothing} otherwise.
      */
     static <A> Maybe<NonEmptyVector<A>> tryWrap(List<A> underlying) {
@@ -157,7 +170,7 @@ public interface NonEmptyVector<A> extends NonEmptyIterable<A>, Vector<A> {
      * it is safe to share.
      * <p>
      * Since this does not make a copy of the array, be aware that anyone that holds a direct reference to
-     * the array can still mutate it.  Use {@link Vector#copyFrom} instead if you want to avoid this situation.
+     * the array can still mutate it.  Use {@link NonEmptyVector#copyFromOrThrow(Object[])} instead if you want to avoid this situation.
      *
      * @param underlying array to wrap
      * @param <A>        the element type
@@ -180,7 +193,7 @@ public interface NonEmptyVector<A> extends NonEmptyIterable<A>, Vector<A> {
      * Since this does not make a copy of the {@link java.util.List}, be aware that anyone that holds a direct reference to
      * the {@link java.util.List} can still mutate it.  Mutating the {@link java.util.List} is not advised.
      * Operations that change the size of the underlying {@link java.util.List} will result in unpredictable behavior.
-     * Use {@link Vector#copyFrom} if you want to avoid this situation.
+     * Use {@link NonEmptyVector#copyFromOrThrow(Iterable)} if you want to avoid this situation.
      *
      * @param underlying {@link List} to wrap
      * @param <A>        the element type
@@ -190,34 +203,150 @@ public interface NonEmptyVector<A> extends NonEmptyIterable<A>, Vector<A> {
         return Vectors.nonEmptyWrapOrThrow(underlying);
     }
 
+    /**
+     * Attempts to constructs a new {@link ImmutableNonEmptyVector} from any {@link Iterable}.
+     * <p>
+     * If determined to be non-empty, the entire {@link Iterable} will be eagerly iterated, so be careful not
+     * to pass in an infinite {@link Iterable} or this method will not terminate.
+     * <p>
+     * If necessary to guarantee immutability, this method will make a copy of the data provided.
+     * If {@code source} already is an {@link ImmutableVector}, it will be returned directly.
+     *
+     * @param source an {@code Iterable<A>} that may be iterated eagerly in its entirety
+     * @param <A>    the element type
+     * @return an {@code ImmutableNonEmptyVector<A>} wrapped in a {@link Maybe#just} if {@code source} is non-empty;
+     * {@link Maybe#nothing} otherwise.
+     */
     static <A> Maybe<ImmutableNonEmptyVector<A>> tryCopyFrom(Iterable<A> source) {
         return ImmutableVectors.tryNonEmptyCopyFrom(source);
     }
 
+    /**
+     * Attempts to constructs a new {@link ImmutableNonEmptyVector} that is copied from an array.
+     *
+     * @param source the array to copy from.
+     *               This method will not alter or hold on to a reference of this array.
+     * @param <A>    the element type
+     * @return an {@code ImmutableNonEmptyVector<A>} wrapped in a {@link Maybe#just} if {@code source} is non-empty;
+     * {@link Maybe#nothing} otherwise.
+     */
     static <A> Maybe<ImmutableNonEmptyVector<A>> tryCopyFrom(A[] source) {
         return ImmutableVectors.tryNonEmptyCopyFrom(source);
     }
 
+    /**
+     * Attempts to construct a new {@link ImmutableNonEmptyVector} from any {@link Iterable},
+     * but consuming a maximum number of elements.
+     * <p>
+     * If determined to be non-empty, the {@link Iterable} will be eagerly iterated,
+     * but only up to a maximum of {@code maxCount} elements.  If {@code maxCount} elements
+     * are not available, then the all of the elements available will be returned.
+     * <p>
+     * This method will make a copy of the data provided, unless {@code source} is
+     * an {@link ImmutableVector} and its size is less than or equal to {@code maxCount},
+     * in which case it will be returned directly.
+     * <p>
+     * If {@code source} is an {@link ImmutableVector} that is greater than {@code maxCount} in size,
+     * a copy will always be made, therefore making it memory-safe to take a small slice of
+     * a huge {@link Vector} that you no longer need.
+     *
+     * @param maxCount the maximum number of elements to consume from the source.  Must be &gt;= 0.
+     *                 If 0, this method will always return {@link Maybe#nothing}.
+     * @param source   an {@code Iterable<A>} that will be iterated eagerly for up to {@code maxCount} elements.
+     *                 It is safe for {@code source} to be infinite.
+     * @param <A>      the element type
+     * @return an {@code ImmutableNonEmptyVector<A>} wrapped in a {@link Maybe#just} if {@code source} is non-empty;
+     * {@link Maybe#nothing} otherwise.
+     */
     static <A> Maybe<ImmutableNonEmptyVector<A>> tryCopyFrom(int maxCount, Iterable<A> source) {
         return ImmutableVectors.tryNonEmptyCopyFrom(maxCount, source);
     }
 
+    /**
+     * Attempts to constructs a new {@link ImmutableNonEmptyVector} that is copied from an array,
+     * but with a maximum number of elements.
+     *
+     * @param maxCount the maximum number of elements to copy from the array. Must be &gt;= 0.
+     *                 If 0, this method will always return {@link Maybe#nothing}.
+     * @param source   the array to copy from.
+     *                 This method will not alter or hold on to a reference of this array.
+     * @param <A>      the element type
+     * @return an {@code ImmutableNonEmptyVector<A>} wrapped in a {@link Maybe#just} if {@code source} is non-empty;
+     * {@link Maybe#nothing} otherwise.
+     */
     static <A> Maybe<ImmutableNonEmptyVector<A>> tryCopyFrom(int maxCount, A[] source) {
         return ImmutableVectors.tryNonEmptyCopyFrom(maxCount, source);
     }
 
+    /**
+     * Attempts to constructs a new {@link ImmutableNonEmptyVector} from any {@link Iterable}.
+     * If the {@link Iterable} is empty, throws an {@link IllegalArgumentException}.
+     * <p>
+     * If determined to be non-empty, the entire {@link Iterable} will be eagerly iterated, so be careful not
+     * to pass in an infinite {@link Iterable} or this method will not terminate.
+     * <p>
+     * If necessary to guarantee immutability, this method will make a copy of the data provided.
+     * If {@code source} already is an {@link ImmutableVector}, it will be returned directly.
+     *
+     * @param source an {@code Iterable<A>} that will be iterated eagerly in its entirety
+     * @param <A>    the element type
+     * @return an {@code ImmutableNonEmptyVector<A>}
+     */
     static <A> ImmutableNonEmptyVector<A> copyFromOrThrow(Iterable<A> source) {
         return ImmutableVectors.nonEmptyCopyFromOrThrow(source);
     }
 
+    /**
+     * Attempts to constructs a new {@link ImmutableNonEmptyVector} that is copied from an array.
+     * If the array is empty, throws an {@link IllegalArgumentException}.
+     *
+     * @param source the array to copy from.
+     *               This method will not alter or hold on to a reference of this array.
+     * @param <A>    the element type
+     * @return an {@code ImmutableNonEmptyVector<A>}
+     */
     static <A> ImmutableNonEmptyVector<A> copyFromOrThrow(A[] source) {
         return ImmutableVectors.nonEmptyCopyFromOrThrow(source);
     }
 
+    /**
+     * Attempts to construct a new {@link ImmutableNonEmptyVector} from any {@link Iterable},
+     * but consuming a maximum number of elements.
+     * If the {@link Iterable} is empty, throws an {@link IllegalArgumentException}.
+     * <p>
+     * If determined to be non-empty, the {@link Iterable} will be eagerly iterated,
+     * but only up to a maximum of {@code maxCount} elements.  If {@code maxCount} elements
+     * are not available, then the all of the elements available will be returned.
+     * <p>
+     * This method will make a copy of the data provided, unless {@code source} is
+     * an {@link ImmutableVector} and its size is less than or equal to {@code maxCount},
+     * in which case it will be returned directly.
+     * <p>
+     * If {@code source} is an {@link ImmutableVector} that is greater than {@code maxCount} in size,
+     * a copy will always be made, therefore making it memory-safe to take a small slice of
+     * a huge {@link Vector} that you no longer need.
+     *
+     * @param maxCount the maximum number of elements to consume from the source.  Must be &gt;= 1.
+     * @param source   an {@code Iterable<A>} that will be iterated eagerly for up to {@code maxCount} elements.
+     *                 It is safe for {@code source} to be infinite.
+     * @param <A>      the element type
+     * @return an {@code ImmutableNonEmptyVector<A>}
+     */
     static <A> ImmutableNonEmptyVector<A> copyFromOrThrow(int maxCount, Iterable<A> source) {
         return ImmutableVectors.nonEmptyCopyFromOrThrow(maxCount, source);
     }
 
+    /**
+     * Attempts to constructs a new {@link ImmutableNonEmptyVector} that is copied from an array,
+     * but with a maximum number of elements.
+     * If the array is empty, throws an {@link IllegalArgumentException}.
+     *
+     * @param maxCount the maximum number of elements to copy from the array. Must be &gt;= 1.
+     * @param source   the array to copy from.
+     *                 This method will not alter or hold on to a reference of this array.
+     * @param <A>      the element type
+     * @return an {@code ImmutableNonEmptyVector<A>}
+     */
     static <A> ImmutableNonEmptyVector<A> copyFromOrThrow(int maxCount, A[] source) {
         return ImmutableVectors.nonEmptyCopyFromOrThrow(maxCount, source);
     }
