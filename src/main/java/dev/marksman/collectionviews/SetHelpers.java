@@ -47,7 +47,11 @@ public class SetHelpers {
             if (inner) {
                 output.append(", ");
             }
-            output.append(elem.toString());
+            if (elem == null) {
+                output.append("null");
+            } else {
+                output.append(elem.toString());
+            }
             inner = true;
         }
         output.append(')');
