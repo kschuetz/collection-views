@@ -1,6 +1,7 @@
 package dev.marksman.collectionviews;
 
 import java.util.Iterator;
+import java.util.Objects;
 
 /**
  * Helper methods for implementers of custom {@link Vector}s.
@@ -11,7 +12,11 @@ import java.util.Iterator;
  * <p>
  * Your {@code toString} method MAY delegate to {@code setToString}.
  */
-public class VectorHelpers {
+public final class VectorHelpers {
+
+    private VectorHelpers() {
+
+    }
 
     public static boolean vectorEquals(Vector<?> vector, Vector<?> other) {
         if (vector == null || other == null) {
@@ -47,6 +52,7 @@ public class VectorHelpers {
     }
 
     public static String vectorToString(Vector<?> vector) {
+        Objects.requireNonNull(vector);
         StringBuilder output = new StringBuilder();
         output.append("Vector(");
         boolean inner = false;

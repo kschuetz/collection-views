@@ -157,9 +157,6 @@ public class VectorExamples {
 
     }
 
-    
-
-
     public static void main(String[] args) {
         vectorExample1();
     }

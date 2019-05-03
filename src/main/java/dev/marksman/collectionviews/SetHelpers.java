@@ -9,7 +9,11 @@ package dev.marksman.collectionviews;
  * <p>
  * Your {@code toString} method MAY delegate to {@code setToString}.
  */
-public class SetHelpers {
+public final class SetHelpers {
+
+    private SetHelpers() {
+
+    }
 
     @SuppressWarnings("unchecked")
     public static boolean setEquals(Set<?> set, Set<?> other) {
