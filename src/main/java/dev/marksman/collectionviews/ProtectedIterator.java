@@ -2,7 +2,7 @@ package dev.marksman.collectionviews;
 
 import java.util.Iterator;
 
-class ProtectedIterator<A> implements Iterator<A> {
+final class ProtectedIterator<A> implements Iterator<A> {
     private final Iterator<A> underlying;
 
     private ProtectedIterator(Iterator<A> underlying) {

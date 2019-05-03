@@ -17,13 +17,19 @@ import static dev.marksman.collectionviews.MapperChain.mapperChain;
 class ImmutableVectors {
 
     static <A> ImmutableVector<A> take(int count, ImmutableVector<A> source) {
-        if (count < 0) throw new IllegalArgumentException("count must be >= 0");
+        if (count < 0) {
+            throw new IllegalArgumentException("count must be >= 0");
+        }
         return slice(0, count, source);
     }
 
     static <A> ImmutableVector<A> slice(int startIndex, int endIndexExclusive, ImmutableVector<A> source) {
-        if (startIndex < 0) throw new IllegalArgumentException("startIndex must be >= 0");
-        if (endIndexExclusive < 0) throw new IllegalArgumentException("endIndex must be >= 0");
+        if (startIndex < 0) {
+            throw new IllegalArgumentException("startIndex must be >= 0");
+        }
+        if (endIndexExclusive < 0) {
+            throw new IllegalArgumentException("endIndex must be >= 0");
+        }
         Objects.requireNonNull(source);
         int requestedSize = endIndexExclusive - startIndex;
         if (requestedSize < 1) {
@@ -88,7 +94,9 @@ class ImmutableVectors {
 
     static <A> ImmutableVector<A> copyFrom(int maxCount, A[] source) {
         Objects.requireNonNull(source);
-        if (maxCount < 0) throw new IllegalArgumentException("maxCount must be >= 0");
+        if (maxCount < 0) {
+            throw new IllegalArgumentException("maxCount must be >= 0");
+        }
         int count = Math.min(maxCount, source.length);
         A[] copied = Arrays.copyOf(source, count);
         return wrapAndVouchFor(copied);
@@ -112,10 +120,11 @@ class ImmutableVectors {
     @SuppressWarnings("unchecked")
     static <A> Maybe<ImmutableNonEmptyVector<A>> tryNonEmptyCopyFrom(int maxCount, A[] arr) {
         Objects.requireNonNull(arr);
-        if (maxCount < 0) throw new IllegalArgumentException("maxCount must be >= 0");
+        if (maxCount < 0) {
+            throw new IllegalArgumentException("maxCount must be >= 0");
+        }
         if (arr.length == 0 || maxCount == 0) {
-            return nothing
-                    ();
+            return nothing();
         } else {
             return (Maybe<ImmutableNonEmptyVector<A>>) copyFrom(maxCount, arr).toNonEmpty();
         }
@@ -124,16 +133,24 @@ class ImmutableVectors {
     @SuppressWarnings("unchecked")
     static <A> Maybe<ImmutableNonEmptyVector<A>> tryNonEmptyCopyFrom(Iterable<A> source) {
         Objects.requireNonNull(source);
-        if (source.iterator().hasNext()) return nothing();
+        if (source.iterator().hasNext()) {
+            return nothing();
+        }
         return (Maybe<ImmutableNonEmptyVector<A>>) copyFrom(source).toNonEmpty();
     }
 
     @SuppressWarnings("unchecked")
     static <A> Maybe<ImmutableNonEmptyVector<A>> tryNonEmptyCopyFrom(int maxCount, Iterable<A> source) {
         Objects.requireNonNull(source);
-        if (maxCount < 0) throw new IllegalArgumentException("maxCount must be >= 0");
-        if (maxCount == 0) return nothing();
-        if (source.iterator().hasNext()) return nothing();
+        if (maxCount < 0) {
+            throw new IllegalArgumentException("maxCount must be >= 0");
+        }
+        if (maxCount == 0) {
+            return nothing();
+        }
+        if (source.iterator().hasNext()) {
+            return nothing();
+        }
         return (Maybe<ImmutableNonEmptyVector<A>>) copyFrom(maxCount, source).toNonEmpty();
     }
 
@@ -213,8 +230,12 @@ class ImmutableVectors {
 
     static <A> ImmutableVector<A> copyFrom(int maxCount, Iterable<A> source) {
         Objects.requireNonNull(source);
-        if (maxCount < 0) throw new IllegalArgumentException("maxCount must be >= 0");
-        if (maxCount == 0) return Vectors.empty();
+        if (maxCount < 0) {
+            throw new IllegalArgumentException("maxCount must be >= 0");
+        }
+        if (maxCount == 0) {
+            return Vectors.empty();
+        }
         if (source instanceof ImmutableVector<?>) {
             return ((ImmutableVector<A>) source).take(maxCount);
         } else {
@@ -223,8 +244,12 @@ class ImmutableVectors {
     }
 
     static <A> ImmutableVector<A> copySliceFrom(int startIndex, int endIndexExclusive, Iterable<A> source) {
-        if (startIndex < 0) throw new IllegalArgumentException("startIndex must be >= 0");
-        if (endIndexExclusive < 0) throw new IllegalArgumentException("endIndex must be >= 0");
+        if (startIndex < 0) {
+            throw new IllegalArgumentException("startIndex must be >= 0");
+        }
+        if (endIndexExclusive < 0) {
+            throw new IllegalArgumentException("endIndex must be >= 0");
+        }
         Objects.requireNonNull(source);
         if (source instanceof ImmutableVector<?>) {
             return ((ImmutableVector<A>) source).slice(startIndex, endIndexExclusive);

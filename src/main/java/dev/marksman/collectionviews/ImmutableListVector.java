@@ -4,7 +4,7 @@ import java.util.List;
 
 class ImmutableListVector<A> extends ConcreteVector<A> implements ImmutableNonEmptyVector<A> {
     /**
-     * underlying must contain at least one element
+     * underlying must contain at least one element.
      */
     private final List<A> underlying;
 

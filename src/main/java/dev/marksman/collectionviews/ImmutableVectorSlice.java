@@ -18,7 +18,9 @@ class ImmutableVectorSlice<A> extends ConcreteVector<A> implements ImmutableVect
 
     @Override
     public A unsafeGet(int index) {
-        if (index < 0 || index >= size) throw new IndexOutOfBoundsException();
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException();
+        }
         return underlying.unsafeGet(offset + index);
     }
 

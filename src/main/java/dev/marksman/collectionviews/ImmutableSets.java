@@ -10,7 +10,11 @@ import static com.jnape.palatable.lambda.adt.Maybe.just;
 import static com.jnape.palatable.lambda.adt.Maybe.nothing;
 import static com.jnape.palatable.lambda.functions.builtin.fn2.ToCollection.toCollection;
 
-class ImmutableSets {
+final class ImmutableSets {
+
+    private ImmutableSets() {
+
+    }
 
     static <A> ImmutableSet<A> copyFrom(Iterable<A> source) {
         Objects.requireNonNull(source);
@@ -30,7 +34,9 @@ class ImmutableSets {
 
     static <A> ImmutableSet<A> copyFrom(int maxCount, Iterable<A> source) {
         Objects.requireNonNull(source);
-        if (maxCount < 0) throw new IllegalArgumentException("maxCount must be >= 0");
+        if (maxCount < 0) {
+            throw new IllegalArgumentException("maxCount must be >= 0");
+        }
         if (maxCount == 0) {
             return Sets.empty();
         } else {
@@ -46,7 +52,9 @@ class ImmutableSets {
 
     static <A> ImmutableSet<A> copyFrom(int maxCount, A[] source) {
         Objects.requireNonNull(source);
-        if (maxCount < 0) throw new IllegalArgumentException("maxCount must be >= 0");
+        if (maxCount < 0) {
+            throw new IllegalArgumentException("maxCount must be >= 0");
+        }
         return copyFrom(maxCount, Vector.wrap(source));
     }
 
@@ -68,7 +76,9 @@ class ImmutableSets {
     @SuppressWarnings("unchecked")
     static <A> Maybe<ImmutableNonEmptySet<A>> tryNonEmptyCopyFrom(int maxCount, Iterable<A> source) {
         Objects.requireNonNull(source);
-        if (maxCount < 0) throw new IllegalArgumentException("maxCount must be >= 0");
+        if (maxCount < 0) {
+            throw new IllegalArgumentException("maxCount must be >= 0");
+        }
         if (maxCount == 0 || !source.iterator().hasNext()) {
             return nothing();
         } else {
@@ -79,7 +89,9 @@ class ImmutableSets {
     @SuppressWarnings("unchecked")
     static <A> Maybe<ImmutableNonEmptySet<A>> tryNonEmptyCopyFrom(int maxCount, A[] source) {
         Objects.requireNonNull(source);
-        if (maxCount < 0) throw new IllegalArgumentException("maxCount must be >= 0");
+        if (maxCount < 0) {
+            throw new IllegalArgumentException("maxCount must be >= 0");
+        }
         if (source.length == 0 || maxCount == 0) {
             return nothing();
         } else {

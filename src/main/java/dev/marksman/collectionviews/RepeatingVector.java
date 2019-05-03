@@ -2,6 +2,8 @@ package dev.marksman.collectionviews;
 
 import com.jnape.palatable.lambda.functions.Fn1;
 
+import java.util.Objects;
+
 class RepeatingVector<A> extends ConcreteVector<A> implements ImmutableNonEmptyVector<A> {
     private final int size; // must be >= 1
     private final A value;
@@ -23,7 +25,9 @@ class RepeatingVector<A> extends ConcreteVector<A> implements ImmutableNonEmptyV
 
     @Override
     public A unsafeGet(int index) {
-        if (index < 0 || index >= size) throw new IndexOutOfBoundsException();
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException();
+        }
         return value;
     }
 
@@ -47,10 +51,8 @@ class RepeatingVector<A> extends ConcreteVector<A> implements ImmutableNonEmptyV
     public boolean equals(Object o) {
         if (o instanceof RepeatingVector<?>) {
             RepeatingVector<Object> other = (RepeatingVector<Object>) o;
-            return other.size == size &&
-                    (value == null
-                            ? other.value == null
-                            : value.equals(other.value));
+            return other.size == size
+                    && (Objects.equals(value, other.value));
         } else {
             return super.equals(o);
         }
@@ -59,7 +61,9 @@ class RepeatingVector<A> extends ConcreteVector<A> implements ImmutableNonEmptyV
 
     @Override
     public ImmutableVector<A> drop(int count) {
-        if (count < 0) throw new IllegalArgumentException("count must be >= 0");
+        if (count < 0) {
+            throw new IllegalArgumentException("count must be >= 0");
+        }
         if (count == 0) {
             return this;
         } else if (count < size) {
@@ -71,8 +75,12 @@ class RepeatingVector<A> extends ConcreteVector<A> implements ImmutableNonEmptyV
 
     @Override
     public ImmutableVector<A> slice(int startIndex, int endIndexExclusive) {
-        if (startIndex < 0) throw new IllegalArgumentException("startIndex must be >= 0");
-        if (endIndexExclusive < 0) throw new IllegalArgumentException("endIndex must be >= 0");
+        if (startIndex < 0) {
+            throw new IllegalArgumentException("startIndex must be >= 0");
+        }
+        if (endIndexExclusive < 0) {
+            throw new IllegalArgumentException("endIndex must be >= 0");
+        }
         endIndexExclusive = Math.min(endIndexExclusive, size);
         if (endIndexExclusive >= startIndex) {
             return take(endIndexExclusive - startIndex);
@@ -83,7 +91,9 @@ class RepeatingVector<A> extends ConcreteVector<A> implements ImmutableNonEmptyV
 
     @Override
     public ImmutableVector<A> take(int count) {
-        if (count < 0) throw new IllegalArgumentException("count must be >= 0");
+        if (count < 0) {
+            throw new IllegalArgumentException("count must be >= 0");
+        }
         if (count == 0) {
             return Vectors.empty();
         } else if (count >= size) {

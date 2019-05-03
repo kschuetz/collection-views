@@ -23,7 +23,9 @@ class LazyVector<A> extends ConcreteVector<A> implements ImmutableNonEmptyVector
 
     @Override
     public A unsafeGet(int index) {
-        if (index < 0 || index >= size) throw new IndexOutOfBoundsException();
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException();
+        }
         return valueSupplier.apply(index);
     }
 

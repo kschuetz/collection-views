@@ -21,7 +21,9 @@ class VectorCons<A> extends ConcreteVector<A> implements NonEmptyVector<A> {
 
     @Override
     public A unsafeGet(int index) {
-        if (index < 0 || index >= size()) throw new IndexOutOfBoundsException();
+        if (index < 0 || index >= size()) {
+            throw new IndexOutOfBoundsException();
+        }
         if (index == 0) {
             return head;
         } else {

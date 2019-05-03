@@ -4,10 +4,12 @@ abstract class ConcreteVector<A> implements Vector<A> {
 
     @Override
     public boolean equals(Object o) {
-        if (o == this)
+        if (o == this) {
             return true;
-        if (!(o instanceof Vector<?>))
+        }
+        if (!(o instanceof Vector<?>)) {
             return false;
+        }
         return VectorHelpers.vectorEquals(this, (Vector<?>) o);
     }
 

@@ -4,11 +4,13 @@ abstract class ConcreteSet<A> implements Set<A> {
 
     @Override
     public boolean equals(Object o) {
-        if (o == this)
+        if (o == this) {
             return true;
+        }
 
-        if (!(o instanceof Set<?>))
+        if (!(o instanceof Set<?>)) {
             return false;
+        }
         return SetHelpers.setEquals(this, (Set<?>) o);
     }
 

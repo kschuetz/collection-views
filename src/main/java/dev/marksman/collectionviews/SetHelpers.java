@@ -9,6 +9,7 @@ package dev.marksman.collectionviews;
  * <p>
  * Your {@code toString} method MAY delegate to {@code setToString}.
  */
+@SuppressWarnings("WeakerAccess")
 public final class SetHelpers {
 
     private SetHelpers() {
@@ -20,9 +21,9 @@ public final class SetHelpers {
         if (set == null || other == null) {
             return false;
         }
-        if (other == set)
+        if (other == set) {
             return true;
-
+        }
         if (other.size() != set.size()) {
             return false;
         }
@@ -35,31 +36,17 @@ public final class SetHelpers {
     }
 
     public static int setHashCode(Set<?> set) {
-        int h = 0;
+        int result = 0;
         for (Object obj : set) {
-            if (obj != null)
-                h += obj.hashCode();
+            if (obj != null) {
+                result += obj.hashCode();
+            }
         }
-        return h;
+        return result;
     }
 
     public static String setToString(Set<?> set) {
-        StringBuilder output = new StringBuilder();
-        output.append("Set(");
-        boolean inner = false;
-        for (Object elem : set) {
-            if (inner) {
-                output.append(", ");
-            }
-            if (elem == null) {
-                output.append("null");
-            } else {
-                output.append(elem.toString());
-            }
-            inner = true;
-        }
-        output.append(')');
-        return output.toString();
+        return Util.iterableToString("Set", set);
     }
 
 }

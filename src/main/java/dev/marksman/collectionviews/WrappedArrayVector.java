@@ -29,7 +29,9 @@ class WrappedArrayVector<A> extends ConcreteVector<A> implements NonEmptyVector<
 
     @Override
     public A unsafeGet(int index) {
-        if (index < 0 || index >= underlying.length) throw new IndexOutOfBoundsException();
+        if (index < 0 || index >= underlying.length) {
+            throw new IndexOutOfBoundsException();
+        }
         return underlying[index];
     }
 

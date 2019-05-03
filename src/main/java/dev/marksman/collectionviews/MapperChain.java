@@ -30,7 +30,7 @@ interface MapperChain {
     }
 
     class EmptyMapperChain implements MapperChain {
-        static EmptyMapperChain INSTANCE = new EmptyMapperChain();
+        static final EmptyMapperChain INSTANCE = new EmptyMapperChain();
 
         private EmptyMapperChain() {
 
@@ -59,7 +59,7 @@ interface MapperChain {
     }
 
     class MapperChainImpl implements MapperChain {
-        private Iterable<Function> mappers;
+        private final Iterable<Function> mappers;
         private volatile Fn1<Object, Object> fnComposedOnTheHeap;
 
         private MapperChainImpl(Iterable<Function> mappers) {

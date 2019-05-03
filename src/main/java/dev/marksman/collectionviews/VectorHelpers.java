@@ -12,6 +12,7 @@ import java.util.Objects;
  * <p>
  * Your {@code toString} method MAY delegate to {@code setToString}.
  */
+@SuppressWarnings("WeakerAccess")
 public final class VectorHelpers {
 
     private VectorHelpers() {
@@ -22,9 +23,9 @@ public final class VectorHelpers {
         if (vector == null || other == null) {
             return false;
         }
-        if (other == vector)
+        if (other == vector) {
             return true;
-
+        }
         if (other.size() != vector.size()) {
             return false;
         }
@@ -34,16 +35,18 @@ public final class VectorHelpers {
         while (e1.hasNext() && e2.hasNext()) {
             Object o1 = e1.next();
             Object o2 = e2.next();
-            if (!(o1 == null ? o2 == null : o1.equals(o2)))
+            if (!(Objects.equals(o1, o2))) {
                 return false;
+            }
         }
         return !(e1.hasNext() || e2.hasNext());
     }
 
     public static int vectorHashCode(Vector<?> vector) {
         int hashCode = 1;
-        for (Object e : vector)
+        for (Object e : vector) {
             hashCode = 31 * hashCode + (e == null ? 0 : e.hashCode());
+        }
         return hashCode;
     }
 
@@ -52,23 +55,7 @@ public final class VectorHelpers {
     }
 
     public static String vectorToString(Vector<?> vector) {
-        Objects.requireNonNull(vector);
-        StringBuilder output = new StringBuilder();
-        output.append("Vector(");
-        boolean inner = false;
-        for (Object elem : vector) {
-            if (inner) {
-                output.append(", ");
-            }
-            if (elem == null) {
-                output.append("null");
-            } else {
-                output.append(elem.toString());
-            }
-            inner = true;
-        }
-        output.append(')');
-        return output.toString();
+        return Util.iterableToString("Vector", vector);
     }
 
 }

@@ -32,7 +32,7 @@ public interface NonEmptyIterable<A> extends Iterable<A> {
     }
 
     /**
-     * Constructs a {@link NonEmptyIterable}
+     * Creates a {@link NonEmptyIterable}.
      *
      * @param head the first element
      * @param tail the remaining elements.  May be empty.

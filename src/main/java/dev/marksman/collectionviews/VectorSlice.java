@@ -18,7 +18,9 @@ class VectorSlice<A> extends ConcreteVector<A> implements Vector<A> {
 
     @Override
     public A unsafeGet(int index) {
-        if (index < 0 || index >= size) throw new IndexOutOfBoundsException();
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException();
+        }
         return underlying.unsafeGet(offset + index);
     }
 

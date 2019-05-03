@@ -16,7 +16,11 @@ import static com.jnape.palatable.lambda.adt.Maybe.nothing;
 import static com.jnape.palatable.lambda.functions.builtin.fn2.ToCollection.toCollection;
 import static dev.marksman.collectionviews.MapperChain.mapperChain;
 
-class Vectors {
+final class Vectors {
+
+    private Vectors() {
+
+    }
 
     static <A> ImmutableVector<A> empty() {
         return EmptyVector.emptyVector();
@@ -54,11 +58,17 @@ class Vectors {
 
     private static <A, V extends Vector<A>> V dropImpl(Fn3<Integer, Integer, V, V> factory, int count, V source) {
         Objects.requireNonNull(source);
-        if (count < 0) throw new IllegalArgumentException("count must be >= 0");
-        if (count == 0) return source;
+        if (count < 0) {
+            throw new IllegalArgumentException("count must be >= 0");
+        }
+        if (count == 0) {
+            return source;
+        }
         int sourceSize = source.size();
-        if (count >= sourceSize) //noinspection unchecked
+        if (count >= sourceSize) {
+            //noinspection unchecked
             return (V) empty();
+        }
         return factory.apply(count, sourceSize - count, source);
     }
 
@@ -67,8 +77,12 @@ class Vectors {
     }
 
     static <A> Vector<A> sliceFromIterable(int startIndex, int endIndexExclusive, Iterable<A> source) {
-        if (startIndex < 0) throw new IllegalArgumentException("startIndex must be >= 0");
-        if (endIndexExclusive < 0) throw new IllegalArgumentException("endIndex must be >= 0");
+        if (startIndex < 0) {
+            throw new IllegalArgumentException("startIndex must be >= 0");
+        }
+        if (endIndexExclusive < 0) {
+            throw new IllegalArgumentException("endIndex must be >= 0");
+        }
         Objects.requireNonNull(source);
         int requestedSize = endIndexExclusive - startIndex;
         if (requestedSize < 1) {
@@ -110,24 +124,38 @@ class Vectors {
     }
 
     static <A> ImmutableVector<A> fill(int size, A value) {
-        if (size < 0) throw new IllegalArgumentException("size must be >= 0");
-        if (size == 0) return empty();
-        else return nonEmptyFill(size, value);
+        if (size < 0) {
+            throw new IllegalArgumentException("size must be >= 0");
+        }
+        if (size == 0) {
+            return empty();
+        } else {
+            return nonEmptyFill(size, value);
+        }
     }
 
     static <A> ImmutableVector<A> lazyFill(int size, Fn1<Integer, A> valueSupplier) {
-        if (size < 0) throw new IllegalArgumentException("size must be >= 0");
-        if (size == 0) return empty();
-        else return nonEmptyLazyFill(size, valueSupplier);
+        if (size < 0) {
+            throw new IllegalArgumentException("size must be >= 0");
+        }
+        if (size == 0) {
+            return empty();
+        } else {
+            return nonEmptyLazyFill(size, valueSupplier);
+        }
     }
 
     static <A> ImmutableNonEmptyVector<A> nonEmptyFill(int size, A value) {
-        if (size < 0) throw new IllegalArgumentException("size must be >= 1");
+        if (size < 0) {
+            throw new IllegalArgumentException("size must be >= 1");
+        }
         return new RepeatingVector<>(size, value);
     }
 
     static <A> ImmutableNonEmptyVector<A> nonEmptyLazyFill(int size, Fn1<Integer, A> valueSupplier) {
-        if (size < 0) throw new IllegalArgumentException("size must be >= 1");
+        if (size < 0) {
+            throw new IllegalArgumentException("size must be >= 1");
+        }
         return new LazyVector<>(size, valueSupplier);
     }
 
@@ -174,7 +202,9 @@ class Vectors {
     }
 
     private static <A> Vector<A> takeFromIterable(int count, Iterable<A> source) {
-        if (count < 0) throw new IllegalArgumentException("count must be >= 0");
+        if (count < 0) {
+            throw new IllegalArgumentException("count must be >= 0");
+        }
         return sliceFromIterable(0, count, source);
     }
 

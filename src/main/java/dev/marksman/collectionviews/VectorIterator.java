@@ -19,7 +19,9 @@ class VectorIterator<A> implements Iterator<A> {
 
     @Override
     public A next() {
-        if (index >= underlying.size()) throw new NoSuchElementException();
+        if (index >= underlying.size()) {
+            throw new NoSuchElementException();
+        }
         A result = underlying.unsafeGet(index);
         index += 1;
         return result;
