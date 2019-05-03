@@ -60,7 +60,7 @@ interface MapperChain {
 
     class MapperChainImpl implements MapperChain {
         private Iterable<Function> mappers;
-        private Fn1<Object, Object> fnComposedOnTheHeap;
+        private volatile Fn1<Object, Object> fnComposedOnTheHeap;
 
         private MapperChainImpl(Iterable<Function> mappers) {
             this.mappers = mappers;
@@ -76,7 +76,6 @@ interface MapperChain {
             return new MapperChainImpl(cons(lambdaToJava(f), mappers));
         }
 
-        @SuppressWarnings("unchecked")
         public Object apply(Object input) {
             return getFn().apply(input);
         }
