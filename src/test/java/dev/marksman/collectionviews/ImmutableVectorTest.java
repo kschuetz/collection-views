@@ -820,6 +820,299 @@ class ImmutableVectorTest {
     }
 
     @Nested
+    @DisplayName("fill")
+    class FillTests {
+
+        @Test
+        void throwsOnNegativeCount() {
+            assertThrows(IllegalArgumentException.class, () -> Vector.fill(-1, "foo"));
+        }
+
+        @Test
+        void countOfZeroReturnsEmptyVector() {
+            assertSame(Vector.empty(), Vector.fill(0, "foo"));
+        }
+
+        @Test
+        void getWillNeverReturnNull() {
+            ImmutableVector<String> subject = Vector.fill(3, null);
+            assertEquals(nothing(), subject.get(0));
+            assertEquals(nothing(), subject.get(1));
+            assertEquals(nothing(), subject.get(2));
+        }
+
+        @Test
+        void iteratorNextReturnsCorrectElements() {
+            ImmutableVector<String> subject = Vector.fill(3, "foo");
+            Iterator<String> iterator = subject.iterator();
+            assertEquals("foo", iterator.next());
+            assertEquals("foo", iterator.next());
+            assertEquals("foo", iterator.next());
+        }
+
+        @SuppressWarnings("ConstantConditions")
+        @Test
+        void iteratorHasNextCanBeCalledMultipleTimes() {
+            ImmutableVector<String> subject = Vector.fill(3, "foo");
+            Iterator<String> iterator = subject.iterator();
+            assertTrue(iterator.hasNext());
+            assertTrue(iterator.hasNext());
+            assertTrue(iterator.hasNext());
+            assertEquals("foo", iterator.next());
+        }
+
+        @Test
+        void iteratorHasNextReturnsFalseIfNothingRemains() {
+            ImmutableVector<String> subject = Vector.fill(1, "foo");
+            Iterator<String> iterator = subject.iterator();
+            iterator.next();
+            assertFalse(iterator.hasNext());
+        }
+
+        @Test
+        void iteratorNextThrowsIfNothingRemains() {
+            ImmutableVector<String> subject = Vector.fill(1, "foo");
+            Iterator<String> iterator = subject.iterator();
+            iterator.next();
+            assertThrows(NoSuchElementException.class, iterator::next);
+        }
+
+        @Test
+        void iteratorThrowsIfRemoveIsCalled() {
+            ImmutableVector<String> subject = Vector.fill(1, "foo");
+            Iterator<String> iterator = subject.iterator();
+            assertThrows(UnsupportedOperationException.class, iterator::remove);
+        }
+
+        @Nested
+        @DisplayName("fill size 3")
+        class FillSize3Tests {
+            private ImmutableVector<String> subject;
+
+            @BeforeEach
+            void setUp() {
+                subject = Vector.fill(3, "foo");
+            }
+
+            @Test
+            void notEmpty() {
+                assertFalse(subject.isEmpty());
+            }
+
+            @Test
+            void sizeIs3() {
+                assertEquals(3, subject.size());
+            }
+
+            @Test
+            void getForValidIndices() {
+                assertEquals(just("foo"), subject.get(0));
+                assertEquals(just("foo"), subject.get(1));
+                assertEquals(just("foo"), subject.get(2));
+            }
+
+            @Test
+            void getForInvalidIndices() {
+                assertEquals(nothing(), subject.get(3));
+                assertEquals(nothing(), subject.get(-1));
+            }
+
+            @Test
+            void unsafeGetForValidIndices() {
+                assertEquals("foo", subject.unsafeGet(0));
+                assertEquals("foo", subject.unsafeGet(1));
+                assertEquals("foo", subject.unsafeGet(2));
+            }
+
+            @Test
+            void unsafeGetThrowsForInvalidIndices() {
+                assertThrows(IndexOutOfBoundsException.class, () -> subject.unsafeGet(3));
+                assertThrows(IndexOutOfBoundsException.class, () -> subject.unsafeGet(-1));
+            }
+
+            @Test
+            void iteratesCorrectly() {
+                assertThat(subject, contains("foo", "foo", "foo"));
+            }
+
+            @Test
+            void tailIteratesCorrectly() {
+                assertThat(subject.tail(), contains("foo", "foo"));
+            }
+
+            @Test
+            void toNonEmptySucceeds() {
+                assertEquals(just(Vector.of("foo", "foo", "foo")),
+                        subject.toNonEmpty());
+            }
+
+            @Test
+            void toNonEmptyOrThrowSucceeds() {
+                assertEquals(Vector.of("foo", "foo", "foo"),
+                        subject.toNonEmptyOrThrow());
+            }
+
+            @Test
+            void toImmutableReturnsItself() {
+                assertSame(subject, subject.toImmutable());
+            }
+
+            @Test
+            void allIndicesReturnSameReference() {
+                Object obj = new Object();
+                ImmutableVector<Object> subject = Vector.fill(3, obj);
+                assertSame(subject.unsafeGet(0), subject.unsafeGet(1));
+                assertSame(subject.unsafeGet(1), subject.unsafeGet(2));
+            }
+
+            @Test
+            void equalToItself() {
+                assertEquals(subject, subject);
+            }
+
+            @Test
+            void equalToOtherVectorWrappingEquivalentUnderlying() {
+                Vector<String> other = Vector.wrap(asList("foo", "foo", "foo"));
+                assertEquals(subject, other);
+                assertEquals(other, subject);
+            }
+
+            @Test
+            void equalToSameVectorConstructedImmutably() {
+                assertEquals(subject, Vector.of("foo", "foo", "foo"));
+                assertEquals(Vector.of("foo", "foo", "foo"), subject);
+            }
+
+            @Test
+            void notEqualToNull() {
+                assertNotEquals(subject, null);
+                assertNotEquals(null, subject);
+            }
+
+            @Test
+            void notEqualToEmpty() {
+                assertNotEquals(subject, Vector.empty());
+                assertNotEquals(Vector.empty(), subject);
+            }
+
+            @Test
+            void notEqualToSubsequence() {
+                Vector<String> subsequence = Vector.of("foo", "foo");
+                assertNotEquals(subject, subsequence);
+                assertNotEquals(subsequence, subject);
+            }
+
+            @Test
+            void notEqualToSupersequence() {
+                Vector<String> supersequence = Vector.of("foo", "foo", "foo", "foo");
+                assertNotEquals(subject, supersequence);
+                assertNotEquals(supersequence, subject);
+            }
+
+        }
+
+        @Nested
+        @DisplayName("take")
+        class FillTakeTests {
+
+            private ImmutableVector<String> subject;
+
+            @BeforeEach
+            void setUp() {
+                subject = Vector.fill(3, "foo");
+            }
+
+            @Test
+            void takeZero() {
+                assertSame(Vector.empty(), subject.take(0));
+            }
+
+            @Test
+            void takeTooShort() {
+                assertEquals(Vector.of("foo", "foo"), subject.take(2));
+            }
+
+            @Test
+            void takeExact() {
+                assertSame(subject, subject.take(3));
+            }
+
+            @Test
+            void takeTooLong() {
+                assertSame(subject, subject.take(1_000_000));
+            }
+
+        }
+
+        @Nested
+        @DisplayName("drop")
+        class FillDropTests {
+
+            private ImmutableVector<String> subject;
+
+            @BeforeEach
+            void setUp() {
+                subject = Vector.fill(3, "foo");
+            }
+
+            @Test
+            void dropZero() {
+                assertSame(subject, subject.drop(0));
+            }
+
+            @Test
+            void dropTooShort() {
+                assertEquals(Vector.of("foo"), subject.drop(2));
+            }
+
+            @Test
+            void dropExact() {
+                assertSame(Vector.empty(), subject.drop(3));
+            }
+
+            @Test
+            void dropTooLong() {
+                assertSame(Vector.empty(), subject.drop(1_000_000));
+            }
+
+        }
+
+        @Nested
+        @DisplayName("slice")
+        class FillSliceTests {
+
+            private ImmutableVector<String> subject;
+
+            @BeforeEach
+            void setUp() {
+                subject = Vector.fill(3, "foo");
+            }
+
+            @Test
+            void sliceFull() {
+                assertSame(subject, subject.slice(0, 3));
+            }
+
+            @Test
+            void sliceShort() {
+                assertEquals(Vector.of("foo"), subject.slice(1, 2));
+            }
+
+            @Test
+            void sliceOutOfBounds() {
+                assertSame(Vector.empty(), subject.slice(10, 1000));
+            }
+
+            @Test
+            void sliceLong() {
+                assertEquals(Vector.of("foo", "foo"), subject.slice(1, 10));
+            }
+
+        }
+
+    }
+
+    @Nested
     @DisplayName("fmap")
     class FmapTests {
 
