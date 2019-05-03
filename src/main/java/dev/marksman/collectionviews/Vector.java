@@ -117,7 +117,8 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
 
     /**
      * Tests whether this {@code Vector} is empty.
-     * xecutes in O(1).
+     * <p>
+     * Executes in O(1).
      *
      * @return true if this {@code Vector} is empty, false otherwise.
      */
@@ -244,7 +245,7 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
     }
 
     /**
-     * Constructs a new {@code ImmutableNonEmptyVector} with the given elements.
+     * Creates a {@code ImmutableNonEmptyVector} with the given elements.
      *
      * @param first the first element
      * @param more  the remaining elements
@@ -265,7 +266,7 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
      *
      * @param size  the number of elements.
      *              Must be &gt;= 0.
-     * @param value the value that will be repeated for all elements of the {@code Vector}
+     * @param value the value that will be repeated for all elements of the {@code ImmutableVector}
      * @param <A>   the element type
      * @return an {@code ImmutableVector<A>} of {@code size} elements, with each element having
      * the value {@code value}
@@ -298,9 +299,9 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
      * Creates a {@code Vector} that wraps an array.
      * <p>
      * Does not make any copies of the given array.
-     * The {@link Vector} will hold on to a reference to the array, but will never alter it in any way.
+     * The created {@link Vector} will hold on to a reference to the array, but will never alter it in any way.
      * <p>
-     * Bearers of the {@code Vector} will be unable to gain access to the underlying array, so it is safe to share.
+     * Bearers of the created {@code Vector} will be unable to gain access to the underlying array, so it is safe to share.
      * <p>
      * Since no copy is made, be aware that anyone that holds a direct reference to the array can still mutate it.
      * Use {@link Vector#copyFrom} instead if you want to avoid this situation.
@@ -317,9 +318,9 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
      * Creates a {@code Vector} that wraps a {@code java.util.List}.
      * <p>
      * Does not make any copies of the given {@link java.util.List}.
-     * The {@link Vector} will hold a reference to the given {@code List}, but will not alter it in any way.
+     * The created {@link Vector} will hold a reference to the given {@code List}, but will not alter it in any way.
      * <p>
-     * Bearers of this {@code Vector} will be unable to gain access to the underlying {@code List}, so it is safe to share.
+     * Bearers of the created {@code Vector} will be unable to gain access to the underlying {@code List}, so it is safe to share.
      * <p>
      * Since no copy is made, be aware that anyone that holds a direct reference to the {@code List} can still mutate it.
      * Mutating the {@code List} is not advised.
@@ -335,7 +336,7 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
     }
 
     /**
-     * Creates a {@code ImmutableVector} that is copied from any {@code Iterable}.
+     * Creates an {@code ImmutableVector} that is copied from any {@code Iterable}.
      * <p>
      * The entire {@link Iterable} will be eagerly iterated.
      * Be careful not to pass in an infinite {@code Iterable} or this method will not terminate.
@@ -352,7 +353,7 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
     }
 
     /**
-     * Creates a {@code ImmutableVector} that is copied from an array.
+     * Creates an {@code ImmutableVector} that is copied from an array.
      *
      * @param source the array to copy from.
      *               Not null.
@@ -365,7 +366,7 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
     }
 
     /**
-     * Constructs a new {@code ImmutableVector} from any {@code Iterable}, but consuming a maximum number of elements.
+     * Creates an {@code ImmutableVector} that is copied from any {@code Iterable}, but consuming a maximum number of elements.
      * <p>
      * The {@link Iterable} will be eagerly iterated, but only up to a maximum of {@code maxCount} elements.
      * If {@code maxCount} elements are not available, then the all of the elements available will be returned.

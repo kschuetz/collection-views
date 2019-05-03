@@ -4,7 +4,7 @@ import com.jnape.palatable.lambda.adt.Maybe;
 import com.jnape.palatable.lambda.functions.Fn1;
 
 /**
- * A {@link Vector} that is guaranteed at compile-time to safe from mutation anywhere.  In other words,
+ * A {@link Vector} that is guaranteed at compile-time to be safe from mutation anywhere.  In other words,
  * it owns the sole reference to the underlying collection.
  * <p>
  * In addition to guarantees of {@link Vector}, provides the following benefits :
