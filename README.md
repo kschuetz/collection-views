@@ -515,7 +515,7 @@ Even something as simple as adding an element to the end of a `Vector` is not su
 
 **collection-views** does not offer full `null` protection like [Guava Immutable Collections](https://github.com/google/guava/wiki/ImmutableCollectionsExplained), which doesn't allow construction of a collection that contains any `null`s.
 
-Though unrecommended, you are able to construct `Vector`s and `Set`s that contain `null` elements.  
+Though not recommended, you are able to construct `Vector`s and `Set`s that contain `null` elements.  
 
 To prevent construction of, say, a `Vector` that contains no `null`s would require examining every element of the collection you are trying to wrap.  This goes beyond what can be deemed "low overhead".
 
