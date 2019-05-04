@@ -768,8 +768,8 @@ class ImmutableVectorTest {
         }
 
         @Nested
-        @DisplayName("with maxCount")
-        class CopySliceFromMaxTests {
+        @DisplayName("copySliceFrom")
+        class CopySliceFromTests {
 
             private Iterable<Integer> finite;
             private Iterable<Integer> infinite;
@@ -1106,6 +1106,291 @@ class ImmutableVectorTest {
             @Test
             void sliceLong() {
                 assertEquals(Vector.of("foo", "foo"), subject.slice(1, 10));
+            }
+
+        }
+
+    }
+
+    @Nested
+    @DisplayName("lazyFill")
+    class LazyFillTests {
+
+        @Test
+        void throwsOnNegativeCount() {
+            assertThrows(IllegalArgumentException.class, () -> Vector.lazyFill(-1, n -> n * 10));
+        }
+
+        @Test
+        void countOfZeroReturnsEmptyVector() {
+            assertSame(Vector.empty(), Vector.lazyFill(0, n -> n * 10));
+        }
+
+        @Test
+        void getWillNeverReturnNull() {
+            ImmutableVector<String> subject = Vector.lazyFill(3, n -> null);
+            assertEquals(nothing(), subject.get(0));
+            assertEquals(nothing(), subject.get(1));
+            assertEquals(nothing(), subject.get(2));
+        }
+
+        @Test
+        void iteratorNextReturnsCorrectElements() {
+            ImmutableVector<Integer> subject = Vector.lazyFill(3, n -> n * 10);
+            Iterator<Integer> iterator = subject.iterator();
+            assertEquals(0, iterator.next());
+            assertEquals(10, iterator.next());
+            assertEquals(20, iterator.next());
+        }
+
+        @SuppressWarnings("ConstantConditions")
+        @Test
+        void iteratorHasNextCanBeCalledMultipleTimes() {
+            ImmutableVector<Integer> subject = Vector.lazyFill(3, n -> n * 10);
+            Iterator<Integer> iterator = subject.iterator();
+            assertTrue(iterator.hasNext());
+            assertTrue(iterator.hasNext());
+            assertTrue(iterator.hasNext());
+            assertEquals(0, iterator.next());
+        }
+
+        @Test
+        void iteratorHasNextReturnsFalseIfNothingRemains() {
+            ImmutableVector<Integer> subject = Vector.lazyFill(1, n -> n * 10);
+            Iterator<Integer> iterator = subject.iterator();
+            iterator.next();
+            assertFalse(iterator.hasNext());
+        }
+
+        @Test
+        void iteratorNextThrowsIfNothingRemains() {
+            ImmutableVector<Integer> subject = Vector.lazyFill(1, n -> n * 10);
+            Iterator<Integer> iterator = subject.iterator();
+            iterator.next();
+            assertThrows(NoSuchElementException.class, iterator::next);
+        }
+
+        @Test
+        void iteratorThrowsIfRemoveIsCalled() {
+            ImmutableVector<Integer> subject = Vector.lazyFill(1, n -> n * 10);
+            Iterator<Integer> iterator = subject.iterator();
+            assertThrows(UnsupportedOperationException.class, iterator::remove);
+        }
+
+        @Nested
+        @DisplayName("lazyFill size 3")
+        class LazyFillSize3Tests {
+            private ImmutableVector<Integer> subject;
+
+            @BeforeEach
+            void setUp() {
+                subject = Vector.lazyFill(3, n -> n * 10);
+            }
+
+            @Test
+            void notEmpty() {
+                assertFalse(subject.isEmpty());
+            }
+
+            @Test
+            void sizeIs3() {
+                assertEquals(3, subject.size());
+            }
+
+            @Test
+            void getForValidIndices() {
+                assertEquals(just(0), subject.get(0));
+                assertEquals(just(10), subject.get(1));
+                assertEquals(just(20), subject.get(2));
+            }
+
+            @Test
+            void getForInvalidIndices() {
+                assertEquals(nothing(), subject.get(3));
+                assertEquals(nothing(), subject.get(-1));
+            }
+
+            @Test
+            void unsafeGetForValidIndices() {
+                assertEquals(0, subject.unsafeGet(0));
+                assertEquals(10, subject.unsafeGet(1));
+                assertEquals(20, subject.unsafeGet(2));
+            }
+
+            @Test
+            void unsafeGetThrowsForInvalidIndices() {
+                assertThrows(IndexOutOfBoundsException.class, () -> subject.unsafeGet(3));
+                assertThrows(IndexOutOfBoundsException.class, () -> subject.unsafeGet(-1));
+            }
+
+            @Test
+            void iteratesCorrectly() {
+                assertThat(subject, contains(0, 10, 20));
+            }
+
+            @Test
+            void tailIteratesCorrectly() {
+                assertThat(subject.tail(), contains(10, 20));
+            }
+
+            @Test
+            void toNonEmptySucceeds() {
+                assertEquals(just(Vector.of(0, 10, 20)),
+                        subject.toNonEmpty());
+            }
+
+            @Test
+            void toNonEmptyOrThrowSucceeds() {
+                assertEquals(Vector.of(0, 10, 20),
+                        subject.toNonEmptyOrThrow());
+            }
+
+            @Test
+            void toImmutableReturnsItself() {
+                assertSame(subject, subject.toImmutable());
+            }
+
+            @Test
+            void equalToItself() {
+                assertEquals(subject, subject);
+            }
+
+            @Test
+            void equalToOtherVectorWrappingEquivalentUnderlying() {
+                Vector<Integer> other = Vector.wrap(asList(0, 10, 20));
+                assertEquals(subject, other);
+                assertEquals(other, subject);
+            }
+
+            @Test
+            void equalToSameVectorConstructedImmutably() {
+                assertEquals(subject, Vector.of(0, 10, 20));
+                assertEquals(Vector.of(0, 10, 20), subject);
+            }
+
+            @Test
+            void notEqualToNull() {
+                assertNotEquals(subject, null);
+                assertNotEquals(null, subject);
+            }
+
+            @Test
+            void notEqualToEmpty() {
+                assertNotEquals(subject, Vector.empty());
+                assertNotEquals(Vector.empty(), subject);
+            }
+
+            @Test
+            void notEqualToSubsequence() {
+                Vector<Integer> subsequence = Vector.of(0, 10);
+                assertNotEquals(subject, subsequence);
+                assertNotEquals(subsequence, subject);
+            }
+
+            @Test
+            void notEqualToSupersequence() {
+                Vector<Integer> supersequence = Vector.of(0, 10, 20, 30);
+                assertNotEquals(subject, supersequence);
+                assertNotEquals(supersequence, subject);
+            }
+
+        }
+
+        @Nested
+        @DisplayName("take")
+        class LazyFillTakeTests {
+
+            private ImmutableVector<Integer> subject;
+
+            @BeforeEach
+            void setUp() {
+                subject = Vector.lazyFill(3, n -> n * 10);
+            }
+
+            @Test
+            void takeZero() {
+                assertSame(Vector.empty(), subject.take(0));
+            }
+
+            @Test
+            void takeTooShort() {
+                assertEquals(Vector.of(0, 10), subject.take(2));
+            }
+
+            @Test
+            void takeExact() {
+                assertSame(subject, subject.take(3));
+            }
+
+            @Test
+            void takeTooLong() {
+                assertSame(subject, subject.take(1_000_000));
+            }
+
+        }
+
+        @Nested
+        @DisplayName("drop")
+        class LazyFillDropTests {
+
+            private ImmutableVector<Integer> subject;
+
+            @BeforeEach
+            void setUp() {
+                subject = Vector.lazyFill(3, n -> n * 10);
+            }
+
+            @Test
+            void dropZero() {
+                assertSame(subject, subject.drop(0));
+            }
+
+            @Test
+            void dropTooShort() {
+                assertEquals(Vector.of(20), subject.drop(2));
+            }
+
+            @Test
+            void dropExact() {
+                assertSame(Vector.empty(), subject.drop(3));
+            }
+
+            @Test
+            void dropTooLong() {
+                assertSame(Vector.empty(), subject.drop(1_000_000));
+            }
+
+        }
+
+        @Nested
+        @DisplayName("slice")
+        class LazyFillSliceTests {
+
+            private ImmutableVector<Integer> subject;
+
+            @BeforeEach
+            void setUp() {
+                subject = Vector.lazyFill(3, n -> n * 10);
+            }
+
+            @Test
+            void sliceFull() {
+                assertSame(subject, subject.slice(0, 3));
+            }
+
+            @Test
+            void sliceShort() {
+                assertEquals(Vector.of(10), subject.slice(1, 2));
+            }
+
+            @Test
+            void sliceOutOfBounds() {
+                assertSame(Vector.empty(), subject.slice(10, 1000));
+            }
+
+            @Test
+            void sliceLong() {
+                assertEquals(Vector.of(10, 20), subject.slice(1, 10));
             }
 
         }

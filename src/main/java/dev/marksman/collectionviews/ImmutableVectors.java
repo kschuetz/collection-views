@@ -133,7 +133,7 @@ class ImmutableVectors {
     @SuppressWarnings("unchecked")
     static <A> Maybe<ImmutableNonEmptyVector<A>> tryNonEmptyCopyFrom(Iterable<A> source) {
         Objects.requireNonNull(source);
-        if (source.iterator().hasNext()) {
+        if (!source.iterator().hasNext()) {
             return nothing();
         }
         return (Maybe<ImmutableNonEmptyVector<A>>) copyFrom(source).toNonEmpty();
@@ -148,7 +148,7 @@ class ImmutableVectors {
         if (maxCount == 0) {
             return nothing();
         }
-        if (source.iterator().hasNext()) {
+        if (!source.iterator().hasNext()) {
             return nothing();
         }
         return (Maybe<ImmutableNonEmptyVector<A>>) copyFrom(maxCount, source).toNonEmpty();

@@ -7,8 +7,10 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+import static com.jnape.palatable.lambda.adt.Maybe.just;
 import static com.jnape.palatable.lambda.adt.Maybe.nothing;
 import static com.jnape.palatable.lambda.adt.Unit.UNIT;
+import static com.jnape.palatable.lambda.functions.builtin.fn1.Cycle.cycle;
 import static com.jnape.palatable.lambda.functions.builtin.fn1.Id.id;
 import static com.jnape.palatable.lambda.functions.builtin.fn2.Replicate.replicate;
 import static com.jnape.palatable.lambda.functions.builtin.fn3.FoldLeft.foldLeft;
@@ -17,38 +19,62 @@ import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 class NonEmptyVectorTest {
 
     @Nested
     @DisplayName("tryWrap")
     class TryWrapTests {
-        @Test
-        void arraySuccess() {
-            NonEmptyVector<String> result = NonEmptyVector.tryWrap(new String[]{"foo"}).orElseThrow(AssertionError::new);
-            assertThat(result, contains("foo"));
-            assertEquals("foo", result.head());
-            assertEquals(1, result.size());
+
+        @Nested
+        @DisplayName("array")
+        class TryWrapArrayTests {
+
+            @Test
+            void throwsOnNullArgument() {
+                Integer[] arr = null;
+                assertThrows(NullPointerException.class, () -> NonEmptyVector.tryWrap(arr));
+            }
+
+            @Test
+            void success() {
+                NonEmptyVector<String> result = NonEmptyVector.tryWrap(new String[]{"foo"}).orElseThrow(AssertionError::new);
+                assertThat(result, contains("foo"));
+                assertEquals("foo", result.head());
+                assertEquals(1, result.size());
+            }
+
+            @Test
+            void failure() {
+                assertEquals(nothing(), NonEmptyVector.tryWrap(new String[]{}));
+            }
+
         }
 
-        @Test
-        void listSuccess() {
-            NonEmptyVector<String> result = NonEmptyVector.tryWrap(singletonList("foo")).orElseThrow(AssertionError::new);
-            assertThat(result, contains("foo"));
-            assertEquals("foo", result.head());
-            assertEquals(1, result.size());
-        }
+        @Nested
+        @DisplayName("List")
+        class TryWrapListTests {
 
-        @Test
-        void arrayFailure() {
-            assertEquals(nothing(), NonEmptyVector.tryWrap(new String[]{}));
-        }
+            @Test
+            void throwsOnNullArgument() {
+                List<String> list = null;
+                assertThrows(NullPointerException.class, () -> NonEmptyVector.tryWrap(list));
+            }
 
-        @Test
-        void listFailure() {
-            assertEquals(nothing(), NonEmptyVector.tryWrap(emptyList()));
+            @Test
+            void success() {
+                NonEmptyVector<String> result = NonEmptyVector.tryWrap(singletonList("foo")).orElseThrow(AssertionError::new);
+                assertThat(result, contains("foo"));
+                assertEquals("foo", result.head());
+                assertEquals(1, result.size());
+            }
+
+            @Test
+            void failure() {
+                assertEquals(nothing(), NonEmptyVector.tryWrap(emptyList()));
+            }
+
         }
 
     }
@@ -56,30 +82,208 @@ class NonEmptyVectorTest {
     @Nested
     @DisplayName("wrapOrThrow")
     class WrapOrThrowTests {
-        @Test
-        void arraySuccess() {
-            NonEmptyVector<String> result = NonEmptyVector.wrapOrThrow(new String[]{"foo"});
-            assertThat(result, contains("foo"));
-            assertEquals("foo", result.head());
-            assertEquals(1, result.size());
+
+        @Nested
+        @DisplayName("array")
+        class WrapOrThrowArrayTests {
+
+            @Test
+            void throwsOnNullArgument() {
+                Integer[] arr = null;
+                assertThrows(NullPointerException.class, () -> NonEmptyVector.wrapOrThrow(arr));
+            }
+
+            @Test
+            void success() {
+                NonEmptyVector<String> result = NonEmptyVector.wrapOrThrow(new String[]{"foo"});
+                assertThat(result, contains("foo"));
+                assertEquals("foo", result.head());
+                assertEquals(1, result.size());
+            }
+
+            @Test
+            void failure() {
+                assertThrows(IllegalArgumentException.class, () -> NonEmptyVector.wrapOrThrow(new String[]{}));
+            }
+
         }
 
-        @Test
-        void listSuccess() {
-            NonEmptyVector<String> result = NonEmptyVector.wrapOrThrow(singletonList("foo"));
-            assertEquals("foo", result.head());
-            assertEquals(1, result.size());
+        @Nested
+        @DisplayName("List")
+        class WrapOrThrowListTests {
+
+            @Test
+            void throwsOnNullArgument() {
+                List<String> list = null;
+                assertThrows(NullPointerException.class, () -> NonEmptyVector.wrapOrThrow(list));
+            }
+
+            @Test
+            void success() {
+                NonEmptyVector<String> result = NonEmptyVector.wrapOrThrow(singletonList("foo"));
+                assertEquals("foo", result.head());
+                assertEquals(1, result.size());
+            }
+
+            @Test
+            void failure() {
+                assertThrows(IllegalArgumentException.class, () -> NonEmptyVector.wrapOrThrow(emptyList()));
+            }
+
         }
 
-        @Test
-        void arrayFailure() {
-            assertThrows(IllegalArgumentException.class, () -> NonEmptyVector.wrapOrThrow(new String[]{}));
+    }
+
+    @Nested
+    @DisplayName("tryCopyFrom")
+    class TryCopyFromTests {
+
+        @Nested
+        @DisplayName("array")
+        class TryCopyFromArrayTests {
+
+            @Test
+            void throwsOnNullArgument() {
+                Integer[] arr = null;
+                assertThrows(NullPointerException.class, () -> NonEmptyVector.tryCopyFrom(arr));
+            }
+
+            @Test
+            void success() {
+                NonEmptyVector<String> result = NonEmptyVector.tryCopyFrom(new String[]{"foo"}).orElseThrow(AssertionError::new);
+                assertThat(result, contains("foo"));
+                assertEquals("foo", result.head());
+                assertEquals(1, result.size());
+            }
+
+            @Test
+            void successWithMaxCount() {
+                NonEmptyVector<String> result = NonEmptyVector.tryCopyFrom(2, new String[]{"foo", "bar", "baz"}).orElseThrow(AssertionError::new);
+                assertThat(result, contains("foo", "bar"));
+            }
+
+            @Test
+            void failure() {
+                assertEquals(nothing(), NonEmptyVector.tryCopyFrom(new String[]{}));
+            }
+
         }
 
-        @Test
-        void listFailure() {
-            assertThrows(IllegalArgumentException.class, () -> NonEmptyVector.wrapOrThrow(emptyList()));
+        @Nested
+        @DisplayName("Iterable")
+        class TryCopyFromIterableTests {
+
+            @Test
+            void throwsOnNullArgument() {
+                Iterable<String> iterable = null;
+                assertThrows(NullPointerException.class, () -> NonEmptyVector.tryCopyFrom(iterable));
+            }
+
+            @Test
+            void success() {
+                NonEmptyVector<String> result = NonEmptyVector.tryCopyFrom(singletonList("foo")).orElseThrow(AssertionError::new);
+                assertThat(result, contains("foo"));
+                assertEquals("foo", result.head());
+                assertEquals(1, result.size());
+            }
+
+            @Test
+            void successWithMaxCount() {
+                Iterable<Integer> infinite = cycle(asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9));
+                assertEquals(just(Vector.of(0, 1, 2, 3, 4)),
+                        NonEmptyVector.tryCopyFrom(5, infinite));
+            }
+
+            @Test
+            void failure() {
+                assertEquals(nothing(), NonEmptyVector.tryCopyFrom(emptyList()));
+            }
+
+            @Test
+            void returnsOriginalIfAlreadyImmutableNonEmptyVector() {
+                Vector<Integer> original = Vector.of(1, 2, 3, 4);
+                NonEmptyVector<Integer> result = NonEmptyVector.tryCopyFrom(original).orElseThrow(AssertionError::new);
+                assertSame(original, result);
+            }
+
         }
+
+    }
+
+    @Nested
+    @DisplayName("copyFromOrThrow")
+    class CopyFromOrThrowTests {
+
+        @Nested
+        @DisplayName("array")
+        class CopyFromOrThrowArrayTests {
+
+            @Test
+            void throwsOnNullArgument() {
+                Integer[] arr = null;
+                assertThrows(NullPointerException.class, () -> NonEmptyVector.copyFromOrThrow(arr));
+            }
+
+            @Test
+            void success() {
+                NonEmptyVector<String> result = NonEmptyVector.copyFromOrThrow(new String[]{"foo"});
+                assertThat(result, contains("foo"));
+                assertEquals("foo", result.head());
+                assertEquals(1, result.size());
+            }
+
+            @Test
+            void successWithMaxCount() {
+                NonEmptyVector<String> result = NonEmptyVector.copyFromOrThrow(2, new String[]{"foo", "bar", "baz"});
+                assertThat(result, contains("foo", "bar"));
+            }
+
+            @Test
+            void failure() {
+                assertThrows(IllegalArgumentException.class, () -> NonEmptyVector.copyFromOrThrow(new String[]{}));
+            }
+
+        }
+
+        @Nested
+        @DisplayName("Iterable")
+        class CopyFromOrThrowIterableTests {
+
+            @Test
+            void throwsOnNullArgument() {
+                Iterable<String> iterable = null;
+                assertThrows(NullPointerException.class, () -> NonEmptyVector.copyFromOrThrow(iterable));
+            }
+
+            @Test
+            void success() {
+                NonEmptyVector<String> result = NonEmptyVector.copyFromOrThrow(singletonList("foo"));
+                assertThat(result, contains("foo"));
+                assertEquals("foo", result.head());
+                assertEquals(1, result.size());
+            }
+
+            @Test
+            void successWithMaxCount() {
+                Iterable<Integer> infinite = cycle(asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9));
+                assertEquals(Vector.of(0, 1, 2, 3, 4),
+                        NonEmptyVector.copyFromOrThrow(5, infinite));
+            }
+
+            @Test
+            void failure() {
+                assertThrows(IllegalArgumentException.class, () -> NonEmptyVector.copyFromOrThrow(emptyList()));
+            }
+
+            @Test
+            void returnsOriginalIfAlreadyImmutableNonEmptyVector() {
+                Vector<Integer> original = Vector.of(1, 2, 3, 4);
+                NonEmptyVector<Integer> result = NonEmptyVector.copyFromOrThrow(original);
+                assertSame(original, result);
+            }
+
+        }
+
     }
 
     @Nested
