@@ -36,7 +36,7 @@ For more details, check out the [javadoc](https://kschuetz.github.io/collection-
 
 Sometimes you might want all of the following:
 
-- To provide (or require) read-access to the essential operations of a collection (e.g., 'get by index' for arrays or lists, or 'contains' for sets), _and nothing more_.
+- To provide (or require) read-access to the essential operations of a collection (e.g., 'get by index' for arrays or lists, or 'contains' for sets), and _nothing more_.
 - Protection from mutation to the collection without making defensive copies.
 - To retain the performance and locality of reference characteristics of the collection you are employing.
 
@@ -50,37 +50,37 @@ It differs from [Guava Immutable Collections](https://github.com/google/guava/wi
 
 # <a name="design-principles">Design principles</a>
 
-**collection-views** is guided by the following design principles and goals:
+The design of **collection-views** is guided by the following principles and goals:
 
 ## Only the essentials
 
-Only the essential read-only operations of underlying collections are exposed.  The consumer of a `Vector` will only be able to iterate its elements, check its size, or read an element by index.  The consumer of a `Set` will only be able to iterate its elements, check its size, or test for membership.
+Only the essential read-only operations of underlying collections should be exposed.  The consumer of a `Vector` will only be able to iterate its elements, check its size, or read an element by index.  The consumer of a `Set` will only be able to iterate its elements, check its size, or test for membership.  It is not a goal of this library to provide add or update operations.
 
 ## Immutable to bearer
 
-A collection view can be shared safely without making a defensive copy.  There is no way the bearer of a collection view can mutate the collection or gain access to a reference to the underlying collection.
+A collection view should be able to be shared safely without making a defensive copy.  There should be no way for the bearer of a collection view to mutate the collection or gain access to a reference to the underlying collection.
 
 ## Correct by construction
 
-It should be impossible to construct an instance of an interface that does not uphold its guarantees.  For example, there is no way to create `NonEmptyVector` that contains no elements.  Therefore, you can be assured at compile-time that if you require a `NonEmptyVector`, you will not need to check at run-time if it is non-empty.
+It should be impossible to construct an instance of an interface that does not uphold its guarantees.  For example, there is no way to create `NonEmptyVector` that contains no elements.  Therefore, you can be assured at compile-time that if you require a `NonEmptyVector`, there will be no need to check at run-time if it is non-empty.
 
 ## Doesn't make copies
 
-Methods should never make a copy of an underlying collection unless explicitly asked to, or if it is necessary to uphold the guarantees of its interface.  For example, there is no reason `fmap`, `take`, or `slice` on a `Vector` should need to make a copy of the underlying collection to uphold the random access guarantee on a `Vector`.   
+Methods should never make a copy of an underlying collection unless explicitly asked to, or if it is necessary to uphold the guarantees of its interface.  For example, there is no reason `fmap`, `take`, or `slice` on a `Vector` should need to make any copies of the collection to uphold the random access guarantee on a `Vector`.   
 
 In contrast, if a `Vector` is to be constructed from an `Iterable` that is not known to have a random access guarantee, then in that case a copy will be made so `Vector` can fulfill this guarantee. 
 
 ## Opt-in to guarantees
 
-If you simply prefer to work with `Vector`s or `Set`s and not think about non-emptiness or immutability, you can do so.  For example, since `NonEmptyVector<A>`, `ImmutableVector<A>`, and `ImmutableNonEmptyVector<A>` are all subtypes of `Vector<A>`, you can use them anywhere a `Vector<A>` is called for.
+If you simply prefer to work with `Vector`s or `Set`s and not think about non-emptiness or immutability, you should be able to do so.  For example, since `NonEmptyVector<A>`, `ImmutableVector<A>`, and `ImmutableNonEmptyVector<A>` are all subtypes of `Vector<A>`, you can use them anywhere a `Vector<A>` is called for.
 
 ## Provide transformations, but only if they don't violate other principles
 
-Although methods for updating and adding to collections are not available, some transformations that can be performed without violating other design principles (e.g. don't make copies), and can be done so with low overhead, are provided.
+Although methods for updating and adding to collections are not available, some transformations  can be performed without violating other design principles (e.g. don't make copies).  Those that can be done so with low overhead should be provided.
 
 Examples include `fmap`, `take`, `drop`, and `slice` on `Vector`s.  Each of these transforms a view of a collection without making copies, or violating any guarantees.
 
-The views yielded by these transformation are new, independent views, and do not affect the original in any way. 
+The views yielded by these transformation are new, independent views, and do not affect the original. 
 
 ## Easy to construct on the fly
 
@@ -101,7 +101,7 @@ For convenience, collection views should be easy to create on the fly without th
 
 ## <a name="vector">`Vector<A>`</a>
 
-The bearer of a `Vector` has the following capabilities:
+A `Vector` is a finite, ordered view of a collection.  The bearer of a `Vector` has the following capabilities:
 
 - Random access to any element in the `Vector` using the `get` method.
 - Get the size of the `Vector` in O(1) using the `size` method.
@@ -142,15 +142,17 @@ A `Vector` can be created by wrapping an existing collection or array using one 
 `Vector.wrap`:
 
 - Does not make a copy of the underlying collection.
-- Will not alter the underlying collection in any way.
+- Will never alter the underlying collection in any way.
 - Will maintain a reference to the collection you wrap.
 
-The underlying collection is protected against mutation from anyone you share the `Vector` with.  However, note that anyone who has a reference to the underlying collection is still able to mutate it.  Therefore, it is highly recommended that you do not mutate the collection or share the underlying collection with anyone else who might mutate it.
+The underlying collection is protected against mutation from anyone you share the `Vector` with. 
+However, be aware that anyone else who has a reference to the underlying collection is still able to mutate it.  
+Therefore, it is highly recommended that you do not mutate the collection or share the underlying collection with anyone else who might mutate it.
 If you prefer to avoid this, you can construct an `ImmutableVector` using `copyFrom` instead.
 
 #### <a name="vector-copy-from">Copying from an `Iterable<A>`</a>
 
-A `Vector` can be constructed from an `Iterable` or array using the `copyFrom` or `copySliceFrom` methods.
+A `Vector` can be created by copying from an `Iterable` or array using the `copyFrom` or `copySliceFrom` methods.
 
 `Vector.copyFrom`:
 
@@ -174,20 +176,21 @@ The `Vector.empty` static method will return an `ImmutableVector<A>` that is emp
 
 ## <a name="non-empty-vector">`NonEmptyVector<A>`</a>
 
-A `NonEmptyVector<A>` is a `Vector<A>` that is known at compile-time to contain at least one element.  It is not possible to construct a `NonEmptyVector` that is empty.  Since it is also a ``Vector<A>``, it can be used anywhere a ``Vector<A>`` is called for.
-`NonEmptyVector<A>` subtypes `NonEmptyIterable<A>`, providing a `head` method that is guaranteed to yield an element.
+A `NonEmptyVector<A>` is a `Vector<A>` that is known at compile-time to contain at least one element.  It is not possible to construct a `NonEmptyVector` that is empty.  Since it is also a `Vector<A>`, it can be used anywhere a `Vector<A>` is called for.
+`NonEmptyVector<A>` is a subtype of `NonEmptyIterable<A>`, which provides a `head` method that unconditionally yields the first element.
 
 ### <a name="creating-non-empty-vectors">Creating a `NonEmptyVector`</a>
 
 #### <a name="non-empty-vector-wrapping">Wrapping an existing collection</a>
 
-`NonEmptyVector.tryWrap` takes an array, a `java.util.List`, or a `Vector` as an argument, and returns a `Maybe<NonEmptyVector<A>>`.  If the provided collection is not empty, a `NonEmptyVector` will be created and returned in a `Maybe.just`, otherwise `Maybe.nothing` will be returned.
+`NonEmptyVector.tryWrap` takes an array or a `java.util.List` and returns a `Maybe<NonEmptyVector<A>>`.  If the provided collection is not empty, a `NonEmptyVector<A>` will be created and returned in a `Maybe.just`, otherwise `Maybe.nothing` will be returned.
 
 Alternatively, if you know for sure that the collection you are passing is not empty, then you can call `NonEmptyVector.wrapOrThrow`.  This will either return the `NonEmptyVector` directly, or throw an `IllegalArgumentException` if the provided collection is empty.
 
 `NonEmptyVector.tryWrap` and `NonEmptyVector.wrapOrThrow` behave similarly to `Vector.wrap` in that a copy of the underlying collection is never made.
 
 #### <a name="non-empty-vector-converting">Converting an existing `Vector`</a>
+
 A `Vector` has the methods `toNonEmpty` and `toNonEmptyOrThrow` that will attempt to convert the `Vector` to a `NonEmptyVector` at run-time.  They will do so without making copies of any underlying data structures.
 
 #### <a name="non-empty-vector-of">Building `NonEmptyVector`s directly</a>
