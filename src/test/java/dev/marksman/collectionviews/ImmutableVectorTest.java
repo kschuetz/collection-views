@@ -1,6 +1,7 @@
 package dev.marksman.collectionviews;
 
 import com.jnape.palatable.lambda.functions.Fn1;
+import com.jnape.palatable.lambda.functions.builtin.fn1.Id;
 import com.jnape.palatable.lambda.functions.builtin.fn2.Take;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -1358,6 +1359,13 @@ class ImmutableVectorTest {
             @Test
             void dropTooLong() {
                 assertSame(Vector.empty(), subject.drop(1_000_000));
+            }
+
+            @Test
+            void stackSafe() {
+                ImmutableVector<Integer> huge = Vector.lazyFill(1_000_000, Id.id());
+                ImmutableVector<Integer> dropped = foldLeft((acc, __) -> acc.drop(1), huge, replicate(10_000, UNIT));
+                assertEquals(10_000, dropped.unsafeGet(0));
             }
 
         }
