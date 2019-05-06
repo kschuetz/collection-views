@@ -29,7 +29,7 @@ interface MapperChain {
         return new MapperChainImpl(Collections.singletonList(lambdaToJava(f)));
     }
 
-    class EmptyMapperChain implements MapperChain {
+    final class EmptyMapperChain implements MapperChain {
         static final EmptyMapperChain INSTANCE = new EmptyMapperChain();
 
         private EmptyMapperChain() {
@@ -58,7 +58,7 @@ interface MapperChain {
 
     }
 
-    class MapperChainImpl implements MapperChain {
+    final class MapperChainImpl implements MapperChain {
         private final Iterable<Function> mappers;
         private volatile Fn1<Object, Object> fnComposedOnTheHeap;
 

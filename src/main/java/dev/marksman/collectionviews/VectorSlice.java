@@ -1,6 +1,6 @@
 package dev.marksman.collectionviews;
 
-class VectorSlice<A> extends ConcreteVector<A> implements Vector<A> {
+final class VectorSlice<A> extends ConcreteVector<A> implements Vector<A> {
     private final int offset;
     private final int size;
     private final Vector<A> underlying;

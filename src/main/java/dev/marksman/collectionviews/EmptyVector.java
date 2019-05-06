@@ -8,7 +8,7 @@ import java.util.Iterator;
 import static com.jnape.palatable.lambda.adt.Maybe.nothing;
 import static java.util.Collections.emptyIterator;
 
-class EmptyVector<A> extends ConcreteVector<A> implements ImmutableVector<A> {
+final class EmptyVector<A> extends ConcreteVector<A> implements ImmutableVector<A> {
     private static final EmptyVector<?> INSTANCE = new EmptyVector<>();
 
     @Override

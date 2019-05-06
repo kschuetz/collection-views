@@ -1,7 +1,7 @@
 package dev.marksman.collectionviews;
 
 @SuppressWarnings("unused")
-class ImmutableArrayVector<A> extends ConcreteVector<A> implements ImmutableNonEmptyVector<A> {
+final class ImmutableArrayVector<A> extends ConcreteVector<A> implements ImmutableNonEmptyVector<A> {
     /**
      * underlying must contain at least one element.
      */

@@ -2,7 +2,7 @@ package dev.marksman.collectionviews;
 
 import com.jnape.palatable.lambda.functions.Fn1;
 
-class ImmutableMappedVector<A> extends ConcreteVector<A> implements ImmutableNonEmptyVector<A> {
+final class ImmutableMappedVector<A> extends ConcreteVector<A> implements ImmutableNonEmptyVector<A> {
     private final MapperChain mapper;
     private final ImmutableNonEmptyVector<Object> underlying;
 

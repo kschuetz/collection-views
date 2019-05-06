@@ -6,7 +6,7 @@ import java.util.Objects;
 
 import static dev.marksman.collectionviews.Validation.*;
 
-class RepeatingVector<A> extends ConcreteVector<A> implements ImmutableNonEmptyVector<A> {
+final class RepeatingVector<A> extends ConcreteVector<A> implements ImmutableNonEmptyVector<A> {
     private final int size; // must be >= 1
     private final A value;
 

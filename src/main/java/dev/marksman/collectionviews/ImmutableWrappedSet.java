@@ -5,7 +5,7 @@ import java.util.Set;
 
 import static dev.marksman.collectionviews.ProtectedIterator.protectedIterator;
 
-class ImmutableWrappedSet<A> extends ConcreteSet<A> implements ImmutableNonEmptySet<A> {
+final class ImmutableWrappedSet<A> extends ConcreteSet<A> implements ImmutableNonEmptySet<A> {
 
     /**
      * underlying must contain at least one element

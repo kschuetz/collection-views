@@ -1,6 +1,6 @@
 package dev.marksman.collectionviews;
 
-class VectorCons<A> extends ConcreteVector<A> implements NonEmptyVector<A> {
+final class VectorCons<A> extends ConcreteVector<A> implements NonEmptyVector<A> {
     private final A head;
     private final Vector<A> tail;
 

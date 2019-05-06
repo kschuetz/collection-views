@@ -4,7 +4,7 @@ import com.jnape.palatable.lambda.functions.Fn1;
 
 import static dev.marksman.collectionviews.Validation.*;
 
-class LazyVector<A> extends ConcreteVector<A> implements ImmutableNonEmptyVector<A> {
+final class LazyVector<A> extends ConcreteVector<A> implements ImmutableNonEmptyVector<A> {
     private final int size; // must be >= 1
     private final int offset;
     private final Fn1<Integer, A> valueSupplier;
