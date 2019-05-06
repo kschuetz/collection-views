@@ -8,14 +8,18 @@ This library has not yet been released.
 #### Table of Contents
 
  - [What is it?](#what-is-it)
- - [Why](#why)
  - [What is it not?](#what-is-it-not)
+ - [Why?](#why)
  - [Design principles](#design-principles)
  - [Type of collection views](#types)
    - [`Vector<A>`](#vector)
-   - [`NonEmptyVector<A>`](#non-empty-vectors)
+   - [`NonEmptyVector<A>`](#non-empty-vector)
    - [`ImmutableVector<A>`](#immutable-vector)
    - [`ImmutableNonEmptyVector<A>`](#immutable-non-empty-vector)
+   - [`Set<A>`](#set)
+   - [`NonEmptySet<A>`](#non-empty-set)
+   - [`ImmutableSet<A>`](#immutable-set)
+   - [`ImmutableNonEmptySet<A>`](#immutable-non-empty-set)
  - [Examples](#examples)
    - [`Vector`](#vector-examples)
    - [`Set`](#vector-examples)
@@ -32,6 +36,12 @@ It is intended to be used in conjunction with [lambda](https://palatable.github.
 
 For more details, check out the [javadoc](https://kschuetz.github.io/collection-views/javadoc/).
 
+# <a name="what-is-it-not">What is it not?</a>
+
+**collection-views** is not a persistent data structures library.  Collections are wrapped as is;  no methods are provided for updating or adding to collections.  
+
+It differs from [Guava Immutable Collections](https://github.com/google/guava/wiki/ImmutableCollectionsExplained) in that it acts as a shield over existing collections rather than being collections themselves.
+
 # <a name="why">Why?</a> 
 
 Sometimes you might want all of the following:
@@ -42,11 +52,25 @@ Sometimes you might want all of the following:
 
 The goal of **collection-views** is to provide this functionality with as little overhead as possible.
 
-# <a name="what-is-it-not">What is it not?</a>
+## What value does it provide?
 
-**collection-views** is not a persistent data structures library.  Collections are wrapped as is;  no methods are provided for updating or adding to collections.  
+**collection-views** is designed to be used with [lambda](https://palatable.github.io/lambda/).
+If you are not currently using lambda (I recommend you do!), this library may not provide much value.
 
-It differs from [Guava Immutable Collections](https://github.com/google/guava/wiki/ImmutableCollectionsExplained) in that it acts as a shield over existing collections rather than being collections themselves.
+### Why not just use `Collections.unmodifiableXXX` or Guava?
+
+`Vector` and `Set`, when wrapped around an existing collection, do essentially the same thing as `UnmodifiableArrayList` and `UnmodifiableSet` in the Java Collections library.   However, **collection-views** gives you the ability to opt in to making a copy, giving stronger guarantees of immutability.
+
+Guava always initially makes a copy, and that may not be what you want.
+
+**collection-views** also provides the following features currently not available in either:
+
+- `NonEmpty` types
+- Transformations such as `fmap`, `take`, `drop`
+
+### Why not just use Lambda's `map`, `take`, `drop`, etc?
+
+While these functions are useful and will work perfectly well on a collection view, they currently operate on `Iterable`s and return `Iterable`s as a result.  **collection-views** provides equivalents that will yield a more specific type at compile time.  For example, `ImmutableNonEmptyVector.fmap` will always yield an `ImmutableNonEmptyVector`, and `ImmutableVector.take` will always yield an `ImmutableVector`.
 
 # <a name="design-principles">Design principles</a>
 
@@ -267,7 +291,7 @@ The copying of the input is a one-time cost, but in return you get an `Immutable
 
 Calling `Set.of` with one or more elements will return a new `ImmutableNonEmptySet`. 
 
-#### <a name="vector-empty">Creating an empty `Set`</a>
+#### <a name="set-empty">Creating an empty `Set`</a>
 
 The `Set.empty` static method will return an `ImmutableSet<A>` that is empty.
 
