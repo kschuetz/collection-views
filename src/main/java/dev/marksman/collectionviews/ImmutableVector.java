@@ -61,6 +61,11 @@ public interface ImmutableVector<A> extends Vector<A>, Immutable {
         return ImmutableVectors.map(f, this);
     }
 
+    @Override
+    default ImmutableVector<A> reverse() {
+        return ImmutableVectors.reverse(this);
+    }
+
     /**
      * Creates a slice of this {@code ImmutableVector}.
      * <p>

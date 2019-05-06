@@ -185,6 +185,22 @@ final class Vectors {
                 (NonEmptyVector<Object>) source);
     }
 
+    static <A> Vector<A> reverse(Vector<A> vec) {
+        if (vec.size() < 2) {
+            return vec;
+        } else {
+            return ReverseVector.reverseVector(vec.toNonEmptyOrThrow());
+        }
+    }
+
+    static <A> NonEmptyVector<A> nonEmptyReverse(NonEmptyVector<A> vec) {
+        if (vec.size() < 2) {
+            return vec;
+        } else {
+            return ReverseVector.reverseVector(vec);
+        }
+    }
+
     private static <A> Vector<A> takeFromIterable(int count, Iterable<A> source) {
         validateTake(count, source);
         return sliceFromIterable(0, count, source);

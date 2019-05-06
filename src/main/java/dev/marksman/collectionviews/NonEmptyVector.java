@@ -65,6 +65,11 @@ public interface NonEmptyVector<A> extends NonEmptyIterable<A>, Vector<A> {
         return VectorHelpers.vectorIterator(this);
     }
 
+    @Override
+    default NonEmptyVector<A> reverse() {
+        return Vectors.nonEmptyReverse(this);
+    }
+
     /**
      * Returns the tail of this {@code NonEmptyVector}. i.e. the same {@link Vector} with the first element dropped.
      * <p>

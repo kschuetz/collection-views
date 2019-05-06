@@ -63,6 +63,22 @@ class ImmutableVectors {
                 (ImmutableNonEmptyVector<Object>) source);
     }
 
+    static <A> ImmutableVector<A> reverse(ImmutableVector<A> vec) {
+        if (vec.size() < 2) {
+            return vec;
+        } else {
+            return ImmutableReverseVector.immutableReverseVector(vec.toNonEmptyOrThrow());
+        }
+    }
+
+    static <A> ImmutableNonEmptyVector<A> nonEmptyReverse(ImmutableNonEmptyVector<A> vec) {
+        if (vec.size() < 2) {
+            return vec;
+        } else {
+            return ImmutableReverseVector.immutableReverseVector(vec);
+        }
+    }
+
     static <A> ImmutableVector<A> wrapAndVouchFor(A[] arr) {
         Objects.requireNonNull(arr);
         if (arr.length == 0) {

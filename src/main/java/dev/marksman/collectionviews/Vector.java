@@ -139,6 +139,10 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
         return VectorHelpers.vectorIterator(this);
     }
 
+    default Vector<A> reverse() {
+        return Vectors.reverse(this);
+    }
+
     /**
      * Creates a slice of this {@code Vector}.
      * <p>

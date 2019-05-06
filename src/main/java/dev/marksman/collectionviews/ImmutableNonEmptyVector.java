@@ -40,6 +40,11 @@ public interface ImmutableNonEmptyVector<A> extends NonEmptyVector<A>, Immutable
         return ImmutableVectors.mapNonEmpty(f, this);
     }
 
+    @Override
+    default ImmutableNonEmptyVector<A> reverse() {
+        return ImmutableVectors.nonEmptyReverse(this);
+    }
+
     /**
      * Returns the tail of this {@code ImmutableNonEmptyVector}.
      * <p>
