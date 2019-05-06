@@ -32,7 +32,7 @@ class Sets {
         return new ImmutableWrappedSet<>(underlying);
     }
 
-    static <A> Maybe<NonEmptySet<A>> tryNonEmptyWrap(java.util.Set<A> underlying) {
+    static <A> Maybe<NonEmptySet<A>> maybeNonEmptyWrap(java.util.Set<A> underlying) {
         Objects.requireNonNull(underlying);
         if (underlying.isEmpty()) {
             return nothing();
@@ -41,7 +41,7 @@ class Sets {
         }
     }
 
-    static <A> Maybe<NonEmptySet<A>> tryNonEmptyWrap(Set<A> underlying) {
+    static <A> Maybe<NonEmptySet<A>> maybeNonEmptyWrap(Set<A> underlying) {
         if (underlying instanceof NonEmptySet<?>) {
             return just((NonEmptySet<A>) underlying);
         } else if (!underlying.isEmpty()) {
@@ -52,11 +52,11 @@ class Sets {
     }
 
     static <A> NonEmptySet<A> nonEmptyWrapOrThrow(java.util.Set<A> underlying) {
-        return getNonEmptyOrThrow(tryNonEmptyWrap(underlying));
+        return getNonEmptyOrThrow(maybeNonEmptyWrap(underlying));
     }
 
     static <A> NonEmptySet<A> nonEmptyWrapOrThrow(Set<A> underlying) {
-        return getNonEmptyOrThrow(tryNonEmptyWrap(underlying));
+        return getNonEmptyOrThrow(maybeNonEmptyWrap(underlying));
     }
 
     static Supplier<IllegalArgumentException> nonEmptyError() {

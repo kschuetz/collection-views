@@ -143,7 +143,7 @@ final class Vectors {
         return new LazyVector<>(size, 0, valueSupplier);
     }
 
-    static <A> Maybe<NonEmptyVector<A>> tryNonEmptyWrap(A[] arr) {
+    static <A> Maybe<NonEmptyVector<A>> maybeNonEmptyWrap(A[] arr) {
         Objects.requireNonNull(arr);
         if (arr.length == 0) {
             return nothing();
@@ -152,7 +152,7 @@ final class Vectors {
         }
     }
 
-    static <A> Maybe<NonEmptyVector<A>> tryNonEmptyWrap(List<A> list) {
+    static <A> Maybe<NonEmptyVector<A>> maybeNonEmptyWrap(List<A> list) {
         Objects.requireNonNull(list);
         if (list.isEmpty()) {
             return nothing();
@@ -162,19 +162,19 @@ final class Vectors {
     }
 
     static <A> NonEmptyVector<A> nonEmptyWrapOrThrow(A[] arr) {
-        return getNonEmptyOrThrow(tryNonEmptyWrap(arr));
+        return getNonEmptyOrThrow(maybeNonEmptyWrap(arr));
     }
 
     static <A> NonEmptyVector<A> nonEmptyWrapOrThrow(List<A> list) {
-        return getNonEmptyOrThrow(tryNonEmptyWrap(list));
+        return getNonEmptyOrThrow(maybeNonEmptyWrap(list));
     }
 
     static <A> NonEmptyVector<A> nonEmptyWrapOrThrow(Vector<A> vec) {
-        return getNonEmptyOrThrow(ImmutableVectors.tryNonEmptyWrap(vec));
+        return getNonEmptyOrThrow(ImmutableVectors.maybeNonEmptyWrap(vec));
     }
 
     static <A, B> Vector<B> map(Fn1<? super A, ? extends B> f, Vector<A> source) {
-        return ImmutableVectors.tryNonEmptyWrap(source)
+        return ImmutableVectors.maybeNonEmptyWrap(source)
                 .match(__ -> empty(),
                         nonEmpty -> mapNonEmpty(f, nonEmpty));
     }

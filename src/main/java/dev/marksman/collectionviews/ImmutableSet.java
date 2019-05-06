@@ -41,7 +41,7 @@ public interface ImmutableSet<A> extends Set<A>, Immutable {
      */
     @Override
     default Maybe<? extends ImmutableNonEmptySet<A>> toNonEmpty() {
-        return ImmutableSets.tryNonEmptyConvert(this);
+        return ImmutableSets.maybeNonEmptyConvert(this);
     }
 
     /**

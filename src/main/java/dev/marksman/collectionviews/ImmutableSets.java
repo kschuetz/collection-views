@@ -54,7 +54,7 @@ final class ImmutableSets {
     }
 
     @SuppressWarnings("unchecked")
-    static <A> Maybe<ImmutableNonEmptySet<A>> tryNonEmptyCopyFrom(Iterable<A> source) {
+    static <A> Maybe<ImmutableNonEmptySet<A>> maybeNonEmptyCopyFrom(Iterable<A> source) {
         Objects.requireNonNull(source);
         if (!source.iterator().hasNext()) {
             return nothing();
@@ -63,13 +63,13 @@ final class ImmutableSets {
         }
     }
 
-    static <A> Maybe<ImmutableNonEmptySet<A>> tryNonEmptyCopyFrom(A[] source) {
+    static <A> Maybe<ImmutableNonEmptySet<A>> maybeNonEmptyCopyFrom(A[] source) {
         Objects.requireNonNull(source);
-        return tryNonEmptyCopyFrom(source.length, source);
+        return maybeNonEmptyCopyFrom(source.length, source);
     }
 
     @SuppressWarnings("unchecked")
-    static <A> Maybe<ImmutableNonEmptySet<A>> tryNonEmptyCopyFrom(int maxCount, Iterable<A> source) {
+    static <A> Maybe<ImmutableNonEmptySet<A>> maybeNonEmptyCopyFrom(int maxCount, Iterable<A> source) {
         validateCopyFrom(maxCount, source);
         if (maxCount == 0 || !source.iterator().hasNext()) {
             return nothing();
@@ -79,7 +79,7 @@ final class ImmutableSets {
     }
 
     @SuppressWarnings("unchecked")
-    static <A> Maybe<ImmutableNonEmptySet<A>> tryNonEmptyCopyFrom(int maxCount, A[] source) {
+    static <A> Maybe<ImmutableNonEmptySet<A>> maybeNonEmptyCopyFrom(int maxCount, A[] source) {
         validateCopyFrom(maxCount, source);
         if (source.length == 0 || maxCount == 0) {
             return nothing();
@@ -88,7 +88,7 @@ final class ImmutableSets {
         }
     }
 
-    static <A> Maybe<ImmutableNonEmptySet<A>> tryNonEmptyConvert(ImmutableSet<A> source) {
+    static <A> Maybe<ImmutableNonEmptySet<A>> maybeNonEmptyConvert(ImmutableSet<A> source) {
         Objects.requireNonNull(source);
         if (source instanceof ImmutableNonEmptySet<?>) {
             return just((ImmutableNonEmptySet<A>) source);
@@ -100,23 +100,23 @@ final class ImmutableSets {
     }
 
     static <A> ImmutableNonEmptySet<A> nonEmptyConvertOrThrow(ImmutableSet<A> source) {
-        return getNonEmptyOrThrow(tryNonEmptyConvert(source));
+        return getNonEmptyOrThrow(maybeNonEmptyConvert(source));
     }
 
     static <A> ImmutableNonEmptySet<A> nonEmptyCopyFromOrThrow(Iterable<A> source) {
-        return getNonEmptyOrThrow(tryNonEmptyCopyFrom(source));
+        return getNonEmptyOrThrow(maybeNonEmptyCopyFrom(source));
     }
 
     static <A> ImmutableNonEmptySet<A> nonEmptyCopyFromOrThrow(A[] source) {
-        return getNonEmptyOrThrow(tryNonEmptyCopyFrom(source));
+        return getNonEmptyOrThrow(maybeNonEmptyCopyFrom(source));
     }
 
     static <A> ImmutableNonEmptySet<A> nonEmptyCopyFromOrThrow(int maxCount, Iterable<A> source) {
-        return getNonEmptyOrThrow(tryNonEmptyCopyFrom(maxCount, source));
+        return getNonEmptyOrThrow(maybeNonEmptyCopyFrom(maxCount, source));
     }
 
     static <A> ImmutableNonEmptySet<A> nonEmptyCopyFromOrThrow(int maxCount, A[] source) {
-        return getNonEmptyOrThrow(tryNonEmptyCopyFrom(maxCount, source));
+        return getNonEmptyOrThrow(maybeNonEmptyCopyFrom(maxCount, source));
     }
 
     private static <A> ImmutableNonEmptySet<A> getNonEmptyOrThrow(Maybe<ImmutableNonEmptySet<A>> maybeResult) {

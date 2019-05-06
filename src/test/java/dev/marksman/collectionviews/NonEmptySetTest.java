@@ -98,12 +98,12 @@ class NonEmptySetTest {
     }
 
     @Nested
-    @DisplayName("tryWrap")
-    class TryWrapTests {
+    @DisplayName("maybeWrap")
+    class MaybeWrapTests {
 
         @Test
         void javaUtilSetSuccess() {
-            NonEmptySet<String> result = NonEmptySet.tryWrap(singleton("foo")).orElseThrow(AssertionError::new);
+            NonEmptySet<String> result = NonEmptySet.maybeWrap(singleton("foo")).orElseThrow(AssertionError::new);
             assertThat(result, contains("foo"));
             assertEquals("foo", result.head());
             assertEquals(1, result.size());
@@ -112,13 +112,13 @@ class NonEmptySetTest {
 
         @Test
         void javaUtilSetFailure() {
-            assertEquals(nothing(), NonEmptySet.tryWrap(emptySet()));
+            assertEquals(nothing(), NonEmptySet.maybeWrap(emptySet()));
         }
 
     }
 
     @Nested
-    @DisplayName("tryWrap")
+    @DisplayName("maybeWrap")
     class WrapOrThrowTests {
 
         @Test

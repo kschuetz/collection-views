@@ -24,22 +24,22 @@ import static org.junit.jupiter.api.Assertions.*;
 class NonEmptyVectorTest {
 
     @Nested
-    @DisplayName("tryWrap")
-    class TryWrapTests {
+    @DisplayName("maybeWrap")
+    class MaybeWrapTests {
 
         @Nested
         @DisplayName("array")
-        class TryWrapArrayTests {
+        class MaybeWrapArrayTests {
 
             @Test
             void throwsOnNullArgument() {
                 Integer[] arr = null;
-                assertThrows(NullPointerException.class, () -> NonEmptyVector.tryWrap(arr));
+                assertThrows(NullPointerException.class, () -> NonEmptyVector.maybeWrap(arr));
             }
 
             @Test
             void success() {
-                NonEmptyVector<String> result = NonEmptyVector.tryWrap(new String[]{"foo"}).orElseThrow(AssertionError::new);
+                NonEmptyVector<String> result = NonEmptyVector.maybeWrap(new String[]{"foo"}).orElseThrow(AssertionError::new);
                 assertThat(result, contains("foo"));
                 assertEquals("foo", result.head());
                 assertEquals(1, result.size());
@@ -47,24 +47,24 @@ class NonEmptyVectorTest {
 
             @Test
             void failure() {
-                assertEquals(nothing(), NonEmptyVector.tryWrap(new String[]{}));
+                assertEquals(nothing(), NonEmptyVector.maybeWrap(new String[]{}));
             }
 
         }
 
         @Nested
         @DisplayName("List")
-        class TryWrapListTests {
+        class MaybeWrapListTests {
 
             @Test
             void throwsOnNullArgument() {
                 List<String> list = null;
-                assertThrows(NullPointerException.class, () -> NonEmptyVector.tryWrap(list));
+                assertThrows(NullPointerException.class, () -> NonEmptyVector.maybeWrap(list));
             }
 
             @Test
             void success() {
-                NonEmptyVector<String> result = NonEmptyVector.tryWrap(singletonList("foo")).orElseThrow(AssertionError::new);
+                NonEmptyVector<String> result = NonEmptyVector.maybeWrap(singletonList("foo")).orElseThrow(AssertionError::new);
                 assertThat(result, contains("foo"));
                 assertEquals("foo", result.head());
                 assertEquals(1, result.size());
@@ -72,7 +72,7 @@ class NonEmptyVectorTest {
 
             @Test
             void failure() {
-                assertEquals(nothing(), NonEmptyVector.tryWrap(emptyList()));
+                assertEquals(nothing(), NonEmptyVector.maybeWrap(emptyList()));
             }
 
         }
@@ -135,22 +135,22 @@ class NonEmptyVectorTest {
     }
 
     @Nested
-    @DisplayName("tryCopyFrom")
-    class TryCopyFromTests {
+    @DisplayName("maybeCopyFrom")
+    class MaybeCopyFromTests {
 
         @Nested
         @DisplayName("array")
-        class TryCopyFromArrayTests {
+        class MaybeCopyFromArrayTests {
 
             @Test
             void throwsOnNullArgument() {
                 Integer[] arr = null;
-                assertThrows(NullPointerException.class, () -> NonEmptyVector.tryCopyFrom(arr));
+                assertThrows(NullPointerException.class, () -> NonEmptyVector.maybeCopyFrom(arr));
             }
 
             @Test
             void success() {
-                NonEmptyVector<String> result = NonEmptyVector.tryCopyFrom(new String[]{"foo"}).orElseThrow(AssertionError::new);
+                NonEmptyVector<String> result = NonEmptyVector.maybeCopyFrom(new String[]{"foo"}).orElseThrow(AssertionError::new);
                 assertThat(result, contains("foo"));
                 assertEquals("foo", result.head());
                 assertEquals(1, result.size());
@@ -158,30 +158,30 @@ class NonEmptyVectorTest {
 
             @Test
             void successWithMaxCount() {
-                NonEmptyVector<String> result = NonEmptyVector.tryCopyFrom(2, new String[]{"foo", "bar", "baz"}).orElseThrow(AssertionError::new);
+                NonEmptyVector<String> result = NonEmptyVector.maybeCopyFrom(2, new String[]{"foo", "bar", "baz"}).orElseThrow(AssertionError::new);
                 assertThat(result, contains("foo", "bar"));
             }
 
             @Test
             void failure() {
-                assertEquals(nothing(), NonEmptyVector.tryCopyFrom(new String[]{}));
+                assertEquals(nothing(), NonEmptyVector.maybeCopyFrom(new String[]{}));
             }
 
         }
 
         @Nested
         @DisplayName("Iterable")
-        class TryCopyFromIterableTests {
+        class MaybeCopyFromIterableTests {
 
             @Test
             void throwsOnNullArgument() {
                 Iterable<String> iterable = null;
-                assertThrows(NullPointerException.class, () -> NonEmptyVector.tryCopyFrom(iterable));
+                assertThrows(NullPointerException.class, () -> NonEmptyVector.maybeCopyFrom(iterable));
             }
 
             @Test
             void success() {
-                NonEmptyVector<String> result = NonEmptyVector.tryCopyFrom(singletonList("foo")).orElseThrow(AssertionError::new);
+                NonEmptyVector<String> result = NonEmptyVector.maybeCopyFrom(singletonList("foo")).orElseThrow(AssertionError::new);
                 assertThat(result, contains("foo"));
                 assertEquals("foo", result.head());
                 assertEquals(1, result.size());
@@ -191,18 +191,18 @@ class NonEmptyVectorTest {
             void successWithMaxCount() {
                 Iterable<Integer> infinite = cycle(asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9));
                 assertEquals(just(Vector.of(0, 1, 2, 3, 4)),
-                        NonEmptyVector.tryCopyFrom(5, infinite));
+                        NonEmptyVector.maybeCopyFrom(5, infinite));
             }
 
             @Test
             void failure() {
-                assertEquals(nothing(), NonEmptyVector.tryCopyFrom(emptyList()));
+                assertEquals(nothing(), NonEmptyVector.maybeCopyFrom(emptyList()));
             }
 
             @Test
             void returnsOriginalIfAlreadyImmutableNonEmptyVector() {
                 Vector<Integer> original = Vector.of(1, 2, 3, 4);
-                NonEmptyVector<Integer> result = NonEmptyVector.tryCopyFrom(original).orElseThrow(AssertionError::new);
+                NonEmptyVector<Integer> result = NonEmptyVector.maybeCopyFrom(original).orElseThrow(AssertionError::new);
                 assertSame(original, result);
             }
 

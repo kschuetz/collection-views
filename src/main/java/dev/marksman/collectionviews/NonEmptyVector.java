@@ -140,8 +140,8 @@ public interface NonEmptyVector<A> extends NonEmptyIterable<A>, Vector<A> {
      * @return a {@code NonEmptyVector<A>} wrapped in a {@link Maybe#just} if {@code underlying} is non-empty;
      * {@link Maybe#nothing} otherwise.
      */
-    static <A> Maybe<NonEmptyVector<A>> tryWrap(A[] underlying) {
-        return Vectors.tryNonEmptyWrap(underlying);
+    static <A> Maybe<NonEmptyVector<A>> maybeWrap(A[] underlying) {
+        return Vectors.maybeNonEmptyWrap(underlying);
     }
 
     /**
@@ -162,8 +162,8 @@ public interface NonEmptyVector<A> extends NonEmptyIterable<A>, Vector<A> {
      * @return a {@code NonEmptyVector<A>} wrapped in a {@link Maybe#just} if {@code underlying} is non-empty;
      * {@link Maybe#nothing} otherwise.
      */
-    static <A> Maybe<NonEmptyVector<A>> tryWrap(List<A> underlying) {
-        return Vectors.tryNonEmptyWrap(underlying);
+    static <A> Maybe<NonEmptyVector<A>> maybeWrap(List<A> underlying) {
+        return Vectors.maybeNonEmptyWrap(underlying);
     }
 
     /**
@@ -222,8 +222,8 @@ public interface NonEmptyVector<A> extends NonEmptyIterable<A>, Vector<A> {
      * @return an {@code ImmutableNonEmptyVector<A>} wrapped in a {@link Maybe#just} if {@code source} is non-empty;
      * {@link Maybe#nothing} otherwise.
      */
-    static <A> Maybe<ImmutableNonEmptyVector<A>> tryCopyFrom(Iterable<A> source) {
-        return ImmutableVectors.tryNonEmptyCopyFrom(source);
+    static <A> Maybe<ImmutableNonEmptyVector<A>> maybeCopyFrom(Iterable<A> source) {
+        return ImmutableVectors.maybeNonEmptyCopyFrom(source);
     }
 
     /**
@@ -236,8 +236,8 @@ public interface NonEmptyVector<A> extends NonEmptyIterable<A>, Vector<A> {
      * @return an {@code ImmutableNonEmptyVector<A>} wrapped in a {@link Maybe#just} if {@code source} is non-empty;
      * {@link Maybe#nothing} otherwise.
      */
-    static <A> Maybe<ImmutableNonEmptyVector<A>> tryCopyFrom(A[] source) {
-        return ImmutableVectors.tryNonEmptyCopyFrom(source);
+    static <A> Maybe<ImmutableNonEmptyVector<A>> maybeCopyFrom(A[] source) {
+        return ImmutableVectors.maybeNonEmptyCopyFrom(source);
     }
 
     /**
@@ -264,8 +264,8 @@ public interface NonEmptyVector<A> extends NonEmptyIterable<A>, Vector<A> {
      * @return an {@code ImmutableNonEmptyVector<A>} wrapped in a {@link Maybe#just} if {@code source} is non-empty;
      * {@link Maybe#nothing} otherwise.
      */
-    static <A> Maybe<ImmutableNonEmptyVector<A>> tryCopyFrom(int maxCount, Iterable<A> source) {
-        return ImmutableVectors.tryNonEmptyCopyFrom(maxCount, source);
+    static <A> Maybe<ImmutableNonEmptyVector<A>> maybeCopyFrom(int maxCount, Iterable<A> source) {
+        return ImmutableVectors.maybeNonEmptyCopyFrom(maxCount, source);
     }
 
     /**
@@ -281,8 +281,8 @@ public interface NonEmptyVector<A> extends NonEmptyIterable<A>, Vector<A> {
      * @return an {@code ImmutableNonEmptyVector<A>} wrapped in a {@link Maybe#just} if {@code source} is non-empty;
      * {@link Maybe#nothing} otherwise.
      */
-    static <A> Maybe<ImmutableNonEmptyVector<A>> tryCopyFrom(int maxCount, A[] source) {
-        return ImmutableVectors.tryNonEmptyCopyFrom(maxCount, source);
+    static <A> Maybe<ImmutableNonEmptyVector<A>> maybeCopyFrom(int maxCount, A[] source) {
+        return ImmutableVectors.maybeNonEmptyCopyFrom(maxCount, source);
     }
 
     /**

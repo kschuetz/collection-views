@@ -143,7 +143,7 @@ public interface ImmutableVector<A> extends Vector<A>, Immutable {
      */
     @Override
     default Maybe<? extends ImmutableNonEmptyVector<A>> toNonEmpty() {
-        return ImmutableVectors.tryNonEmptyConvert(this);
+        return ImmutableVectors.maybeNonEmptyConvert(this);
     }
 
     /**

@@ -72,7 +72,7 @@ public interface Set<A> extends Iterable<A> {
      * @return a {@code Maybe<NonEmptySet<A>>}
      */
     default Maybe<? extends NonEmptySet<A>> toNonEmpty() {
-        return Sets.tryNonEmptyWrap(this);
+        return Sets.maybeNonEmptyWrap(this);
     }
 
     /**

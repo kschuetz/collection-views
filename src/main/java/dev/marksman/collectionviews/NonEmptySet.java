@@ -91,8 +91,8 @@ public interface NonEmptySet<A> extends NonEmptyIterable<A>, Set<A> {
      * @return a {@code NonEmptySet<A>} wrapped in a {@link Maybe#just} if {@code underlying} is non-empty;
      * {@link Maybe#nothing} otherwise.
      */
-    static <A> Maybe<NonEmptySet<A>> tryWrap(java.util.Set<A> underlying) {
-        return Sets.tryNonEmptyWrap(underlying);
+    static <A> Maybe<NonEmptySet<A>> maybeWrap(java.util.Set<A> underlying) {
+        return Sets.maybeNonEmptyWrap(underlying);
     }
 
     /**
@@ -131,8 +131,8 @@ public interface NonEmptySet<A> extends NonEmptyIterable<A>, Set<A> {
      * @return an {@code ImmutableNonEmptySet<A>} wrapped in a {@link Maybe#just} if {@code source} is non-empty;
      * {@link Maybe#nothing} otherwise.
      */
-    static <A> Maybe<ImmutableNonEmptySet<A>> tryCopyFrom(Iterable<A> source) {
-        return ImmutableSets.tryNonEmptyCopyFrom(source);
+    static <A> Maybe<ImmutableNonEmptySet<A>> maybeCopyFrom(Iterable<A> source) {
+        return ImmutableSets.maybeNonEmptyCopyFrom(source);
     }
 
     /**
@@ -145,8 +145,8 @@ public interface NonEmptySet<A> extends NonEmptyIterable<A>, Set<A> {
      * @return an {@code ImmutableNonEmptySet<A>} wrapped in a {@link Maybe#just} if {@code source} is non-empty;
      * {@link Maybe#nothing} otherwise.
      */
-    static <A> Maybe<ImmutableNonEmptySet<A>> tryCopyFrom(A[] source) {
-        return ImmutableSets.tryNonEmptyCopyFrom(source);
+    static <A> Maybe<ImmutableNonEmptySet<A>> maybeCopyFrom(A[] source) {
+        return ImmutableSets.maybeNonEmptyCopyFrom(source);
     }
 
     /**
@@ -168,8 +168,8 @@ public interface NonEmptySet<A> extends NonEmptyIterable<A>, Set<A> {
      * @return an {@code ImmutableNonEmptySet<A>} wrapped in a {@link Maybe#just} if {@code source} is non-empty;
      * {@link Maybe#nothing} otherwise.
      */
-    static <A> Maybe<ImmutableNonEmptySet<A>> tryCopyFrom(int maxCount, Iterable<A> source) {
-        return ImmutableSets.tryNonEmptyCopyFrom(maxCount, source);
+    static <A> Maybe<ImmutableNonEmptySet<A>> maybeCopyFrom(int maxCount, Iterable<A> source) {
+        return ImmutableSets.maybeNonEmptyCopyFrom(maxCount, source);
     }
 
     /**
@@ -185,8 +185,8 @@ public interface NonEmptySet<A> extends NonEmptyIterable<A>, Set<A> {
      * @return an {@code ImmutableNonEmptySet<A>} wrapped in a {@link Maybe#just} if {@code source} is non-empty;
      * {@link Maybe#nothing} otherwise.
      */
-    static <A> Maybe<ImmutableNonEmptySet<A>> tryCopyFrom(int maxCount, A[] source) {
-        return ImmutableSets.tryNonEmptyCopyFrom(maxCount, source);
+    static <A> Maybe<ImmutableNonEmptySet<A>> maybeCopyFrom(int maxCount, A[] source) {
+        return ImmutableSets.maybeNonEmptyCopyFrom(maxCount, source);
     }
 
     /**

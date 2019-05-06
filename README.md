@@ -128,9 +128,9 @@ Several static methods are available for creating `Vector`s, with various levels
 | `Vector.copySliceFrom` |`ImmutableVector<A>` | yes |  |
 | `Vector.fill` | `ImmutableVector<A>` | N/A | |
 | `Vector.lazyFill` | `ImmutableVector<A>` | N/A | |
-| `NonEmptyVector.tryWrap` |`Maybe<NonEmptyVector<A>>` | no |  |
+| `NonEmptyVector.maybeWrap` |`Maybe<NonEmptyVector<A>>` | no |  |
 | `NonEmptyVector.wrapOrThrow` |`NonEmptyVector<A>` | no | may throw exceptions |
-| `NonEmptyVector.tryCopyFrom` |`Maybe<ImmutableNonEmptyVector<A>>` | yes | may not terminate if input is infinite |
+| `NonEmptyVector.maybeCopyFrom` |`Maybe<ImmutableNonEmptyVector<A>>` | yes | may not terminate if input is infinite |
 | `NonEmptyVector.copyFromOrThrow` |`ImmutableNonEmptyVector<A>` | yes | may throw exceptions |
 | `NonEmptyVector.fill` | `ImmutableNonEmptyVector<A>` | N/A | |
 | `NonEmptyVector.lazyFill` | `ImmutableNonEmptyVector<A>` | N/A | |
@@ -183,11 +183,11 @@ A `NonEmptyVector<A>` is a `Vector<A>` that is known at compile-time to contain 
 
 #### <a name="non-empty-vector-wrapping">Wrapping an existing collection</a>
 
-`NonEmptyVector.tryWrap` takes an array or a `java.util.List` and returns a `Maybe<NonEmptyVector<A>>`.  If the provided collection is not empty, a `NonEmptyVector<A>` will be created and returned in a `Maybe.just`, otherwise `Maybe.nothing` will be returned.
+`NonEmptyVector.maybeWrap` takes an array or a `java.util.List` and returns a `Maybe<NonEmptyVector<A>>`.  If the provided collection is not empty, a `NonEmptyVector<A>` will be created and returned in a `Maybe.just`, otherwise `Maybe.nothing` will be returned.
 
 Alternatively, if you know for sure that the collection you are passing is not empty, then you can call `NonEmptyVector.wrapOrThrow`.  This will either return the `NonEmptyVector` directly, or throw an `IllegalArgumentException` if the provided collection is empty.
 
-`NonEmptyVector.tryWrap` and `NonEmptyVector.wrapOrThrow` behave similarly to `Vector.wrap` in that a copy of the underlying collection is never made.
+`NonEmptyVector.maybeWrap` and `NonEmptyVector.wrapOrThrow` behave similarly to `Vector.wrap` in that a copy of the underlying collection is never made.
 
 #### <a name="non-empty-vector-converting">Converting an existing `Vector`</a>
 
@@ -231,9 +231,9 @@ Several static methods are available for creating `Set`s, with various levels of
 | `Set.of` | `ImmutableNonEmptySet<A>` | N/A |  |  
 | `Set.wrap` | `Set<A>` | no |  |  
 | `Set.copyFrom` | `ImmutableSet<A>` | yes| may not terminate if input is infinite | 
-| `NonEmptySet.tryWrap` |`Maybe<NonEmptySet<A>>` | no |  |
+| `NonEmptySet.maybeWrap` |`Maybe<NonEmptySet<A>>` | no |  |
 | `NonEmptySet.wrapOrThrow` |`NonEmptySet<A>` | no | may throw exceptions |
-| `NonEmptySet.tryCopyFrom` |`Maybe<ImmutableNonEmptySet<A>>` | yes | may not terminate if input is infinite |
+| `NonEmptySet.maybeCopyFrom` |`Maybe<ImmutableNonEmptySet<A>>` | yes | may not terminate if input is infinite |
 | `NonEmptySet.copyFromOrThrow` |`ImmutableNonEmptySet<A>` | yes | may throw exceptions |
 
 #### <a name="set-wrapping">Wrapping an existing `java.util.Set`</a>
