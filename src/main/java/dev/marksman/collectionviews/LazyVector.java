@@ -4,24 +4,18 @@ import com.jnape.palatable.lambda.functions.Fn1;
 
 class LazyVector<A> extends ConcreteVector<A> implements ImmutableNonEmptyVector<A> {
     private final int size; // must be >= 1
-    private final IndexChain indexChain;
+    private final int offset;
     private final Fn1<Integer, A> valueSupplier;
 
-    LazyVector(int size, Fn1<Integer, A> valueSupplier) {
+    LazyVector(int size, int offset, Fn1<Integer, A> valueSupplier) {
         this.size = size;
+        this.offset = offset;
         this.valueSupplier = valueSupplier;
-        this.indexChain = IndexChain.identity();
-    }
-
-    private LazyVector(int size, Fn1<Integer, A> valueSupplier, IndexChain indexChain) {
-        this.size = size;
-        this.valueSupplier = valueSupplier;
-        this.indexChain = indexChain;
     }
 
     @Override
     public A head() {
-        return valueSupplier.apply(indexChain.apply(0));
+        return valueSupplier.apply(offset);
     }
 
     @Override
@@ -34,7 +28,7 @@ class LazyVector<A> extends ConcreteVector<A> implements ImmutableNonEmptyVector
         if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException();
         }
-        return valueSupplier.apply(indexChain.apply(index));
+        return valueSupplier.apply(index + offset);
     }
 
     @Override
@@ -45,7 +39,7 @@ class LazyVector<A> extends ConcreteVector<A> implements ImmutableNonEmptyVector
         if (count == 0) {
             return this;
         } else if (count < size) {
-            return new LazyVector<>(size - count, valueSupplier, indexChain.contraMap(n -> count + n));
+            return new LazyVector<>(size - count, offset + count, valueSupplier);
         } else {
             return Vectors.empty();
         }
@@ -64,7 +58,7 @@ class LazyVector<A> extends ConcreteVector<A> implements ImmutableNonEmptyVector
         }
         endIndexExclusive = Math.min(endIndexExclusive, size);
         if (endIndexExclusive >= startIndex) {
-            return new LazyVector<>(endIndexExclusive - startIndex, valueSupplier, indexChain.contraMap(n -> startIndex + n));
+            return new LazyVector<>(endIndexExclusive - startIndex, offset + startIndex, valueSupplier);
         } else {
             return Vector.empty();
         }
@@ -80,7 +74,7 @@ class LazyVector<A> extends ConcreteVector<A> implements ImmutableNonEmptyVector
         } else if (count >= size) {
             return this;
         } else {
-            return new LazyVector<>(count, valueSupplier, indexChain);
+            return new LazyVector<>(count, offset, valueSupplier);
         }
     }
 

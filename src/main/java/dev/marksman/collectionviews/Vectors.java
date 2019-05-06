@@ -156,7 +156,7 @@ final class Vectors {
         if (size < 0) {
             throw new IllegalArgumentException("size must be >= 1");
         }
-        return new LazyVector<>(size, valueSupplier);
+        return new LazyVector<>(size, 0, valueSupplier);
     }
 
     static <A> Maybe<NonEmptyVector<A>> tryNonEmptyWrap(A[] arr) {
