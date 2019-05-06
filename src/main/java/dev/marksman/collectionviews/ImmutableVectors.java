@@ -13,24 +13,17 @@ import static com.jnape.palatable.lambda.adt.Maybe.just;
 import static com.jnape.palatable.lambda.adt.Maybe.nothing;
 import static com.jnape.palatable.lambda.functions.builtin.fn2.ToCollection.toCollection;
 import static dev.marksman.collectionviews.MapperChain.mapperChain;
+import static dev.marksman.collectionviews.Validation.*;
 
 class ImmutableVectors {
 
     static <A> ImmutableVector<A> take(int count, ImmutableVector<A> source) {
-        if (count < 0) {
-            throw new IllegalArgumentException("count must be >= 0");
-        }
+        validateTake(count, source);
         return slice(0, count, source);
     }
 
     static <A> ImmutableVector<A> slice(int startIndex, int endIndexExclusive, ImmutableVector<A> source) {
-        if (startIndex < 0) {
-            throw new IllegalArgumentException("startIndex must be >= 0");
-        }
-        if (endIndexExclusive < 0) {
-            throw new IllegalArgumentException("endIndex must be >= 0");
-        }
-        Objects.requireNonNull(source);
+        validateSlice(startIndex, endIndexExclusive, source);
         int requestedSize = endIndexExclusive - startIndex;
         if (requestedSize < 1) {
             return Vectors.empty();
@@ -93,10 +86,7 @@ class ImmutableVectors {
     }
 
     static <A> ImmutableVector<A> copyFrom(int maxCount, A[] source) {
-        Objects.requireNonNull(source);
-        if (maxCount < 0) {
-            throw new IllegalArgumentException("maxCount must be >= 0");
-        }
+        validateCopyFrom(maxCount, source);
         int count = Math.min(maxCount, source.length);
         A[] copied = Arrays.copyOf(source, count);
         return wrapAndVouchFor(copied);
@@ -119,10 +109,7 @@ class ImmutableVectors {
 
     @SuppressWarnings("unchecked")
     static <A> Maybe<ImmutableNonEmptyVector<A>> tryNonEmptyCopyFrom(int maxCount, A[] arr) {
-        Objects.requireNonNull(arr);
-        if (maxCount < 0) {
-            throw new IllegalArgumentException("maxCount must be >= 0");
-        }
+        validateCopyFrom(maxCount, arr);
         if (arr.length == 0 || maxCount == 0) {
             return nothing();
         } else {
@@ -141,10 +128,7 @@ class ImmutableVectors {
 
     @SuppressWarnings("unchecked")
     static <A> Maybe<ImmutableNonEmptyVector<A>> tryNonEmptyCopyFrom(int maxCount, Iterable<A> source) {
-        Objects.requireNonNull(source);
-        if (maxCount < 0) {
-            throw new IllegalArgumentException("maxCount must be >= 0");
-        }
+        validateCopyFrom(maxCount, source);
         if (maxCount == 0) {
             return nothing();
         }
@@ -229,10 +213,7 @@ class ImmutableVectors {
     }
 
     static <A> ImmutableVector<A> copyFrom(int maxCount, Iterable<A> source) {
-        Objects.requireNonNull(source);
-        if (maxCount < 0) {
-            throw new IllegalArgumentException("maxCount must be >= 0");
-        }
+        validateCopyFrom(maxCount, source);
         if (maxCount == 0) {
             return Vectors.empty();
         }
@@ -244,13 +225,7 @@ class ImmutableVectors {
     }
 
     static <A> ImmutableVector<A> copySliceFrom(int startIndex, int endIndexExclusive, Iterable<A> source) {
-        if (startIndex < 0) {
-            throw new IllegalArgumentException("startIndex must be >= 0");
-        }
-        if (endIndexExclusive < 0) {
-            throw new IllegalArgumentException("endIndex must be >= 0");
-        }
-        Objects.requireNonNull(source);
+        validateSlice(startIndex, endIndexExclusive, source);
         if (source instanceof ImmutableVector<?>) {
             return ((ImmutableVector<A>) source).slice(startIndex, endIndexExclusive);
         } else {

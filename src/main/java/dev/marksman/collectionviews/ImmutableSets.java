@@ -9,6 +9,7 @@ import java.util.Objects;
 import static com.jnape.palatable.lambda.adt.Maybe.just;
 import static com.jnape.palatable.lambda.adt.Maybe.nothing;
 import static com.jnape.palatable.lambda.functions.builtin.fn2.ToCollection.toCollection;
+import static dev.marksman.collectionviews.Validation.validateCopyFrom;
 
 final class ImmutableSets {
 
@@ -33,10 +34,7 @@ final class ImmutableSets {
     }
 
     static <A> ImmutableSet<A> copyFrom(int maxCount, Iterable<A> source) {
-        Objects.requireNonNull(source);
-        if (maxCount < 0) {
-            throw new IllegalArgumentException("maxCount must be >= 0");
-        }
+        validateCopyFrom(maxCount, source);
         if (maxCount == 0) {
             return Sets.empty();
         } else {
@@ -51,10 +49,7 @@ final class ImmutableSets {
     }
 
     static <A> ImmutableSet<A> copyFrom(int maxCount, A[] source) {
-        Objects.requireNonNull(source);
-        if (maxCount < 0) {
-            throw new IllegalArgumentException("maxCount must be >= 0");
-        }
+        validateCopyFrom(maxCount, source);
         return copyFrom(maxCount, Vector.wrap(source));
     }
 
@@ -75,10 +70,7 @@ final class ImmutableSets {
 
     @SuppressWarnings("unchecked")
     static <A> Maybe<ImmutableNonEmptySet<A>> tryNonEmptyCopyFrom(int maxCount, Iterable<A> source) {
-        Objects.requireNonNull(source);
-        if (maxCount < 0) {
-            throw new IllegalArgumentException("maxCount must be >= 0");
-        }
+        validateCopyFrom(maxCount, source);
         if (maxCount == 0 || !source.iterator().hasNext()) {
             return nothing();
         } else {
@@ -88,10 +80,7 @@ final class ImmutableSets {
 
     @SuppressWarnings("unchecked")
     static <A> Maybe<ImmutableNonEmptySet<A>> tryNonEmptyCopyFrom(int maxCount, A[] source) {
-        Objects.requireNonNull(source);
-        if (maxCount < 0) {
-            throw new IllegalArgumentException("maxCount must be >= 0");
-        }
+        validateCopyFrom(maxCount, source);
         if (source.length == 0 || maxCount == 0) {
             return nothing();
         } else {

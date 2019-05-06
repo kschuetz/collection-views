@@ -2,6 +2,8 @@ package dev.marksman.collectionviews;
 
 import com.jnape.palatable.lambda.functions.Fn1;
 
+import static dev.marksman.collectionviews.Validation.*;
+
 class LazyVector<A> extends ConcreteVector<A> implements ImmutableNonEmptyVector<A> {
     private final int size; // must be >= 1
     private final int offset;
@@ -33,9 +35,7 @@ class LazyVector<A> extends ConcreteVector<A> implements ImmutableNonEmptyVector
 
     @Override
     public ImmutableVector<A> drop(int count) {
-        if (count < 0) {
-            throw new IllegalArgumentException("count must be >= 0");
-        }
+        validateDrop(count);
         if (count == 0) {
             return this;
         } else if (count < size) {
@@ -47,12 +47,7 @@ class LazyVector<A> extends ConcreteVector<A> implements ImmutableNonEmptyVector
 
     @Override
     public ImmutableVector<A> slice(int startIndex, int endIndexExclusive) {
-        if (startIndex < 0) {
-            throw new IllegalArgumentException("startIndex must be >= 0");
-        }
-        if (endIndexExclusive < 0) {
-            throw new IllegalArgumentException("endIndex must be >= 0");
-        }
+        validateSlice(startIndex, endIndexExclusive);
         if (startIndex == 0) {
             return take(endIndexExclusive);
         }
@@ -66,9 +61,7 @@ class LazyVector<A> extends ConcreteVector<A> implements ImmutableNonEmptyVector
 
     @Override
     public ImmutableVector<A> take(int count) {
-        if (count < 0) {
-            throw new IllegalArgumentException("count must be >= 0");
-        }
+        validateTake(count);
         if (count == 0) {
             return Vectors.empty();
         } else if (count >= size) {

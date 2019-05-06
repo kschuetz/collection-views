@@ -4,6 +4,8 @@ import com.jnape.palatable.lambda.functions.Fn1;
 
 import java.util.Objects;
 
+import static dev.marksman.collectionviews.Validation.*;
+
 class RepeatingVector<A> extends ConcreteVector<A> implements ImmutableNonEmptyVector<A> {
     private final int size; // must be >= 1
     private final A value;
@@ -61,9 +63,7 @@ class RepeatingVector<A> extends ConcreteVector<A> implements ImmutableNonEmptyV
 
     @Override
     public ImmutableVector<A> drop(int count) {
-        if (count < 0) {
-            throw new IllegalArgumentException("count must be >= 0");
-        }
+        validateTake(count);
         if (count == 0) {
             return this;
         } else if (count < size) {
@@ -75,12 +75,7 @@ class RepeatingVector<A> extends ConcreteVector<A> implements ImmutableNonEmptyV
 
     @Override
     public ImmutableVector<A> slice(int startIndex, int endIndexExclusive) {
-        if (startIndex < 0) {
-            throw new IllegalArgumentException("startIndex must be >= 0");
-        }
-        if (endIndexExclusive < 0) {
-            throw new IllegalArgumentException("endIndex must be >= 0");
-        }
+        validateSlice(startIndex, endIndexExclusive);
         endIndexExclusive = Math.min(endIndexExclusive, size);
         if (endIndexExclusive >= startIndex) {
             return take(endIndexExclusive - startIndex);
@@ -91,9 +86,7 @@ class RepeatingVector<A> extends ConcreteVector<A> implements ImmutableNonEmptyV
 
     @Override
     public ImmutableVector<A> take(int count) {
-        if (count < 0) {
-            throw new IllegalArgumentException("count must be >= 0");
-        }
+        validateDrop(count);
         if (count == 0) {
             return Vectors.empty();
         } else if (count >= size) {
