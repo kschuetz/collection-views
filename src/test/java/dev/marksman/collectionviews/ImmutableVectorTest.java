@@ -533,7 +533,7 @@ class ImmutableVectorTest {
 
             @Test
             void getWillNeverReturnNull() {
-                Vector<String> subject = Vector.wrap(asList("foo", null, "baz"));
+                Vector<String> subject = Vector.copyFrom(asList("foo", null, "baz"));
                 assertEquals(just("foo"), subject.get(0));
                 assertEquals(nothing(), subject.get(1));
                 assertEquals(just("baz"), subject.get(2));
@@ -541,7 +541,7 @@ class ImmutableVectorTest {
 
             @Test
             void iteratorNextReturnsCorrectElements() {
-                Vector<String> subject = Vector.wrap(asList("foo", "bar", "baz"));
+                Vector<String> subject = Vector.copyFrom(asList("foo", "bar", "baz"));
                 Iterator<String> iterator = subject.iterator();
                 assertEquals("foo", iterator.next());
                 assertEquals("bar", iterator.next());
@@ -551,7 +551,7 @@ class ImmutableVectorTest {
             @SuppressWarnings("ConstantConditions")
             @Test
             void iteratorHasNextCanBeCalledMultipleTimes() {
-                Vector<String> subject = Vector.wrap(asList("foo", "bar", "baz"));
+                Vector<String> subject = Vector.copyFrom(asList("foo", "bar", "baz"));
                 Iterator<String> iterator = subject.iterator();
                 assertTrue(iterator.hasNext());
                 assertTrue(iterator.hasNext());
@@ -561,7 +561,7 @@ class ImmutableVectorTest {
 
             @Test
             void iteratorHasNextReturnsFalseIfNothingRemains() {
-                Vector<String> subject = Vector.wrap(singletonList("foo"));
+                Vector<String> subject = Vector.copyFrom(singletonList("foo"));
                 Iterator<String> iterator = subject.iterator();
                 iterator.next();
                 assertFalse(iterator.hasNext());
@@ -569,7 +569,7 @@ class ImmutableVectorTest {
 
             @Test
             void iteratorNextThrowsIfNothingRemains() {
-                Vector<String> subject = Vector.wrap(singletonList("foo"));
+                Vector<String> subject = Vector.copyFrom(singletonList("foo"));
                 Iterator<String> iterator = subject.iterator();
                 iterator.next();
                 assertThrows(NoSuchElementException.class, iterator::next);
@@ -577,7 +577,7 @@ class ImmutableVectorTest {
 
             @Test
             void iteratorThrowsIfRemoveIsCalled() {
-                Vector<String> subject = Vector.wrap(singletonList("foo"));
+                Vector<String> subject = Vector.copyFrom(singletonList("foo"));
                 Iterator<String> iterator = subject.iterator();
                 assertThrows(UnsupportedOperationException.class, iterator::remove);
             }

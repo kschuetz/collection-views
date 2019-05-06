@@ -21,38 +21,6 @@ import static org.junit.jupiter.api.Assertions.*;
 class SetTest {
 
     @Nested
-    @DisplayName("empty")
-    class EmptySetTests {
-
-        @Test
-        void alwaysYieldsSameReference() {
-            Set<Integer> v1 = Set.empty();
-            Set<String> v2 = Set.empty();
-            assertSame(v1, v2);
-        }
-
-        @Test
-        void isEmpty() {
-            assertTrue(Set.empty().isEmpty());
-        }
-
-        @Test
-        void sizeIsZero() {
-            assertEquals(0, Set.empty().size());
-        }
-
-        @Test
-        void iteratesCorrectly() {
-            assertThat(Set.empty(), emptyIterable());
-        }
-
-        @Test
-        void equalToItself() {
-            assertEquals(Set.empty(), Set.empty());
-        }
-    }
-
-    @Nested
     @DisplayName("wrap")
     class WrapTests {
 
