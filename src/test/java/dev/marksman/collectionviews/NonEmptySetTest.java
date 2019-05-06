@@ -5,10 +5,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import java.util.Iterator;
-
 import static com.jnape.palatable.lambda.adt.Maybe.nothing;
-import static java.util.Collections.*;
+import static java.util.Collections.emptySet;
+import static java.util.Collections.singleton;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInAnyOrder;
 import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
@@ -112,71 +111,8 @@ class NonEmptySetTest {
         }
 
         @Test
-        void setSuccess() {
-            NonEmptySet<String> result = NonEmptySet.tryWrap(Set.of("foo")).orElseThrow(AssertionError::new);
-            assertThat(result, contains("foo"));
-            assertEquals("foo", result.head());
-            assertEquals(1, result.size());
-            assertTrue(result.contains("foo"));
-        }
-
-        @Test
-        void customSetSuccess() {
-            // A Set that is not empty, but doesn't subtype NonEmptySet
-            Set<String> customSet = new Set<String>() {
-                @Override
-                public int size() {
-                    return 1;
-                }
-
-                @Override
-                public boolean contains(String element) {
-                    return element.equals("foo");
-                }
-
-                @Override
-                public Iterator<String> iterator() {
-                    return singleton("foo").iterator();
-                }
-            };
-
-            NonEmptySet<String> result = NonEmptySet.tryWrap(customSet).orElseThrow(AssertionError::new);
-            assertThat(result, contains("foo"));
-            assertEquals("foo", result.head());
-            assertEquals(1, result.size());
-            assertTrue(result.contains("foo"));
-        }
-
-        @Test
         void javaUtilSetFailure() {
             assertEquals(nothing(), NonEmptySet.tryWrap(emptySet()));
-        }
-
-        @Test
-        void setFailure() {
-            assertEquals(nothing(), NonEmptySet.tryWrap(Set.empty()));
-        }
-
-        @Test
-        void customSetFailure() {
-            Set<String> customSet = new Set<String>() {
-                @Override
-                public int size() {
-                    return 0;
-                }
-
-                @Override
-                public boolean contains(String element) {
-                    return false;
-                }
-
-                @Override
-                public Iterator<String> iterator() {
-                    return emptyIterator();
-                }
-            };
-
-            assertEquals(nothing(), NonEmptySet.tryWrap(customSet));
         }
 
     }
@@ -195,71 +131,8 @@ class NonEmptySetTest {
         }
 
         @Test
-        void setSuccess() {
-            NonEmptySet<String> result = NonEmptySet.wrapOrThrow(Set.of("foo"));
-            assertThat(result, contains("foo"));
-            assertEquals("foo", result.head());
-            assertEquals(1, result.size());
-            assertTrue(result.contains("foo"));
-        }
-
-        @Test
-        void customSetSuccess() {
-            // A Set that is not empty, but doesn't subtype NonEmptySet
-            Set<String> customSet = new Set<String>() {
-                @Override
-                public int size() {
-                    return 1;
-                }
-
-                @Override
-                public boolean contains(String element) {
-                    return element.equals("foo");
-                }
-
-                @Override
-                public Iterator<String> iterator() {
-                    return singleton("foo").iterator();
-                }
-            };
-
-            NonEmptySet<String> result = NonEmptySet.wrapOrThrow(customSet);
-            assertThat(result, contains("foo"));
-            assertEquals("foo", result.head());
-            assertEquals(1, result.size());
-            assertTrue(result.contains("foo"));
-        }
-
-        @Test
         void javaUtilSetFailure() {
             assertThrows(IllegalArgumentException.class, () -> NonEmptySet.wrapOrThrow(emptySet()));
-        }
-
-        @Test
-        void setFailure() {
-            assertThrows(IllegalArgumentException.class, () -> NonEmptySet.wrapOrThrow(Set.empty()));
-        }
-
-        @Test
-        void customSetFailure() {
-            Set<String> customSet = new Set<String>() {
-                @Override
-                public int size() {
-                    return 0;
-                }
-
-                @Override
-                public boolean contains(String element) {
-                    return false;
-                }
-
-                @Override
-                public Iterator<String> iterator() {
-                    return emptyIterator();
-                }
-            };
-
-            assertThrows(IllegalArgumentException.class, () -> NonEmptySet.wrapOrThrow(customSet));
         }
 
     }

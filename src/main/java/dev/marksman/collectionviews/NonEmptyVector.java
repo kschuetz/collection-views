@@ -157,7 +157,7 @@ public interface NonEmptyVector<A> extends NonEmptyIterable<A>, Vector<A> {
      * Operations that change the size of the underlying {@code List} will result in unpredictable behavior.
      * Use {@link Vector#copyFrom} if you want to avoid this situation.
      *
-     * @param underlying {@code List} to wrap; not null
+     * @param underlying {@code java.util.List} to wrap; not null
      * @param <A>        the element type
      * @return a {@code NonEmptyVector<A>} wrapped in a {@link Maybe#just} if {@code underlying} is non-empty;
      * {@link Maybe#nothing} otherwise.
@@ -215,7 +215,7 @@ public interface NonEmptyVector<A> extends NonEmptyIterable<A>, Vector<A> {
      * Be careful not to pass in an infinite {@code Iterable} or this method will not terminate.
      * <p>
      * If necessary to guarantee immutability, this method will make a copy of the data provided.
-     * If {@code source} already is an {@link ImmutableVector}, it will be returned directly.
+     * If {@code source} already is an {@link ImmutableNonEmptyVector}, it will be returned directly.
      *
      * @param source an {@code Iterable<A>} that may be iterated eagerly in its entirety; not null
      * @param <A>    the element type
@@ -254,7 +254,8 @@ public interface NonEmptyVector<A> extends NonEmptyIterable<A>, Vector<A> {
      * a copy will always be made, therefore making it memory-safe to take a small slice of
      * a huge {@link Vector} that you no longer need.
      *
-     * @param maxCount the maximum number of elements to consume from the source.  Must be &gt;= 0.
+     * @param maxCount the maximum number of elements to consume from the source.
+     *                 Must be &gt;= 0.
      *                 If 0, this method will always return {@link Maybe#nothing}.
      * @param source   an {@code Iterable<A>} that will be iterated eagerly for up to {@code maxCount} elements.
      *                 Not null.
@@ -270,7 +271,8 @@ public interface NonEmptyVector<A> extends NonEmptyIterable<A>, Vector<A> {
     /**
      * Attempts to create an {@code ImmutableNonEmptyVector} that is copied from an array, but with a maximum number of elements.
      *
-     * @param maxCount the maximum number of elements to copy from the array. Must be &gt;= 0.
+     * @param maxCount the maximum number of elements to copy from the array.
+     *                 Must be &gt;= 0.
      *                 If 0, this method will always return {@link Maybe#nothing}.
      * @param source   the array to copy from.
      *                 Not null.
@@ -345,7 +347,8 @@ public interface NonEmptyVector<A> extends NonEmptyIterable<A>, Vector<A> {
      * Attempts to create an {@code ImmutableNonEmptyVector} that is copied from an array, but with a maximum number of elements.
      * If the array is empty, throws an {@link IllegalArgumentException}.
      *
-     * @param maxCount the maximum number of elements to copy from the array. Must be &gt;= 1.
+     * @param maxCount the maximum number of elements to copy from the array.
+     *                 Must be &gt;= 1.
      * @param source   the array to copy from.
      *                 Not null.
      *                 This method will not alter or hold on to a reference of this array.

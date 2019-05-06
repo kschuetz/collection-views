@@ -11,7 +11,9 @@ import static com.jnape.palatable.lambda.adt.Maybe.maybe;
 import static com.jnape.palatable.lambda.adt.Maybe.nothing;
 
 /**
- * A finite, ordered view of a collection that guarantees the following:
+ * A finite, ordered view of a collection.
+ * <p>
+ * A {@code Vector} guarantees the following:
  * <ul>
  * <li>A {@link Vector#size} method that executes in O(1).
  * <li>A {@link Vector#get} method that retrieves an element by index in O(1).
@@ -99,7 +101,8 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
     }
 
     /**
-     * Get an element from this {@code Vector} at an index.
+     * Gets an element from this {@code Vector} at an index.
+     * <p>
      * Executes in O(1).
      * Will never return null.
      *
@@ -227,7 +230,7 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
      * <p>
      * Does not make copies of any underlying data structures.
      *
-     * @return a {@code Maybe<NonEmptyVector<A>>}
+     * @return a {@code NonEmptyVector<A>}
      * @throws IllegalArgumentException if this {@code Vector} is empty
      */
     default NonEmptyVector<A> toNonEmptyOrThrow() {
@@ -250,7 +253,7 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
      * @param first the first element
      * @param more  the remaining elements
      * @param <A>   the element type
-     * @return an {@code ImmutableNonEmptyVector<A>}, which is guaranteed to be non-empty and to be safe from mutation.
+     * @return an {@code ImmutableNonEmptyVector<A>}
      */
     @SafeVarargs
     static <A> ImmutableNonEmptyVector<A> of(A first, A... more) {

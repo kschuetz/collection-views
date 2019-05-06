@@ -6,13 +6,13 @@ import com.jnape.palatable.lambda.functions.Fn1;
 import static com.jnape.palatable.lambda.adt.Maybe.just;
 
 /**
- * A {@link Vector} that is guaranteed at compile-time to be non-empty, and safe from mutation anywhere.
+ * A {@code Vector} that is guaranteed at compile-time to be non-empty and safe from mutation anywhere.
  * In other words, it owns the sole reference to the underlying collection.
  * <p>
  * In addition to the guarantees of {@link Vector}, {@link NonEmptyVector}, and {@link ImmutableVector},
  * provides the following benefits:
  * <ul>
- * <li>{@link ImmutableNonEmptyVector#fmap} always returns a {@code ImmutableNonEmptyVector}.</li>
+ * <li>{@code ImmutableNonEmptyVector#fmap} always returns a {@code ImmutableNonEmptyVector}.</li>
  * </ul>
  *
  * @param <A> the element type
@@ -20,14 +20,16 @@ import static com.jnape.palatable.lambda.adt.Maybe.just;
 public interface ImmutableNonEmptyVector<A> extends NonEmptyVector<A>, ImmutableVector<A> {
 
     /**
-     * Maps a function over the elements in an {@link ImmutableNonEmptyVector} and returns
-     * a new {@link ImmutableNonEmptyVector} of the same size (but possibly a different type).
+     * Maps a function over this {@code ImmutableNonEmptyVector}.
+     * <p>
+     * Returns a new {@link ImmutableNonEmptyVector} of the same size (but possibly a different type).
      * <p>
      * Does not make any copies of underlying data structures.
      * <p>
-     * This method is stack-safe, so a Vector can be mapped as many times as the heap permits.
+     * This method is stack-safe, so a {@code ImmutableNonEmptyVector} can be mapped as many times as the heap permits.
      *
      * @param f   a function from {@code A} to {@code B}.
+     *            Not null.
      *            This function should be referentially transparent and not perform side-effects.
      *            It may be called zero or more times for each element.
      * @param <B> The type of the elements contained in the output Vector.
@@ -39,12 +41,14 @@ public interface ImmutableNonEmptyVector<A> extends NonEmptyVector<A>, Immutable
     }
 
     /**
-     * Returns the tail of the {@link ImmutableVector}, i.e. the same {@link ImmutableVector} with the first element dropped.
+     * Returns the tail of this {@code ImmutableNonEmptyVector}.
+     * <p>
+     * The tail of an {@link ImmutableNonEmptyVector} is the same {@code ImmutableNonEmptyVector} with the first element dropped.
      * May be empty.
      * <p>
      * Does not make copies of any underlying data structures.
      *
-     * @return an {@link ImmutableVector} of the same type
+     * @return an {@code ImmutableVector<A>}
      */
     @Override
     default ImmutableVector<A> tail() {
@@ -52,8 +56,9 @@ public interface ImmutableNonEmptyVector<A> extends NonEmptyVector<A>, Immutable
     }
 
     /**
-     * Returns an {@link ImmutableVector} containing the same elements as this one.
-     * Since this is an {@link ImmutableVector} already, this method simply returns
+     * Returns an {@code ImmutableNonEmptyVector} containing the same elements as this one.
+     * <p>
+     * Since this is an {@link ImmutableNonEmptyVector} already, this method simply returns
      * itself.
      *
      * @return itself
@@ -64,11 +69,14 @@ public interface ImmutableNonEmptyVector<A> extends NonEmptyVector<A>, Immutable
     }
 
     /**
-     * Attempts to convert this {@link Vector} to a {@link NonEmptyVector}.
+     * Attempts to convert this {@code ImmutableVector} to an {@code ImmutableNonEmptyVector}.
+     * <p>
      * Since this will always be successful for {@link ImmutableNonEmptyVector}s,
      * this method always returns itself wrapped in a {@link Maybe#just}.
      * <p>
      * Does not make copies of any underlying data structures.
+     *
+     * @return this {@code ImmutableNonEmptyVector} wrapped in a {@link Maybe#just}
      */
     @Override
     default Maybe<? extends ImmutableNonEmptyVector<A>> toNonEmpty() {
@@ -76,11 +84,14 @@ public interface ImmutableNonEmptyVector<A> extends NonEmptyVector<A>, Immutable
     }
 
     /**
-     * Attempts to convert this {@link Vector} to a {@link NonEmptyVector}.
+     * Attempts to convert this {@code ImmutableVector} to a {@code ImmutableNonEmptyVector}.
+     * <p>
      * Since this will always be successful for {@link ImmutableNonEmptyVector}s,
      * this method always returns itself.
      * <p>
      * Does not make copies of any underlying data structures.
+     *
+     * @return this {@code ImmutableNonEmptyVector}
      */
     @Override
     default ImmutableNonEmptyVector<A> toNonEmptyOrThrow() {
