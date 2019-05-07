@@ -3,6 +3,7 @@ package dev.marksman.collectionviews;
 import com.jnape.palatable.lambda.adt.Maybe;
 import com.jnape.palatable.lambda.adt.hlist.Tuple2;
 import com.jnape.palatable.lambda.functions.Fn1;
+import com.jnape.palatable.lambda.functions.builtin.fn2.Find;
 
 import java.util.Iterator;
 import java.util.List;
@@ -97,6 +98,28 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
      */
     default Vector<A> dropRight(int count) {
         return Vectors.dropRight(count, this);
+    }
+
+    /**
+     * Finds the first element of this {@code Vector} that satisfies a predicate, if any.
+     *
+     * @param predicate a predicate; not null
+     * @return an element wrapped in a {@link Maybe#just} if a matching element is found;
+     * {@link Maybe#nothing} otherwise.
+     */
+    default Maybe<A> find(Fn1<? super A, ? extends Boolean> predicate) {
+        return Find.find(predicate, this);
+    }
+
+    /**
+     * Finds the first element of this {@code Vector} that satisfies a predicate, if any, and returns its index.
+     *
+     * @param predicate a predicate; not null
+     * @return an index wrapped in a {@link Maybe#just} if a matching element is found;
+     * {@link Maybe#nothing} otherwise.
+     */
+    default Maybe<Integer> findIndex(Fn1<? super A, ? extends Boolean> predicate) {
+        return Vectors.findIndex(predicate, this);
     }
 
     /**

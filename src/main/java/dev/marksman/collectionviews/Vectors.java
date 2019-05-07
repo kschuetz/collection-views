@@ -226,6 +226,16 @@ final class Vectors {
         }
     }
 
+    static <A> Maybe<Integer> findIndex(Fn1<? super A, ? extends Boolean> predicate, Vector<A> vec) {
+        int size = vec.size();
+        for (int i = 0; i < size; i++) {
+            if (predicate.apply(vec.unsafeGet(i))) {
+                return just(i);
+            }
+        }
+        return nothing();
+    }
+
     static <A> NonEmptyVector<Tuple2<A, Integer>> nonEmptyZipWithIndex(NonEmptyVector<A> vec) {
         return new VectorZipWithIndex<>(vec);
     }
