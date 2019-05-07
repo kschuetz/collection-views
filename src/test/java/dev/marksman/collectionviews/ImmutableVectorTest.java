@@ -1,7 +1,9 @@
 package dev.marksman.collectionviews;
 
+import com.jnape.palatable.lambda.adt.hlist.Tuple2;
 import com.jnape.palatable.lambda.functions.Fn1;
 import com.jnape.palatable.lambda.functions.builtin.fn1.Id;
+import com.jnape.palatable.lambda.functions.builtin.fn2.Eq;
 import com.jnape.palatable.lambda.functions.builtin.fn2.Take;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -16,6 +18,8 @@ import java.util.NoSuchElementException;
 import static com.jnape.palatable.lambda.adt.Maybe.just;
 import static com.jnape.palatable.lambda.adt.Maybe.nothing;
 import static com.jnape.palatable.lambda.adt.Unit.UNIT;
+import static com.jnape.palatable.lambda.adt.hlist.HList.tuple;
+import static com.jnape.palatable.lambda.functions.builtin.fn1.Constantly.constantly;
 import static com.jnape.palatable.lambda.functions.builtin.fn1.Cycle.cycle;
 import static com.jnape.palatable.lambda.functions.builtin.fn1.Id.id;
 import static com.jnape.palatable.lambda.functions.builtin.fn1.Repeat.repeat;
@@ -78,6 +82,27 @@ class ImmutableVectorTest {
         void tailIsEmpty() {
             assertThat(Vector.empty().tail(), emptyIterable());
         }
+
+        @Test
+        void reverseIsEmpty() {
+            assertThat(Vector.empty().reverse(), emptyIterable());
+        }
+
+        @Test
+        void zipWithIndexIsEmpty() {
+            assertThat(Vector.empty().zipWithIndex(), emptyIterable());
+        }
+
+        @Test
+        void findReturnsNothing() {
+            assertEquals(nothing(), Vector.empty().find(constantly(true)));
+        }
+
+        @Test
+        void equalToItself() {
+            assertEquals(Vector.empty(), Vector.empty());
+        }
+
     }
 
     @Nested
@@ -213,6 +238,16 @@ class ImmutableVectorTest {
                 }
 
                 @Test
+                void reverseIteratesCorrectly() {
+                    assertThat(subject.reverse(), contains("baz", "bar", "foo"));
+                }
+
+                @Test
+                void zipWithIndexIteratesCorrectly() {
+                    assertThat(subject.zipWithIndex(), contains(tuple("foo", 0), tuple("bar", 1), tuple("baz", 2)));
+                }
+
+                @Test
                 void toNonEmptySucceeds() {
                     assertEquals(just(Vector.of("foo", "bar", "baz")),
                             subject.toNonEmpty());
@@ -233,6 +268,16 @@ class ImmutableVectorTest {
                 void notAffectedByMutation() {
                     underlying[0] = "qwerty";
                     assertThat(subject, contains("foo", "bar", "baz"));
+                }
+
+                @Test
+                void findPositive() {
+                    assertEquals(just("bar"), subject.find(Eq.eq("bar")));
+                }
+
+                @Test
+                void findNegative() {
+                    assertEquals(nothing(), subject.find(Eq.eq("not in list")));
                 }
 
             }
@@ -262,7 +307,7 @@ class ImmutableVectorTest {
 
             @Nested
             @DisplayName("copyFrom empty array")
-            class WrapEmptyArrayTests {
+            class CopyFromEmptyArrayTests {
                 private ImmutableVector<Integer> subject;
 
                 @BeforeEach
@@ -422,6 +467,16 @@ class ImmutableVectorTest {
                 }
 
                 @Test
+                void reverseIteratesCorrectly() {
+                    assertThat(subject.reverse(), contains("baz", "bar", "foo"));
+                }
+
+                @Test
+                void zipWithIndexIteratesCorrectly() {
+                    assertThat(subject.zipWithIndex(), contains(tuple("foo", 0), tuple("bar", 1), tuple("baz", 2)));
+                }
+
+                @Test
                 void toNonEmptySucceeds() {
                     assertEquals(just(Vector.of("foo", "bar", "baz")),
                             subject.toNonEmpty());
@@ -442,6 +497,16 @@ class ImmutableVectorTest {
                 void notAffectedByMutation() {
                     underlying.set(0, "qwerty");
                     assertThat(subject, contains("foo", "bar", "baz"));
+                }
+
+                @Test
+                void findPositive() {
+                    assertEquals(just("bar"), subject.find(Eq.eq("bar")));
+                }
+
+                @Test
+                void findNegative() {
+                    assertEquals(nothing(), subject.find(Eq.eq("not in list")));
                 }
 
             }
@@ -504,7 +569,6 @@ class ImmutableVectorTest {
                 void toNonEmptyFails() {
                     assertEquals(nothing(), subject.toNonEmpty());
                 }
-
 
                 @Test
                 void toNonEmptyOrThrowThrows() {
@@ -641,6 +705,16 @@ class ImmutableVectorTest {
                 }
 
                 @Test
+                void reverseIteratesCorrectly() {
+                    assertThat(subject.reverse(), contains("baz", "bar", "foo"));
+                }
+
+                @Test
+                void zipWithIndexIteratesCorrectly() {
+                    assertThat(subject.zipWithIndex(), contains(tuple("foo", 0), tuple("bar", 1), tuple("baz", 2)));
+                }
+
+                @Test
                 void toNonEmptySucceeds() {
                     assertEquals(just(Vector.of("foo", "bar", "baz")),
                             subject.toNonEmpty());
@@ -650,6 +724,16 @@ class ImmutableVectorTest {
                 void toNonEmptyOrThrowSucceeds() {
                     assertEquals(Vector.of("foo", "bar", "baz"),
                             subject.toNonEmptyOrThrow());
+                }
+
+                @Test
+                void findPositive() {
+                    assertEquals(just("bar"), subject.find(Eq.eq("bar")));
+                }
+
+                @Test
+                void findNegative() {
+                    assertEquals(nothing(), subject.find(Eq.eq("not in list")));
                 }
 
             }
@@ -817,6 +901,18 @@ class ImmutableVectorTest {
                         contains(0, 1, 2));
             }
 
+            @Test
+            void findPositive() {
+                assertEquals(just(1), Vector.copySliceFrom(100, 103, infinite)
+                        .find(n -> n >= 1));
+            }
+
+            @Test
+            void findNegative() {
+                assertEquals(nothing(), Vector.copySliceFrom(100, 103, infinite)
+                        .find(n -> n >= 5));
+            }
+
         }
     }
 
@@ -942,6 +1038,16 @@ class ImmutableVectorTest {
             }
 
             @Test
+            void reverseIteratesCorrectly() {
+                assertThat(subject.reverse(), contains("foo", "foo", "foo"));
+            }
+
+            @Test
+            void zipWithIndexIteratesCorrectly() {
+                assertThat(subject.zipWithIndex(), contains(tuple("foo", 0), tuple("foo", 1), tuple("foo", 2)));
+            }
+
+            @Test
             void toNonEmptySucceeds() {
                 assertEquals(just(Vector.of("foo", "foo", "foo")),
                         subject.toNonEmpty());
@@ -1010,6 +1116,21 @@ class ImmutableVectorTest {
                 assertNotEquals(supersequence, subject);
             }
 
+            @Test
+            void reverseReturnsSameReference() {
+                assertSame(subject, subject.reverse());
+            }
+
+            @Test
+            void findPositive() {
+                assertEquals(just("foo"), subject.find(Eq.eq("foo")));
+            }
+
+            @Test
+            void findNegative() {
+                assertEquals(nothing(), subject.find(Eq.eq("not in list")));
+            }
+
         }
 
         @Nested
@@ -1041,6 +1162,11 @@ class ImmutableVectorTest {
             @Test
             void takeTooLong() {
                 assertSame(subject, subject.take(1_000_000));
+            }
+
+            @Test
+            void reverseReturnsSameReference() {
+                assertSame(subject.take(1000), subject.take(1000).reverse());
             }
 
         }
@@ -1235,6 +1361,16 @@ class ImmutableVectorTest {
             }
 
             @Test
+            void reverseIteratesCorrectly() {
+                assertThat(subject.reverse(), contains(20, 10, 0));
+            }
+
+            @Test
+            void zipWithIndexIteratesCorrectly() {
+                assertThat(subject.zipWithIndex(), contains(tuple(0, 0), tuple(10, 1), tuple(20, 2)));
+            }
+
+            @Test
             void toNonEmptySucceeds() {
                 assertEquals(just(Vector.of(0, 10, 20)),
                         subject.toNonEmpty());
@@ -1293,6 +1429,16 @@ class ImmutableVectorTest {
                 Vector<Integer> supersequence = Vector.of(0, 10, 20, 30);
                 assertNotEquals(subject, supersequence);
                 assertNotEquals(supersequence, subject);
+            }
+
+            @Test
+            void findPositive() {
+                assertEquals(just(20), subject.find(n -> n >= 20));
+            }
+
+            @Test
+            void findNegative() {
+                assertEquals(nothing(), subject.find(n -> n > 100));
             }
 
         }
@@ -1401,6 +1547,11 @@ class ImmutableVectorTest {
                 assertEquals(Vector.of(10, 20), subject.slice(1, 10));
             }
 
+            @Test
+            void reverseIteratesCorrectly() {
+                assertThat(subject.slice(1, 3).reverse(), contains(20, 10));
+            }
+
         }
 
     }
@@ -1452,6 +1603,12 @@ class ImmutableVectorTest {
                     subject, replicate(10_000, UNIT));
             assertThat(mapped, contains(10_001, 10_002, 10_003));
         }
+
+        @Test
+        void reverseIteratesCorrectly() {
+            assertThat(subject.fmap(Object::toString).reverse(),
+                    contains("3", "2", "1"));
+        }
     }
 
     @Nested
@@ -1479,6 +1636,12 @@ class ImmutableVectorTest {
                     contains(1));
             assertThat(Vector.copyFrom(asList(1, 2, 3)).take(0),
                     emptyIterable());
+        }
+
+        @Test
+        void reverseIteratesCorrectly() {
+            assertThat(Vector.copyFrom(asList(1, 2, 3, 4, 5, 6)).take(3).reverse(),
+                    contains(3, 2, 1));
         }
 
         @Test
@@ -1527,6 +1690,12 @@ class ImmutableVectorTest {
                     contains(3));
             assertThat(Vector.copyFrom(asList(1, 2, 3)).takeRight(0),
                     emptyIterable());
+        }
+
+        @Test
+        void reverseIteratesCorrectly() {
+            assertThat(Vector.copyFrom(asList(1, 2, 3, 4, 5, 6)).takeRight(3).reverse(),
+                    contains(6, 5, 4));
         }
 
         @Test
@@ -1590,6 +1759,12 @@ class ImmutableVectorTest {
         }
 
         @Test
+        void reverseIteratesCorrectly() {
+            assertThat(Vector.copyFrom(asList(1, 2, 3, 4, 5, 6)).drop(3).reverse(),
+                    contains(6, 5, 4));
+        }
+
+        @Test
         void notAffectedByMutation() {
             List<String> originalUnderlying = asList("foo", "bar", "baz");
             ImmutableVector<String> original = Vector.copyFrom(originalUnderlying);
@@ -1638,6 +1813,12 @@ class ImmutableVectorTest {
         void twoElements() {
             ImmutableVector<Integer> source = Vector.copyFrom(asList(1, 2, 3));
             assertThat(source.dropRight(2), contains(1));
+        }
+
+        @Test
+        void reverseIteratesCorrectly() {
+            assertThat(Vector.copyFrom(asList(1, 2, 3, 4, 5, 6)).dropRight(3).reverse(),
+                    contains(3, 2, 1));
         }
 
         @Test
@@ -1718,6 +1899,141 @@ class ImmutableVectorTest {
             assertThat(original, contains("foo", "bar", "baz"));
             assertThat(slice2, contains("bar", "baz"));
             assertThat(slice3, contains("baz"));
+        }
+
+        @Test
+        void reverseIteratesCorrectly() {
+            assertThat(Vector.copyFrom(asList(1, 2, 3, 4, 5, 6)).slice(1, 4).reverse(),
+                    contains(4, 3, 2));
+        }
+
+    }
+
+    @Nested
+    @DisplayName("reverse")
+    class ReverseTests {
+
+        @Test
+        void returnsEmptyVectorIfEmpty() {
+            assertSame(Vector.empty(), Vector.empty().reverse());
+        }
+
+        @Test
+        void returnsSelfIfOneElement() {
+            Vector<Integer> subject = Vector.of(1);
+            assertSame(subject, subject.reverse());
+        }
+
+        @Test
+        void threeElements() {
+            assertEquals(Vector.of(3, 2, 1), Vector.of(1, 2, 3).reverse());
+        }
+
+        @Test
+        void doubleReverseReturnsOriginalReference() {
+            Vector<Integer> subject = Vector.of(1, 2, 3);
+            assertSame(subject, subject.reverse().reverse());
+        }
+
+        @Test
+        void notAffectedByMutation() {
+            List<String> underlying = asList("foo", "bar", "baz");
+            ImmutableVector<String> original = Vector.copyFrom(underlying);
+            underlying.set(1, "qwerty");
+            assertThat(original, contains("foo", "bar", "baz"));
+            assertThat(original.reverse(), contains("baz", "bar", "foo"));
+        }
+
+        @Test
+        void equality() {
+            assertEquals(Vector.of(3, 2, 1),
+                    Vector.of(1, 2, 3).reverse());
+        }
+
+    }
+
+    @Nested
+    @DisplayName("zipWithIndex")
+    class ZipWithIndexTests {
+
+        private ImmutableVector<String> subject;
+
+        @BeforeEach
+        void beforeEach() {
+            subject = Vector.copyFrom(new String[]{"foo", "bar", "baz"});
+        }
+
+        @Test
+        void beforeFmap() {
+            assertThat(subject.zipWithIndex().fmap(t -> t._1() + t._2()),
+                    contains("foo0", "bar1", "baz2"));
+        }
+
+        @Test
+        void afterFmap() {
+            assertThat(subject.fmap(t -> t + "!").zipWithIndex(),
+                    contains(tuple("foo!", 0), tuple("bar!", 1), tuple("baz!", 2)));
+        }
+
+        @Test
+        void beforeReverse() {
+            assertThat(subject.zipWithIndex().reverse(),
+                    contains(tuple("baz", 2), tuple("bar", 1), tuple("foo", 0)));
+        }
+
+        @Test
+        void afterReverse() {
+            assertThat(subject.reverse().zipWithIndex(),
+                    contains(tuple("baz", 0), tuple("bar", 1), tuple("foo", 2)));
+        }
+
+        @Test
+        void beforeTake() {
+            assertThat(subject.zipWithIndex().take(2),
+                    contains(tuple("foo", 0), tuple("bar", 1)));
+        }
+
+        @Test
+        void afterTake() {
+            assertThat(subject.take(2).zipWithIndex(),
+                    contains(tuple("foo", 0), tuple("bar", 1)));
+        }
+
+        @Test
+        void beforeDrop() {
+            assertThat(subject.zipWithIndex().drop(1),
+                    contains(tuple("bar", 1), tuple("baz", 2)));
+        }
+
+        @Test
+        void afterDrop() {
+            assertThat(subject.drop(1).zipWithIndex(),
+                    contains(tuple("bar", 0), tuple("baz", 1)));
+        }
+
+        @Test
+        void willNotMakeCopiesOfUnderlying() {
+            List<String> underlying = asList("foo", "bar", "baz");
+            Vector<String> original = Vector.wrap(underlying);
+            Vector<Tuple2<String, Integer>> subject = original.zipWithIndex();
+            underlying.set(1, "qwerty");
+            assertThat(subject, contains(tuple("foo", 0), tuple("qwerty", 1), tuple("baz", 2)));
+        }
+
+        @Test
+        void notAffectedByMutation() {
+            List<String> underlying = asList("foo", "bar", "baz");
+            ImmutableVector<String> original = Vector.copyFrom(underlying);
+            ImmutableVector<Tuple2<String, Integer>> subject = original.zipWithIndex();
+            underlying.set(1, "qwerty");
+            assertThat(original, contains("foo", "bar", "baz"));
+            assertThat(subject, contains(tuple("foo", 0), tuple("bar", 1), tuple("baz", 2)));
+        }
+
+        @Test
+        void equality() {
+            assertEquals(Vector.wrap(asList(1, 2, 3)).zipWithIndex(),
+                    Vector.wrap(new Integer[]{1, 2, 3}).zipWithIndex());
         }
 
     }

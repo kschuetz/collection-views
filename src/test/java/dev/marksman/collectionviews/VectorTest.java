@@ -1,6 +1,8 @@
 package dev.marksman.collectionviews;
 
+import com.jnape.palatable.lambda.adt.hlist.Tuple2;
 import com.jnape.palatable.lambda.functions.Fn1;
+import com.jnape.palatable.lambda.functions.builtin.fn2.Eq;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -13,6 +15,8 @@ import java.util.NoSuchElementException;
 import static com.jnape.palatable.lambda.adt.Maybe.just;
 import static com.jnape.palatable.lambda.adt.Maybe.nothing;
 import static com.jnape.palatable.lambda.adt.Unit.UNIT;
+import static com.jnape.palatable.lambda.adt.hlist.HList.tuple;
+import static com.jnape.palatable.lambda.functions.builtin.fn1.Constantly.constantly;
 import static com.jnape.palatable.lambda.functions.builtin.fn1.Id.id;
 import static com.jnape.palatable.lambda.functions.builtin.fn2.Replicate.replicate;
 import static com.jnape.palatable.lambda.functions.builtin.fn3.FoldLeft.foldLeft;
@@ -78,6 +82,21 @@ class VectorTest {
             }
 
             @Test
+            void reverseIsEmpty() {
+                assertThat(Vector.wrap(new Integer[]{}).reverse(), emptyIterable());
+            }
+
+            @Test
+            void zipWithIndexIsEmpty() {
+                assertThat(Vector.wrap(new Integer[]{}).zipWithIndex(), emptyIterable());
+            }
+
+            @Test
+            void findReturnsNothing() {
+                assertEquals(nothing(), Vector.wrap(new Integer[]{}).find(constantly(true)));
+            }
+
+            @Test
             void equalToItself() {
                 assertEquals(Vector.wrap(new Integer[]{}), Vector.wrap(new Integer[]{}));
             }
@@ -129,6 +148,21 @@ class VectorTest {
             @Test
             void tailIsEmpty() {
                 assertThat(Vector.wrap(emptyList()).tail(), emptyIterable());
+            }
+
+            @Test
+            void reverseIsEmpty() {
+                assertThat(Vector.wrap(emptyList()).reverse(), emptyIterable());
+            }
+
+            @Test
+            void zipWithIndexIsEmpty() {
+                assertThat(Vector.wrap(emptyList()).zipWithIndex(), emptyIterable());
+            }
+
+            @Test
+            void findReturnsNothing() {
+                assertEquals(nothing(), Vector.wrap(emptyList()).find(constantly(true)));
             }
 
             @Test
@@ -282,6 +316,16 @@ class VectorTest {
                 }
 
                 @Test
+                void reverseIteratesCorrectly() {
+                    assertThat(subject.reverse(), contains("baz", "bar", "foo"));
+                }
+
+                @Test
+                void zipWithIndexIteratesCorrectly() {
+                    assertThat(subject.zipWithIndex(), contains(tuple("foo", 0), tuple("bar", 1), tuple("baz", 2)));
+                }
+
+                @Test
                 void toNonEmptySucceeds() {
                     assertEquals(just(Vector.of("foo", "bar", "baz")),
                             subject.toNonEmpty());
@@ -344,6 +388,17 @@ class VectorTest {
                     assertNotEquals(subject, supersequence);
                     assertNotEquals(supersequence, subject);
                 }
+
+                @Test
+                void findPositive() {
+                    assertEquals(just("bar"), subject.find(Eq.eq("bar")));
+                }
+
+                @Test
+                void findNegative() {
+                    assertEquals(nothing(), subject.find(Eq.eq("not in list")));
+                }
+
             }
 
             @Nested
@@ -546,6 +601,16 @@ class VectorTest {
                 }
 
                 @Test
+                void reverseIteratesCorrectly() {
+                    assertThat(subject.reverse(), contains("baz", "bar", "foo"));
+                }
+
+                @Test
+                void zipWithIndexIteratesCorrectly() {
+                    assertThat(subject.zipWithIndex(), contains(tuple("foo", 0), tuple("bar", 1), tuple("baz", 2)));
+                }
+
+                @Test
                 void toNonEmptySucceeds() {
                     assertEquals(just(Vector.of("foo", "bar", "baz")),
                             subject.toNonEmpty());
@@ -607,6 +672,16 @@ class VectorTest {
                     Vector<String> supersequence = Vector.of("foo", "bar", "baz", "quux");
                     assertNotEquals(subject, supersequence);
                     assertNotEquals(supersequence, subject);
+                }
+
+                @Test
+                void findPositive() {
+                    assertEquals(just("bar"), subject.find(Eq.eq("bar")));
+                }
+
+                @Test
+                void findNegative() {
+                    assertEquals(nothing(), subject.find(Eq.eq("not in list")));
                 }
 
             }
@@ -865,6 +940,18 @@ class VectorTest {
                         Vector.wrap(new Integer[]{1, 2, 3, 4, 5, 6}).take(3));
             }
 
+            @Test
+            void findPositive() {
+                assertEquals(just("bar"), Vector.wrap(new String[]{"foo", "bar", "baz"}).take(2)
+                        .find(Eq.eq("bar")));
+            }
+
+            @Test
+            void findNegative() {
+                assertEquals(nothing(), Vector.wrap(new String[]{"foo", "bar", "baz"}).take(2)
+                        .find(Eq.eq("baz")));
+            }
+
         }
 
         @Nested
@@ -916,6 +1003,18 @@ class VectorTest {
             void equality() {
                 assertEquals(Vector.wrap(asList(1, 2, 3)),
                         Vector.wrap(asList(1, 2, 3, 4, 5, 6)).take(3));
+            }
+
+            @Test
+            void findPositive() {
+                assertEquals(just("bar"), Vector.wrap(asList("foo", "bar", "baz")).take(2)
+                        .find(Eq.eq("bar")));
+            }
+
+            @Test
+            void findNegative() {
+                assertEquals(nothing(), Vector.wrap(asList("foo", "bar", "baz")).take(2)
+                        .find(Eq.eq("baz")));
             }
 
         }
@@ -1094,6 +1193,18 @@ class VectorTest {
                         Vector.wrap(new Integer[]{1, 2, 3, 4, 5, 6}).drop(3));
             }
 
+            @Test
+            void findPositive() {
+                assertEquals(just("bar"), Vector.wrap(new String[]{"foo", "bar", "baz"}).drop(1)
+                        .find(Eq.eq("bar")));
+            }
+
+            @Test
+            void findNegative() {
+                assertEquals(nothing(), Vector.wrap(new String[]{"foo", "bar", "baz"}).drop(1)
+                        .find(Eq.eq("foo")));
+            }
+
         }
 
         @Nested
@@ -1149,6 +1260,18 @@ class VectorTest {
             void equality() {
                 assertEquals(Vector.wrap(asList(4, 5, 6)),
                         Vector.wrap(asList(1, 2, 3, 4, 5, 6)).drop(3));
+            }
+
+            @Test
+            void findPositive() {
+                assertEquals(just("bar"), Vector.wrap(asList("foo", "bar", "baz")).drop(1)
+                        .find(Eq.eq("bar")));
+            }
+
+            @Test
+            void findNegative() {
+                assertEquals(nothing(), Vector.wrap(asList("foo", "bar", "baz")).drop(1)
+                        .find(Eq.eq("foo")));
             }
 
         }
@@ -1354,6 +1477,18 @@ class VectorTest {
                         Vector.wrap(new Integer[]{1, 2, 3, 4, 5, 6}).slice(1, 4));
             }
 
+            @Test
+            void findPositive() {
+                assertEquals(just("bar"), Vector.wrap(new String[]{"foo", "bar", "baz"}).slice(1, 2)
+                        .find(Eq.eq("bar")));
+            }
+
+            @Test
+            void findNegative() {
+                assertEquals(nothing(), Vector.wrap(new String[]{"foo", "bar", "baz"}).slice(1, 2)
+                        .find(Eq.eq("foo")));
+            }
+
         }
 
         @Nested
@@ -1430,7 +1565,187 @@ class VectorTest {
                         Vector.wrap(asList(1, 2, 3, 4, 5, 6)).slice(1, 4));
             }
 
+            @Test
+            void findPositive() {
+                assertEquals(just("bar"), Vector.wrap(asList("foo", "bar", "baz")).slice(1, 2)
+                        .find(Eq.eq("bar")));
+            }
+
+            @Test
+            void findNegative() {
+                assertEquals(nothing(), Vector.wrap(asList("foo", "bar", "baz")).slice(1, 2)
+                        .find(Eq.eq("foo")));
+            }
+
         }
 
     }
+
+    @Nested
+    @DisplayName("reverse")
+    class ReverseTests {
+
+        @Nested
+        @DisplayName("array")
+        class ArrayReverseTests {
+
+            @Test
+            void returnsEmptyVectorIfEmpty() {
+                assertSame(Vector.empty(), Vector.wrap(new Integer[]{}).reverse());
+            }
+
+            @Test
+            void returnsSelfIfOneElement() {
+                Vector<Integer> subject = Vector.wrap(new Integer[]{});
+                assertSame(subject, subject.reverse());
+            }
+
+            @Test
+            void threeElements() {
+                assertEquals(Vector.wrap(new Integer[]{3, 2, 1}), Vector.wrap(new Integer[]{1, 2, 3}).reverse());
+            }
+
+            @Test
+            void doubleReverseReturnsOriginalReference() {
+                Vector<Integer> subject = Vector.wrap(new Integer[]{1, 2, 3});
+                assertSame(subject, subject.reverse().reverse());
+            }
+
+            @Test
+            void willNotMakeCopiesOfUnderlying() {
+                Integer[] underlying = {1, 2, 3, 4};
+                Vector<Integer> original = Vector.wrap(underlying);
+                Vector<Integer> reversed = original.reverse();
+                underlying[2] = 10;
+                assertThat(reversed, contains(4, 10, 2, 1));
+            }
+
+            @Test
+            void equality() {
+                assertEquals(Vector.wrap(new Integer[]{3, 2, 1}),
+                        Vector.wrap(new Integer[]{1, 2, 3}).reverse());
+            }
+
+        }
+
+        @Nested
+        @DisplayName("List")
+        class ListReverseTests {
+
+            @Test
+            void returnsEmptyVectorIfEmpty() {
+                assertSame(Vector.empty(), Vector.wrap(emptyList()).reverse());
+            }
+
+            @Test
+            void returnsSelfIfOneElement() {
+                Vector<Integer> subject = Vector.wrap(emptyList());
+                assertSame(subject, subject.reverse());
+            }
+
+            @Test
+            void threeElements() {
+                assertEquals(Vector.wrap(asList(3, 2, 1)), Vector.wrap(asList(1, 2, 3)).reverse());
+            }
+
+            @Test
+            void doubleReverseReturnsOriginalReference() {
+                Vector<Integer> subject = Vector.wrap(asList(1, 2, 3));
+                assertSame(subject, subject.reverse().reverse());
+            }
+
+            @Test
+            void willNotMakeCopiesOfUnderlying() {
+                List<Integer> underlying = asList(1, 2, 3, 4);
+                Vector<Integer> original = Vector.wrap(underlying);
+                Vector<Integer> reversed = original.reverse();
+                underlying.set(2, 10);
+                assertThat(reversed, contains(4, 10, 2, 1));
+            }
+
+            @Test
+            void equality() {
+                assertEquals(Vector.wrap(asList(3, 2, 1)),
+                        Vector.wrap(asList(1, 2, 3)).reverse());
+            }
+
+        }
+    }
+
+    @Nested
+    @DisplayName("zipWithIndex")
+    class ZipWithIndexTests {
+
+        private Vector<String> subject;
+
+        @BeforeEach
+        void beforeEach() {
+            subject = Vector.wrap(new String[]{"foo", "bar", "baz"});
+        }
+
+        @Test
+        void beforeFmap() {
+            assertThat(subject.zipWithIndex().fmap(t -> t._1() + t._2()),
+                    contains("foo0", "bar1", "baz2"));
+        }
+
+        @Test
+        void afterFmap() {
+            assertThat(subject.fmap(t -> t + "!").zipWithIndex(),
+                    contains(tuple("foo!", 0), tuple("bar!", 1), tuple("baz!", 2)));
+        }
+
+        @Test
+        void beforeReverse() {
+            assertThat(subject.zipWithIndex().reverse(),
+                    contains(tuple("baz", 2), tuple("bar", 1), tuple("foo", 0)));
+        }
+
+        @Test
+        void afterReverse() {
+            assertThat(subject.reverse().zipWithIndex(),
+                    contains(tuple("baz", 0), tuple("bar", 1), tuple("foo", 2)));
+        }
+
+        @Test
+        void beforeTake() {
+            assertThat(subject.zipWithIndex().take(2),
+                    contains(tuple("foo", 0), tuple("bar", 1)));
+        }
+
+        @Test
+        void afterTake() {
+            assertThat(subject.take(2).zipWithIndex(),
+                    contains(tuple("foo", 0), tuple("bar", 1)));
+        }
+
+        @Test
+        void beforeDrop() {
+            assertThat(subject.zipWithIndex().drop(1),
+                    contains(tuple("bar", 1), tuple("baz", 2)));
+        }
+
+        @Test
+        void afterDrop() {
+            assertThat(subject.drop(1).zipWithIndex(),
+                    contains(tuple("bar", 0), tuple("baz", 1)));
+        }
+
+        @Test
+        void willNotMakeCopiesOfUnderlying() {
+            List<String> underlying = asList("foo", "bar", "baz");
+            Vector<String> original = Vector.wrap(underlying);
+            Vector<Tuple2<String, Integer>> subject = original.zipWithIndex();
+            underlying.set(1, "qwerty");
+            assertThat(subject, contains(tuple("foo", 0), tuple("qwerty", 1), tuple("baz", 2)));
+        }
+
+        @Test
+        void equality() {
+            assertEquals(Vector.wrap(asList(1, 2, 3)).zipWithIndex(),
+                    Vector.wrap(new Integer[]{1, 2, 3}).zipWithIndex());
+        }
+
+    }
+
 }

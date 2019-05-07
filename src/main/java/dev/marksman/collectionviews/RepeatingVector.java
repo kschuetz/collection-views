@@ -112,6 +112,11 @@ final class RepeatingVector<A> extends ConcreteVector<A> implements ImmutableNon
     }
 
     @Override
+    public ImmutableNonEmptyVector<A> reverse() {
+        return this;
+    }
+
+    @Override
     public ImmutableVector<A> slice(int startIndex, int endIndexExclusive) {
         validateSlice(startIndex, endIndexExclusive);
         endIndexExclusive = Math.min(endIndexExclusive, size);
