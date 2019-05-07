@@ -1,11 +1,14 @@
 package dev.marksman.collectionviews;
 
 import com.jnape.palatable.lambda.adt.Maybe;
+import com.jnape.palatable.lambda.adt.hlist.Tuple2;
 import com.jnape.palatable.lambda.functions.Fn1;
 
 import java.util.Iterator;
+import java.util.Objects;
 
 import static com.jnape.palatable.lambda.adt.Maybe.nothing;
+import static dev.marksman.collectionviews.Validation.*;
 import static java.util.Collections.emptyIterator;
 
 final class EmptyVector<A> extends ConcreteVector<A> implements ImmutableVector<A> {
@@ -22,6 +25,18 @@ final class EmptyVector<A> extends ConcreteVector<A> implements ImmutableVector<
     }
 
     @Override
+    public Maybe<A> find(Fn1<? super A, ? extends Boolean> predicate) {
+        Objects.requireNonNull(predicate);
+        return nothing();
+    }
+
+    @Override
+    public Maybe<Integer> findIndex(Fn1<? super A, ? extends Boolean> predicate) {
+        Objects.requireNonNull(predicate);
+        return nothing();
+    }
+
+    @Override
     public boolean isEmpty() {
         return true;
     }
@@ -29,6 +44,63 @@ final class EmptyVector<A> extends ConcreteVector<A> implements ImmutableVector<
     @Override
     public ImmutableVector<A> tail() {
         return this;
+    }
+
+    @Override
+    public ImmutableVector<A> drop(int count) {
+        validateDrop(count);
+        return this;
+    }
+
+    @Override
+    public ImmutableVector<A> dropRight(int count) {
+        validateDrop(count);
+        return this;
+    }
+
+    @Override
+    public ImmutableVector<A> dropWhile(Fn1<? super A, ? extends Boolean> predicate) {
+        Objects.requireNonNull(predicate);
+        return this;
+    }
+
+    @Override
+    public ImmutableVector<A> reverse() {
+        return this;
+    }
+
+    @Override
+    public ImmutableVector<A> slice(int startIndex, int endIndexExclusive) {
+        validateSlice(startIndex, endIndexExclusive);
+        return this;
+    }
+
+    @Override
+    public ImmutableVector<A> take(int count) {
+        validateTake(count);
+        return this;
+    }
+
+    @Override
+    public ImmutableVector<A> takeRight(int count) {
+        validateTake(count);
+        return this;
+    }
+
+    @Override
+    public ImmutableVector<A> takeWhile(Fn1<? super A, ? extends Boolean> predicate) {
+        Objects.requireNonNull(predicate);
+        return this;
+    }
+
+    @Override
+    public ImmutableVector<A> toImmutable() {
+        return this;
+    }
+
+    @Override
+    public ImmutableVector<Tuple2<A, Integer>> zipWithIndex() {
+        return emptyVector();
     }
 
     @Override
