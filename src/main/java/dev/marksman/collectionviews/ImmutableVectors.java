@@ -1,6 +1,7 @@
 package dev.marksman.collectionviews;
 
 import com.jnape.palatable.lambda.adt.Maybe;
+import com.jnape.palatable.lambda.adt.hlist.Tuple2;
 import com.jnape.palatable.lambda.functions.Fn1;
 import com.jnape.palatable.lambda.functions.builtin.fn2.Take;
 
@@ -14,6 +15,7 @@ import static com.jnape.palatable.lambda.adt.Maybe.nothing;
 import static com.jnape.palatable.lambda.functions.builtin.fn2.ToCollection.toCollection;
 import static dev.marksman.collectionviews.MapperChain.mapperChain;
 import static dev.marksman.collectionviews.Validation.*;
+import static dev.marksman.collectionviews.Vector.empty;
 
 class ImmutableVectors {
 
@@ -77,6 +79,18 @@ class ImmutableVectors {
         } else {
             return ImmutableReverseVector.immutableReverseVector(vec);
         }
+    }
+
+    static <A> ImmutableVector<Tuple2<A, Integer>> zipWithIndex(ImmutableVector<A> vec) {
+        if (vec.isEmpty()) {
+            return empty();
+        } else {
+            return new ImmutableVectorZipWithIndex<>(vec.toNonEmptyOrThrow());
+        }
+    }
+
+    static <A> ImmutableNonEmptyVector<Tuple2<A, Integer>> nonEmptyZipWithIndex(ImmutableNonEmptyVector<A> vec) {
+        return new ImmutableVectorZipWithIndex<>(vec);
     }
 
     static <A> ImmutableVector<A> wrapAndVouchFor(A[] arr) {

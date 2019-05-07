@@ -1,6 +1,7 @@
 package dev.marksman.collectionviews;
 
 import com.jnape.palatable.lambda.adt.Maybe;
+import com.jnape.palatable.lambda.adt.hlist.Tuple2;
 import com.jnape.palatable.lambda.functions.Fn1;
 
 /**
@@ -167,6 +168,19 @@ public interface ImmutableVector<A> extends Vector<A>, Immutable {
     @Override
     default ImmutableNonEmptyVector<A> toNonEmptyOrThrow() {
         return ImmutableVectors.nonEmptyConvertOrThrow(this);
+    }
+
+    /**
+     * Zips this {@code ImmutableVector} with its indices.
+     * <p>
+     * Does not make copies of any underlying data structures.
+     *
+     * @return a new {@code ImmutableVector} containing pairs consisting of all elements of this {@code ImmutableVector} paired with their index.
+     * Indices start at 0.
+     */
+    @Override
+    default ImmutableVector<Tuple2<A, Integer>> zipWithIndex() {
+        return ImmutableVectors.zipWithIndex(this);
     }
 
 }

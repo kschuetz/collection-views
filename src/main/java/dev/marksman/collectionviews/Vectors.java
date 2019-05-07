@@ -1,6 +1,7 @@
 package dev.marksman.collectionviews;
 
 import com.jnape.palatable.lambda.adt.Maybe;
+import com.jnape.palatable.lambda.adt.hlist.Tuple2;
 import com.jnape.palatable.lambda.functions.Fn1;
 import com.jnape.palatable.lambda.functions.Fn3;
 import com.jnape.palatable.lambda.functions.builtin.fn2.Drop;
@@ -199,6 +200,18 @@ final class Vectors {
         } else {
             return ReverseVector.reverseVector(vec);
         }
+    }
+
+    static <A> Vector<Tuple2<A, Integer>> zipWithIndex(Vector<A> vec) {
+        if (vec.isEmpty()) {
+            return empty();
+        } else {
+            return new VectorZipWithIndex<>(vec.toNonEmptyOrThrow());
+        }
+    }
+
+    static <A> NonEmptyVector<Tuple2<A, Integer>> nonEmptyZipWithIndex(NonEmptyVector<A> vec) {
+        return new VectorZipWithIndex<>(vec);
     }
 
     private static <A> Vector<A> takeFromIterable(int count, Iterable<A> source) {

@@ -1,6 +1,7 @@
 package dev.marksman.collectionviews;
 
 import com.jnape.palatable.lambda.adt.Maybe;
+import com.jnape.palatable.lambda.adt.hlist.Tuple2;
 import com.jnape.palatable.lambda.functions.Fn1;
 
 import java.util.Iterator;
@@ -127,6 +128,19 @@ public interface NonEmptyVector<A> extends NonEmptyIterable<A>, Vector<A> {
     @Override
     default NonEmptyVector<A> toNonEmptyOrThrow() {
         return this;
+    }
+
+    /**
+     * Zips this {@code NonEmptyVector} with its indices.
+     * <p>
+     * Does not make copies of any underlying data structures.
+     *
+     * @return a new {@code NonEmptyVector} containing pairs consisting of all elements of this {@code NonEmptyVector} paired with their index.
+     * Indices start at 0.
+     */
+    @Override
+    default NonEmptyVector<Tuple2<A, Integer>> zipWithIndex() {
+        return Vectors.nonEmptyZipWithIndex(this);
     }
 
     /**
