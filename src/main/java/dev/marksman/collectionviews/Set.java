@@ -1,6 +1,8 @@
 package dev.marksman.collectionviews;
 
 import com.jnape.palatable.lambda.adt.Maybe;
+import com.jnape.palatable.lambda.functions.Fn1;
+import com.jnape.palatable.lambda.functions.builtin.fn2.Find;
 
 /**
  * A finite, unordered view of a collection that contains no duplicate elements.
@@ -35,6 +37,17 @@ public interface Set<A> extends Iterable<A> {
      * @return the number of elements in this {@link Set}
      */
     int size();
+
+    /**
+     * Finds an element of this {@code Set} that satisfies a predicate, if any.
+     *
+     * @param predicate a predicate; not null
+     * @return an element wrapped in a {@link Maybe#just} if a matching element is found;
+     * {@link Maybe#nothing} otherwise.
+     */
+    default Maybe<A> find(Fn1<? super A, ? extends Boolean> predicate) {
+        return Find.find(predicate, this);
+    }
 
     /**
      * Tests whether this {@link Set} is empty.
