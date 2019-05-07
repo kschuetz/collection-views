@@ -1,9 +1,12 @@
 package dev.marksman.collectionviews;
 
+import com.jnape.palatable.lambda.adt.Maybe;
 import com.jnape.palatable.lambda.functions.Fn1;
 
 import java.util.Objects;
 
+import static com.jnape.palatable.lambda.adt.Maybe.just;
+import static com.jnape.palatable.lambda.adt.Maybe.nothing;
 import static dev.marksman.collectionviews.Validation.*;
 
 final class RepeatingVector<A> extends ConcreteVector<A> implements ImmutableNonEmptyVector<A> {
@@ -31,6 +34,26 @@ final class RepeatingVector<A> extends ConcreteVector<A> implements ImmutableNon
             throw new IndexOutOfBoundsException();
         }
         return value;
+    }
+
+    @Override
+    public Maybe<A> find(Fn1<? super A, ? extends Boolean> predicate) {
+        Objects.requireNonNull(predicate);
+        if (predicate.apply(value)) {
+            return just(value);
+        } else {
+            return nothing();
+        }
+    }
+
+    @Override
+    public Maybe<Integer> findIndex(Fn1<? super A, ? extends Boolean> predicate) {
+        Objects.requireNonNull(predicate);
+        if (predicate.apply(value)) {
+            return just(0);
+        } else {
+            return nothing();
+        }
     }
 
     @Override
@@ -63,13 +86,28 @@ final class RepeatingVector<A> extends ConcreteVector<A> implements ImmutableNon
 
     @Override
     public ImmutableVector<A> drop(int count) {
-        validateTake(count);
+        validateDrop(count);
         if (count == 0) {
             return this;
         } else if (count < size) {
             return new RepeatingVector<>(size - count, value);
         } else {
             return Vectors.empty();
+        }
+    }
+
+    @Override
+    public ImmutableVector<A> dropRight(int count) {
+        return drop(count);
+    }
+
+    @Override
+    public ImmutableVector<A> dropWhile(Fn1<? super A, ? extends Boolean> predicate) {
+        Objects.requireNonNull(predicate);
+        if (predicate.apply(value)) {
+            return Vectors.empty();
+        } else {
+            return this;
         }
     }
 
@@ -86,13 +124,28 @@ final class RepeatingVector<A> extends ConcreteVector<A> implements ImmutableNon
 
     @Override
     public ImmutableVector<A> take(int count) {
-        validateDrop(count);
+        validateTake(count);
         if (count == 0) {
             return Vectors.empty();
         } else if (count >= size) {
             return this;
         } else {
             return new RepeatingVector<>(count, value);
+        }
+    }
+
+    @Override
+    public ImmutableVector<A> takeRight(int count) {
+        return take(count);
+    }
+
+    @Override
+    public ImmutableVector<A> takeWhile(Fn1<? super A, ? extends Boolean> predicate) {
+        Objects.requireNonNull(predicate);
+        if (predicate.apply(value)) {
+            return this;
+        } else {
+            return Vectors.empty();
         }
     }
 
