@@ -1503,6 +1503,54 @@ class ImmutableVectorTest {
     }
 
     @Nested
+    @DisplayName("takeRight")
+    class TakeRightTests {
+
+        @Test
+        void throwsOnNegativeCount() {
+            assertThrows(IllegalArgumentException.class, () -> Vector.copyFrom(singletonList(1)).takeRight(-1));
+        }
+
+        @Test
+        void takesAsMuchAsItCan() {
+            assertThat(Vector.copyFrom(asList(1, 2, 3)).takeRight(1_000_000),
+                    contains(1, 2, 3));
+        }
+
+        @Test
+        void onlyTakesWhatWasAskedFor() {
+            assertThat(Vector.copyFrom(asList(1, 2, 3)).takeRight(3),
+                    contains(1, 2, 3));
+            assertThat(Vector.copyFrom(asList(1, 2, 3)).takeRight(2),
+                    contains(2, 3));
+            assertThat(Vector.copyFrom(asList(1, 2, 3)).takeRight(1),
+                    contains(3));
+            assertThat(Vector.copyFrom(asList(1, 2, 3)).takeRight(0),
+                    emptyIterable());
+        }
+
+        @Test
+        void notAffectedByMutation() {
+            List<String> originalUnderlying = asList("foo", "bar", "baz");
+            ImmutableVector<String> original = Vector.copyFrom(originalUnderlying);
+            Vector<String> sliced = original.takeRight(2);
+            assertThat(sliced, contains("bar", "baz"));
+            originalUnderlying.set(1, "qwerty");
+            assertThat(sliced, contains("bar", "baz"));
+        }
+
+        @Test
+        void returnsOriginalVectorReferenceIfPossible() {
+            ImmutableVector<String> original = Vector.copyFrom(asList("foo", "bar", "baz"));
+            ImmutableVector<String> slice1 = original.takeRight(100);
+            ImmutableVector<String> slice2 = original.takeRight(3);
+            assertSame(original, slice1);
+            assertSame(original, slice2);
+        }
+
+    }
+
+    @Nested
     @DisplayName("drop")
     class DropTests {
 
@@ -1549,6 +1597,57 @@ class ImmutableVectorTest {
             assertThat(sliced, contains("bar", "baz"));
             originalUnderlying.set(1, "qwerty");
             assertThat(sliced, contains("bar", "baz"));
+        }
+
+    }
+
+    @Nested
+    @DisplayName("dropRight")
+    class DropRightTests {
+
+        @Test
+        void throwsOnNegativeCount() {
+            assertThrows(IllegalArgumentException.class, () -> Vector.copyFrom(singletonList(1)).dropRight(-1));
+        }
+
+        @Test
+        void countZeroReturnsSameReference() {
+            ImmutableVector<Integer> source = Vector.copyFrom(asList(1, 2, 3));
+            ImmutableVector<Integer> sliced = source.dropRight(0);
+            assertSame(source, sliced);
+        }
+
+        @Test
+        void countEqualToSizeReturnsEmptyVector() {
+            assertEquals(Vector.empty(), Vector.copyFrom(asList(1, 2, 3)).dropRight(3));
+        }
+
+        @Test
+        void countExceedingSizeReturnsEmptyVector() {
+            assertEquals(Vector.empty(), Vector.copyFrom(asList(1, 2, 3)).dropRight(4));
+            assertEquals(Vector.empty(), Vector.copyFrom(asList(1, 2, 3)).dropRight(1_000_000));
+        }
+
+        @Test
+        void oneElement() {
+            ImmutableVector<Integer> source = Vector.copyFrom(asList(1, 2, 3));
+            assertThat(source.dropRight(1), contains(1, 2));
+        }
+
+        @Test
+        void twoElements() {
+            ImmutableVector<Integer> source = Vector.copyFrom(asList(1, 2, 3));
+            assertThat(source.dropRight(2), contains(1));
+        }
+
+        @Test
+        void notAffectedByMutation() {
+            List<String> originalUnderlying = asList("foo", "bar", "baz");
+            ImmutableVector<String> original = Vector.copyFrom(originalUnderlying);
+            Vector<String> sliced = original.dropRight(1);
+            assertThat(sliced, contains("foo", "bar"));
+            originalUnderlying.set(1, "qwerty");
+            assertThat(sliced, contains("foo", "bar"));
         }
 
     }

@@ -923,6 +923,119 @@ class VectorTest {
     }
 
     @Nested
+    @DisplayName("takeRight")
+    class TakeRightTests {
+
+        @Nested
+        @DisplayName("array")
+        class ArrayTests {
+
+            @Test
+            void throwsOnNegativeCount() {
+                assertThrows(IllegalArgumentException.class, () -> Vector.wrap(new Integer[]{1}).takeRight(-1));
+            }
+
+            @Test
+            void takesAsMuchAsItCan() {
+                assertThat(Vector.wrap(new Integer[]{1, 2, 3}).takeRight(1_000_000),
+                        contains(1, 2, 3));
+            }
+
+            @Test
+            void onlyTakesWhatWasAskedFor() {
+                assertThat(Vector.wrap(new Integer[]{1, 2, 3}).takeRight(3),
+                        contains(1, 2, 3));
+                assertThat(Vector.wrap(new Integer[]{1, 2, 3}).takeRight(2),
+                        contains(2, 3));
+                assertThat(Vector.wrap(new Integer[]{1, 2, 3}).takeRight(1),
+                        contains(3));
+                assertThat(Vector.wrap(new Integer[]{1, 2, 3}).takeRight(0),
+                        emptyIterable());
+            }
+
+            @Test
+            void willNotMakeCopiesOfUnderlying() {
+                String[] originalUnderlying = new String[]{"foo", "bar", "baz"};
+                Vector<String> original = Vector.wrap(originalUnderlying);
+                Vector<String> sliced = original.takeRight(2);
+                assertThat(sliced, contains("bar", "baz"));
+                originalUnderlying[1] = "qwerty";
+                assertThat(sliced, contains("qwerty", "baz"));
+            }
+
+            @Test
+            void returnsOriginalVectorReferenceIfPossible() {
+                Vector<String> original = Vector.wrap(new String[]{"foo", "bar", "baz"});
+                Vector<String> slice1 = original.takeRight(100);
+                Vector<String> slice2 = original.takeRight(3);
+                assertSame(original, slice1);
+                assertSame(original, slice2);
+            }
+
+            @Test
+            void equality() {
+                assertEquals(Vector.wrap(new Integer[]{4, 5, 6}),
+                        Vector.wrap(new Integer[]{1, 2, 3, 4, 5, 6}).takeRight(3));
+            }
+
+        }
+
+        @Nested
+        @DisplayName("List")
+        class ListTests {
+            @Test
+            void throwsOnNegativeCount() {
+                assertThrows(IllegalArgumentException.class, () -> Vector.wrap(singletonList(1)).takeRight(-1));
+            }
+
+            @Test
+            void takesAsMuchAsItCan() {
+                assertThat(Vector.wrap(asList(1, 2, 3)).takeRight(1_000_000),
+                        contains(1, 2, 3));
+            }
+
+            @Test
+            void onlyTakesWhatWasAskedFor() {
+                assertThat(Vector.wrap(asList(1, 2, 3)).takeRight(3),
+                        contains(1, 2, 3));
+                assertThat(Vector.wrap(asList(1, 2, 3)).takeRight(2),
+                        contains(2, 3));
+                assertThat(Vector.wrap(asList(1, 2, 3)).takeRight(1),
+                        contains(3));
+                assertThat(Vector.wrap(asList(1, 2, 3)).takeRight(0),
+                        emptyIterable());
+            }
+
+            @Test
+            void willNotMakeCopiesOfUnderlying() {
+                List<String> originalUnderlying = asList("foo", "bar", "baz");
+                Vector<String> original = Vector.wrap(originalUnderlying);
+                Vector<String> sliced = original.takeRight(2);
+                assertThat(sliced, contains("bar", "baz"));
+                originalUnderlying.set(1, "qwerty");
+                assertThat(sliced, contains("qwerty", "baz"));
+            }
+
+            @Test
+            void returnsOriginalVectorReferenceIfPossible() {
+                Vector<String> original = Vector.wrap(asList("foo", "bar", "baz"));
+                Vector<String> slice1 = original.takeRight(100);
+                Vector<String> slice2 = original.takeRight(3);
+                assertSame(original, slice1);
+                assertSame(original, slice2);
+            }
+
+            @Test
+            void equality() {
+                assertEquals(Vector.wrap(asList(1, 2, 3)),
+                        Vector.wrap(asList(1, 2, 3, 4, 5, 6)).take(3));
+            }
+
+        }
+
+    }
+
+    @Nested
     @DisplayName("drop")
     class DropTests {
 
@@ -1041,6 +1154,127 @@ class VectorTest {
         }
 
     }
+
+    @Nested
+    @DisplayName("dropRight")
+    class DropRightTests {
+
+        @Nested
+        @DisplayName("array")
+        class ArrayDropRightTests {
+
+            @Test
+            void throwsOnNegativeCount() {
+                assertThrows(IllegalArgumentException.class, () -> Vector.wrap(new Integer[]{1}).dropRight(-1));
+            }
+
+            @Test
+            void countZeroReturnsSameReference() {
+                Vector<Integer> source = Vector.wrap(new Integer[]{1, 2, 3});
+                Vector<Integer> sliced = source.dropRight(0);
+                assertSame(source, sliced);
+            }
+
+            @Test
+            void countEqualToSizeReturnsEmptyVector() {
+                assertEquals(Vector.empty(), Vector.wrap(new Integer[]{1, 2, 3}).dropRight(3));
+            }
+
+            @Test
+            void countExceedingSizeReturnsEmptyVector() {
+                assertEquals(Vector.empty(), Vector.wrap(new Integer[]{1, 2, 3}).dropRight(4));
+                assertEquals(Vector.empty(), Vector.wrap(new Integer[]{1, 2, 3}).dropRight(1_000_000));
+            }
+
+            @Test
+            void oneElement() {
+                Vector<Integer> source = Vector.wrap(new Integer[]{1, 2, 3});
+                assertThat(source.dropRight(1), contains(1, 2));
+            }
+
+            @Test
+            void twoElements() {
+                Vector<Integer> source = Vector.wrap(new Integer[]{1, 2, 3});
+                assertThat(source.dropRight(2), contains(1));
+            }
+
+            @Test
+            void willNotMakeCopiesOfUnderlying() {
+                String[] underlying = {"foo", "bar", "baz"};
+                Vector<String> source = Vector.wrap(underlying);
+                Vector<String> drop1 = source.dropRight(1);
+                assertThat(drop1, contains("foo", "bar"));
+                underlying[1] = "qwerty";
+                assertThat(drop1, contains("foo", "qwerty"));
+            }
+
+            @Test
+            void equality() {
+                assertEquals(Vector.wrap(new Integer[]{1, 2, 3}),
+                        Vector.wrap(new Integer[]{1, 2, 3, 4, 5, 6}).dropRight(3));
+            }
+
+        }
+
+        @Nested
+        @DisplayName("List")
+        class ListDropRightTests {
+
+            @Test
+            void throwsOnNegativeCount() {
+                assertThrows(IllegalArgumentException.class, () -> Vector.wrap(singletonList(1)).dropRight(-1));
+            }
+
+            @Test
+            void countZeroReturnsSameReference() {
+                Vector<Integer> source = Vector.wrap(asList(1, 2, 3));
+                Vector<Integer> sliced = source.dropRight(0);
+                assertSame(source, sliced);
+            }
+
+            @Test
+            void countEqualToSizeReturnsEmptyVector() {
+                assertEquals(Vector.empty(), Vector.wrap(asList(1, 2, 3)).dropRight(3));
+            }
+
+            @Test
+            void countExceedingSizeReturnsEmptyVector() {
+                assertEquals(Vector.empty(), Vector.wrap(asList(1, 2, 3)).dropRight(4));
+                assertEquals(Vector.empty(), Vector.wrap(asList(1, 2, 3)).dropRight(1_000_000));
+            }
+
+            @Test
+            void oneElement() {
+                Vector<Integer> source = Vector.wrap(asList(1, 2, 3));
+                assertThat(source.dropRight(1), contains(1, 2));
+            }
+
+            @Test
+            void twoElements() {
+                Vector<Integer> source = Vector.wrap(asList(1, 2, 3));
+                assertThat(source.dropRight(2), contains(1));
+            }
+
+            @Test
+            void willNotMakeCopiesOfUnderlying() {
+                List<String> underlying = asList("foo", "bar", "baz");
+                Vector<String> source = Vector.wrap(underlying);
+                Vector<String> drop1 = source.dropRight(1);
+                assertThat(drop1, contains("foo", "bar"));
+                underlying.set(1, "qwerty");
+                assertThat(drop1, contains("foo", "qwerty"));
+            }
+
+            @Test
+            void equality() {
+                assertEquals(Vector.wrap(asList(1, 2, 3)),
+                        Vector.wrap(asList(1, 2, 3, 4, 5, 6)).dropRight(3));
+            }
+
+        }
+
+    }
+
 
     @Nested
     @DisplayName("slice")

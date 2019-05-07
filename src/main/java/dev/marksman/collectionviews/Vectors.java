@@ -70,7 +70,7 @@ final class Vectors {
         if (count >= size) {
             return empty();
         } else {
-            return drop(size - count, source);
+            return take(size - count, source);
         }
     }
 
