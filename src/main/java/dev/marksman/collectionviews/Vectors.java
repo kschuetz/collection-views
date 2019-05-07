@@ -50,15 +50,31 @@ final class Vectors {
         return takeFromIterable(count, source);
     }
 
+    static <A> Vector<A> takeRight(int count, Vector<A> source) {
+        validateTake(count, source);
+        int size = source.size();
+        if (count >= size) {
+            return source;
+        } else {
+            return drop(size - count, source);
+        }
+    }
+
     static <A> Vector<A> drop(int count, Vector<A> source) {
         return dropImpl(VectorSlice::new, count, source);
     }
 
-    static <A> ImmutableVector<A> immutableDrop(int count, ImmutableVector<A> source) {
-        return dropImpl(ImmutableVectorSlice::new, count, source);
+    static <A> Vector<A> dropRight(int count, Vector<A> source) {
+        validateDrop(count, source);
+        int size = source.size();
+        if (count >= size) {
+            return empty();
+        } else {
+            return drop(size - count, source);
+        }
     }
 
-    private static <A, V extends Vector<A>> V dropImpl(Fn3<Integer, Integer, V, V> factory, int count, V source) {
+    static <A, V extends Vector<A>> V dropImpl(Fn3<Integer, Integer, V, V> factory, int count, V source) {
         validateDrop(count, source);
         if (count == 0) {
             return source;

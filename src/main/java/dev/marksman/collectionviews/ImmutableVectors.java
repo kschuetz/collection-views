@@ -19,9 +19,33 @@ import static dev.marksman.collectionviews.Vector.empty;
 
 class ImmutableVectors {
 
+    static <A> ImmutableVector<A> drop(int count, ImmutableVector<A> source) {
+        return Vectors.dropImpl(ImmutableVectorSlice::new, count, source);
+    }
+
+    static <A> ImmutableVector<A> dropRight(int count, ImmutableVector<A> source) {
+        validateDrop(count, source);
+        int size = source.size();
+        if (count >= size) {
+            return empty();
+        } else {
+            return drop(size - count, source);
+        }
+    }
+
     static <A> ImmutableVector<A> take(int count, ImmutableVector<A> source) {
         validateTake(count, source);
         return slice(0, count, source);
+    }
+
+    static <A> ImmutableVector<A> takeRight(int count, ImmutableVector<A> source) {
+        validateTake(count, source);
+        int size = source.size();
+        if (count >= size) {
+            return source;
+        } else {
+            return drop(size - count, source);
+        }
     }
 
     static <A> ImmutableVector<A> slice(int startIndex, int endIndexExclusive, ImmutableVector<A> source) {

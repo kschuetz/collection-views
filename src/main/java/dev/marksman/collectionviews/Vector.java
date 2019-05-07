@@ -82,6 +82,24 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
     }
 
     /**
+     * Returns a new {@code Vector} that drops all except the last {@code count} elements of this {@code Vector}.
+     * <p>
+     * Does not make copies of any underlying data structures.
+     * <p>
+     * Use caution when taking a small slice of a huge {@code Vector} that you no longer need.
+     * The smaller slice will hold onto a reference of the larger one, and will prevent it from being GC'ed.
+     *
+     * @param count the number of elements to drop from the end of this {@code Vector}.
+     *              Must be &gt;= 0.
+     *              May exceed size of this {@code Vector}, in which case, the result will be an
+     *              empty {@code Vector}.
+     * @return a {@code Vector<A>}
+     */
+    default Vector<A> dropRight(int count) {
+        return Vectors.dropRight(count, this);
+    }
+
+    /**
      * Maps a function over this {@code Vector}.
      * <p>
      * Returns a new {@link Vector} of the same size (but possibly a different type).
@@ -140,6 +158,13 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
         return VectorHelpers.vectorIterator(this);
     }
 
+    /**
+     * Creates a {@code Vector} with this {@code Vector}'s elements in reversed order.
+     * <p>
+     * Does not make copies of any underlying data structures.
+     *
+     * @return a {@code Vector<A>}
+     */
     default Vector<A> reverse() {
         return Vectors.reverse(this);
     }
@@ -195,6 +220,24 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
      */
     default Vector<A> take(int count) {
         return Vectors.take(count, this);
+    }
+
+    /**
+     * Returns a new {@code Vector} containing at most the last {@code count} elements of this {@code Vector}.
+     * <p>
+     * Does not make copies of any underlying data structures.
+     * <p>
+     * Use caution when taking a small slice of a huge {@link Vector} that you no longer need.
+     * The smaller slice will hold onto a reference of the larger one, and will prevent it from being GC'ed.
+     * To avoid this situation, use {@link Vector#copyFrom(int, Iterable)} instead.
+     *
+     * @param count the maximum number of elements to take from this {@code Vector}.
+     *              Must be &gt;= 0.
+     *              May exceed size of this {@code Vector}.
+     * @return a {@code Vector<A>}
+     */
+    default Vector<A> takeRight(int count) {
+        return Vectors.takeRight(count, this);
     }
 
     /**

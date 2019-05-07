@@ -66,6 +66,13 @@ public interface NonEmptyVector<A> extends NonEmptyIterable<A>, Vector<A> {
         return VectorHelpers.vectorIterator(this);
     }
 
+    /**
+     * Creates a {@code NonEmptyVector} with this {@code NonEmptyVector}'s elements in reversed order.
+     * <p>
+     * Does not make copies of any underlying data structures.
+     *
+     * @return a {@code NonEmptyVector<A>}
+     */
     @Override
     default NonEmptyVector<A> reverse() {
         return Vectors.nonEmptyReverse(this);

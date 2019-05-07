@@ -41,6 +41,13 @@ public interface ImmutableNonEmptyVector<A> extends NonEmptyVector<A>, Immutable
         return ImmutableVectors.mapNonEmpty(f, this);
     }
 
+    /**
+     * Creates an {@code ImmutableNonEmptyVector} with this {@code ImmutableNonEmptyVector}'s elements in reversed order.
+     * <p>
+     * Does not make copies of any underlying data structures.
+     *
+     * @return an {@code ImmutableNonEmptyVector<A>}
+     */
     @Override
     default ImmutableNonEmptyVector<A> reverse() {
         return ImmutableVectors.nonEmptyReverse(this);

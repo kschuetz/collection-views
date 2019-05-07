@@ -38,7 +38,25 @@ public interface ImmutableVector<A> extends Vector<A>, Immutable {
      */
     @Override
     default ImmutableVector<A> drop(int count) {
-        return Vectors.immutableDrop(count, this);
+        return ImmutableVectors.drop(count, this);
+    }
+
+    /**
+     * Returns a new {@code ImmutableVector} that drops all except the last {@code count} elements of this {@code ImmutableVector}.
+     * <p>
+     * Does not make copies of any underlying data structures.
+     * <p>
+     * Use caution when taking a small slice of a huge {@code Vector} that you no longer need.
+     * The smaller slice will hold onto a reference of the larger one, and will prevent it from being GC'ed.
+     *
+     * @param count the number of elements to drop from the end of this {@code ImmutableVector}.
+     *              Must be &gt;= 0.
+     *              May exceed size of this {@code ImmutableVector}, in which case, the result will be an
+     *              empty {@code ImmutableVector}.
+     * @return a {@code ImmutableVector<A>}
+     */
+    default ImmutableVector<A> dropRight(int count) {
+        return ImmutableVectors.dropRight(count, this);
     }
 
     /**
@@ -62,6 +80,13 @@ public interface ImmutableVector<A> extends Vector<A>, Immutable {
         return ImmutableVectors.map(f, this);
     }
 
+    /**
+     * Creates an {@code ImmutableVector} with this {@code ImmutableVector}'s elements in reversed order.
+     * <p>
+     * Does not make copies of any underlying data structures.
+     *
+     * @return an {@code ImmutableVector<A>}
+     */
     @Override
     default ImmutableVector<A> reverse() {
         return ImmutableVectors.reverse(this);
@@ -121,6 +146,24 @@ public interface ImmutableVector<A> extends Vector<A>, Immutable {
     @Override
     default ImmutableVector<A> take(int count) {
         return ImmutableVectors.take(count, this);
+    }
+
+    /**
+     * Returns a new {@code ImmutableVector} containing at most the last {@code count} elements of this {@code ImmutableVector}.
+     * <p>
+     * Does not make copies of any underlying data structures.
+     * <p>
+     * Use caution when taking a small slice of a huge {@link ImmutableVector} that you no longer need.
+     * The smaller slice will hold onto a reference of the larger one, and will prevent it from being GC'ed.
+     * To avoid this situation, use {@link Vector#copyFrom(int, Iterable)} instead.
+     *
+     * @param count the maximum number of elements to take from this {@code ImmutableVector}.
+     *              Must be &gt;= 0.
+     *              May exceed size of this {@code Vector}.
+     * @return an {@code ImmutableVector<A>}
+     */
+    default ImmutableVector<A> takeRight(int count) {
+        return ImmutableVectors.takeRight(count, this);
     }
 
     /**
