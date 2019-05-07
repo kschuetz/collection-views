@@ -243,4 +243,16 @@ final class Vectors {
         return () -> new IllegalArgumentException("Cannot construct NonEmptyVector from empty input");
     }
 
+    static <A> int findPrefixLength(Fn1<? super A, ? extends Boolean> predicate, Vector<A> vec) {
+        int result = 0;
+        for (A current : vec) {
+            if (predicate.apply(current)) {
+                result += 1;
+            } else {
+                break;
+            }
+        }
+        return result;
+    }
+
 }

@@ -55,8 +55,21 @@ public interface ImmutableVector<A> extends Vector<A>, Immutable {
      *              empty {@code ImmutableVector}.
      * @return a {@code ImmutableVector<A>}
      */
+    @Override
     default ImmutableVector<A> dropRight(int count) {
         return ImmutableVectors.dropRight(count, this);
+    }
+
+    /**
+     * Returns a new {@code ImmutableVector} that drops longest prefix of elements of this {@code ImmutableVector} that satisfy a predicate.
+     * <p>
+     * Does not make copies of any underlying data structures.
+     *
+     * @param predicate a predicate;  not null
+     * @return an {@code ImmutableVector<A>}
+     */
+    default ImmutableVector<A> dropWhile(Fn1<? super A, ? extends Boolean> predicate) {
+        return ImmutableVectors.dropWhile(predicate, this);
     }
 
     /**
@@ -162,8 +175,21 @@ public interface ImmutableVector<A> extends Vector<A>, Immutable {
      *              May exceed size of this {@code Vector}.
      * @return an {@code ImmutableVector<A>}
      */
+    @Override
     default ImmutableVector<A> takeRight(int count) {
         return ImmutableVectors.takeRight(count, this);
+    }
+
+    /**
+     * Returns a new {@code ImmutableVector} containing the longest prefix of elements this {@code ImmutableVector} that satisfy a predicate.
+     * <p>
+     * Does not make copies of any underlying data structures.
+     *
+     * @param predicate a predicate;  not null
+     * @return an {@code ImmutableVector<A>}
+     */
+    default ImmutableVector<A> takeWhile(Fn1<? super A, ? extends Boolean> predicate) {
+        return ImmutableVectors.takeWhile(predicate, this);
     }
 
     /**

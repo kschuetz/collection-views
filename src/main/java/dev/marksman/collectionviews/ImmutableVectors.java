@@ -33,6 +33,12 @@ class ImmutableVectors {
         }
     }
 
+    static <A> ImmutableVector<A> dropWhile(Fn1<? super A, ? extends Boolean> predicate, ImmutableVector<A> source) {
+        Objects.requireNonNull(predicate);
+        Objects.requireNonNull(source);
+        return drop(Vectors.findPrefixLength(predicate, source), source);
+    }
+
     static <A> ImmutableVector<A> take(int count, ImmutableVector<A> source) {
         validateTake(count, source);
         return slice(0, count, source);
@@ -46,6 +52,12 @@ class ImmutableVectors {
         } else {
             return drop(size - count, source);
         }
+    }
+
+    static <A> ImmutableVector<A> takeWhile(Fn1<? super A, ? extends Boolean> predicate, ImmutableVector<A> source) {
+        Objects.requireNonNull(predicate);
+        Objects.requireNonNull(source);
+        return take(Vectors.findPrefixLength(predicate, source), source);
     }
 
     static <A> ImmutableVector<A> slice(int startIndex, int endIndexExclusive, ImmutableVector<A> source) {
