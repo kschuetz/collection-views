@@ -4,7 +4,6 @@ import com.jnape.palatable.lambda.adt.hlist.Tuple2;
 import com.jnape.palatable.lambda.functions.Fn1;
 import com.jnape.palatable.lambda.functions.builtin.fn1.Id;
 import com.jnape.palatable.lambda.functions.builtin.fn2.Eq;
-import com.jnape.palatable.lambda.functions.builtin.fn2.Take;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -25,6 +24,7 @@ import static com.jnape.palatable.lambda.functions.builtin.fn1.Id.id;
 import static com.jnape.palatable.lambda.functions.builtin.fn1.Repeat.repeat;
 import static com.jnape.palatable.lambda.functions.builtin.fn2.Cons.cons;
 import static com.jnape.palatable.lambda.functions.builtin.fn2.Replicate.replicate;
+import static com.jnape.palatable.lambda.functions.builtin.fn2.Take.take;
 import static com.jnape.palatable.lambda.functions.builtin.fn3.FoldLeft.foldLeft;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
@@ -38,7 +38,7 @@ class ImmutableVectorTest {
 
     @Nested
     @DisplayName("empty")
-    class EmptyVectorTests {
+    class Empty {
 
         @Test
         void alwaysYieldsSameReference() {
@@ -107,11 +107,11 @@ class ImmutableVectorTest {
 
     @Nested
     @DisplayName("copyFrom")
-    class CopyFromTests {
+    class CopyFrom {
 
         @Nested
         @DisplayName("copyFrom array")
-        class CopyFromArrayTests {
+        class CopyFromArray {
 
             @Test
             void throwsOnNullArgument() {
@@ -181,7 +181,7 @@ class ImmutableVectorTest {
 
             @Nested
             @DisplayName("copyFrom size 3 array")
-            class CopyFromArray3Tests {
+            class CopyFromSize3Array {
                 private ImmutableVector<String> subject;
                 private String[] underlying;
 
@@ -294,7 +294,7 @@ class ImmutableVectorTest {
 
             @Nested
             @DisplayName("copyFrom size 1 array")
-            class CopyFromSingletonArrayTests {
+            class CopyFromSize1Array {
                 private ImmutableVector<String> subject;
 
                 @BeforeEach
@@ -317,7 +317,7 @@ class ImmutableVectorTest {
 
             @Nested
             @DisplayName("copyFrom empty array")
-            class CopyFromEmptyArrayTests {
+            class CopyFromEmptyArray {
                 private ImmutableVector<Integer> subject;
 
                 @BeforeEach
@@ -350,7 +350,7 @@ class ImmutableVectorTest {
 
         @Nested
         @DisplayName("copyFrom List")
-        class CopyFromListTests {
+        class CopyFromList {
 
             @Test
             void throwsOnNullArgument() {
@@ -420,7 +420,7 @@ class ImmutableVectorTest {
 
             @Nested
             @DisplayName("copyFrom size 3 List")
-            class CopyFromList3Tests {
+            class CopyFromSize3List {
                 private Vector<String> subject;
                 private List<String> underlying;
 
@@ -533,7 +533,7 @@ class ImmutableVectorTest {
 
             @Nested
             @DisplayName("copyFrom size 1 List")
-            class CopyFromSize1ListTests {
+            class CopyFromSize1List {
 
                 private ImmutableVector<String> subject;
 
@@ -556,7 +556,7 @@ class ImmutableVectorTest {
 
             @Nested
             @DisplayName("copyFrom empty List")
-            class CopyFromEmptyListTests {
+            class CopyFromEmptyList {
                 private ImmutableVector<Integer> subject;
 
                 @BeforeEach
@@ -600,7 +600,7 @@ class ImmutableVectorTest {
 
         @Nested
         @DisplayName("copyFrom Iterable")
-        class CopyFromIterableTests {
+        class CopyFromIterable {
 
             @Test
             void throwsOnNullArgument() {
@@ -668,7 +668,7 @@ class ImmutableVectorTest {
 
             @Nested
             @DisplayName("copyFrom size 3 Iterable")
-            class CopyFromSize3IterableTests {
+            class CopyFromSize3Iterable {
                 private ImmutableVector<String> subject;
                 private Iterable<String> underlying;
 
@@ -770,7 +770,7 @@ class ImmutableVectorTest {
 
             @Nested
             @DisplayName("copyFrom size 1 Iterable")
-            class CopyFromSize1IterableTests {
+            class CopyFromSize1Iterable {
 
                 private ImmutableVector<String> subject;
 
@@ -793,7 +793,7 @@ class ImmutableVectorTest {
 
             @Nested
             @DisplayName("copyFrom empty Iterable")
-            class CopyFromEmptyIterableTests {
+            class CopyFromEmptyIterable {
                 private Vector<Integer> subject;
 
                 @BeforeEach
@@ -838,7 +838,7 @@ class ImmutableVectorTest {
 
         @Nested
         @DisplayName("with maxCount")
-        class CopyFromMaxCountTests {
+        class CopyFromWithMaxCount {
 
             private Iterable<Integer> source;
 
@@ -884,7 +884,7 @@ class ImmutableVectorTest {
 
         @Nested
         @DisplayName("copySliceFrom")
-        class CopySliceFromTests {
+        class CopySliceFrom {
 
             private Iterable<Integer> finite;
             private Iterable<Integer> infinite;
@@ -892,7 +892,7 @@ class ImmutableVectorTest {
             @BeforeEach
             void setUp() {
                 infinite = cycle(asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9));
-                finite = Take.take(10, infinite);
+                finite = take(10, infinite);
             }
 
             @Test
@@ -960,7 +960,7 @@ class ImmutableVectorTest {
 
     @Nested
     @DisplayName("fill")
-    class FillTests {
+    class Fill {
 
         @Test
         void throwsOnNegativeCount() {
@@ -1025,7 +1025,7 @@ class ImmutableVectorTest {
 
         @Nested
         @DisplayName("fill size 3")
-        class FillSize3Tests {
+        class FillSize3 {
             private ImmutableVector<String> subject;
 
             @BeforeEach
@@ -1187,7 +1187,7 @@ class ImmutableVectorTest {
 
         @Nested
         @DisplayName("take")
-        class FillTakeTests {
+        class FillTake {
 
             private ImmutableVector<String> subject;
 
@@ -1225,7 +1225,7 @@ class ImmutableVectorTest {
 
         @Nested
         @DisplayName("drop")
-        class FillDropTests {
+        class FillDrop {
 
             private ImmutableVector<String> subject;
 
@@ -1258,7 +1258,7 @@ class ImmutableVectorTest {
 
         @Nested
         @DisplayName("slice")
-        class FillSliceTests {
+        class FillSlice {
 
             private ImmutableVector<String> subject;
 
@@ -1293,7 +1293,7 @@ class ImmutableVectorTest {
 
     @Nested
     @DisplayName("lazyFill")
-    class LazyFillTests {
+    class LazyFill {
 
         @Test
         void throwsOnNegativeCount() {
@@ -1358,7 +1358,7 @@ class ImmutableVectorTest {
 
         @Nested
         @DisplayName("lazyFill size 3")
-        class LazyFillSize3Tests {
+        class LazyFillSize3 {
             private ImmutableVector<Integer> subject;
 
             @BeforeEach
@@ -1507,7 +1507,7 @@ class ImmutableVectorTest {
 
         @Nested
         @DisplayName("take")
-        class LazyFillTakeTests {
+        class LazyFillTake {
 
             private ImmutableVector<Integer> subject;
 
@@ -1540,7 +1540,7 @@ class ImmutableVectorTest {
 
         @Nested
         @DisplayName("drop")
-        class LazyFillDropTests {
+        class LazyFillDrop {
 
             private ImmutableVector<Integer> subject;
 
@@ -1580,7 +1580,7 @@ class ImmutableVectorTest {
 
         @Nested
         @DisplayName("slice")
-        class LazyFillSliceTests {
+        class LazyFillSlice {
 
             private ImmutableVector<Integer> subject;
 
@@ -1620,7 +1620,7 @@ class ImmutableVectorTest {
 
     @Nested
     @DisplayName("fmap")
-    class FmapTests {
+    class Fmap {
 
         private ImmutableVector<Integer> subject;
         private Integer[] underlying;
@@ -1675,7 +1675,7 @@ class ImmutableVectorTest {
 
     @Nested
     @DisplayName("take")
-    class TakeTests {
+    class Take {
 
         @Test
         void throwsOnNegativeCount() {
@@ -1729,7 +1729,7 @@ class ImmutableVectorTest {
 
     @Nested
     @DisplayName("takeRight")
-    class TakeRightTests {
+    class TakeRight {
 
         @Test
         void throwsOnNegativeCount() {
@@ -1783,7 +1783,7 @@ class ImmutableVectorTest {
 
     @Nested
     @DisplayName("drop")
-    class DropTests {
+    class Drop {
 
         @Test
         void throwsOnNegativeCount() {
@@ -1840,7 +1840,7 @@ class ImmutableVectorTest {
 
     @Nested
     @DisplayName("dropRight")
-    class DropRightTests {
+    class DropRight {
 
         @Test
         void throwsOnNegativeCount() {
@@ -1897,7 +1897,7 @@ class ImmutableVectorTest {
 
     @Nested
     @DisplayName("slice")
-    class SliceTests {
+    class Slice {
 
         @Test
         void throwsOnNegativeStartIndex() {
@@ -1973,7 +1973,7 @@ class ImmutableVectorTest {
 
     @Nested
     @DisplayName("reverse")
-    class ReverseTests {
+    class Reverse {
 
         @Test
         void returnsEmptyVectorIfEmpty() {
@@ -2016,7 +2016,7 @@ class ImmutableVectorTest {
 
     @Nested
     @DisplayName("zipWithIndex")
-    class ZipWithIndexTests {
+    class ZipWithIndex {
 
         private ImmutableVector<String> subject;
 
@@ -2093,7 +2093,7 @@ class ImmutableVectorTest {
 
     @Nested
     @DisplayName("findByIndex")
-    class FindByIndexTests {
+    class FindByIndex {
 
         @Test
         void returnsFirstFound() {

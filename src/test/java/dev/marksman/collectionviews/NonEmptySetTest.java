@@ -17,11 +17,11 @@ class NonEmptySetTest {
 
     @Nested
     @DisplayName("'of' constructor")
-    class ConstructorTests {
+    class Constructor {
 
         @Nested
         @DisplayName("of size 3")
-        class OfSize3Tests {
+        class OfSize3 {
             private NonEmptySet<String> subject;
 
             @BeforeEach
@@ -61,7 +61,7 @@ class NonEmptySetTest {
 
         @Nested
         @DisplayName("of size 1")
-        class OfSize1Tests {
+        class OfSize1 {
             private NonEmptySet<String> subject;
 
             @BeforeEach
@@ -99,7 +99,7 @@ class NonEmptySetTest {
 
     @Nested
     @DisplayName("maybeWrap")
-    class MaybeWrapTests {
+    class MaybeWrap {
 
         @Test
         void javaUtilSetSuccess() {
@@ -118,8 +118,8 @@ class NonEmptySetTest {
     }
 
     @Nested
-    @DisplayName("maybeWrap")
-    class WrapOrThrowTests {
+    @DisplayName("wrapOrThrow")
+    class WrapOrThrow {
 
         @Test
         void javaUtilSetSuccess() {

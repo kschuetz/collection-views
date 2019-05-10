@@ -19,7 +19,7 @@ class ImmutableNonEmptyVectorTest {
 
     @Nested
     @DisplayName("fmap")
-    class FmapTests {
+    class Fmap {
 
         private ImmutableNonEmptyVector<Integer> subject;
         private Integer[] underlying;

@@ -29,7 +29,7 @@ class NonEmptyVectorTest {
 
         @Nested
         @DisplayName("array")
-        class MaybeWrapArrayTests {
+        class MaybeWrapArray {
 
             @Test
             void throwsOnNullArgument() {
@@ -54,7 +54,7 @@ class NonEmptyVectorTest {
 
         @Nested
         @DisplayName("List")
-        class MaybeWrapListTests {
+        class MaybeWrapList {
 
             @Test
             void throwsOnNullArgument() {
@@ -81,11 +81,11 @@ class NonEmptyVectorTest {
 
     @Nested
     @DisplayName("wrapOrThrow")
-    class WrapOrThrowTests {
+    class WrapOrThrow {
 
         @Nested
         @DisplayName("array")
-        class WrapOrThrowArrayTests {
+        class WrapOrThrowArray {
 
             @Test
             void throwsOnNullArgument() {
@@ -110,7 +110,7 @@ class NonEmptyVectorTest {
 
         @Nested
         @DisplayName("List")
-        class WrapOrThrowListTests {
+        class WrapOrThrowList {
 
             @Test
             void throwsOnNullArgument() {
@@ -136,11 +136,11 @@ class NonEmptyVectorTest {
 
     @Nested
     @DisplayName("maybeCopyFrom")
-    class MaybeCopyFromTests {
+    class MaybeCopyFrom {
 
         @Nested
         @DisplayName("array")
-        class MaybeCopyFromArrayTests {
+        class MaybeCopyFromArray {
 
             @Test
             void throwsOnNullArgument() {
@@ -171,7 +171,7 @@ class NonEmptyVectorTest {
 
         @Nested
         @DisplayName("Iterable")
-        class MaybeCopyFromIterableTests {
+        class MaybeCopyFromIterable {
 
             @Test
             void throwsOnNullArgument() {
@@ -212,11 +212,11 @@ class NonEmptyVectorTest {
 
     @Nested
     @DisplayName("copyFromOrThrow")
-    class CopyFromOrThrowTests {
+    class CopyFromOrThrow {
 
         @Nested
         @DisplayName("array")
-        class CopyFromOrThrowArrayTests {
+        class CopyFromOrThrowArray {
 
             @Test
             void throwsOnNullArgument() {
@@ -247,7 +247,7 @@ class NonEmptyVectorTest {
 
         @Nested
         @DisplayName("Iterable")
-        class CopyFromOrThrowIterableTests {
+        class CopyFromOrThrowIterable {
 
             @Test
             void throwsOnNullArgument() {
@@ -288,7 +288,7 @@ class NonEmptyVectorTest {
 
     @Nested
     @DisplayName("fmap")
-    class FmapTests {
+    class Fmap {
 
         @Test
         void wrappedArray() {

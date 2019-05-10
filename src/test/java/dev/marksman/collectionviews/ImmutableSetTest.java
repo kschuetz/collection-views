@@ -27,7 +27,7 @@ class ImmutableSetTest {
 
     @Nested
     @DisplayName("empty")
-    class EmptySetTests {
+    class Empty {
 
         @Test
         void alwaysYieldsSameReference() {
@@ -59,11 +59,11 @@ class ImmutableSetTest {
 
     @Nested
     @DisplayName("copyFrom")
-    class CopyFromTests {
+    class CopyFrom {
 
         @Nested
         @DisplayName("copyFrom array")
-        class CopyFromArrayTests {
+        class CopyFromArray {
 
             @Test
             void throwsOnNullArgument() {
@@ -187,7 +187,7 @@ class ImmutableSetTest {
 
             @Nested
             @DisplayName("copyFrom size 1 array")
-            class CopyFromSingletonArrayTests {
+            class CopyFromSize1Array {
                 private ImmutableSet<String> subject;
 
                 @BeforeEach
@@ -204,7 +204,7 @@ class ImmutableSetTest {
 
             @Nested
             @DisplayName("copyFrom empty array")
-            class WrapEmptyArrayTests {
+            class CopyFromEmptyArray {
                 private ImmutableSet<Integer> subject;
 
                 @BeforeEach
@@ -232,7 +232,7 @@ class ImmutableSetTest {
 
         @Nested
         @DisplayName("copyFrom List")
-        class CopyFromListTests {
+        class CopyFromList {
 
             @Test
             void throwsOnNullArgument() {
@@ -292,7 +292,7 @@ class ImmutableSetTest {
 
             @Nested
             @DisplayName("copyFrom size 3 List")
-            class CopyFromList3Tests {
+            class CopyFromSize3List {
                 private Set<String> subject;
                 private List<String> underlying;
 
@@ -356,7 +356,7 @@ class ImmutableSetTest {
 
             @Nested
             @DisplayName("copyFrom size 1 List")
-            class CopyFromSize1ListTests {
+            class CopyFromSize1List {
 
                 private ImmutableSet<String> subject;
 
@@ -373,8 +373,8 @@ class ImmutableSetTest {
             }
 
             @Nested
-            @DisplayName("wrap empty List")
-            class CopyFromEmptyListTests {
+            @DisplayName("copyFrom empty List")
+            class CopyFromEmptyList {
                 private ImmutableSet<Integer> subject;
 
                 @BeforeEach
@@ -413,7 +413,7 @@ class ImmutableSetTest {
 
         @Nested
         @DisplayName("copyFrom Iterable")
-        class CopyFromIterableTests {
+        class CopyFromIterable {
 
             @Test
             void throwsOnNullArgument() {
@@ -471,13 +471,12 @@ class ImmutableSetTest {
 
             @Nested
             @DisplayName("copyFrom size 3 Iterable")
-            class CopyFromSize3IterableTests {
+            class CopyFromSize3Iterable {
                 private ImmutableSet<String> subject;
-                private Iterable<String> underlying;
 
                 @BeforeEach
                 void setUp() {
-                    underlying = cons("foo", cons("bar", cons("baz", emptyList())));
+                    Iterable<String> underlying = cons("foo", cons("bar", cons("baz", emptyList())));
                     subject = Set.copyFrom(underlying);
                 }
 
@@ -524,7 +523,7 @@ class ImmutableSetTest {
 
             @Nested
             @DisplayName("copyFrom size 1 Iterable")
-            class CopyFromSize1IterableTests {
+            class CopyFromSize1Iterable {
 
                 private ImmutableSet<String> subject;
 
@@ -542,7 +541,7 @@ class ImmutableSetTest {
 
             @Nested
             @DisplayName("copyFrom empty Iterable")
-            class CopyFromEmptyIterableTests {
+            class CopyFromEmptyIterable {
                 private Set<Integer> subject;
 
                 @BeforeEach
@@ -577,50 +576,93 @@ class ImmutableSetTest {
                 }
 
             }
+
         }
 
         @Nested
         @DisplayName("with maxCount")
-        class CopyFromMaxCountTests {
+        class CopyFromWithMaxCount {
 
-            private Iterable<Integer> source;
+            @Nested
+            @DisplayName("array")
+            class CopyFromArrayWithMaxCount {
 
-            @BeforeEach
-            void setUp() {
-                source = cons(1, cons(2, cons(3, emptyList())));
+                private Integer[] source;
+
+                @BeforeEach
+                void setUp() {
+                    source = new Integer[]{1, 2, 3, 1, 2, 3, 4};
+                }
+
+                @Test
+                void takesAsMuchAsItCan() {
+                    assertThat(Set.copyFrom(1_000_000, source),
+                            containsInAnyOrder(1, 2, 3, 4));
+                }
+
+                @Test
+                void onlyTakesWhatWasAskedFor() {
+                    assertThat(Set.copyFrom(7, source),
+                            containsInAnyOrder(1, 2, 3, 4));
+                    assertThat(Set.copyFrom(6, source),
+                            containsInAnyOrder(1, 2, 3));
+                    assertThat(Set.copyFrom(2, source),
+                            containsInAnyOrder(1, 2));
+                    assertThat(Set.copyFrom(1, source),
+                            contains(1));
+                    assertThat(Set.copyFrom(0, source),
+                            emptyIterable());
+                }
+
             }
 
-            @Test
-            void takesAsMuchAsItCan() {
-                assertThat(Set.copyFrom(1_000_000, source),
-                        containsInAnyOrder(1, 2, 3));
-            }
+            @Nested
+            @DisplayName("Iterable")
+            class CopyFromIterableWithMaxCount {
 
-            @Test
-            void onlyTakesWhatWasAskedFor() {
-                assertThat(Set.copyFrom(3, source),
-                        containsInAnyOrder(1, 2, 3));
-                assertThat(Set.copyFrom(2, source),
-                        containsInAnyOrder(1, 2));
-                assertThat(Set.copyFrom(1, source),
-                        contains(1));
-                assertThat(Set.copyFrom(0, source),
-                        emptyIterable());
-            }
+                private Iterable<Integer> source;
 
-            @Test
-            void willNotEvaluateIterableUnlessNecessary() {
-                Iterable<String> poison = () -> {
-                    throw new AssertionError("Iterable was evaluated");
-                };
-                assertThat(Set.copyFrom(0, poison), emptyIterable());
-                assertThat(Set.copyFrom(1, cons("foo", poison)), contains("foo"));
-            }
+                @BeforeEach
+                void setUp() {
+                    source = cons(1, cons(2, cons(3, cons(1, cons(2, cons(3, cons(4,
+                            emptyList())))))));
+                }
 
-            @Test
-            void safeToUseOnInfiniteIterables() {
-                assertThat(Set.copyFrom(3, repeat("foo")),
-                        contains("foo"));
+                @Test
+                void takesAsMuchAsItCan() {
+                    assertThat(Set.copyFrom(1_000_000, source),
+                            containsInAnyOrder(1, 2, 3, 4));
+                }
+
+                @Test
+                void onlyTakesWhatWasAskedFor() {
+                    assertThat(Set.copyFrom(7, source),
+                            containsInAnyOrder(1, 2, 3, 4));
+                    assertThat(Set.copyFrom(6, source),
+                            containsInAnyOrder(1, 2, 3));
+                    assertThat(Set.copyFrom(2, source),
+                            containsInAnyOrder(1, 2));
+                    assertThat(Set.copyFrom(1, source),
+                            contains(1));
+                    assertThat(Set.copyFrom(0, source),
+                            emptyIterable());
+                }
+
+                @Test
+                void willNotEvaluateIterableUnlessNecessary() {
+                    Iterable<String> poison = () -> {
+                        throw new AssertionError("Iterable was evaluated");
+                    };
+                    assertThat(Set.copyFrom(0, poison), emptyIterable());
+                    assertThat(Set.copyFrom(1, cons("foo", poison)), contains("foo"));
+                }
+
+                @Test
+                void safeToUseOnInfiniteIterables() {
+                    assertThat(Set.copyFrom(3, repeat("foo")),
+                            contains("foo"));
+                }
+
             }
 
         }

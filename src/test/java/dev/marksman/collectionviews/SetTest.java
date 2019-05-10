@@ -22,7 +22,7 @@ class SetTest {
 
     @Nested
     @DisplayName("wrap")
-    class WrapTests {
+    class Wrap {
 
         @Test
         void iteratorNextReturnsCorrectElements() {
@@ -67,7 +67,7 @@ class SetTest {
 
         @Nested
         @DisplayName("wrap size 3 java.util.Set")
-        class WrapSize3Tests {
+        class WrapSize3JavaUtilSet {
             private java.util.Set<String> underlying;
             private Set<String> subject;
 
@@ -157,8 +157,8 @@ class SetTest {
         }
 
         @Nested
-        @DisplayName("wrap size 3 java.util.Set")
-        class WrapSize1Tests {
+        @DisplayName("wrap size 1 java.util.Set")
+        class WrapSize1JavaUtilSet {
             private java.util.Set<String> underlying;
             private Set<String> subject;
 
@@ -236,7 +236,7 @@ class SetTest {
 
         @Nested
         @DisplayName("wrap empty java.util.Set")
-        class WrapEmptySetTests {
+        class WrapEmptySet {
             private Set<String> subject;
 
             @BeforeEach
@@ -298,7 +298,7 @@ class SetTest {
 
     @Nested
     @DisplayName("equality")
-    class EqualityTests {
+    class Equality {
 
         @Test
         void setsWithSameElementsEqual() {

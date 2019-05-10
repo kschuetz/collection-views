@@ -12,7 +12,7 @@ class VectorHelpersTest {
 
     @Nested
     @DisplayName("vectorToString")
-    class VectorToStringTests {
+    class VectorToString {
 
         @Test
         void threeElements() {
