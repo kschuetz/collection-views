@@ -581,7 +581,7 @@ Since `Vector` and `Set` are interfaces, you can create your own custom implemen
   
 By design, no concrete classes in this library are exposed for direct instantiation or extension.  However, some useful methods have been made available in `VectorHelpers` and `SetHelpers` to which you can delegate to handle some of the administrivia (e.g., `equals`, `toString`) in your custom implementation.
 
-# Notes
+# <a name="notes">Notes</a>
 
 #### <a name="o1-note">O(1)</a>
 
