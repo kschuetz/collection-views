@@ -580,6 +580,18 @@ class ImmutableSetTest {
         }
 
         @Nested
+        @DisplayName("copyFrom ImmutableSet")
+        class CopyFromImmutableSet {
+
+            @Test
+            void returnsOriginal() {
+                ImmutableSet<Integer> original = Set.of(1, 2, 3);
+                assertSame(original, Set.copyFrom(original));
+            }
+
+        }
+
+        @Nested
         @DisplayName("with maxCount")
         class CopyFromWithMaxCount {
 
@@ -661,6 +673,30 @@ class ImmutableSetTest {
                 void safeToUseOnInfiniteIterables() {
                     assertThat(Set.copyFrom(3, repeat("foo")),
                             contains("foo"));
+                }
+
+            }
+
+            @Nested
+            @DisplayName("ImmutableSet")
+            class CopyFromImmutableSetWithMaxCount {
+
+                @Test
+                void returnsOriginalIfMaxCountEqualsSize() {
+                    ImmutableSet<Integer> original = Set.of(1, 2, 3);
+                    assertSame(original, Set.copyFrom(3, original));
+                }
+
+                @Test
+                void returnsOriginalIfMaxCountGreaterThanSize() {
+                    ImmutableSet<Integer> original = Set.of(1, 2, 3);
+                    assertSame(original, Set.copyFrom(4, original));
+                }
+
+                @Test
+                void correctSizeIfMaxCountLessThanSize() {
+                    ImmutableSet<Integer> original = Set.of(1, 2, 3);
+                    assertEquals(2, Set.copyFrom(2, original).size());
                 }
 
             }

@@ -9,7 +9,7 @@ final class Validation {
     }
 
     static void requirePositive(String paramName, int value) {
-        if (value < 0) {
+        if (value < 1) {
             throw new IllegalArgumentException(paramName + " must be >= 1");
         }
     }

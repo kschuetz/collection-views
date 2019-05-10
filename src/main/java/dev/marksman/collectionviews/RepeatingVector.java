@@ -14,6 +14,7 @@ final class RepeatingVector<A> extends ConcreteVector<A> implements ImmutableNon
     private final A value;
 
     RepeatingVector(int size, A value) {
+        assert (size >= 1);
         this.size = size;
         this.value = value;
     }
@@ -58,6 +59,7 @@ final class RepeatingVector<A> extends ConcreteVector<A> implements ImmutableNon
 
     @Override
     public <B> ImmutableNonEmptyVector<B> fmap(Fn1<? super A, ? extends B> f) {
+        Objects.requireNonNull(f);
         return new RepeatingVector<>(size, f.apply(value));
     }
 

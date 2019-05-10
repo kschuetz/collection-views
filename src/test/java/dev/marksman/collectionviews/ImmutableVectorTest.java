@@ -837,47 +837,118 @@ class ImmutableVectorTest {
         }
 
         @Nested
-        @DisplayName("with maxCount")
+        @DisplayName("copyFrom ImmutableVector")
+        class CopyFromImmutableVector {
+
+            @Test
+            void returnsOriginal() {
+                ImmutableVector<Integer> original = Vector.of(1, 2, 3);
+                assertSame(original, Vector.copyFrom(original));
+            }
+
+        }
+
+        @Nested
+        @DisplayName("copyFrom with maxCount")
         class CopyFromWithMaxCount {
 
-            private Iterable<Integer> source;
+            @Nested
+            @DisplayName("array")
+            class CopyFromArrayWithMaxCount {
+                private Integer[] source;
 
-            @BeforeEach
-            void setUp() {
-                source = cons(1, cons(2, cons(3, emptyList())));
+                @BeforeEach
+                void setUp() {
+                    source = new Integer[]{1, 2, 3};
+                }
+
+                @Test
+                void takesAsMuchAsItCan() {
+                    assertThat(Vector.copyFrom(1_000_000, source),
+                            contains(1, 2, 3));
+                }
+
+                @Test
+                void onlyTakesWhatWasAskedFor() {
+                    assertThat(Vector.copyFrom(3, source),
+                            contains(1, 2, 3));
+                    assertThat(Vector.copyFrom(2, source),
+                            contains(1, 2));
+                    assertThat(Vector.copyFrom(1, source),
+                            contains(1));
+                    assertThat(Vector.copyFrom(0, source),
+                            emptyIterable());
+                }
+
             }
 
-            @Test
-            void takesAsMuchAsItCan() {
-                assertThat(Vector.copyFrom(1_000_000, source),
-                        contains(1, 2, 3));
+            @Nested
+            @DisplayName("Iterable")
+            class CopyFromIterableWithMaxCount {
+                private Iterable<Integer> source;
+
+                @BeforeEach
+                void setUp() {
+                    source = cons(1, cons(2, cons(3, emptyList())));
+                }
+
+                @Test
+                void takesAsMuchAsItCan() {
+                    assertThat(Vector.copyFrom(1_000_000, source),
+                            contains(1, 2, 3));
+                }
+
+                @Test
+                void onlyTakesWhatWasAskedFor() {
+                    assertThat(Vector.copyFrom(3, source),
+                            contains(1, 2, 3));
+                    assertThat(Vector.copyFrom(2, source),
+                            contains(1, 2));
+                    assertThat(Vector.copyFrom(1, source),
+                            contains(1));
+                    assertThat(Vector.copyFrom(0, source),
+                            emptyIterable());
+                }
+
+                @Test
+                void willNotEvaluateIterableUnlessNecessary() {
+                    Iterable<String> poison = () -> {
+                        throw new AssertionError("Iterable was evaluated");
+                    };
+                    assertThat(Vector.copyFrom(0, poison), emptyIterable());
+                    assertThat(Vector.copyFrom(1, cons("foo", poison)), contains("foo"));
+                }
+
+                @Test
+                void safeToUseOnInfiniteIterables() {
+                    assertThat(Vector.copyFrom(3, repeat("foo")),
+                            contains("foo", "foo", "foo"));
+                }
+
             }
 
-            @Test
-            void onlyTakesWhatWasAskedFor() {
-                assertThat(Vector.copyFrom(3, source),
-                        contains(1, 2, 3));
-                assertThat(Vector.copyFrom(2, source),
-                        contains(1, 2));
-                assertThat(Vector.copyFrom(1, source),
-                        contains(1));
-                assertThat(Vector.copyFrom(0, source),
-                        emptyIterable());
-            }
+            @Nested
+            @DisplayName("ImmutableVector")
+            class CopyFromImmutableVectorWithMaxCount {
 
-            @Test
-            void willNotEvaluateIterableUnlessNecessary() {
-                Iterable<String> poison = () -> {
-                    throw new AssertionError("Iterable was evaluated");
-                };
-                assertThat(Vector.copyFrom(0, poison), emptyIterable());
-                assertThat(Vector.copyFrom(1, cons("foo", poison)), contains("foo"));
-            }
+                @Test
+                void returnsOriginalIfMaxCountEqualsSize() {
+                    ImmutableVector<Integer> original = Vector.of(1, 2, 3);
+                    assertSame(original, Vector.copyFrom(3, original));
+                }
 
-            @Test
-            void safeToUseOnInfiniteIterables() {
-                assertThat(Vector.copyFrom(3, repeat("foo")),
-                        contains("foo", "foo", "foo"));
+                @Test
+                void returnsOriginalIfMaxCountGreaterThanSize() {
+                    ImmutableVector<Integer> original = Vector.of(1, 2, 3);
+                    assertSame(original, Vector.copyFrom(4, original));
+                }
+
+                @Test
+                void correctIfMaxCountLessThanSize() {
+                    ImmutableVector<Integer> original = Vector.of(1, 2, 3);
+                    assertThat(Vector.copyFrom(2, original), contains(1, 2));
+                }
+
             }
 
         }
@@ -1285,6 +1356,54 @@ class ImmutableVectorTest {
             @Test
             void sliceLong() {
                 assertEquals(Vector.of("foo", "foo"), subject.slice(1, 10));
+            }
+
+        }
+
+        @Nested
+        @DisplayName("fmap")
+        class Fmap {
+
+            private ImmutableVector<Integer> subject;
+
+            @BeforeEach
+            void beforeEach() {
+                subject = Vector.fill(3, 100);
+            }
+
+            @Test
+            void throwsOnNullFunction() {
+                assertThrows(NullPointerException.class, () -> subject.fmap(null));
+            }
+
+            @Test
+            void fmap() {
+                assertThat(subject.fmap(n -> n * 2), contains(200, 200, 200));
+            }
+
+            @Test
+            void functorIdentity() {
+                assertEquals(subject, subject.fmap(id()));
+            }
+
+            @Test
+            void functorComposition() {
+                Fn1<Integer, Integer> f = n -> n * 2;
+                Fn1<Integer, String> g = Object::toString;
+                assertEquals(subject.fmap(f).fmap(g), subject.fmap(f.andThen(g)));
+            }
+
+            @Test
+            void stackSafe() {
+                ImmutableVector<Integer> mapped = foldLeft((acc, __) -> acc.fmap(n -> n + 1),
+                        subject, replicate(10_000, UNIT));
+                assertThat(mapped, contains(10_100, 10_100, 10_100));
+            }
+
+            @Test
+            void reverseIteratesCorrectly() {
+                assertThat(subject.fmap(Object::toString).reverse(),
+                        contains("100", "100", "100"));
             }
 
         }

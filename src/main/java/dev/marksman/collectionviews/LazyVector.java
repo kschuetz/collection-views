@@ -10,6 +10,7 @@ final class LazyVector<A> extends ConcreteVector<A> implements ImmutableNonEmpty
     private final Fn1<Integer, A> valueSupplier;
 
     LazyVector(int size, int offset, Fn1<Integer, A> valueSupplier) {
+        assert (size >= 1);
         this.size = size;
         this.offset = offset;
         this.valueSupplier = valueSupplier;

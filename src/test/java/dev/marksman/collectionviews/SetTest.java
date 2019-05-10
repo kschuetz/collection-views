@@ -9,6 +9,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+import static com.jnape.palatable.lambda.adt.Maybe.just;
+import static com.jnape.palatable.lambda.adt.Maybe.nothing;
 import static com.jnape.palatable.lambda.functions.builtin.fn2.ToCollection.toCollection;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptySet;
@@ -154,17 +156,36 @@ class SetTest {
                 assertNotEquals(superset, subject);
             }
 
+            @Test
+            void toNonEmptySucceeds() {
+                assertEquals(just(Set.of("foo", "bar", "baz")),
+                        subject.toNonEmpty());
+            }
+
+            @Test
+            void toNonEmptyOrThrowSucceeds() {
+                assertEquals(Set.of("foo", "bar", "baz"),
+                        subject.toNonEmptyOrThrow());
+            }
+
+            @Test
+            void toImmutableIsUnaffectedByMutation() {
+                ImmutableSet<String> immutable = subject.toImmutable();
+                underlying.add("qwerty");
+                assertThat(subject, containsInAnyOrder("qwerty", "foo", "bar", "baz"));
+                assertThat(immutable, containsInAnyOrder("foo", "bar", "baz"));
+            }
+
         }
 
         @Nested
         @DisplayName("wrap size 1 java.util.Set")
         class WrapSize1JavaUtilSet {
-            private java.util.Set<String> underlying;
             private Set<String> subject;
 
             @BeforeEach
             void beforeEach() {
-                underlying = singleton("foo");
+                java.util.Set<String> underlying = singleton("foo");
                 subject = Set.wrap(underlying);
             }
 
@@ -290,6 +311,16 @@ class SetTest {
                 Set<String> superset = Set.of("foo");
                 assertNotEquals(subject, superset);
                 assertNotEquals(superset, subject);
+            }
+
+            @Test
+            void toNonEmptyFails() {
+                assertEquals(nothing(), subject.toNonEmpty());
+            }
+
+            @Test
+            void toNonEmptyOrThrowThrows() {
+                assertThrows(IllegalArgumentException.class, () -> subject.toNonEmptyOrThrow());
             }
 
         }
