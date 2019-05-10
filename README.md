@@ -22,15 +22,16 @@ This library has not yet been released.
    - [`ImmutableNonEmptySet<A>`](#immutable-non-empty-set)
  - [Examples](#examples)
    - [`Vector`](#vector-examples)
-   - [`Set`](#vector-examples)
+   - [`Set`](#set-examples)
  - [Non-goals and trade-offs](#non-goals-and-trade-offs)
  - [Custom views](#custom-views)
+ - [Notes](#notes)
  - [License](#license)   
        
 
 # <a name="what-is-it">What is it?</a>
 
-**collection-views** is a small Java library that facilitates creating protected views over collections and arrays with as little overhead as possible.  It provides the interfaces `Vector<A>` and `Set<A>`, and some variations of these that provide additional guarantees. 
+*collection-views* is a small Java library that facilitates creating protected views over collections and arrays with as little overhead as possible.  It provides the interfaces `Vector<A>` and `Set<A>`, and some variations of these that provide additional guarantees. 
 
 It is intended to be used in conjunction with [lambda](https://palatable.github.io/lambda/).
 
@@ -38,7 +39,7 @@ For more details, check out the [javadoc](https://kschuetz.github.io/collection-
 
 # <a name="what-is-it-not">What is it not?</a>
 
-**collection-views** is not a persistent data structures library.  Collections are wrapped as is;  no methods are provided for updating or adding to collections.  
+*collection-views* is not a persistent data structures library.  Collections are wrapped as is;  no methods are provided for updating or adding to collections.  
 
 It differs from [Guava Immutable Collections](https://github.com/google/guava/wiki/ImmutableCollectionsExplained) in that it acts as a shield over existing collections rather than being collections themselves.
 
@@ -46,35 +47,31 @@ It differs from [Guava Immutable Collections](https://github.com/google/guava/wi
 
 Sometimes you might want all of the following:
 
-- To provide (or require) read-access to the essential operations of a collection (e.g., 'get by index' for arrays or lists, or 'contains' for sets), and _nothing more_.
+- To provide (or require) read-access to the essential operations of a collection (e.g., 'get by index' for arrays or lists, or 'contains' for sets).
 - Protection from mutation to the collection without making defensive copies.
 - To retain the performance and locality of reference characteristics of the collection you are employing.
 
-The goal of **collection-views** is to provide this functionality with as little overhead as possible.
+The goal of *collection-views* is to provide this functionality with as little overhead as possible.
 
-## What value does it provide?
+#### Why not just use `Collections.unmodifiableXXX` or Guava?
 
-**collection-views** is designed to be used with [lambda](https://palatable.github.io/lambda/).
-If you are not currently using lambda (I recommend you do!), this library may not provide much value.
+While *collection-views* has essentially the same purpose as `Collections.unmodifiableXXX` or Guava, here are a few reasons *collection-views* is different.
 
-### Why not just use `Collections.unmodifiableXXX` or Guava?
+- *collection-views* is designed to be used with [lambda](https://palatable.github.io/lambda/).  It takes advantage of *lambda*'s types (such as `Maybe`), and should be comfortable to those already using *lambda*.  
 
-`Vector` and `Set`, when wrapped around an existing collection, do essentially the same thing as `UnmodifiableArrayList` and `UnmodifiableSet` in the Java Collections library.   However, **collection-views** gives you the ability to opt in to making a copy, giving stronger guarantees of immutability.
+- *collection-views* gives you control over when to make copies. `Collections.unmodifiableXXX` will never make a copy, so you don't have a strong guarantee of immutability.  Guava, on the other hand, always initially makes a copy, and that may not be always what you want.  
 
-Guava always initially makes a copy, and that may not be what you want.
+- *collection-views* provides the following features currently not available in either:
+    - `NonEmpty` types
+    - Transformations such as `fmap`, `take`, `drop`, `slice`
 
-**collection-views** also provides the following features currently not available in either:
+#### Why not just use Lambda's `map`, `take`, `drop`, etc?
 
-- `NonEmpty` types
-- Transformations such as `fmap`, `take`, `drop`
-
-### Why not just use Lambda's `map`, `take`, `drop`, etc?
-
-While these functions are useful and will work perfectly well on a collection view, they currently operate on `Iterable`s and return `Iterable`s as a result.  **collection-views** provides equivalents that will yield a more specific type at compile time.  For example, `ImmutableNonEmptyVector.fmap` will always yield an `ImmutableNonEmptyVector`, and `ImmutableVector.take` will always yield an `ImmutableVector`.
+While these functions are useful and will work perfectly well on a collection view, they currently operate on `Iterable`s and return `Iterable`s as a result.  *collection-views* provides equivalents that will yield a more specific type at compile-time.  For example, `ImmutableNonEmptyVector.fmap` will always yield an `ImmutableNonEmptyVector`, and `ImmutableVector.take` will always yield an `ImmutableVector`.
 
 # <a name="design-principles">Design principles</a>
 
-The design of **collection-views** is guided by the following principles and goals:
+The design of *collection-views* is guided by the following principles and goals:
 
 ## Only the essentials
 
@@ -98,11 +95,11 @@ In contrast, if a `Vector` is to be constructed from an `Iterable` that is not k
 
 If you simply prefer to work with `Vector`s or `Set`s and not think about non-emptiness or immutability, you should be able to do so.  For example, since `NonEmptyVector<A>`, `ImmutableVector<A>`, and `ImmutableNonEmptyVector<A>` are all subtypes of `Vector<A>`, you can use them anywhere a `Vector<A>` is called for.
 
-## Provide transformations, but only if they don't violate other principles
+## Provide transformations if they don't violate other principles
 
-Although methods for updating and adding to collections are not available, some transformations  can be performed without violating other design principles (e.g. don't make copies).  Those that can be done so with low overhead should be provided.
+Although updating and adding to collections is not supported, some transformations can be performed without violating other design principles (e.g. don't make copies).  Those that can be done so with low overhead should be provided.
 
-Examples include `fmap`, `take`, `drop`, and `slice` on `Vector`s.  Each of these transforms a view of a collection without making copies, or violating any guarantees.
+Examples include `fmap`, `take`, `drop`, `slice`, and `reverse` on `Vector`s.  Each of these transforms a view of a collection without making copies, or violating any guarantees.
 
 The views yielded by these transformation are new, independent views, and do not affect the original. 
 
@@ -125,10 +122,10 @@ For convenience, collection views should be easy to create on the fly without th
 
 ## <a name="vector">`Vector<A>`</a>
 
-A `Vector` is a finite, ordered view of a collection.  The bearer of a `Vector` has the following capabilities:
+A `Vector` is a finite, ordered view of a collection, with O(1)[*](#o1-note) random access to its elements.  The bearer of a `Vector` has the following capabilities:
 
 - Random access to any element in the `Vector` using the `get` method.
-- Get the size of the `Vector` in O(1) using the `size` method.
+- Get the size of the `Vector` in O(1)[*](#o1-note) using the `size` method.
 - Safely iterate the `Vector` or use it anywhere an `Iterable` is called for.  A `Vector` is always finite.
 - Share the `Vector` with others safely.
 - Make slices of the `Vector` using the `take`, `drop` or `slice` methods.  These slices are `Vector`s themselves, and can also be shared with others safely.
@@ -230,6 +227,23 @@ An `ImmutableVector<A>` is a `Vector<A>` with the additional guarantee that it i
 ## <a name="immutable-non-empty-vector">`ImmutableNonEmptyVector<A>`</a>
 
 An `ImmutableNonEmptyVector<A>` is a `Vector<A>` that also has all the guarantees of `NonEmptyVector<A>` and `ImmutableVector<A>`.  An `ImmutableNonEmptyVector<A>` can be used anywhere a `Vector<A>` is called for. 
+
+## Transformations available on `Vectors`
+
+The following transformations are available on all `Vector`s.  All return a new `Vector` with as specific a type as possible, and don't make copies of the underlying collection:
+
+- `fmap`
+- `reverse`
+- `take`
+- `drop`
+- `slice`
+- `takeRight`
+- `dropRight`
+
+The following transformations are also possible on `ImmutableVector`s: 
+
+- `takeWhile`
+- `dropWhile`
 
 ## <a name="set">`Set<A>`</a>
 
@@ -540,7 +554,7 @@ Even something as simple as adding an element to the end of a `Vector` is not su
 
 ## Protection from `null`s
 
-**collection-views** does not offer full `null` protection like [Guava Immutable Collections](https://github.com/google/guava/wiki/ImmutableCollectionsExplained), which doesn't allow construction of a collection that contains any `null`s.
+*collection-views* does not offer full `null` protection like [Guava Immutable Collections](https://github.com/google/guava/wiki/ImmutableCollectionsExplained), which doesn't allow construction of a collection that contains any `null`s.
 
 Though not recommended, you are able to construct `Vector`s and `Set`s that contain `null` elements.  
 
@@ -550,7 +564,7 @@ To prevent construction of, say, a `Vector` that contains no `null`s would requi
 
 ## `java.util.Collection`
 
-It is non-goal to make **collection-views** compatible with `java.util.Collection`.  If you need to convert to a `java.util.Collection`, you can easily accomplish this with [lambda](https://palatable.github.io/lambda/)'s `toCollection` function. 
+It is non-goal to make *collection-views* compatible with `java.util.Collection`.  If you need to convert to a `java.util.Collection`, you can easily accomplish this with [lambda](https://palatable.github.io/lambda/)'s `toCollection` function. 
 
 # <a name="custom-views">Custom views</a>
 
@@ -558,9 +572,15 @@ Since `Vector` and `Set` are interfaces, you can create your own custom implemen
   
 By design, no concrete classes in this library are exposed for direct instantiation or extension.  However, some useful methods have been made available in `VectorHelpers` and `SetHelpers` to which you can delegate to handle some of the administrivia (e.g., `equals`, `toString`) in your custom implementation.
 
+# Notes
+
+#### <a name="o1-note">O(1)</a>
+
+Throughout this library, the claim of O(1) means that the number of elements in a collection has no bearing on performance.  However, the number of transformations applied to a view (such as mapping and slicing), will.  Technically, the complexity is O(k) where *k* is the number of transformations applied.  
+
 # <a name="license">License</a>
 
-**collection-views** is distributed under [The MIT License](http://choosealicense.com/licenses/mit/).
+*collection-views* is distributed under [The MIT License](http://choosealicense.com/licenses/mit/).
 
 The MIT License (MIT)
 
