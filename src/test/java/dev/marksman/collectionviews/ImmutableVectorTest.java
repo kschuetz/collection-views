@@ -280,6 +280,16 @@ class ImmutableVectorTest {
                     assertEquals(nothing(), subject.find(Eq.eq("not in list")));
                 }
 
+                @Test
+                void findIndexPositive() {
+                    assertEquals(just(1), subject.findIndex(Eq.eq("bar")));
+                }
+
+                @Test
+                void findIndexNegative() {
+                    assertEquals(nothing(), subject.findIndex(Eq.eq("not in list")));
+                }
+
             }
 
             @Nested
@@ -509,6 +519,16 @@ class ImmutableVectorTest {
                     assertEquals(nothing(), subject.find(Eq.eq("not in list")));
                 }
 
+                @Test
+                void findIndexPositive() {
+                    assertEquals(just(1), subject.findIndex(Eq.eq("bar")));
+                }
+
+                @Test
+                void findIndexNegative() {
+                    assertEquals(nothing(), subject.findIndex(Eq.eq("not in list")));
+                }
+
             }
 
             @Nested
@@ -535,7 +555,7 @@ class ImmutableVectorTest {
             }
 
             @Nested
-            @DisplayName("wrap empty List")
+            @DisplayName("copyFrom empty List")
             class CopyFromEmptyListTests {
                 private ImmutableVector<Integer> subject;
 
@@ -736,6 +756,16 @@ class ImmutableVectorTest {
                     assertEquals(nothing(), subject.find(Eq.eq("not in list")));
                 }
 
+                @Test
+                void findIndexPositive() {
+                    assertEquals(just(1), subject.findIndex(Eq.eq("bar")));
+                }
+
+                @Test
+                void findIndexNegative() {
+                    assertEquals(nothing(), subject.findIndex(Eq.eq("not in list")));
+                }
+
             }
 
             @Nested
@@ -797,13 +827,13 @@ class ImmutableVectorTest {
                     assertEquals(nothing(), subject.toNonEmpty());
                 }
 
-
                 @Test
                 void toNonEmptyOrThrowThrows() {
                     assertThrows(IllegalArgumentException.class, () -> subject.toNonEmptyOrThrow());
                 }
 
             }
+
         }
 
         @Nested
@@ -911,6 +941,18 @@ class ImmutableVectorTest {
             void findNegative() {
                 assertEquals(nothing(), Vector.copySliceFrom(100, 103, infinite)
                         .find(n -> n >= 5));
+            }
+
+            @Test
+            void findIndexPositive() {
+                assertEquals(just(1), Vector.copySliceFrom(100, 103, infinite)
+                        .findIndex(n -> n >= 1));
+            }
+
+            @Test
+            void findIndexNegative() {
+                assertEquals(nothing(), Vector.copySliceFrom(100, 103, infinite)
+                        .findIndex(n -> n >= 5));
             }
 
         }
@@ -1129,6 +1171,16 @@ class ImmutableVectorTest {
             @Test
             void findNegative() {
                 assertEquals(nothing(), subject.find(Eq.eq("not in list")));
+            }
+
+            @Test
+            void findIndexPositive() {
+                assertEquals(just(0), subject.findIndex(Eq.eq("foo")));
+            }
+
+            @Test
+            void findIndexNegative() {
+                assertEquals(nothing(), subject.findIndex(Eq.eq("not in list")));
             }
 
         }
@@ -1439,6 +1491,16 @@ class ImmutableVectorTest {
             @Test
             void findNegative() {
                 assertEquals(nothing(), subject.find(n -> n > 100));
+            }
+
+            @Test
+            void findIndexPositive() {
+                assertEquals(just(2), subject.findIndex(n -> n >= 20));
+            }
+
+            @Test
+            void findIndexNegative() {
+                assertEquals(nothing(), subject.findIndex(n -> n > 100));
             }
 
         }
@@ -2012,15 +2074,6 @@ class ImmutableVectorTest {
         }
 
         @Test
-        void willNotMakeCopiesOfUnderlying() {
-            List<String> underlying = asList("foo", "bar", "baz");
-            Vector<String> original = Vector.wrap(underlying);
-            Vector<Tuple2<String, Integer>> subject = original.zipWithIndex();
-            underlying.set(1, "qwerty");
-            assertThat(subject, contains(tuple("foo", 0), tuple("qwerty", 1), tuple("baz", 2)));
-        }
-
-        @Test
         void notAffectedByMutation() {
             List<String> underlying = asList("foo", "bar", "baz");
             ImmutableVector<String> original = Vector.copyFrom(underlying);
@@ -2032,8 +2085,27 @@ class ImmutableVectorTest {
 
         @Test
         void equality() {
-            assertEquals(Vector.wrap(asList(1, 2, 3)).zipWithIndex(),
-                    Vector.wrap(new Integer[]{1, 2, 3}).zipWithIndex());
+            assertEquals(Vector.copyFrom(asList(1, 2, 3)).zipWithIndex(),
+                    Vector.copyFrom(new Integer[]{1, 2, 3}).zipWithIndex());
+        }
+
+    }
+
+    @Nested
+    @DisplayName("findByIndex")
+    class FindByIndexTests {
+
+        @Test
+        void returnsFirstFound() {
+            assertEquals(just(1), Vector.copyFrom(new String[]{"foo", "bar", "baz", "bar", "foo"})
+                    .findIndex(Eq.eq("bar")));
+        }
+
+        @Test
+        void correctWhenReversed() {
+            assertEquals(just(2), Vector.copyFrom(new String[]{"foo", "bar", "baz"})
+                    .reverse()
+                    .findIndex(Eq.eq("foo")));
         }
 
     }

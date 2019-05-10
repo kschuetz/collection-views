@@ -97,6 +97,11 @@ class VectorTest {
             }
 
             @Test
+            void findIndexReturnsNothing() {
+                assertEquals(nothing(), Vector.wrap(new Integer[]{}).findIndex(constantly(true)));
+            }
+
+            @Test
             void equalToItself() {
                 assertEquals(Vector.wrap(new Integer[]{}), Vector.wrap(new Integer[]{}));
             }
@@ -163,6 +168,11 @@ class VectorTest {
             @Test
             void findReturnsNothing() {
                 assertEquals(nothing(), Vector.wrap(emptyList()).find(constantly(true)));
+            }
+
+            @Test
+            void findIndexReturnsNothing() {
+                assertEquals(nothing(), Vector.wrap(emptyList()).findIndex(constantly(true)));
             }
 
             @Test
@@ -397,6 +407,16 @@ class VectorTest {
                 @Test
                 void findNegative() {
                     assertEquals(nothing(), subject.find(Eq.eq("not in list")));
+                }
+
+                @Test
+                void findIndexPositive() {
+                    assertEquals(just(1), subject.findIndex(Eq.eq("bar")));
+                }
+
+                @Test
+                void findIndexNegative() {
+                    assertEquals(nothing(), subject.findIndex(Eq.eq("not in list")));
                 }
 
             }
@@ -684,6 +704,16 @@ class VectorTest {
                     assertEquals(nothing(), subject.find(Eq.eq("not in list")));
                 }
 
+                @Test
+                void findIndexPositive() {
+                    assertEquals(just(1), subject.findIndex(Eq.eq("bar")));
+                }
+
+                @Test
+                void findIndexNegative() {
+                    assertEquals(nothing(), subject.findIndex(Eq.eq("not in list")));
+                }
+
             }
 
             @Nested
@@ -952,6 +982,18 @@ class VectorTest {
                         .find(Eq.eq("baz")));
             }
 
+            @Test
+            void findIndexPositive() {
+                assertEquals(just(1), Vector.wrap(new String[]{"foo", "bar", "baz"}).take(2)
+                        .findIndex(Eq.eq("bar")));
+            }
+
+            @Test
+            void findIndexNegative() {
+                assertEquals(nothing(), Vector.wrap(new String[]{"foo", "bar", "baz"}).take(2)
+                        .findIndex(Eq.eq("baz")));
+            }
+
         }
 
         @Nested
@@ -1015,6 +1057,18 @@ class VectorTest {
             void findNegative() {
                 assertEquals(nothing(), Vector.wrap(asList("foo", "bar", "baz")).take(2)
                         .find(Eq.eq("baz")));
+            }
+
+            @Test
+            void findIndexPositive() {
+                assertEquals(just(1), Vector.wrap(asList("foo", "bar", "baz")).take(2)
+                        .findIndex(Eq.eq("bar")));
+            }
+
+            @Test
+            void findIndexNegative() {
+                assertEquals(nothing(), Vector.wrap(asList("foo", "bar", "baz")).take(2)
+                        .findIndex(Eq.eq("baz")));
             }
 
         }
@@ -1205,6 +1259,18 @@ class VectorTest {
                         .find(Eq.eq("foo")));
             }
 
+            @Test
+            void findIndexPositive() {
+                assertEquals(just(0), Vector.wrap(new String[]{"foo", "bar", "baz"}).drop(1)
+                        .findIndex(Eq.eq("bar")));
+            }
+
+            @Test
+            void findIndexNegative() {
+                assertEquals(nothing(), Vector.wrap(new String[]{"foo", "bar", "baz"}).drop(1)
+                        .findIndex(Eq.eq("foo")));
+            }
+
         }
 
         @Nested
@@ -1272,6 +1338,18 @@ class VectorTest {
             void findNegative() {
                 assertEquals(nothing(), Vector.wrap(asList("foo", "bar", "baz")).drop(1)
                         .find(Eq.eq("foo")));
+            }
+
+            @Test
+            void findIndexPositive() {
+                assertEquals(just(0), Vector.wrap(asList("foo", "bar", "baz")).drop(1)
+                        .findIndex(Eq.eq("bar")));
+            }
+
+            @Test
+            void findIndexNegative() {
+                assertEquals(nothing(), Vector.wrap(asList("foo", "bar", "baz")).drop(1)
+                        .findIndex(Eq.eq("foo")));
             }
 
         }
@@ -1489,6 +1567,18 @@ class VectorTest {
                         .find(Eq.eq("foo")));
             }
 
+            @Test
+            void findIndexPositive() {
+                assertEquals(just(0), Vector.wrap(new String[]{"foo", "bar", "baz"}).slice(1, 2)
+                        .findIndex(Eq.eq("bar")));
+            }
+
+            @Test
+            void findIndexNegative() {
+                assertEquals(nothing(), Vector.wrap(new String[]{"foo", "bar", "baz"}).slice(1, 2)
+                        .findIndex(Eq.eq("foo")));
+            }
+
         }
 
         @Nested
@@ -1575,6 +1665,18 @@ class VectorTest {
             void findNegative() {
                 assertEquals(nothing(), Vector.wrap(asList("foo", "bar", "baz")).slice(1, 2)
                         .find(Eq.eq("foo")));
+            }
+
+            @Test
+            void findIndexPositive() {
+                assertEquals(just(0), Vector.wrap(asList("foo", "bar", "baz")).slice(1, 2)
+                        .findIndex(Eq.eq("bar")));
+            }
+
+            @Test
+            void findIndexNegative() {
+                assertEquals(nothing(), Vector.wrap(asList("foo", "bar", "baz")).slice(1, 2)
+                        .findIndex(Eq.eq("foo")));
             }
 
         }
@@ -1744,6 +1846,50 @@ class VectorTest {
         void equality() {
             assertEquals(Vector.wrap(asList(1, 2, 3)).zipWithIndex(),
                     Vector.wrap(new Integer[]{1, 2, 3}).zipWithIndex());
+        }
+
+    }
+
+    @Nested
+    @DisplayName("findByIndex")
+    class FindByIndexTests {
+
+        @Nested
+        @DisplayName("array")
+        class ArrayFindByIndexTests {
+
+            @Test
+            void returnsFirstFound() {
+                assertEquals(just(1), Vector.wrap(new String[]{"foo", "bar", "baz", "bar", "foo"})
+                        .findIndex(Eq.eq("bar")));
+            }
+
+            @Test
+            void correctWhenReversed() {
+                assertEquals(just(2), Vector.wrap(new String[]{"foo", "bar", "baz"})
+                        .reverse()
+                        .findIndex(Eq.eq("foo")));
+            }
+
+        }
+
+        @Nested
+        @DisplayName("List")
+        class ListFindByIndexTests {
+
+            @Test
+            void returnsFirstFound() {
+                assertEquals(just(1), Vector.wrap(asList("foo", "bar", "baz", "bar", "foo"))
+                        .findIndex(Eq.eq("bar")));
+            }
+
+            @Test
+            void correctWhenReversed() {
+                assertEquals(just(2), Vector.wrap(asList("foo", "bar", "baz"))
+                        .reverse()
+                        .findIndex(Eq.eq("foo")));
+            }
+
         }
 
     }
