@@ -22,9 +22,10 @@ This library has not yet been released.
    - [`ImmutableNonEmptySet<A>`](#immutable-non-empty-set)
  - [Examples](#examples)
    - [`Vector`](#vector-examples)
-   - [`Set`](#vector-examples)
+   - [`Set`](#set-examples)
  - [Non-goals and trade-offs](#non-goals-and-trade-offs)
  - [Custom views](#custom-views)
+ - [Notes](#notes)
  - [License](#license)   
        
 
