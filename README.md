@@ -210,7 +210,7 @@ Alternatively, if you know for sure that the collection you are passing is not e
 
 #### <a name="non-empty-vector-converting">Converting an existing `Vector`</a>
 
-A `Vector` has the methods `toNonEmpty` and `toNonEmptyOrThrow` that will attempt to convert the `Vector` to a `NonEmptyVector` at run-time.  They will do so without making copies of any underlying data structures.
+A `Vector` has the methods `toNonEmpty` and `toNonEmptyOrThrow` that will attempt to convert the `Vector` to a `NonEmptyVector` at run-time.  They will do so without making copies of any underlying collections.
 
 #### <a name="non-empty-vector-of">Building `NonEmptyVector`s directly</a>
 
@@ -326,14 +326,8 @@ TODO
 
 ### Basics
 
-`Vector`s can wrap arrays or `java.util.List`s. 
-They hold on to a reference of the data structure they wrap and never mutate it themselves, and are guaranteed to never make copies of the underlying data structure unless explicitly asked.
+`Vector`s can wrap arrays or `java.util.List`s. The following wraps an `Integer` array in a `Vector`.  No copy of the array is made:
 
-While a Vector can be mutated elsewhere (i.e. from someone else who holds a reference to the underlying collection), it can not be mutated by someone who only holds the `Vector` itself, so it is safe to share freely.
-
-(Note: if you want complete protection from mutation _anywhere_, you can use an `ImmutableVector` instead, which will be explained later).
-
-The following wraps an `Integer` array in a `Vector`.  No copy of the array is made:
 ```Java
 Integer[] arr = new Integer[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
 
@@ -348,7 +342,7 @@ System.out.println("vector1 = " + vector1);
     // *** vector1 = Vector(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
 ```
 
-Get the size of the `Vector` in O(1) using the `size` method:
+You can get the size of the `Vector` in O(1) using the `size` method:
 
 ```Java
 System.out.println("vector1.size() = " + vector1.size());
@@ -368,7 +362,7 @@ System.out.println("vector1.get(100) = " + vector1.get(100));
     // *** vector1.get(100) = Nothing
 ```
 
-Note that `get` returns a `Maybe<A>`.  If you pass get an invalid index, it will return `Maybe.nothing`:
+Note that `get` returns a `Maybe<A>`.  If you pass `get` an invalid index, it will return `Maybe.nothing`:
 
 ```Java
 System.out.println("vector1.get(100) = " + vector1.get(100));
@@ -377,7 +371,7 @@ System.out.println("vector1.get(100) = " + vector1.get(100));
 
 `get` is also guaranteed to never return `null`.  If the underlying collection contains a `null` at the index requested, `get` will return `Maybe.nothing`.
 
-You can also use the `unsafeGet` method if you want avoid the overhead of wrapping the result in a `Maybe`...
+If you want to avoid the overhead of wrapping the result in a `Maybe`, you can use the `unsafeGet` method...
 
 ```Java
 System.out.println("vector1.unsafeGet(5) = " + vector1.unsafeGet(5));
@@ -385,18 +379,17 @@ System.out.println("vector1.unsafeGet(5) = " + vector1.unsafeGet(5));
 
 ```
 
-...but be aware, this method will throw an `IndexOutOfBoundsException` if you provide it an invalid index:
+...but be aware, `unsafeGet` will throw an `IndexOutOfBoundsException` if you provide it an invalid index:
 ```Java
 System.out.println("vector1.unsafeGet(1000) = "  + vector1.unsafeGet(1000));
 // *** throws IndexOutOfBoundsException
 ```
 
-Also, `unsafeGet` may return `null` if that is what the underlying collection contains.
+`unsafeGet` may return `null` if that is what the underlying collection contains.
 
 ### Slices
 
-You can create slices of another `Vector` using `take`, `drop`, or `slice`.  The results of these methods are also `Vector`s,
-and none of them make copies of the original underlying data structure.
+You can create slices of another `Vector` using `take`, `drop`, or `slice`.  The results of these methods are also `Vector`s, and none of them make copies of the original underlying collection.
 
 ```Java
 Vector<Integer> vector2 = vector1.take(5);
@@ -466,7 +459,7 @@ ImmutableVector<Integer> vector7 = vector1.toImmutable();
 System.out.println("vector7 = " + vector7);
     // *** vector7 = Vector(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
 ```
-Note that `toImmutable` may make a copy of the underlying structure, but only if it is necessary.  Calling `toImmutable` on a `Vector` that is already immutable is a no-op.
+Note that `toImmutable` may make a copy of the underlying collection, but only if it is necessary.  Calling `toImmutable` on a `Vector` that is already immutable is a no-op.
 
 Now we will show that `ImmutableVector`s are safe from mutation:
 
