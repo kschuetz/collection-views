@@ -239,6 +239,7 @@ The following transformations are available on all `Vector`s.  All return a new 
 - `slice`
 - `takeRight`
 - `dropRight`
+- `zipWithIndex`
 
 The following transformations are also possible on `ImmutableVector`s: 
 
@@ -311,9 +312,15 @@ The `Set.empty` static method will return an `ImmutableSet<A>` that is empty.
 
 ## <a name="non-empty-set">`NonEmptySet<A>`</a>
 
+TODO
+
 ## <a name="immutable-set">`ImmutableSet<A>`</a>
 
+TODO
+
 ## <a name="immutable-non-empty-set">`ImmutableNonEmptySet<A>`</a>
+
+TODO
 
 # <a name="examples">Examples</a>
 
@@ -541,6 +548,8 @@ System.out.println("vector23 = " + vector23);
 ```
 
 ## <a name="set-examples">`Set` examples</a>
+
+TODO
 
 # <a name="non-goals-and-trade-offs">Non-goals and trade-offs</a>
 
