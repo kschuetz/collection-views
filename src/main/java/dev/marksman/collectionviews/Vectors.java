@@ -24,42 +24,6 @@ final class Vectors {
 
     }
 
-    static <A> ImmutableVector<A> empty() {
-        return EmptyVector.emptyVector();
-    }
-
-    static <A> Vector<A> wrap(A[] arr) {
-        Objects.requireNonNull(arr);
-        if (arr.length == 0) {
-            return empty();
-        } else {
-            return new WrappedArrayVector<>(arr);
-        }
-    }
-
-    static <A> Vector<A> wrap(List<A> list) {
-        Objects.requireNonNull(list);
-        if (list.isEmpty()) {
-            return empty();
-        } else {
-            return new WrappedListVector<>(list);
-        }
-    }
-
-    static <A> Vector<A> take(int count, Vector<A> source) {
-        return takeFromIterable(count, source);
-    }
-
-    static <A> Vector<A> takeRight(int count, Vector<A> source) {
-        validateTake(count, source);
-        int size = source.size();
-        if (count >= size) {
-            return source;
-        } else {
-            return drop(size - count, source);
-        }
-    }
-
     static <A> Vector<A> drop(int count, Vector<A> source) {
         return dropImpl(VectorSlice::new, count, source);
     }
@@ -85,6 +49,146 @@ final class Vectors {
             return (V) empty();
         }
         return factory.apply(count, sourceSize - count, source);
+    }
+
+    static <A> ImmutableVector<A> empty() {
+        return EmptyVector.emptyVector();
+    }
+
+    static <A> ImmutableVector<A> fill(int size, A value) {
+        validateFill(size);
+        if (size == 0) {
+            return empty();
+        } else {
+            return nonEmptyFill(size, value);
+        }
+    }
+
+    static <A> Maybe<Integer> findIndex(Fn1<? super A, ? extends Boolean> predicate, Vector<A> vec) {
+        int size = vec.size();
+        for (int i = 0; i < size; i++) {
+            if (predicate.apply(vec.unsafeGet(i))) {
+                return just(i);
+            }
+        }
+        return nothing();
+    }
+
+    static <A> int findPrefixLength(Fn1<? super A, ? extends Boolean> predicate, Vector<A> vec) {
+        int result = 0;
+        for (A current : vec) {
+            if (predicate.apply(current)) {
+                result += 1;
+            } else {
+                break;
+            }
+        }
+        return result;
+    }
+
+    static <A> ImmutableVector<A> lazyFill(int size, Fn1<Integer, A> valueSupplier) {
+        validateFill(size);
+        Objects.requireNonNull(valueSupplier);
+        if (size == 0) {
+            return empty();
+        } else {
+            return nonEmptyLazyFill(size, valueSupplier);
+        }
+    }
+
+    static <A, B> Vector<B> map(Fn1<? super A, ? extends B> f, Vector<A> source) {
+        return maybeNonEmptyWrap(source)
+                .match(__ -> empty(),
+                        nonEmpty -> nonEmptyMap(f, nonEmpty));
+    }
+
+    static <A> Maybe<NonEmptyVector<A>> maybeNonEmptyWrap(A[] arr) {
+        Objects.requireNonNull(arr);
+        if (arr.length == 0) {
+            return nothing();
+        } else {
+            return just(new WrappedArrayVector<>(arr));
+        }
+    }
+
+    static <A> Maybe<NonEmptyVector<A>> maybeNonEmptyWrap(List<A> list) {
+        Objects.requireNonNull(list);
+        if (list.isEmpty()) {
+            return nothing();
+        } else {
+            return just(new WrappedListVector<>(list));
+        }
+    }
+
+    static <A> Maybe<NonEmptyVector<A>> maybeNonEmptyWrap(Vector<A> vec) {
+        Objects.requireNonNull(vec);
+        if (vec instanceof NonEmptyVector<?>) {
+            return just((NonEmptyVector<A>) vec);
+        } else if (!vec.isEmpty()) {
+            return just(new VectorCons<>(vec.unsafeGet(0), vec.tail()));
+        } else {
+            return nothing();
+        }
+    }
+
+    static Supplier<IllegalArgumentException> nonEmptyError() {
+        return () -> new IllegalArgumentException("Cannot construct NonEmptyVector from empty input");
+    }
+
+    static <A> ImmutableNonEmptyVector<A> nonEmptyFill(int size, A value) {
+        validateNonEmptyFill(size);
+        return new RepeatingVector<>(size, value);
+    }
+
+    static <A> ImmutableNonEmptyVector<A> nonEmptyLazyFill(int size, Fn1<Integer, A> valueSupplier) {
+        validateNonEmptyFill(size);
+        return new LazyVector<>(size, 0, valueSupplier);
+    }
+
+    @SuppressWarnings("unchecked")
+    static <A, B> NonEmptyVector<B> nonEmptyMap(Fn1<? super A, ? extends B> f, NonEmptyVector<A> source) {
+        return new MappedVector<>(mapperChain((Fn1<Object, Object>) f),
+                (NonEmptyVector<Object>) source);
+    }
+
+    static <A> NonEmptyVector<A> nonEmptyReverse(NonEmptyVector<A> vec) {
+        Objects.requireNonNull(vec);
+        if (vec.size() < 2) {
+            return vec;
+        } else {
+            return ReverseVector.reverseVector(vec);
+        }
+    }
+
+    static <A> NonEmptyVector<A> nonEmptyWrapOrThrow(A[] arr) {
+        return getNonEmptyOrThrow(maybeNonEmptyWrap(arr));
+    }
+
+    static <A> NonEmptyVector<A> nonEmptyWrapOrThrow(List<A> list) {
+        return getNonEmptyOrThrow(maybeNonEmptyWrap(list));
+    }
+
+    static <A> NonEmptyVector<A> nonEmptyWrapOrThrow(Vector<A> vec) {
+        return getNonEmptyOrThrow(maybeNonEmptyWrap(vec));
+    }
+
+    static <A> NonEmptyVector<Tuple2<A, Integer>> nonEmptyZipWithIndex(NonEmptyVector<A> vec) {
+        Objects.requireNonNull(vec);
+        return new VectorZipWithIndex<>(vec);
+    }
+
+    @SafeVarargs
+    static <A> ImmutableNonEmptyVector<A> of(A first, A... more) {
+        return new ImmutableVectorCons<>(first, ImmutableVectors.wrapAndVouchFor(more));
+    }
+
+    static <A> Vector<A> reverse(Vector<A> vec) {
+        Objects.requireNonNull(vec);
+        if (vec.size() < 2) {
+            return vec;
+        } else {
+            return ReverseVector.reverseVector(vec.toNonEmptyOrThrow());
+        }
     }
 
     static <A> Vector<A> slice(int startIndex, int endIndexExclusive, Vector<A> source) {
@@ -127,98 +231,41 @@ final class Vectors {
         }
     }
 
-    @SafeVarargs
-    static <A> ImmutableNonEmptyVector<A> of(A first, A... more) {
-        return new ImmutableVectorCons<>(first, ImmutableVectors.wrapAndVouchFor(more));
+    static <A> Vector<A> take(int count, Vector<A> source) {
+        validateTake(count, source);
+        return sliceFromIterable(0, count, source);
     }
 
-    static <A> ImmutableVector<A> fill(int size, A value) {
-        validateFill(size);
-        if (size == 0) {
-            return empty();
+    static <A> Vector<A> takeRight(int count, Vector<A> source) {
+        validateTake(count, source);
+        int size = source.size();
+        if (count >= size) {
+            return source;
         } else {
-            return nonEmptyFill(size, value);
+            return drop(size - count, source);
         }
     }
 
-    static <A> ImmutableVector<A> lazyFill(int size, Fn1<Integer, A> valueSupplier) {
-        validateFill(size);
-        if (size == 0) {
-            return empty();
-        } else {
-            return nonEmptyLazyFill(size, valueSupplier);
-        }
-    }
-
-    static <A> ImmutableNonEmptyVector<A> nonEmptyFill(int size, A value) {
-        validateNonEmptyFill(size);
-        return new RepeatingVector<>(size, value);
-    }
-
-    static <A> ImmutableNonEmptyVector<A> nonEmptyLazyFill(int size, Fn1<Integer, A> valueSupplier) {
-        validateNonEmptyFill(size);
-        return new LazyVector<>(size, 0, valueSupplier);
-    }
-
-    static <A> Maybe<NonEmptyVector<A>> maybeNonEmptyWrap(A[] arr) {
+    static <A> Vector<A> wrap(A[] arr) {
         Objects.requireNonNull(arr);
         if (arr.length == 0) {
-            return nothing();
+            return empty();
         } else {
-            return just(new WrappedArrayVector<>(arr));
+            return new WrappedArrayVector<>(arr);
         }
     }
 
-    static <A> Maybe<NonEmptyVector<A>> maybeNonEmptyWrap(List<A> list) {
+    static <A> Vector<A> wrap(List<A> list) {
         Objects.requireNonNull(list);
         if (list.isEmpty()) {
-            return nothing();
+            return empty();
         } else {
-            return just(new WrappedListVector<>(list));
-        }
-    }
-
-    static <A> NonEmptyVector<A> nonEmptyWrapOrThrow(A[] arr) {
-        return getNonEmptyOrThrow(maybeNonEmptyWrap(arr));
-    }
-
-    static <A> NonEmptyVector<A> nonEmptyWrapOrThrow(List<A> list) {
-        return getNonEmptyOrThrow(maybeNonEmptyWrap(list));
-    }
-
-    static <A> NonEmptyVector<A> nonEmptyWrapOrThrow(Vector<A> vec) {
-        return getNonEmptyOrThrow(ImmutableVectors.maybeNonEmptyWrap(vec));
-    }
-
-    static <A, B> Vector<B> map(Fn1<? super A, ? extends B> f, Vector<A> source) {
-        return ImmutableVectors.maybeNonEmptyWrap(source)
-                .match(__ -> empty(),
-                        nonEmpty -> mapNonEmpty(f, nonEmpty));
-    }
-
-    @SuppressWarnings("unchecked")
-    static <A, B> NonEmptyVector<B> mapNonEmpty(Fn1<? super A, ? extends B> f, NonEmptyVector<A> source) {
-        return new MappedVector<>(mapperChain((Fn1<Object, Object>) f),
-                (NonEmptyVector<Object>) source);
-    }
-
-    static <A> Vector<A> reverse(Vector<A> vec) {
-        if (vec.size() < 2) {
-            return vec;
-        } else {
-            return ReverseVector.reverseVector(vec.toNonEmptyOrThrow());
-        }
-    }
-
-    static <A> NonEmptyVector<A> nonEmptyReverse(NonEmptyVector<A> vec) {
-        if (vec.size() < 2) {
-            return vec;
-        } else {
-            return ReverseVector.reverseVector(vec);
+            return new WrappedListVector<>(list);
         }
     }
 
     static <A> Vector<Tuple2<A, Integer>> zipWithIndex(Vector<A> vec) {
+        Objects.requireNonNull(vec);
         if (vec.isEmpty()) {
             return empty();
         } else {
@@ -226,43 +273,8 @@ final class Vectors {
         }
     }
 
-    static <A> Maybe<Integer> findIndex(Fn1<? super A, ? extends Boolean> predicate, Vector<A> vec) {
-        int size = vec.size();
-        for (int i = 0; i < size; i++) {
-            if (predicate.apply(vec.unsafeGet(i))) {
-                return just(i);
-            }
-        }
-        return nothing();
-    }
-
-    static <A> NonEmptyVector<Tuple2<A, Integer>> nonEmptyZipWithIndex(NonEmptyVector<A> vec) {
-        return new VectorZipWithIndex<>(vec);
-    }
-
-    private static <A> Vector<A> takeFromIterable(int count, Iterable<A> source) {
-        validateTake(count, source);
-        return sliceFromIterable(0, count, source);
-    }
-
     private static <A> NonEmptyVector<A> getNonEmptyOrThrow(Maybe<NonEmptyVector<A>> maybeResult) {
         return maybeResult.orElseThrow(Vectors.nonEmptyError());
-    }
-
-    static Supplier<IllegalArgumentException> nonEmptyError() {
-        return () -> new IllegalArgumentException("Cannot construct NonEmptyVector from empty input");
-    }
-
-    static <A> int findPrefixLength(Fn1<? super A, ? extends Boolean> predicate, Vector<A> vec) {
-        int result = 0;
-        for (A current : vec) {
-            if (predicate.apply(current)) {
-                result += 1;
-            } else {
-                break;
-            }
-        }
-        return result;
     }
 
 }

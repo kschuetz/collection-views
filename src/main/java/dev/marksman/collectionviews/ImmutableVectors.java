@@ -204,17 +204,6 @@ class ImmutableVectors {
         return (Maybe<ImmutableNonEmptyVector<A>>) copyFrom(maxCount, source).toNonEmpty();
     }
 
-    static <A> Maybe<NonEmptyVector<A>> maybeNonEmptyWrap(Vector<A> vec) {
-        Objects.requireNonNull(vec);
-        if (vec instanceof NonEmptyVector<?>) {
-            return just((NonEmptyVector<A>) vec);
-        } else if (!vec.isEmpty()) {
-            return just(new VectorCons<>(vec.unsafeGet(0), vec.tail()));
-        } else {
-            return nothing();
-        }
-    }
-
     static <A> Maybe<ImmutableNonEmptyVector<A>> maybeNonEmptyConvert(ImmutableVector<A> vec) {
         Objects.requireNonNull(vec);
         if (vec instanceof ImmutableNonEmptyVector<?>) {

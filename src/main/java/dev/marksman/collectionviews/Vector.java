@@ -288,7 +288,7 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
      * @return a {@code Maybe<NonEmptyVector<A>>}
      */
     default Maybe<? extends NonEmptyVector<A>> toNonEmpty() {
-        return ImmutableVectors.maybeNonEmptyWrap(this);
+        return Vectors.maybeNonEmptyWrap(this);
     }
 
     /**

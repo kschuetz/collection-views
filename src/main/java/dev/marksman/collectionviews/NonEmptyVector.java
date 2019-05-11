@@ -41,7 +41,7 @@ public interface NonEmptyVector<A> extends NonEmptyIterable<A>, Vector<A> {
      */
     @Override
     default <B> NonEmptyVector<B> fmap(Fn1<? super A, ? extends B> f) {
-        return Vectors.mapNonEmpty(f, this);
+        return Vectors.nonEmptyMap(f, this);
     }
 
     /**
