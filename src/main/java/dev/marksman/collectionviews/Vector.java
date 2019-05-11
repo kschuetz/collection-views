@@ -340,7 +340,7 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
      */
     @SafeVarargs
     static <A> ImmutableNonEmptyVector<A> of(A first, A... more) {
-        return Vectors.of(first, more);
+        return Vectors.nonEmptyVectorOf(first, more);
     }
 
     /**

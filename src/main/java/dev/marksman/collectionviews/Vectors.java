@@ -160,6 +160,11 @@ final class Vectors {
         }
     }
 
+    @SafeVarargs
+    static <A> ImmutableNonEmptyVector<A> nonEmptyVectorOf(A first, A... more) {
+        return new ImmutableVectorCons<>(first, ImmutableVectors.wrapAndVouchFor(more));
+    }
+
     static <A> NonEmptyVector<A> nonEmptyWrapOrThrow(A[] arr) {
         return getNonEmptyOrThrow(maybeNonEmptyWrap(arr));
     }
@@ -175,11 +180,6 @@ final class Vectors {
     static <A> NonEmptyVector<Tuple2<A, Integer>> nonEmptyZipWithIndex(NonEmptyVector<A> vec) {
         Objects.requireNonNull(vec);
         return new VectorZipWithIndex<>(vec);
-    }
-
-    @SafeVarargs
-    static <A> ImmutableNonEmptyVector<A> of(A first, A... more) {
-        return new ImmutableVectorCons<>(first, ImmutableVectors.wrapAndVouchFor(more));
     }
 
     static <A> Vector<A> reverse(Vector<A> vec) {

@@ -15,23 +15,6 @@ class Sets {
         return EmptySet.emptySet();
     }
 
-    static <A> Set<A> wrap(java.util.Set<A> underlying) {
-        Objects.requireNonNull(underlying);
-        if (underlying.isEmpty()) {
-            return empty();
-        } else {
-            return new WrappedSet<>(underlying);
-        }
-    }
-
-    @SafeVarargs
-    static <A> ImmutableNonEmptySet<A> nonEmptySetOf(A first, A... more) {
-        java.util.Set<A> underlying = new java.util.HashSet<>();
-        underlying.add(first);
-        underlying.addAll(Arrays.asList(more));
-        return new ImmutableWrappedSet<>(underlying);
-    }
-
     static <A> Maybe<NonEmptySet<A>> maybeNonEmptyWrap(java.util.Set<A> underlying) {
         Objects.requireNonNull(underlying);
         if (underlying.isEmpty()) {
@@ -51,6 +34,18 @@ class Sets {
         }
     }
 
+    static Supplier<IllegalArgumentException> nonEmptyError() {
+        return () -> new IllegalArgumentException("Cannot construct NonEmptySet from empty input");
+    }
+
+    @SafeVarargs
+    static <A> ImmutableNonEmptySet<A> nonEmptySetOf(A first, A... more) {
+        java.util.Set<A> underlying = new java.util.HashSet<>();
+        underlying.add(first);
+        underlying.addAll(Arrays.asList(more));
+        return new ImmutableWrappedSet<>(underlying);
+    }
+
     static <A> NonEmptySet<A> nonEmptyWrapOrThrow(java.util.Set<A> underlying) {
         return getNonEmptyOrThrow(maybeNonEmptyWrap(underlying));
     }
@@ -59,8 +54,13 @@ class Sets {
         return getNonEmptyOrThrow(maybeNonEmptyWrap(underlying));
     }
 
-    static Supplier<IllegalArgumentException> nonEmptyError() {
-        return () -> new IllegalArgumentException("Cannot construct NonEmptySet from empty input");
+    static <A> Set<A> wrap(java.util.Set<A> underlying) {
+        Objects.requireNonNull(underlying);
+        if (underlying.isEmpty()) {
+            return empty();
+        } else {
+            return new WrappedSet<>(underlying);
+        }
     }
 
     private static <A> NonEmptySet<A> getNonEmptyOrThrow(Maybe<NonEmptySet<A>> maybeResult) {
