@@ -38,7 +38,7 @@ public interface ImmutableNonEmptyVector<A> extends NonEmptyVector<A>, Immutable
      */
     @Override
     default <B> ImmutableNonEmptyVector<B> fmap(Fn1<? super A, ? extends B> f) {
-        return ImmutableVectors.mapNonEmpty(f, this);
+        return ImmutableVectors.nonEmptyMap(f, this);
     }
 
     /**
