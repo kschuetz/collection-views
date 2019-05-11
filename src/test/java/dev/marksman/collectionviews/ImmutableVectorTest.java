@@ -1856,6 +1856,20 @@ class ImmutableVectorTest {
             assertSame(original, slice2);
         }
 
+        @Test
+        void stackSafe() {
+            int BIG = 50_000;
+            Integer[] underlying = new Integer[BIG];
+            for (int i = 0; i < BIG; i++) {
+                underlying[i] = i;
+            }
+            ImmutableVector<Integer> sliced = Vector.copyFrom(underlying);
+            for (int i = BIG; i > 0; i--) {
+                sliced = sliced.take(i);
+            }
+            assertEquals(just(0), sliced.get(0));
+        }
+
     }
 
     @Nested
@@ -2031,6 +2045,20 @@ class ImmutableVectorTest {
             assertThat(sliced, contains("bar", "baz"));
             originalUnderlying.set(1, "qwerty");
             assertThat(sliced, contains("bar", "baz"));
+        }
+
+        @Test
+        void stackSafe() {
+            int BIG = 50_000;
+            Integer[] underlying = new Integer[BIG];
+            for (int i = 0; i < BIG; i++) {
+                underlying[i] = i;
+            }
+            ImmutableVector<Integer> sliced = Vector.copyFrom(underlying);
+            for (int i = 0; i < BIG - 1; i++) {
+                sliced = sliced.drop(1);
+            }
+            assertEquals(just(BIG - 1), sliced.get(0));
         }
 
     }

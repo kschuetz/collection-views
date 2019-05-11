@@ -8,6 +8,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -994,6 +995,20 @@ class VectorTest {
                         .findIndex(Eq.eq("baz")));
             }
 
+            @Test
+            void stackSafe() {
+                int BIG = 50_000;
+                Integer[] underlying = new Integer[BIG];
+                for (int i = 0; i < BIG; i++) {
+                    underlying[i] = i;
+                }
+                Vector<Integer> sliced = Vector.wrap(underlying);
+                for (int i = BIG; i > 0; i--) {
+                    sliced = sliced.take(i);
+                }
+                assertEquals(just(0), sliced.get(0));
+            }
+
         }
 
         @Nested
@@ -1069,6 +1084,20 @@ class VectorTest {
             void findIndexNegative() {
                 assertEquals(nothing(), Vector.wrap(asList("foo", "bar", "baz")).take(2)
                         .findIndex(Eq.eq("baz")));
+            }
+
+            @Test
+            void stackSafe() {
+                int BIG = 50_000;
+                ArrayList<Integer> underlying = new ArrayList<>(BIG);
+                for (int i = 0; i < BIG; i++) {
+                    underlying.add(i);
+                }
+                Vector<Integer> sliced = Vector.wrap(underlying);
+                for (int i = BIG; i > 0; i--) {
+                    sliced = sliced.take(i);
+                }
+                assertEquals(just(0), sliced.get(0));
             }
 
         }
@@ -1271,6 +1300,20 @@ class VectorTest {
                         .findIndex(Eq.eq("foo")));
             }
 
+            @Test
+            void stackSafe() {
+                int BIG = 50_000;
+                Integer[] underlying = new Integer[BIG];
+                for (int i = 0; i < BIG; i++) {
+                    underlying[i] = i;
+                }
+                Vector<Integer> sliced = Vector.wrap(underlying);
+                for (int i = 0; i < BIG - 1; i++) {
+                    sliced = sliced.drop(1);
+                }
+                assertEquals(just(BIG - 1), sliced.get(0));
+            }
+
         }
 
         @Nested
@@ -1350,6 +1393,20 @@ class VectorTest {
             void findIndexNegative() {
                 assertEquals(nothing(), Vector.wrap(asList("foo", "bar", "baz")).drop(1)
                         .findIndex(Eq.eq("foo")));
+            }
+
+            @Test
+            void stackSafe() {
+                int BIG = 50_000;
+                ArrayList<Integer> underlying = new ArrayList<>(BIG);
+                for (int i = 0; i < BIG; i++) {
+                    underlying.add(i);
+                }
+                Vector<Integer> sliced = Vector.wrap(underlying);
+                for (int i = 0; i < BIG - 1; i++) {
+                    sliced = sliced.drop(1);
+                }
+                assertEquals(just(BIG - 1), sliced.get(0));
             }
 
         }

@@ -14,6 +14,7 @@ import static com.jnape.palatable.lambda.adt.Maybe.just;
 import static com.jnape.palatable.lambda.adt.Maybe.nothing;
 import static com.jnape.palatable.lambda.functions.builtin.fn2.ToCollection.toCollection;
 import static dev.marksman.collectionviews.ImmutableReverseVector.immutableReverseVector;
+import static dev.marksman.collectionviews.ImmutableVectorSlice.immutableVectorSlice;
 import static dev.marksman.collectionviews.MapperChain.mapperChain;
 import static dev.marksman.collectionviews.Validation.*;
 import static dev.marksman.collectionviews.Vector.empty;
@@ -66,7 +67,7 @@ class ImmutableVectors {
     }
 
     static <A> ImmutableVector<A> drop(int count, ImmutableVector<A> source) {
-        return Vectors.dropImpl(ImmutableVectorSlice::new, count, source);
+        return Vectors.dropImpl(ImmutableVectorSlice::immutableVectorSlice, count, source);
     }
 
     static <A> ImmutableVector<A> dropRight(int count, ImmutableVector<A> source) {
@@ -223,7 +224,7 @@ class ImmutableVectors {
         } else {
             int available = Math.max(sourceSize - startIndex, 0);
             int sliceSize = Math.min(available, requestedSize);
-            return new ImmutableVectorSlice<>(startIndex, sliceSize, source);
+            return immutableVectorSlice(startIndex, sliceSize, source);
         }
     }
 

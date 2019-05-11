@@ -25,7 +25,7 @@ final class Vectors {
     }
 
     static <A> Vector<A> drop(int count, Vector<A> source) {
-        return dropImpl(VectorSlice::new, count, source);
+        return dropImpl(VectorSlice::vectorSlice, count, source);
     }
 
     static <A> Vector<A> dropRight(int count, Vector<A> source) {
@@ -211,7 +211,7 @@ final class Vectors {
             } else {
                 int available = Math.max(sourceSize - startIndex, 0);
                 int sliceSize = Math.min(available, requestedSize);
-                return new VectorSlice<>(startIndex, sliceSize, sourceVector);
+                return VectorSlice.vectorSlice(startIndex, sliceSize, sourceVector);
             }
         } else if (source instanceof List<?>) {
             List<A> sourceList = (List<A>) source;
@@ -223,7 +223,7 @@ final class Vectors {
             } else {
                 int available = Math.max(sourceSize - startIndex, 0);
                 int sliceSize = Math.min(available, requestedSize);
-                return new VectorSlice<>(startIndex, sliceSize, wrap(sourceList));
+                return VectorSlice.vectorSlice(startIndex, sliceSize, wrap(sourceList));
             }
         } else {
             ArrayList<A> newList = toCollection(ArrayList::new, Take.take(requestedSize, Drop.drop(startIndex, source)));
