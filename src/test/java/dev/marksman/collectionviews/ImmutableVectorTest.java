@@ -1802,6 +1802,18 @@ class ImmutableVectorTest {
         }
 
         @Test
+        void countZeroReturnsEmptyVector() {
+            assertEquals(Vector.empty(), Vector.copyFrom(asList(1, 2, 3)).take(0));
+        }
+
+        @Test
+        void takeAllReturnsSameReference() {
+            ImmutableVector<Integer> source = Vector.copyFrom(asList(1, 2, 3));
+            ImmutableVector<Integer> sliced = source.take(3);
+            assertSame(source, sliced);
+        }
+
+        @Test
         void takesAsMuchAsItCan() {
             assertThat(Vector.copyFrom(asList(1, 2, 3)).take(1_000_000),
                     contains(1, 2, 3));
@@ -1894,6 +1906,72 @@ class ImmutableVectorTest {
             ImmutableVector<String> original = Vector.copyFrom(asList("foo", "bar", "baz"));
             ImmutableVector<String> slice1 = original.takeRight(100);
             ImmutableVector<String> slice2 = original.takeRight(3);
+            assertSame(original, slice1);
+            assertSame(original, slice2);
+        }
+
+    }
+
+    @Nested
+    @DisplayName("takeWhile")
+    class TakeWhile {
+
+        @Test
+        void throwsOnNullPredicate() {
+            assertThrows(NullPointerException.class, () -> Vector.copyFrom(singletonList(1)).takeWhile(null));
+        }
+
+        @Test
+        void neverTakeReturnsEmptyVector() {
+            assertEquals(Vector.empty(), Vector.copyFrom(asList(1, 2, 3)).takeWhile(constantly(false)));
+        }
+
+        @Test
+        void alwaysTakeReturnsSameReference() {
+            ImmutableVector<Integer> source = Vector.copyFrom(asList(1, 2, 3));
+            ImmutableVector<Integer> sliced = source.takeWhile(constantly(true));
+            assertSame(source, sliced);
+        }
+
+        @Test
+        void takesAsMuchAsItCan() {
+            assertThat(Vector.copyFrom(asList(1, 2, 3)).takeWhile(constantly(true)),
+                    contains(1, 2, 3));
+        }
+
+        @Test
+        void onlyTakesWhatWasAskedFor() {
+            assertThat(Vector.copyFrom(asList(1, 2, 3)).takeWhile(n -> n < 4),
+                    contains(1, 2, 3));
+            assertThat(Vector.copyFrom(asList(1, 2, 3)).takeWhile(n -> n < 3),
+                    contains(1, 2));
+            assertThat(Vector.copyFrom(asList(1, 2, 3)).takeWhile(n -> n < 2),
+                    contains(1));
+            assertThat(Vector.copyFrom(asList(1, 2, 3)).takeWhile(n -> n < 1),
+                    emptyIterable());
+        }
+
+        @Test
+        void reverseIteratesCorrectly() {
+            assertThat(Vector.copyFrom(asList(1, 2, 3, 4, 5, 6)).takeWhile(n -> n < 4).reverse(),
+                    contains(3, 2, 1));
+        }
+
+        @Test
+        void notAffectedByMutation() {
+            List<String> originalUnderlying = asList("baz", "bar", "foo");
+            ImmutableVector<String> original = Vector.copyFrom(originalUnderlying);
+            Vector<String> sliced = original.takeWhile(s -> s.startsWith("b"));
+            assertThat(sliced, contains("baz", "bar"));
+            originalUnderlying.set(0, "qwerty");
+            assertThat(sliced, contains("baz", "bar"));
+        }
+
+        @Test
+        void returnsOriginalVectorReferenceIfPossible() {
+            ImmutableVector<String> original = Vector.copyFrom(asList("foo", "bar", "baz"));
+            ImmutableVector<String> slice1 = original.takeWhile(s -> s.length() == 3);
+            ImmutableVector<String> slice2 = original.takeWhile(constantly(true));
             assertSame(original, slice1);
             assertSame(original, slice2);
         }
@@ -2010,6 +2088,51 @@ class ImmutableVectorTest {
             assertThat(sliced, contains("foo", "bar"));
             originalUnderlying.set(1, "qwerty");
             assertThat(sliced, contains("foo", "bar"));
+        }
+
+    }
+
+    @Nested
+    @DisplayName("dropWhile")
+    class DropWhile {
+
+        @Test
+        void throwsOnNullPredicate() {
+            assertThrows(NullPointerException.class, () -> Vector.copyFrom(singletonList(1)).dropWhile(null));
+        }
+
+        @Test
+        void neverDropReturnsSameReference() {
+            ImmutableVector<Integer> source = Vector.copyFrom(asList(1, 2, 3));
+            ImmutableVector<Integer> sliced = source.dropWhile(constantly(false));
+            assertSame(source, sliced);
+        }
+
+        @Test
+        void alwaysDropReturnsEmptyVector() {
+            assertEquals(Vector.empty(), Vector.copyFrom(asList(1, 2, 3)).dropWhile(constantly(true)));
+        }
+
+        @Test
+        void dropOneElement() {
+            ImmutableVector<Integer> source = Vector.copyFrom(asList(1, 2, 3));
+            assertThat(source.dropWhile(n -> n < 2), contains(2, 3));
+        }
+
+        @Test
+        void reverseIteratesCorrectly() {
+            assertThat(Vector.copyFrom(asList(1, 2, 3, 4, 5, 6)).dropWhile(n -> n < 4).reverse(),
+                    contains(6, 5, 4));
+        }
+
+        @Test
+        void notAffectedByMutation() {
+            List<String> originalUnderlying = asList("foo", "bar", "baz");
+            ImmutableVector<String> original = Vector.copyFrom(originalUnderlying);
+            Vector<String> sliced = original.dropWhile(s -> s.startsWith("f"));
+            assertThat(sliced, contains("bar", "baz"));
+            originalUnderlying.set(1, "qwerty");
+            assertThat(sliced, contains("bar", "baz"));
         }
 
     }
