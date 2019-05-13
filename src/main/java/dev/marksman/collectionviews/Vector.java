@@ -17,9 +17,9 @@ import static com.jnape.palatable.lambda.adt.Maybe.nothing;
  * <p>
  * A {@code Vector} guarantees the following:
  * <ul>
- * <li>A {@link Vector#size} method that executes in O(1).
- * <li>A {@link Vector#get} method that retrieves an element by index in O(1).
- * <li>An {@link Vector#isEmpty} method that executes in O(1).
+ * <li>A {@link Vector#size} method that executes in O(1)<sup>*</sup>.
+ * <li>A {@link Vector#get} method that retrieves an element by index in O(1)<sup>*</sup>.
+ * <li>An {@link Vector#isEmpty} method that executes in O(1)<sup>*</sup>.
  * <li>Iteration will always terminate.
  * <li>Protected from mutation by the bearer.
  * <li>The bearer cannot gain access to a reference to the underlying collection.
@@ -37,6 +37,10 @@ import static com.jnape.palatable.lambda.adt.Maybe.nothing;
  * While {@code Vector} does implement {@link Iterable}, it does <i>not</i> implement {@link java.util.Collection}.
  * If you need to convert the {@code Vector} to a {@code java.util.Collection}, you will need to make a copy.
  * Consider using Lambda's {@code toCollection} function to accomplish this.
+ * <p>
+ * <sup>*</sup><small>The claim of O(1) means that the number of elements in the Vector has no bearing on performance.
+ * However, the number of transformations applied to the Vector, such as mapping and slicing, will.
+ * Technically, the complexity is O(k) where <i>k</i> is the number of transformations applied.</small>
  *
  * @param <A> the element type
  */

@@ -14,6 +14,8 @@ import static com.jnape.palatable.lambda.adt.Maybe.just;
  * provides the following benefits:
  * <ul>
  * <li>{@code ImmutableNonEmptyVector#fmap} always returns a {@code ImmutableNonEmptyVector}.</li>
+ * <li>{@code ImmutableNonEmptyVector#reverse} always returns a {@code ImmutableNonEmptyVector}.</li>
+ * <li>{@code ImmutableNonEmptyVector#zipWithIndex} always returns a {@code ImmutableNonEmptyVector}.</li>
  * </ul>
  *
  * @param <A> the element type

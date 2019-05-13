@@ -15,6 +15,8 @@ import com.jnape.palatable.lambda.functions.Fn1;
  * <li>{@link ImmutableVector#take} always returns a {@code ImmutableVector}.</li>
  * <li>{@link ImmutableVector#drop} always returns a {@code ImmutableVector}.</li>
  * <li>{@link ImmutableVector#slice} always returns a {@code ImmutableVector}.</li>
+ * <li>{@link ImmutableVector#reverse} always returns a {@code ImmutableVector}.</li>
+ * <li>{@link ImmutableVector#zipWithIndex} always returns a {@code ImmutableVector}.</li>
  * <li>{@link ImmutableVector#toImmutable} always returns itself.</li>
  * </ul>
  *

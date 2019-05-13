@@ -17,6 +17,8 @@ import static com.jnape.palatable.lambda.adt.Maybe.just;
  * <li>{@link NonEmptyVector#head} method that returns the first element.</li>
  * <li>Implements {@link NonEmptyIterable}.</li>
  * <li>{@link NonEmptyVector#fmap} always returns a {@code NonEmptyVector}.</li>
+ * <li>{@link NonEmptyVector#reverse} always returns a {@code NonEmptyVector}.</li>
+ * <li>{@link NonEmptyVector#zipWithIndex} always returns a {@code NonEmptyVector}.</li>
  * </ul>
  *
  * @param <A> the element type

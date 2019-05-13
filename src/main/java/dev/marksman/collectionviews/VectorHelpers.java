@@ -10,7 +10,7 @@ import java.util.Objects;
  * methods SHOULD delegate to {@code vectorEquals} and {@code vectorHashCode}, respectively.  This will
  * ensure that equality works correctly with the built-in {@link Vector} types.
  * <p>
- * Your {@code toString} method MAY delegate to {@code setToString}.
+ * Your {@code toString} method MAY delegate to {@code vectorToString}.
  */
 @SuppressWarnings("WeakerAccess")
 public final class VectorHelpers {
