@@ -1,6 +1,7 @@
 package dev.marksman.collectionviews;
 
-class ImmutableReverseVector<A> extends ConcreteVector<A> implements ImmutableNonEmptyVector<A> {
+class ImmutableReverseVector<A> extends ConcreteVector<A>
+        implements ImmutableNonEmptyVector<A> {
     private final ImmutableNonEmptyVector<A> underlying;
 
     private ImmutableReverseVector(ImmutableNonEmptyVector<A> underlying) {

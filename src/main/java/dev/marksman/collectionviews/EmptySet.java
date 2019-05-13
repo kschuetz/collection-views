@@ -4,7 +4,7 @@ import java.util.Iterator;
 
 import static java.util.Collections.emptyIterator;
 
-final class EmptySet<A> extends ConcreteSet<A> implements ImmutableSet<A> {
+final class EmptySet<A> extends ConcreteSet<A> implements ImmutableSet<A>, Primitive {
     private static final EmptySet<?> INSTANCE = new EmptySet<>();
 
     @Override

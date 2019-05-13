@@ -26,4 +26,8 @@ final class Util {
         return output.toString();
     }
 
+    static boolean isPrimitive(Object obj) {
+        return (obj instanceof Primitive);
+    }
+
 }

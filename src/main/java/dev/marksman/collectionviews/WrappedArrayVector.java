@@ -2,7 +2,8 @@ package dev.marksman.collectionviews;
 
 import java.util.Arrays;
 
-final class WrappedArrayVector<A> extends ConcreteVector<A> implements NonEmptyVector<A> {
+final class WrappedArrayVector<A> extends ConcreteVector<A>
+        implements NonEmptyVector<A>, Primitive {
     /**
      * underlying must contain at least one element
      */

@@ -432,7 +432,7 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
      * Be careful not to pass in an infinite {@code Iterable} or this method will not terminate.
      * <p>
      * If necessary to guarantee immutability, this method will make a copy of the data provided.
-     * If {@code source} already is an {@link ImmutableVector}, it will be returned directly.
+     * If {@code source} is an untransformed {@link ImmutableVector}, it will be returned directly.
      *
      * @param source an {@code Iterable<A>} that will be iterated eagerly in its entirety;  not null
      * @param <A>    the element type
@@ -462,7 +462,7 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
      * If {@code maxCount} elements are not available, then the all of the elements available will be returned.
      * <p>
      * This method will make a copy of the data provided, unless {@code source} is
-     * an {@link ImmutableVector} and its size is less than or equal to {@code maxCount},
+     * an untransformed {@link ImmutableVector} and its size is less than or equal to {@code maxCount},
      * in which case it will be returned directly.
      * <p>
      * If {@code source} is an {@code ImmutableVector} that is greater than {@code maxCount} in size,

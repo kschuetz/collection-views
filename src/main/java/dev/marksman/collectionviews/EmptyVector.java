@@ -11,7 +11,7 @@ import static com.jnape.palatable.lambda.adt.Maybe.nothing;
 import static dev.marksman.collectionviews.Validation.*;
 import static java.util.Collections.emptyIterator;
 
-final class EmptyVector<A> extends ConcreteVector<A> implements ImmutableVector<A> {
+final class EmptyVector<A> extends ConcreteVector<A> implements ImmutableVector<A>, Primitive {
     private static final EmptyVector<?> INSTANCE = new EmptyVector<>();
 
     @Override

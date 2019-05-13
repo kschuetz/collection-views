@@ -2,7 +2,8 @@ package dev.marksman.collectionviews;
 
 import java.util.List;
 
-final class ImmutableListVector<A> extends ConcreteVector<A> implements ImmutableNonEmptyVector<A> {
+final class ImmutableListVector<A> extends ConcreteVector<A>
+        implements ImmutableNonEmptyVector<A>, Primitive {
     /**
      * underlying must contain at least one element.
      */

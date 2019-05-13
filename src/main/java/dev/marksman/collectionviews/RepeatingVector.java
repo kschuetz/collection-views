@@ -9,7 +9,8 @@ import static com.jnape.palatable.lambda.adt.Maybe.just;
 import static com.jnape.palatable.lambda.adt.Maybe.nothing;
 import static dev.marksman.collectionviews.Validation.*;
 
-final class RepeatingVector<A> extends ConcreteVector<A> implements ImmutableNonEmptyVector<A> {
+final class RepeatingVector<A> extends ConcreteVector<A>
+        implements ImmutableNonEmptyVector<A>, Primitive {
     private final int size; // must be >= 1
     private final A value;
 

@@ -1,6 +1,7 @@
 package dev.marksman.collectionviews;
 
-final class ImmutableVectorSlice<A> extends ConcreteVector<A> implements ImmutableVector<A> {
+final class ImmutableVectorSlice<A> extends ConcreteVector<A>
+        implements ImmutableVector<A> {
     private final int offset;
     private final int size;
     private final ImmutableVector<A> underlying;

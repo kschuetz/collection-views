@@ -4,10 +4,11 @@ import java.util.Iterator;
 
 import static dev.marksman.collectionviews.ProtectedIterator.protectedIterator;
 
-final class ImmutableNonEmptySetAdapter<A> extends ConcreteSet<A> implements ImmutableNonEmptySet<A> {
-    private final Set<A> underlying;
+final class ImmutableNonEmptySetAdapter<A> extends ConcreteSet<A>
+        implements ImmutableNonEmptySet<A>, Primitive {
+    private final ImmutableSet<A> underlying;
 
-    ImmutableNonEmptySetAdapter(Set<A> underlying) {
+    ImmutableNonEmptySetAdapter(ImmutableSet<A> underlying) {
         this.underlying = underlying;
     }
 

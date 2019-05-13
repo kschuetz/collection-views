@@ -5,7 +5,8 @@ import java.util.List;
 
 import static com.jnape.palatable.lambda.functions.builtin.fn2.ToCollection.toCollection;
 
-final class WrappedListVector<A> extends ConcreteVector<A> implements NonEmptyVector<A> {
+final class WrappedListVector<A> extends ConcreteVector<A>
+        implements NonEmptyVector<A>, Primitive {
     /**
      * underlying must contain at least one element
      */
