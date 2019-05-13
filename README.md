@@ -55,7 +55,7 @@ The goal of *collection-views* is to provide this functionality with as little o
 
 While *collection-views* has essentially the same purpose as `Collections.unmodifiableXXX` or Guava, here are a few reasons *collection-views* is different.
 
-- *collection-views* is designed to be used with [lambda](https://palatable.github.io/lambda/).  It takes advantage of *lambda*'s types (such as `Maybe`), and should be comfortable to those already using *lambda*.  
+- *collection-views* is designed to be used with [lambda](https://palatable.github.io/lambda/).  It takes advantage of lambda's types (such as `Maybe`), and should be comfortable to those already using lambda.  
 
 - *collection-views* gives you control over when to make copies. `Collections.unmodifiableXXX` will never make a copy, so you don't have a strong guarantee of immutability.  Guava, on the other hand, always initially makes a copy, and that may not be always what you want.  
 
@@ -63,7 +63,7 @@ While *collection-views* has essentially the same purpose as `Collections.unmodi
     - `NonEmpty` types
     - Transformations such as `fmap`, `take`, `drop`, `slice`
 
-#### Why not just use Lambda's `map`, `take`, `drop`, etc?
+#### Why not just use lambda's `map`, `take`, `drop`, etc?
 
 While these functions are useful and will work perfectly well on a collection view, they currently operate on `Iterable`s and return `Iterable`s as a result.  *collection-views* provides equivalents that will yield a more specific type at compile-time.  For example, `ImmutableNonEmptyVector.fmap` will always yield an `ImmutableNonEmptyVector`, and `ImmutableVector.take` will always yield an `ImmutableVector`.
 
@@ -310,15 +310,34 @@ The `Set.empty` static method will return an `ImmutableSet<A>` that is empty.
 
 ## <a name="non-empty-set">`NonEmptySet<A>`</a>
 
-TODO
+A `NonEmptySet<A>` is a `Set<A>` that is known at compile-time to contain at least one element.  It is not possible to construct a `NonEmptySet` that is empty.  Since it is also a `Set<A>`, it can be used anywhere a `Set<A>` is called for.
+`NonEmptySet<A>` is a subtype of `NonEmptyIterable<A>`, which provides a `head` method that unconditionally yields an element.
+
+### <a name="creating-non-empty-vectors">Creating a `NonEmptySet`</a>
+
+#### <a name="non-empty-vector-wrapping">Wrapping an existing collection</a>
+
+`NonEmptyVector.maybeWrap` takes an a `java.util.Set` and returns a `Maybe<NonEmptySet<A>>`.  If the provided collection is not empty, a `NonEmptySet<A>` will be created and returned in a `Maybe.just`, otherwise `Maybe.nothing` will be returned.
+
+Alternatively, if you know for sure that the set you are passing is not empty, then you can call `NonEmptySet.wrapOrThrow`.  This will either return the `NonEmptySet` directly, or throw an `IllegalArgumentException` if the provided collection is empty.
+
+`NonEmptySet.maybeWrap` and `NonEmptySet.wrapOrThrow` behave similarly to `Set.wrap` in that a copy of the underlying collection is never made.
+
+#### <a name="non-empty-vector-converting">Converting an existing `Set`</a>
+
+A `Set` has the methods `toNonEmpty` and `toNonEmptyOrThrow` that will attempt to convert the `Set` to a `NonEmptySet` at run-time.  They will do so without making copies of any underlying collections.
+
+#### <a name="non-empty-vector-of">Building `NonEmptyVector`s directly</a>
+
+`Set.of` always returns a `ImmutableNonEmptySet`, so all `Set`s constructed this way are compatible with `NonEmptySet`.
 
 ## <a name="immutable-set">`ImmutableSet<A>`</a>
 
-TODO
+An `ImmutableSet<A>` is a `Set<A>` with the additional guarantee that it is 100% safe from mutation.  In other words, no one else holds any references to its underlying collection.
 
 ## <a name="immutable-non-empty-set">`ImmutableNonEmptySet<A>`</a>
 
-TODO
+An `ImmutableNonEmptySet<A>` is a `Set<A>` that also has all the guarantees of `NonEmptySet<A>` and `ImmutableSet<A>`.  An `ImmutableNonEmptySet<A>` can be used anywhere a `Set<A>` is called for. 
 
 # <a name="examples">Examples</a>
 
