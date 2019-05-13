@@ -17,6 +17,7 @@ import static com.jnape.palatable.lambda.adt.Maybe.nothing;
 import static com.jnape.palatable.lambda.functions.builtin.fn2.ToCollection.toCollection;
 import static dev.marksman.collectionviews.MapperChain.mapperChain;
 import static dev.marksman.collectionviews.Validation.*;
+import static dev.marksman.collectionviews.VectorSlice.vectorSlice;
 
 final class Vectors {
 
@@ -203,31 +204,25 @@ final class Vectors {
         }
         if (source instanceof Vector<?>) {
             Vector<A> sourceVector = (Vector<A>) source;
-            int sourceSize = sourceVector.size();
-            if (startIndex == 0 && requestedSize >= sourceSize) {
-                return sourceVector;
-            } else if (startIndex >= sourceSize) {
-                return empty();
-            } else {
-                int available = Math.max(sourceSize - startIndex, 0);
-                int sliceSize = Math.min(available, requestedSize);
-                return VectorSlice.vectorSlice(startIndex, sliceSize, sourceVector);
-            }
+            return sliceImpl(startIndex, sourceVector.size(), requestedSize, () -> sourceVector);
         } else if (source instanceof List<?>) {
             List<A> sourceList = (List<A>) source;
-            int sourceSize = sourceList.size();
-            if (startIndex == 0 && requestedSize >= sourceSize) {
-                return wrap(sourceList);
-            } else if (startIndex >= sourceSize) {
-                return empty();
-            } else {
-                int available = Math.max(sourceSize - startIndex, 0);
-                int sliceSize = Math.min(available, requestedSize);
-                return VectorSlice.vectorSlice(startIndex, sliceSize, wrap(sourceList));
-            }
+            return sliceImpl(startIndex, sourceList.size(), requestedSize, () -> Vector.wrap(sourceList));
         } else {
             ArrayList<A> newList = toCollection(ArrayList::new, Take.take(requestedSize, Drop.drop(startIndex, source)));
             return ImmutableVectors.wrapAndVouchFor(newList);
+        }
+    }
+
+    private static <A> Vector<A> sliceImpl(int startIndex, int sourceSize, int requestedSize, Supplier<Vector<A>> underlyingSupplier) {
+        if (startIndex == 0 && requestedSize >= sourceSize) {
+            return underlyingSupplier.get();
+        } else if (startIndex >= sourceSize) {
+            return empty();
+        } else {
+            int available = Math.max(sourceSize - startIndex, 0);
+            int sliceSize = Math.min(available, requestedSize);
+            return vectorSlice(startIndex, sliceSize, underlyingSupplier.get());
         }
     }
 
