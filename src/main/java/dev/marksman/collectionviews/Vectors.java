@@ -199,18 +199,6 @@ final class Vectors {
         }
     }
 
-//    private static <A> Vector<A> sliceImpl_old(int startIndex, int sourceSize, int requestedSize, Supplier<Vector<A>> underlyingSupplier) {
-//        if (startIndex == 0 && requestedSize >= sourceSize) {
-//            return underlyingSupplier.get();
-//        } else if (startIndex >= sourceSize) {
-//            return empty();
-//        } else {
-//            int available = Math.max(sourceSize - startIndex, 0);
-//            int sliceSize = Math.min(available, requestedSize);
-//            return vectorSlice(startIndex, sliceSize, underlyingSupplier.get());
-//        }
-//    }
-
     static <A> Vector<A> take(int count, Vector<A> source) {
         validateTake(count, source);
         return sliceFromIterable(0, count, source);

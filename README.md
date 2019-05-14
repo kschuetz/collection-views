@@ -10,6 +10,7 @@
  - [What is it not?](#what-is-it-not)
  - [Why?](#why)
  - [Design principles](#design-principles)
+ - [Installation](#installation)
  - [Type of collection views](#types)
    - [`Vector<A>`](#vector)
    - [`NonEmptyVector<A>`](#non-empty-vector)
@@ -106,7 +107,7 @@ The views yielded by these transformation are new, independent views, and do not
 
 For convenience, collection views should be easy to create on the fly without the need for a pre-existing collection.  Views constructed this way should be first-class and have the same capabilities of all other views.  
 
-# Installation
+# <a name="installation">Installation</a>
 
 To install, add the dependency to the latest version to your `pom.xml` (Maven) or `build.gradle` (Gradle).
 

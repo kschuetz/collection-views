@@ -841,9 +841,17 @@ class ImmutableVectorTest {
         class CopyFromImmutableVector {
 
             @Test
-            void returnsOriginal() {
+            void returnsOriginalForPrimitives() {
                 ImmutableVector<Integer> original = Vector.of(1, 2, 3);
                 assertSame(original, Vector.copyFrom(original));
+            }
+
+            @Test
+            void makesCopyForNonPrimitives() {
+                ImmutableNonEmptyVector<Integer> source = Vector.of(1, 2, 3).fmap(n -> n * 2);
+                ImmutableVector<Integer> copied = Vector.copyFrom(source);
+                assertTrue(Util.isPrimitive(copied));
+                assertNotSame(source, copied);
             }
 
         }
