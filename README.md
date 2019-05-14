@@ -1,7 +1,8 @@
 # collection-views
 
-[![Build Status](https://travis-ci.org/kschuetz/collection-views.svg?branch=master)](https://travis-ci.org/kschuetz/collection-views)
 [![collection-views](https://img.shields.io/maven-central/v/dev.marksman/collection-views.svg)](http://search.maven.org/#search%7Cga%7C1%7Cdev.marksman.collection-views)
+[![Build Status](https://travis-ci.org/kschuetz/collection-views.svg?branch=master)](https://travis-ci.org/kschuetz/collection-views)
+[![Maintainability](https://api.codeclimate.com/v1/badges/43ac4c983644c1bc7f5d/maintainability)](https://codeclimate.com/github/kschuetz/collection-views/maintainability)
 
 #### Table of Contents
 
@@ -104,6 +105,13 @@ The views yielded by these transformation are new, independent views, and do not
 ## Easy to construct on the fly
 
 For convenience, collection views should be easy to create on the fly without the need for a pre-existing collection.  Views constructed this way should be first-class and have the same capabilities of all other views.  
+
+# Installation
+
+To install, add the dependency to the latest version to your `pom.xml` (Maven) or `build.gradle` (Gradle).
+
+Follow this link to get the dependency info for your preferred build tool:
+[![collection-views](https://img.shields.io/maven-central/v/dev.marksman/collection-views.svg)](http://search.maven.org/#search%7Cga%7C1%7Cdev.marksman.collection-views)
 
 # <a name="types">Types of collection views</a>
 
