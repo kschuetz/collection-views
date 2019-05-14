@@ -10,24 +10,32 @@ final class Util {
         StringBuilder output = new StringBuilder();
         output.append(prefix);
         output.append('(');
-        boolean inner = false;
-        for (Object elem : iterable) {
-            if (inner) {
-                output.append(", ");
-            }
-            if (elem == null) {
-                output.append("null");
-            } else {
-                output.append(elem.toString());
-            }
-            inner = true;
-        }
+        renderElements(output, iterable);
         output.append(')');
         return output.toString();
     }
 
     static boolean isPrimitive(Object obj) {
         return (obj instanceof Primitive);
+    }
+
+    private static void renderElements(StringBuilder output, Iterable<?> iterable) {
+        boolean inner = false;
+        for (Object elem : iterable) {
+            if (inner) {
+                output.append(", ");
+            }
+            renderElement(output, elem);
+            inner = true;
+        }
+    }
+
+    private static void renderElement(StringBuilder output, Object elem) {
+        if (elem == null) {
+            output.append("null");
+        } else {
+            output.append(elem.toString());
+        }
     }
 
 }
