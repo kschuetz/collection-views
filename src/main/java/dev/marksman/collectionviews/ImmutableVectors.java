@@ -19,7 +19,11 @@ import static dev.marksman.collectionviews.Validation.*;
 import static dev.marksman.collectionviews.Vector.empty;
 import static dev.marksman.collectionviews.VectorSlicing.sliceImpl;
 
-class ImmutableVectors {
+final class ImmutableVectors {
+
+    private ImmutableVectors() {
+
+    }
 
     static <A> ImmutableVector<A> copyFrom(A[] source) {
         Objects.requireNonNull(source);

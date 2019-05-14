@@ -6,7 +6,11 @@ import java.util.function.Supplier;
 
 import static dev.marksman.collectionviews.Validation.validateDrop;
 
-class VectorSlicing {
+final class VectorSlicing {
+
+    private VectorSlicing() {
+
+    }
 
     @SuppressWarnings("unchecked")
     static <A, V extends Vector<A>> V sliceImpl(Fn3<Integer, Integer, V, V> factory, int sourceSize,
