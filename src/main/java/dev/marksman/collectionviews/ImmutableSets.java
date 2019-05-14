@@ -42,13 +42,17 @@ final class ImmutableSets {
         validateCopyFrom(maxCount, source);
         if (maxCount == 0) {
             return Sets.empty();
+        } else if (source instanceof ImmutableSet<?>) {
+            return copyFrom(maxCount, (ImmutableSet<A>) source);
         } else {
-            if (source instanceof ImmutableSet<?>) {
-                ImmutableSet<A> sourceSet = (ImmutableSet<A>) source;
-                if (sourceSet.size() <= maxCount) {
-                    return sourceSet;
-                }
-            }
+            return copyFrom(Take.take(maxCount, source));
+        }
+    }
+
+    private static <A> ImmutableSet<A> copyFrom(int maxCount, ImmutableSet<A> source) {
+        if (source.size() <= maxCount) {
+            return source;
+        } else {
             return copyFrom(Take.take(maxCount, source));
         }
     }
