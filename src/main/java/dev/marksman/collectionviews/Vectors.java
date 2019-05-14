@@ -3,7 +3,6 @@ package dev.marksman.collectionviews;
 import com.jnape.palatable.lambda.adt.Maybe;
 import com.jnape.palatable.lambda.adt.hlist.Tuple2;
 import com.jnape.palatable.lambda.functions.Fn1;
-import com.jnape.palatable.lambda.functions.Fn3;
 import com.jnape.palatable.lambda.functions.builtin.fn2.Drop;
 import com.jnape.palatable.lambda.functions.builtin.fn2.Take;
 
@@ -17,7 +16,6 @@ import static com.jnape.palatable.lambda.adt.Maybe.nothing;
 import static com.jnape.palatable.lambda.functions.builtin.fn2.ToCollection.toCollection;
 import static dev.marksman.collectionviews.MapperChain.mapperChain;
 import static dev.marksman.collectionviews.Validation.*;
-import static dev.marksman.collectionviews.VectorSlice.vectorSlice;
 
 final class Vectors {
 
@@ -26,7 +24,7 @@ final class Vectors {
     }
 
     static <A> Vector<A> drop(int count, Vector<A> source) {
-        return dropImpl(VectorSlice::vectorSlice, count, source);
+        return VectorSlicing.dropImpl(VectorSlice::vectorSlice, count, source);
     }
 
     static <A> Vector<A> dropRight(int count, Vector<A> source) {
@@ -37,19 +35,6 @@ final class Vectors {
         } else {
             return take(size - count, source);
         }
-    }
-
-    static <A, V extends Vector<A>> V dropImpl(Fn3<Integer, Integer, V, V> factory, int count, V source) {
-        validateDrop(count, source);
-        if (count == 0) {
-            return source;
-        }
-        int sourceSize = source.size();
-        if (count >= sourceSize) {
-            //noinspection unchecked
-            return (V) empty();
-        }
-        return factory.apply(count, sourceSize - count, source);
     }
 
     static <A> ImmutableVector<A> empty() {
@@ -204,27 +189,27 @@ final class Vectors {
         }
         if (source instanceof Vector<?>) {
             Vector<A> sourceVector = (Vector<A>) source;
-            return sliceImpl(startIndex, sourceVector.size(), requestedSize, () -> sourceVector);
+            return VectorSlicing.sliceImpl(VectorSlice::vectorSlice, sourceVector.size(), () -> sourceVector, startIndex, requestedSize);
         } else if (source instanceof List<?>) {
             List<A> sourceList = (List<A>) source;
-            return sliceImpl(startIndex, sourceList.size(), requestedSize, () -> Vector.wrap(sourceList));
+            return VectorSlicing.sliceImpl(VectorSlice::vectorSlice, sourceList.size(), () -> Vector.wrap(sourceList), startIndex, requestedSize);
         } else {
             ArrayList<A> newList = toCollection(ArrayList::new, Take.take(requestedSize, Drop.drop(startIndex, source)));
             return ImmutableVectors.wrapAndVouchFor(newList);
         }
     }
 
-    private static <A> Vector<A> sliceImpl(int startIndex, int sourceSize, int requestedSize, Supplier<Vector<A>> underlyingSupplier) {
-        if (startIndex == 0 && requestedSize >= sourceSize) {
-            return underlyingSupplier.get();
-        } else if (startIndex >= sourceSize) {
-            return empty();
-        } else {
-            int available = Math.max(sourceSize - startIndex, 0);
-            int sliceSize = Math.min(available, requestedSize);
-            return vectorSlice(startIndex, sliceSize, underlyingSupplier.get());
-        }
-    }
+//    private static <A> Vector<A> sliceImpl_old(int startIndex, int sourceSize, int requestedSize, Supplier<Vector<A>> underlyingSupplier) {
+//        if (startIndex == 0 && requestedSize >= sourceSize) {
+//            return underlyingSupplier.get();
+//        } else if (startIndex >= sourceSize) {
+//            return empty();
+//        } else {
+//            int available = Math.max(sourceSize - startIndex, 0);
+//            int sliceSize = Math.min(available, requestedSize);
+//            return vectorSlice(startIndex, sliceSize, underlyingSupplier.get());
+//        }
+//    }
 
     static <A> Vector<A> take(int count, Vector<A> source) {
         validateTake(count, source);

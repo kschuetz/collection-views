@@ -14,10 +14,10 @@ import static com.jnape.palatable.lambda.adt.Maybe.just;
 import static com.jnape.palatable.lambda.adt.Maybe.nothing;
 import static com.jnape.palatable.lambda.functions.builtin.fn2.ToCollection.toCollection;
 import static dev.marksman.collectionviews.ImmutableReverseVector.immutableReverseVector;
-import static dev.marksman.collectionviews.ImmutableVectorSlice.immutableVectorSlice;
 import static dev.marksman.collectionviews.MapperChain.mapperChain;
 import static dev.marksman.collectionviews.Validation.*;
 import static dev.marksman.collectionviews.Vector.empty;
+import static dev.marksman.collectionviews.VectorSlicing.sliceImpl;
 
 class ImmutableVectors {
 
@@ -67,7 +67,7 @@ class ImmutableVectors {
     }
 
     static <A> ImmutableVector<A> drop(int count, ImmutableVector<A> source) {
-        return Vectors.dropImpl(ImmutableVectorSlice::immutableVectorSlice, count, source);
+        return VectorSlicing.dropImpl(ImmutableVectorSlice::immutableVectorSlice, count, source);
     }
 
     static <A> ImmutableVector<A> dropRight(int count, ImmutableVector<A> source) {
@@ -215,16 +215,9 @@ class ImmutableVectors {
         int requestedSize = endIndexExclusive - startIndex;
         if (requestedSize < 1) {
             return Vectors.empty();
-        }
-        int sourceSize = source.size();
-        if (startIndex == 0 && requestedSize >= sourceSize) {
-            return source;
-        } else if (startIndex >= sourceSize) {
-            return Vectors.empty();
         } else {
-            int available = Math.max(sourceSize - startIndex, 0);
-            int sliceSize = Math.min(available, requestedSize);
-            return immutableVectorSlice(startIndex, sliceSize, source);
+            return sliceImpl(ImmutableVectorSlice::immutableVectorSlice, source.size(), () -> source,
+                    startIndex, requestedSize);
         }
     }
 
