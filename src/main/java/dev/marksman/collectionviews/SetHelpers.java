@@ -27,12 +27,7 @@ public final class SetHelpers {
         if (other.size() != set.size()) {
             return false;
         }
-        for (Object elem : set) {
-            if (!((Set<Object>) other).contains(elem)) {
-                return false;
-            }
-        }
-        return true;
+        return containsAllElements((Set<Object>) other, (Iterable<Object>) set);
     }
 
     public static int setHashCode(Set<?> set) {
@@ -47,6 +42,15 @@ public final class SetHelpers {
 
     public static String setToString(Set<?> set) {
         return Util.iterableToString("Set", set);
+    }
+
+    private static boolean containsAllElements(Set<Object> set, Iterable<Object> elements) {
+        for (Object elem : elements) {
+            if (!set.contains(elem)) {
+                return false;
+            }
+        }
+        return true;
     }
 
 }

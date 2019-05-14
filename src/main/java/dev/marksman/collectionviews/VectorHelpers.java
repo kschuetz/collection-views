@@ -25,21 +25,10 @@ public final class VectorHelpers {
         }
         if (other == vector) {
             return true;
+        } else {
+            return (other.size() == vector.size())
+                    && allElementsEqual(vector.iterator(), other.iterator());
         }
-        if (other.size() != vector.size()) {
-            return false;
-        }
-
-        Iterator<?> e1 = vector.iterator();
-        Iterator<?> e2 = other.iterator();
-        while (e1.hasNext() && e2.hasNext()) {
-            Object o1 = e1.next();
-            Object o2 = e2.next();
-            if (!(Objects.equals(o1, o2))) {
-                return false;
-            }
-        }
-        return !(e1.hasNext() || e2.hasNext());
     }
 
     public static int vectorHashCode(Vector<?> vector) {
@@ -56,6 +45,17 @@ public final class VectorHelpers {
 
     public static String vectorToString(Vector<?> vector) {
         return Util.iterableToString("Vector", vector);
+    }
+
+    private static boolean allElementsEqual(Iterator<?> e1, Iterator<?> e2) {
+        while (e1.hasNext() && e2.hasNext()) {
+            Object o1 = e1.next();
+            Object o2 = e2.next();
+            if (!(Objects.equals(o1, o2))) {
+                return false;
+            }
+        }
+        return !(e1.hasNext() || e2.hasNext());
     }
 
 }
