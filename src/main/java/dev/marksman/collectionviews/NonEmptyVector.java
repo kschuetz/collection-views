@@ -3,6 +3,7 @@ package dev.marksman.collectionviews;
 import com.jnape.palatable.lambda.adt.Maybe;
 import com.jnape.palatable.lambda.adt.hlist.Tuple2;
 import com.jnape.palatable.lambda.functions.Fn1;
+import com.jnape.palatable.lambda.functions.Fn2;
 
 import java.util.Iterator;
 import java.util.List;
@@ -141,6 +142,10 @@ public interface NonEmptyVector<A> extends NonEmptyIterable<A>, Vector<A> {
     @Override
     default NonEmptyVector<A> toNonEmptyOrThrow() {
         return this;
+    }
+
+    default <B, R> NonEmptyVector<R> zipWith(Fn2<A, B, R> fn, NonEmptyVector<B> other) {
+        return Vectors.nonEmptyZipWith(fn, this, other);
     }
 
     /**

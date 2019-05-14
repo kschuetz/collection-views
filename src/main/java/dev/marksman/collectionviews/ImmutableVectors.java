@@ -3,6 +3,7 @@ package dev.marksman.collectionviews;
 import com.jnape.palatable.lambda.adt.Maybe;
 import com.jnape.palatable.lambda.adt.hlist.Tuple2;
 import com.jnape.palatable.lambda.functions.Fn1;
+import com.jnape.palatable.lambda.functions.Fn2;
 import com.jnape.palatable.lambda.functions.builtin.fn2.Take;
 
 import java.util.ArrayList;
@@ -17,6 +18,7 @@ import static com.jnape.palatable.lambda.functions.builtin.fn2.ToCollection.toCo
 import static com.jnape.palatable.lambda.functions.builtin.fn2.Tupler2.tupler;
 import static dev.marksman.collectionviews.ImmutableCrossJoinVector.immutableCrossJoinVector;
 import static dev.marksman.collectionviews.ImmutableReverseVector.immutableReverseVector;
+import static dev.marksman.collectionviews.ImmutableVectorZip.immutableVectorZip;
 import static dev.marksman.collectionviews.MapperChain.mapperChain;
 import static dev.marksman.collectionviews.Validation.*;
 import static dev.marksman.collectionviews.Vector.empty;
@@ -216,6 +218,14 @@ final class ImmutableVectors {
         }
     }
 
+    static <A, B, R> ImmutableNonEmptyVector<R> nonEmptyZipWith(Fn2<A, B, R> fn,
+                                                                ImmutableNonEmptyVector<A> first, ImmutableNonEmptyVector<B> second) {
+        Objects.requireNonNull(fn);
+        Objects.requireNonNull(first);
+        Objects.requireNonNull(second);
+        return immutableVectorZip(fn, first, second);
+    }
+
     static <A> ImmutableNonEmptyVector<Tuple2<A, Integer>> nonEmptyZipWithIndex(ImmutableNonEmptyVector<A> vec) {
         return new ImmutableVectorZipWithIndex<>(vec);
     }
@@ -276,6 +286,13 @@ final class ImmutableVectors {
         } else {
             return new ImmutableListVector<>(list);
         }
+    }
+
+    static <A, B, R> ImmutableVector<R> zipWith(Fn2<A, B, R> fn, ImmutableVector<A> first, ImmutableVector<B> second) {
+        return second.toNonEmpty().<Tuple2<ImmutableNonEmptyVector<A>, ImmutableNonEmptyVector<B>>>zip(first.toNonEmpty()
+                .fmap(tupler()))
+                .match(__ -> empty(),
+                        into((ne1, ne2) -> nonEmptyZipWith(fn, ne1, ne2)));
     }
 
     static <A> ImmutableVector<Tuple2<A, Integer>> zipWithIndex(ImmutableVector<A> vec) {

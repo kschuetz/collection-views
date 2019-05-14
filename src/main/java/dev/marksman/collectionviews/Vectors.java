@@ -3,6 +3,7 @@ package dev.marksman.collectionviews;
 import com.jnape.palatable.lambda.adt.Maybe;
 import com.jnape.palatable.lambda.adt.hlist.Tuple2;
 import com.jnape.palatable.lambda.functions.Fn1;
+import com.jnape.palatable.lambda.functions.Fn2;
 import com.jnape.palatable.lambda.functions.builtin.fn2.Drop;
 import com.jnape.palatable.lambda.functions.builtin.fn2.Take;
 
@@ -19,6 +20,7 @@ import static com.jnape.palatable.lambda.functions.builtin.fn2.Tupler2.tupler;
 import static dev.marksman.collectionviews.CrossJoinVector.crossJoinVector;
 import static dev.marksman.collectionviews.MapperChain.mapperChain;
 import static dev.marksman.collectionviews.Validation.*;
+import static dev.marksman.collectionviews.VectorZip.vectorZip;
 
 final class Vectors {
 
@@ -177,6 +179,13 @@ final class Vectors {
         return getNonEmptyOrThrow(maybeNonEmptyWrap(vec));
     }
 
+    static <A, B, R> NonEmptyVector<R> nonEmptyZipWith(Fn2<A, B, R> fn, NonEmptyVector<A> first, NonEmptyVector<B> second) {
+        Objects.requireNonNull(fn);
+        Objects.requireNonNull(first);
+        Objects.requireNonNull(second);
+        return vectorZip(fn, first, second);
+    }
+
     static <A> NonEmptyVector<Tuple2<A, Integer>> nonEmptyZipWithIndex(NonEmptyVector<A> vec) {
         Objects.requireNonNull(vec);
         return new VectorZipWithIndex<>(vec);
@@ -244,6 +253,13 @@ final class Vectors {
         } else {
             return new WrappedListVector<>(list);
         }
+    }
+
+    static <A, B, R> Vector<R> zipWith(Fn2<A, B, R> fn, Vector<A> first, Vector<B> second) {
+        return second.toNonEmpty().<Tuple2<NonEmptyVector<A>, NonEmptyVector<B>>>zip(first.toNonEmpty()
+                .fmap(tupler()))
+                .match(__ -> empty(),
+                        into((ne1, ne2) -> nonEmptyZipWith(fn, ne1, ne2)));
     }
 
     static <A> Vector<Tuple2<A, Integer>> zipWithIndex(Vector<A> vec) {

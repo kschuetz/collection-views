@@ -3,6 +3,7 @@ package dev.marksman.collectionviews;
 import com.jnape.palatable.lambda.adt.Maybe;
 import com.jnape.palatable.lambda.adt.hlist.Tuple2;
 import com.jnape.palatable.lambda.functions.Fn1;
+import com.jnape.palatable.lambda.functions.Fn2;
 
 /**
  * A {@code Vector} that is guaranteed at compile-time to be safe from mutation anywhere.
@@ -243,6 +244,10 @@ public interface ImmutableVector<A> extends Vector<A>, Immutable {
     @Override
     default ImmutableNonEmptyVector<A> toNonEmptyOrThrow() {
         return ImmutableVectors.nonEmptyConvertOrThrow(this);
+    }
+
+    default <B, R> ImmutableVector<R> zipWith(Fn2<A, B, R> fn, ImmutableVector<B> other) {
+        return ImmutableVectors.zipWith(fn, this, other);
     }
 
     /**

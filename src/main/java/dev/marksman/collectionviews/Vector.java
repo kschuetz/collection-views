@@ -3,6 +3,7 @@ package dev.marksman.collectionviews;
 import com.jnape.palatable.lambda.adt.Maybe;
 import com.jnape.palatable.lambda.adt.hlist.Tuple2;
 import com.jnape.palatable.lambda.functions.Fn1;
+import com.jnape.palatable.lambda.functions.Fn2;
 import com.jnape.palatable.lambda.functions.builtin.fn2.Find;
 
 import java.util.Iterator;
@@ -314,6 +315,10 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
      */
     default NonEmptyVector<A> toNonEmptyOrThrow() {
         return Vectors.nonEmptyWrapOrThrow(this);
+    }
+
+    default <B, R> Vector<R> zipWith(Fn2<A, B, R> fn, Vector<B> other) {
+        return Vectors.zipWith(fn, this, other);
     }
 
     /**
