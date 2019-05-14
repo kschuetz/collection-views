@@ -111,7 +111,7 @@ final class ImmutableVectors {
     }
 
     static <A, B> ImmutableVector<B> map(Fn1<? super A, ? extends B> f, ImmutableVector<A> source) {
-        return maybeNonEmptyWrap(source)
+        return maybeNonEmptyConvert(source)
                 .match(__ -> Vectors.empty(),
                         nonEmpty -> nonEmptyMap(f, nonEmpty));
     }
@@ -274,17 +274,6 @@ final class ImmutableVectors {
 
     private static <A> ImmutableNonEmptyVector<A> getNonEmptyOrThrow(Maybe<ImmutableNonEmptyVector<A>> maybeResult) {
         return maybeResult.orElseThrow(Vectors.nonEmptyError());
-    }
-
-    private static <A> Maybe<ImmutableNonEmptyVector<A>> maybeNonEmptyWrap(ImmutableVector<A> vec) {
-        Objects.requireNonNull(vec);
-        if (vec instanceof NonEmptyVector<?>) {
-            return just((ImmutableNonEmptyVector<A>) vec);
-        } else if (!vec.isEmpty()) {
-            return just(new ImmutableVectorCons<>(vec.unsafeGet(0), vec.tail()));
-        } else {
-            return nothing();
-        }
     }
 
 }
