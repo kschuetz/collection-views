@@ -13,7 +13,10 @@ import java.util.function.Supplier;
 
 import static com.jnape.palatable.lambda.adt.Maybe.just;
 import static com.jnape.palatable.lambda.adt.Maybe.nothing;
+import static com.jnape.palatable.lambda.functions.builtin.fn2.Into.into;
 import static com.jnape.palatable.lambda.functions.builtin.fn2.ToCollection.toCollection;
+import static com.jnape.palatable.lambda.functions.builtin.fn2.Tupler2.tupler;
+import static dev.marksman.collectionviews.CrossJoinVector.crossJoinVector;
 import static dev.marksman.collectionviews.MapperChain.mapperChain;
 import static dev.marksman.collectionviews.Validation.*;
 
@@ -21,6 +24,13 @@ final class Vectors {
 
     private Vectors() {
 
+    }
+
+    static <A, B> Vector<Tuple2<A, B>> cross(Vector<A> first, Vector<B> second) {
+        return second.toNonEmpty().<Tuple2<NonEmptyVector<A>, NonEmptyVector<B>>>zip(first.toNonEmpty()
+                .fmap(tupler()))
+                .match(__ -> empty(),
+                        into(Vectors::nonEmptyCross));
     }
 
     static <A> Vector<A> drop(int count, Vector<A> source) {
@@ -115,6 +125,10 @@ final class Vectors {
         } else {
             return nothing();
         }
+    }
+
+    static <A, B> NonEmptyVector<Tuple2<A, B>> nonEmptyCross(NonEmptyVector<A> first, NonEmptyVector<B> second) {
+        return crossJoinVector(first, second);
     }
 
     static Supplier<IllegalArgumentException> nonEmptyError() {

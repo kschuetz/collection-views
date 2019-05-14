@@ -12,7 +12,10 @@ import java.util.Objects;
 
 import static com.jnape.palatable.lambda.adt.Maybe.just;
 import static com.jnape.palatable.lambda.adt.Maybe.nothing;
+import static com.jnape.palatable.lambda.functions.builtin.fn2.Into.into;
 import static com.jnape.palatable.lambda.functions.builtin.fn2.ToCollection.toCollection;
+import static com.jnape.palatable.lambda.functions.builtin.fn2.Tupler2.tupler;
+import static dev.marksman.collectionviews.ImmutableCrossJoinVector.immutableCrossJoinVector;
 import static dev.marksman.collectionviews.ImmutableReverseVector.immutableReverseVector;
 import static dev.marksman.collectionviews.MapperChain.mapperChain;
 import static dev.marksman.collectionviews.Validation.*;
@@ -68,6 +71,13 @@ final class ImmutableVectors {
         } else {
             return Vectors.sliceFromIterable(startIndex, endIndexExclusive, source).toImmutable();
         }
+    }
+
+    static <A, B> ImmutableVector<Tuple2<A, B>> cross(ImmutableVector<A> first, ImmutableVector<B> second) {
+        return second.toNonEmpty().<Tuple2<ImmutableNonEmptyVector<A>, ImmutableNonEmptyVector<B>>>zip(first.toNonEmpty()
+                .fmap(tupler()))
+                .match(__ -> empty(),
+                        into(ImmutableVectors::nonEmptyCross));
     }
 
     static <A> ImmutableVector<A> drop(int count, ImmutableVector<A> source) {
@@ -186,6 +196,10 @@ final class ImmutableVectors {
 
     static <A> ImmutableNonEmptyVector<A> nonEmptyCopyFromOrThrow(int maxCount, A[] source) {
         return getNonEmptyOrThrow(maybeNonEmptyCopyFrom(maxCount, source));
+    }
+
+    static <A, B> ImmutableNonEmptyVector<Tuple2<A, B>> nonEmptyCross(ImmutableNonEmptyVector<A> first, ImmutableNonEmptyVector<B> second) {
+        return immutableCrossJoinVector(first, second);
     }
 
     @SuppressWarnings("unchecked")

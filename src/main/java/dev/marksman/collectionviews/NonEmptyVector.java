@@ -25,6 +25,10 @@ import static com.jnape.palatable.lambda.adt.Maybe.just;
  */
 public interface NonEmptyVector<A> extends NonEmptyIterable<A>, Vector<A> {
 
+    default <B> NonEmptyVector<Tuple2<A, B>> cross(NonEmptyVector<B> other) {
+        return Vectors.nonEmptyCross(this, other);
+    }
+
     /**
      * Maps a function over this {@code NonEmptyVector}.
      * <p>

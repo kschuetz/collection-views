@@ -68,6 +68,10 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
      */
     A unsafeGet(int index);
 
+    default <B> Vector<Tuple2<A, B>> cross(Vector<B> other) {
+        return Vectors.cross(this, other);
+    }
+
     /**
      * Returns a new {@code Vector} that drops the first {@code count} elements of this {@code Vector}.
      * <p>

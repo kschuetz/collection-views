@@ -24,6 +24,10 @@ import com.jnape.palatable.lambda.functions.Fn1;
  */
 public interface ImmutableVector<A> extends Vector<A>, Immutable {
 
+    default <B> ImmutableVector<Tuple2<A, B>> cross(ImmutableVector<B> other) {
+        return ImmutableVectors.cross(this, other);
+    }
+
     /**
      * Returns a new {@code ImmutableVector} that drops the first {@code count} elements of this {@code ImmutableVector}.
      * <p>

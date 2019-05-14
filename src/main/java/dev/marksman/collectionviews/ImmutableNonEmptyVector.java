@@ -22,6 +22,10 @@ import static com.jnape.palatable.lambda.adt.Maybe.just;
  */
 public interface ImmutableNonEmptyVector<A> extends NonEmptyVector<A>, ImmutableVector<A> {
 
+    default <B> ImmutableNonEmptyVector<Tuple2<A, B>> cross(ImmutableNonEmptyVector<B> other) {
+        return ImmutableVectors.nonEmptyCross(this, other);
+    }
+
     /**
      * Maps a function over this {@code ImmutableNonEmptyVector}.
      * <p>
