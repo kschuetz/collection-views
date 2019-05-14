@@ -106,6 +106,13 @@ The views yielded by these transformation are new, independent views, and do not
 
 For convenience, collection views should be easy to create on the fly without the need for a pre-existing collection.  Views constructed this way should be first-class and have the same capabilities of all other views.  
 
+# Installation
+
+To install, add the dependency to the latest version to your `pom.xml` (Maven) or `build.gradle` (Gradle).
+
+Follow this link to get the dependency info for your preferred build tool:
+[![collection-views](https://img.shields.io/maven-central/v/dev.marksman/collection-views.svg)](http://search.maven.org/#search%7Cga%7C1%7Cdev.marksman.collection-views)
+
 # <a name="types">Types of collection views</a>
 
 | Interface | Immutable to bearer | Guaranteed safe from mutation anywhere | Guaranteed non-empty |
