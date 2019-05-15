@@ -250,6 +250,13 @@ final class ImmutableVectors {
         }
     }
 
+    static <A> Tuple2<ImmutableVector<A>, ImmutableVector<A>> span
+            (Fn1<? super A, ? extends Boolean> predicate, ImmutableVector<A> source) {
+        Objects.requireNonNull(predicate);
+        Objects.requireNonNull(source);
+        return splitAt(Vectors.findPrefixLength(predicate, source), source);
+    }
+
     static <A> Tuple2<ImmutableVector<A>, ImmutableVector<A>> splitAt(int index, ImmutableVector<A> source) {
         validateTake(index, source);
         return tuple(source.take(index), source.drop(index));

@@ -134,6 +134,10 @@ public interface ImmutableVector<A> extends Vector<A>, Immutable {
         return ImmutableVectors.slice(startIndex, endIndexExclusive, this);
     }
 
+    default Tuple2<ImmutableVector<A>, ImmutableVector<A>> span(Fn1<? super A, ? extends Boolean> predicate) {
+        return ImmutableVectors.span(predicate, this);
+    }
+
     @Override
     default Tuple2<ImmutableVector<A>, ImmutableVector<A>> splitAt(int index) {
         return ImmutableVectors.splitAt(index, this);
