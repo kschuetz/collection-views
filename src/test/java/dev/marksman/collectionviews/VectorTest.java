@@ -33,7 +33,7 @@ class VectorTest {
 
     @Nested
     @DisplayName("empty")
-    class EmptyVectorTests {
+    class EmptyVector {
 
         @Nested
         @DisplayName("array")
@@ -177,11 +177,11 @@ class VectorTest {
 
     @Nested
     @DisplayName("wrap")
-    class WrapTests {
+    class Wrap {
 
         @Nested
         @DisplayName("wrap array")
-        class WrapArrayTests {
+        class WrapArray {
 
             @Test
             void throwsOnNullArgument() {
@@ -251,7 +251,7 @@ class VectorTest {
 
             @Nested
             @DisplayName("wrap size 3 array")
-            class WrapArray3Tests {
+            class WrapSize3Array3 {
                 private Vector<String> subject;
                 private String[] underlying;
 
@@ -400,7 +400,7 @@ class VectorTest {
 
             @Nested
             @DisplayName("wrap size 1 array")
-            class WrapSingletonArrayTests {
+            class WrapSize1Array {
                 private Vector<String> subject;
 
                 @BeforeEach
@@ -417,7 +417,7 @@ class VectorTest {
 
             @Nested
             @DisplayName("wrap empty array")
-            class WrapEmptyArrayTests {
+            class WrapEmptyArray {
                 private Vector<Integer> subject;
 
                 @BeforeEach
@@ -450,7 +450,7 @@ class VectorTest {
 
         @Nested
         @DisplayName("wrap List")
-        class WrapListTests {
+        class WrapList {
 
             @Test
             void throwsOnNullArgument() {
@@ -520,7 +520,7 @@ class VectorTest {
 
             @Nested
             @DisplayName("wrap size 3 List")
-            class WrapList3Tests {
+            class WrapSize3List {
                 private Vector<String> subject;
                 private List<String> underlying;
 
@@ -669,7 +669,7 @@ class VectorTest {
 
             @Nested
             @DisplayName("wrap size 1 List")
-            class WrapSize1ListTests {
+            class WrapSize1List {
 
                 private Vector<String> subject;
 
@@ -687,7 +687,7 @@ class VectorTest {
 
             @Nested
             @DisplayName("wrap empty List")
-            class WrapEmptyListTests {
+            class WrapEmptyList {
                 private Vector<Integer> subject;
 
                 @BeforeEach
@@ -733,10 +733,10 @@ class VectorTest {
 
     @Nested
     @DisplayName("fmap")
-    class FmapTests {
+    class Fmap {
         @Nested
         @DisplayName("array")
-        class ArrayFmapTests {
+        class Array {
 
             @Test
             void throwsOnNullFunction() {
@@ -795,7 +795,7 @@ class VectorTest {
 
         @Nested
         @DisplayName("List")
-        class ListFmapTests {
+        class List {
 
             @Test
             void throwsOnNullFunction() {
@@ -824,7 +824,7 @@ class VectorTest {
 
             @Test
             void willNotMakeCopiesOfUnderlying() {
-                List<Integer> underlying = asList(1, 2, 3);
+                java.util.List<Integer> underlying = asList(1, 2, 3);
                 Vector<Integer> subject = Vector.wrap(underlying);
                 Vector<Integer> mapped1 = subject.fmap(n -> n * 2);
                 Vector<String> mapped2 = mapped1.fmap(Object::toString);
@@ -856,11 +856,11 @@ class VectorTest {
 
     @Nested
     @DisplayName("take")
-    class TakeTests {
+    class Take {
 
         @Nested
         @DisplayName("array")
-        class ArrayTests {
+        class Array {
 
             @Test
             void throwsOnNegativeCount() {
@@ -952,7 +952,7 @@ class VectorTest {
 
         @Nested
         @DisplayName("List")
-        class ListTests {
+        class List {
             @Test
             void throwsOnNegativeCount() {
                 assertThrows(IllegalArgumentException.class, () -> Vector.wrap(singletonList(1)).take(-1));
@@ -978,7 +978,7 @@ class VectorTest {
 
             @Test
             void willNotMakeCopiesOfUnderlying() {
-                List<String> originalUnderlying = asList("foo", "bar", "baz");
+                java.util.List<String> originalUnderlying = asList("foo", "bar", "baz");
                 Vector<String> original = Vector.wrap(originalUnderlying);
                 Vector<String> sliced = original.take(2);
                 assertThat(sliced, contains("foo", "bar"));
@@ -1045,11 +1045,11 @@ class VectorTest {
 
     @Nested
     @DisplayName("takeRight")
-    class TakeRightTests {
+    class TakeRight {
 
         @Nested
         @DisplayName("array")
-        class ArrayTests {
+        class Array {
 
             @Test
             void throwsOnNegativeCount() {
@@ -1103,7 +1103,7 @@ class VectorTest {
 
         @Nested
         @DisplayName("List")
-        class ListTests {
+        class List {
             @Test
             void throwsOnNegativeCount() {
                 assertThrows(IllegalArgumentException.class, () -> Vector.wrap(singletonList(1)).takeRight(-1));
@@ -1129,7 +1129,7 @@ class VectorTest {
 
             @Test
             void willNotMakeCopiesOfUnderlying() {
-                List<String> originalUnderlying = asList("foo", "bar", "baz");
+                java.util.List<String> originalUnderlying = asList("foo", "bar", "baz");
                 Vector<String> original = Vector.wrap(originalUnderlying);
                 Vector<String> sliced = original.takeRight(2);
                 assertThat(sliced, contains("bar", "baz"));
@@ -1158,11 +1158,11 @@ class VectorTest {
 
     @Nested
     @DisplayName("drop")
-    class DropTests {
+    class Drop {
 
         @Nested
         @DisplayName("array")
-        class ArrayDropTests {
+        class Array {
 
             @Test
             void throwsOnNegativeCount() {
@@ -1257,7 +1257,7 @@ class VectorTest {
 
         @Nested
         @DisplayName("List")
-        class ListDropTests {
+        class List {
 
             @Test
             void throwsOnNegativeCount() {
@@ -1296,7 +1296,7 @@ class VectorTest {
 
             @Test
             void willNotMakeCopiesOfUnderlying() {
-                List<String> underlying = asList("foo", "bar", "baz");
+                java.util.List<String> underlying = asList("foo", "bar", "baz");
                 Vector<String> source = Vector.wrap(underlying);
                 Vector<String> drop1 = source.drop(1);
                 assertThat(drop1, contains("bar", "baz"));
@@ -1354,11 +1354,11 @@ class VectorTest {
 
     @Nested
     @DisplayName("dropRight")
-    class DropRightTests {
+    class DropRight {
 
         @Nested
         @DisplayName("array")
-        class ArrayDropRightTests {
+        class Array {
 
             @Test
             void throwsOnNegativeCount() {
@@ -1415,7 +1415,7 @@ class VectorTest {
 
         @Nested
         @DisplayName("List")
-        class ListDropRightTests {
+        class List {
 
             @Test
             void throwsOnNegativeCount() {
@@ -1454,7 +1454,7 @@ class VectorTest {
 
             @Test
             void willNotMakeCopiesOfUnderlying() {
-                List<String> underlying = asList("foo", "bar", "baz");
+                java.util.List<String> underlying = asList("foo", "bar", "baz");
                 Vector<String> source = Vector.wrap(underlying);
                 Vector<String> drop1 = source.dropRight(1);
                 assertThat(drop1, contains("foo", "bar"));
@@ -1475,11 +1475,11 @@ class VectorTest {
 
     @Nested
     @DisplayName("slice")
-    class SliceTests {
+    class Slice {
 
         @Nested
         @DisplayName("array")
-        class ArraySliceTests {
+        class Array {
 
             @Test
             void throwsOnNegativeStartIndex() {
@@ -1579,7 +1579,7 @@ class VectorTest {
 
         @Nested
         @DisplayName("List")
-        class ListSliceTests {
+        class List {
 
             @Test
             void throwsOnNegativeStartIndex() {
@@ -1634,7 +1634,7 @@ class VectorTest {
 
             @Test
             void willNotMakeCopiesOfUnderlying() {
-                List<String> underlying = asList("foo", "bar", "baz");
+                java.util.List<String> underlying = asList("foo", "bar", "baz");
                 Vector<String> original = Vector.wrap(underlying);
                 Vector<String> slice2 = original.slice(1, 3);
                 Vector<String> slice3 = original.slice(2, 100);
@@ -1681,11 +1681,11 @@ class VectorTest {
 
     @Nested
     @DisplayName("reverse")
-    class ReverseTests {
+    class Reverse {
 
         @Nested
         @DisplayName("array")
-        class ArrayReverseTests {
+        class Array {
 
             @Test
             void returnsEmptyVectorIfEmpty() {
@@ -1728,7 +1728,7 @@ class VectorTest {
 
         @Nested
         @DisplayName("List")
-        class ListReverseTests {
+        class List {
 
             @Test
             void returnsEmptyVectorIfEmpty() {
@@ -1754,7 +1754,7 @@ class VectorTest {
 
             @Test
             void willNotMakeCopiesOfUnderlying() {
-                List<Integer> underlying = asList(1, 2, 3, 4);
+                java.util.List<Integer> underlying = asList(1, 2, 3, 4);
                 Vector<Integer> original = Vector.wrap(underlying);
                 Vector<Integer> reversed = original.reverse();
                 underlying.set(2, 10);
@@ -1772,7 +1772,7 @@ class VectorTest {
 
     @Nested
     @DisplayName("zipWithIndex")
-    class ZipWithIndexTests {
+    class ZipWithIndex {
 
         private Vector<String> subject;
 
@@ -1848,11 +1848,11 @@ class VectorTest {
 
     @Nested
     @DisplayName("findByIndex")
-    class FindByIndexTests {
+    class FindByIndex {
 
         @Nested
         @DisplayName("array")
-        class ArrayFindByIndexTests {
+        class Array {
 
             @Test
             void returnsFirstFound() {
@@ -1871,7 +1871,7 @@ class VectorTest {
 
         @Nested
         @DisplayName("List")
-        class ListFindByIndexTests {
+        class List {
 
             @Test
             void returnsFirstFound() {
@@ -1887,6 +1887,12 @@ class VectorTest {
             }
 
         }
+
+    }
+
+    @Nested
+    @DisplayName("cross")
+    class Cross {
 
     }
 
