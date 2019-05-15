@@ -24,6 +24,18 @@ import com.jnape.palatable.lambda.functions.Fn2;
  */
 public interface ImmutableVector<A> extends Vector<A>, Immutable {
 
+    /**
+     * Returns the cartesian product of this {@code ImmutableVector} with another {@code ImmutableVector}.
+     * <p>
+     * Does not make copies of any underlying collections.
+     * <p>
+     * The returned {@link ImmutableVector} will have a size of {@code size()} x {@code other.size()},
+     * but will allocate no extra memory (aside from a few bytes for housekeeping).
+     *
+     * @param other an {@code ImmutableVector} of any type
+     * @param <B>   the type of the other {@code ImmutableVector}
+     * @return a {@code ImmutableVector<Tuple2<A, B>>}
+     */
     default <B> ImmutableVector<Tuple2<A, B>> cross(ImmutableVector<B> other) {
         return ImmutableVectors.cross(this, other);
     }
@@ -31,7 +43,7 @@ public interface ImmutableVector<A> extends Vector<A>, Immutable {
     /**
      * Returns a new {@code ImmutableVector} that drops the first {@code count} elements of this {@code ImmutableVector}.
      * <p>
-     * Does not make copies of any underlying data structures.
+     * Does not make copies of any underlying collections.
      * <p>
      * Use caution when taking a small slice of a huge {@link ImmutableVector} that you no longer need.
      * The smaller slice will hold onto a reference of the larger one, and will prevent it from being GC'ed.
@@ -50,7 +62,7 @@ public interface ImmutableVector<A> extends Vector<A>, Immutable {
     /**
      * Returns a new {@code ImmutableVector} that drops all except the last {@code count} elements of this {@code ImmutableVector}.
      * <p>
-     * Does not make copies of any underlying data structures.
+     * Does not make copies of any underlying collections.
      * <p>
      * Use caution when taking a small slice of a huge {@code Vector} that you no longer need.
      * The smaller slice will hold onto a reference of the larger one, and will prevent it from being GC'ed.
@@ -69,7 +81,7 @@ public interface ImmutableVector<A> extends Vector<A>, Immutable {
     /**
      * Returns a new {@code ImmutableVector} that drops longest prefix of elements of this {@code ImmutableVector} that satisfy a predicate.
      * <p>
-     * Does not make copies of any underlying data structures.
+     * Does not make copies of any underlying collections.
      *
      * @param predicate a predicate;  not null
      * @return an {@code ImmutableVector<A>}
@@ -83,7 +95,7 @@ public interface ImmutableVector<A> extends Vector<A>, Immutable {
      * <p>
      * Returns a new {@link ImmutableVector} of the same size (but possibly a different type).
      * <p>
-     * Does not make any copies of underlying data structures.
+     * Does not make any copies of underlying collections.
      * <p>
      * This method is stack-safe, so a {@code ImmutableVector} can be mapped as many times as the heap permits.
      *
@@ -107,7 +119,7 @@ public interface ImmutableVector<A> extends Vector<A>, Immutable {
     /**
      * Creates an {@code ImmutableVector} with this {@code ImmutableVector}'s elements in reversed order.
      * <p>
-     * Does not make copies of any underlying data structures.
+     * Does not make copies of any underlying collections.
      *
      * @return an {@code ImmutableVector<A>}
      */
@@ -119,7 +131,7 @@ public interface ImmutableVector<A> extends Vector<A>, Immutable {
     /**
      * Creates a slice of this {@code ImmutableVector}.
      * <p>
-     * Does not make copies of any underlying data structures.
+     * Does not make copies of any underlying collections.
      * <p>
      * Use caution when taking a small slice of a huge {@code ImmutableVector} that you no longer need.
      * The smaller slice will hold onto a reference of the larger one, and will prevent it from being GC'ed.
@@ -155,7 +167,7 @@ public interface ImmutableVector<A> extends Vector<A>, Immutable {
     /**
      * Returns a new {@code ImmutableVector} containing at most the first {@code count} elements of this {@code ImmutableVector}.
      * <p>
-     * Does not make copies of any underlying data structures.
+     * Does not make copies of any underlying collections.
      * <p>
      * Use caution when taking a small slice of a huge {@link ImmutableVector} that you no longer need.
      * The smaller slice will hold onto a reference of the larger one, and will prevent it from being GC'ed.
@@ -174,7 +186,7 @@ public interface ImmutableVector<A> extends Vector<A>, Immutable {
     /**
      * Returns a new {@code ImmutableVector} containing at most the last {@code count} elements of this {@code ImmutableVector}.
      * <p>
-     * Does not make copies of any underlying data structures.
+     * Does not make copies of any underlying collections.
      * <p>
      * Use caution when taking a small slice of a huge {@link ImmutableVector} that you no longer need.
      * The smaller slice will hold onto a reference of the larger one, and will prevent it from being GC'ed.
@@ -193,7 +205,7 @@ public interface ImmutableVector<A> extends Vector<A>, Immutable {
     /**
      * Returns a new {@code ImmutableVector} containing the longest prefix of elements this {@code ImmutableVector} that satisfy a predicate.
      * <p>
-     * Does not make copies of any underlying data structures.
+     * Does not make copies of any underlying collections.
      *
      * @param predicate a predicate;  not null
      * @return an {@code ImmutableVector<A>}
@@ -222,7 +234,7 @@ public interface ImmutableVector<A> extends Vector<A>, Immutable {
      * <p>
      * If this {@code ImmutableVector} is empty, returns {@link Maybe#nothing}.
      * <p>
-     * Does not make copies of any underlying data structures.
+     * Does not make copies of any underlying collections.
      *
      * @return a {@code Maybe<ImmutableNonEmptyVector<A>>}
      */
@@ -239,7 +251,7 @@ public interface ImmutableVector<A> extends Vector<A>, Immutable {
      * <p>
      * If this {@code ImmutableVector} is empty, throws an {@link IllegalArgumentException}.
      * <p>
-     * Does not make copies of any underlying data structures.
+     * Does not make copies of any underlying collections.
      *
      * @return an {@code ImmutableNonEmptyVector<A>}
      * @throws IllegalArgumentException if this {@code ImmutableVector} is empty
@@ -256,7 +268,7 @@ public interface ImmutableVector<A> extends Vector<A>, Immutable {
     /**
      * Zips this {@code ImmutableVector} with its indices.
      * <p>
-     * Does not make copies of any underlying data structures.
+     * Does not make copies of any underlying collections.
      *
      * @return a new {@code ImmutableVector} containing pairs consisting of all elements of this {@code ImmutableVector} paired with their index.
      * Indices start at 0.

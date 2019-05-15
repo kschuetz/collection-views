@@ -23,6 +23,18 @@ import static com.jnape.palatable.lambda.adt.Maybe.just;
  */
 public interface ImmutableNonEmptyVector<A> extends NonEmptyVector<A>, ImmutableVector<A> {
 
+    /**
+     * Returns the cartesian product of this {@code ImmutableNonEmptyVector} with another {@code ImmutableNonEmptyVector}.
+     * <p>
+     * Does not make copies of any underlying collections.
+     * <p>
+     * The returned {@link ImmutableNonEmptyVector} will have a size of {@code size()} x {@code other.size()},
+     * but will allocate no extra memory (aside from a few bytes for housekeeping).
+     *
+     * @param other an {@code ImmutableNonEmptyVector} of any type
+     * @param <B>   the type of the other {@code ImmutableNonEmptyVector}
+     * @return a {@code ImmutableNonEmptyVector<Tuple2<A, B>>}
+     */
     default <B> ImmutableNonEmptyVector<Tuple2<A, B>> cross(ImmutableNonEmptyVector<B> other) {
         return ImmutableVectors.nonEmptyCross(this, other);
     }
@@ -32,7 +44,7 @@ public interface ImmutableNonEmptyVector<A> extends NonEmptyVector<A>, Immutable
      * <p>
      * Returns a new {@link ImmutableNonEmptyVector} of the same size (but possibly a different type).
      * <p>
-     * Does not make any copies of underlying data structures.
+     * Does not make any copies of underlying collections.
      * <p>
      * This method is stack-safe, so a {@code ImmutableNonEmptyVector} can be mapped as many times as the heap permits.
      *
@@ -56,7 +68,7 @@ public interface ImmutableNonEmptyVector<A> extends NonEmptyVector<A>, Immutable
     /**
      * Creates an {@code ImmutableNonEmptyVector} with this {@code ImmutableNonEmptyVector}'s elements in reversed order.
      * <p>
-     * Does not make copies of any underlying data structures.
+     * Does not make copies of any underlying collections.
      *
      * @return an {@code ImmutableNonEmptyVector<A>}
      */
@@ -71,7 +83,7 @@ public interface ImmutableNonEmptyVector<A> extends NonEmptyVector<A>, Immutable
      * The tail of an {@link ImmutableNonEmptyVector} is the same {@code ImmutableNonEmptyVector} with the first element dropped.
      * May be empty.
      * <p>
-     * Does not make copies of any underlying data structures.
+     * Does not make copies of any underlying collections.
      *
      * @return an {@code ImmutableVector<A>}
      */
@@ -99,7 +111,7 @@ public interface ImmutableNonEmptyVector<A> extends NonEmptyVector<A>, Immutable
      * Since this will always be successful for {@link ImmutableNonEmptyVector}s,
      * this method always returns itself wrapped in a {@link Maybe#just}.
      * <p>
-     * Does not make copies of any underlying data structures.
+     * Does not make copies of any underlying collections.
      *
      * @return this {@code ImmutableNonEmptyVector} wrapped in a {@link Maybe#just}
      */
@@ -114,7 +126,7 @@ public interface ImmutableNonEmptyVector<A> extends NonEmptyVector<A>, Immutable
      * Since this will always be successful for {@link ImmutableNonEmptyVector}s,
      * this method always returns itself.
      * <p>
-     * Does not make copies of any underlying data structures.
+     * Does not make copies of any underlying collections.
      *
      * @return this {@code ImmutableNonEmptyVector}
      */
@@ -130,7 +142,7 @@ public interface ImmutableNonEmptyVector<A> extends NonEmptyVector<A>, Immutable
     /**
      * Zips this {@code ImmutableNonEmptyVector} with its indices.
      * <p>
-     * Does not make copies of any underlying data structures.
+     * Does not make copies of any underlying collections.
      *
      * @return a new {@code ImmutableNonEmptyVector} containing pairs consisting of all elements of this {@code ImmutableNonEmptyVector} paired with their index.
      * Indices start at 0.

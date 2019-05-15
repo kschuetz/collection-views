@@ -26,6 +26,18 @@ import static com.jnape.palatable.lambda.adt.Maybe.just;
  */
 public interface NonEmptyVector<A> extends NonEmptyIterable<A>, Vector<A> {
 
+    /**
+     * Returns the cartesian product of this {@code NonEmptyVector} with another {@code NonEmptyVector}.
+     * <p>
+     * Does not make copies of any underlying collections.
+     * <p>
+     * The returned {@link NonEmptyVector} will have a size of {@code size()} x {@code other.size()},
+     * but will allocate no extra memory (aside from a few bytes for housekeeping).
+     *
+     * @param other a {@code NonEmptyVector} of any type
+     * @param <B>   the type of the other {@code NonEmptyVector}
+     * @return a {@code NonEmptyVector<Tuple2<A, B>>}
+     */
     default <B> NonEmptyVector<Tuple2<A, B>> cross(NonEmptyVector<B> other) {
         return Vectors.nonEmptyCross(this, other);
     }
@@ -35,7 +47,7 @@ public interface NonEmptyVector<A> extends NonEmptyIterable<A>, Vector<A> {
      * <p>
      * Returns a new {@link NonEmptyVector} of the same size (but possibly a different type).
      * <p>
-     * Does not make any copies of underlying data structures.
+     * Does not make any copies of underlying collections.
      * <p>
      * This method is stack-safe, so a {@code NonEmptyVector} can be mapped as many times as the heap permits.
      *
@@ -104,7 +116,7 @@ public interface NonEmptyVector<A> extends NonEmptyIterable<A>, Vector<A> {
     /**
      * Creates a {@code NonEmptyVector} with this {@code NonEmptyVector}'s elements in reversed order.
      * <p>
-     * Does not make copies of any underlying data structures.
+     * Does not make copies of any underlying collections.
      *
      * @return a {@code NonEmptyVector<A>}
      */
@@ -119,7 +131,7 @@ public interface NonEmptyVector<A> extends NonEmptyIterable<A>, Vector<A> {
      * The tail of a {@link NonEmptyVector} is the same {@code Vector} with the first element dropped.
      * May be empty.
      * <p>
-     * Does not make copies of any underlying data structures.
+     * Does not make copies of any underlying collections.
      *
      * @return a {@code Vector<A>}
      */
@@ -148,7 +160,7 @@ public interface NonEmptyVector<A> extends NonEmptyIterable<A>, Vector<A> {
      * Since this will always be successful for {@link NonEmptyVector}s,
      * this method always returns itself wrapped in a {@link Maybe#just}.
      * <p>
-     * Does not make copies of any underlying data structures.
+     * Does not make copies of any underlying collections.
      *
      * @return this {@code NonEmptyVector} wrapped in a {@link Maybe#just}
      */
@@ -163,7 +175,7 @@ public interface NonEmptyVector<A> extends NonEmptyIterable<A>, Vector<A> {
      * Since this will always be successful for {@link NonEmptyVector}s,
      * this method always returns itself.
      * <p>
-     * Does not make copies of any underlying data structures.
+     * Does not make copies of any underlying collections.
      *
      * @return this {@code NonEmptyVector}
      */
@@ -179,7 +191,7 @@ public interface NonEmptyVector<A> extends NonEmptyIterable<A>, Vector<A> {
     /**
      * Zips this {@code NonEmptyVector} with its indices.
      * <p>
-     * Does not make copies of any underlying data structures.
+     * Does not make copies of any underlying collections.
      *
      * @return a new {@code NonEmptyVector} containing pairs consisting of all elements of this {@code NonEmptyVector} paired with their index.
      * Indices start at 0.

@@ -69,6 +69,18 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
      */
     A unsafeGet(int index);
 
+    /**
+     * Returns the cartesian product of this {@code Vector} with another {@code Vector}.
+     * <p>
+     * Does not make copies of any underlying collections.
+     * <p>
+     * The returned {@link Vector} will have a size of {@code size()} x {@code other.size()},
+     * but will allocate no extra memory (aside from a few bytes for housekeeping).
+     *
+     * @param other a {@code Vector} of any type
+     * @param <B>   the type of the other {@code Vector}
+     * @return a {@code Vector<Tuple2<A, B>>}
+     */
     default <B> Vector<Tuple2<A, B>> cross(Vector<B> other) {
         return Vectors.cross(this, other);
     }
@@ -76,7 +88,7 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
     /**
      * Returns a new {@code Vector} that drops the first {@code count} elements of this {@code Vector}.
      * <p>
-     * Does not make copies of any underlying data structures.
+     * Does not make copies of any underlying collections.
      * <p>
      * Use caution when taking a small slice of a huge {@code Vector} that you no longer need.
      * The smaller slice will hold onto a reference of the larger one, and will prevent it from being GC'ed.
@@ -94,7 +106,7 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
     /**
      * Returns a new {@code Vector} that drops all except the last {@code count} elements of this {@code Vector}.
      * <p>
-     * Does not make copies of any underlying data structures.
+     * Does not make copies of any underlying collections.
      * <p>
      * Use caution when taking a small slice of a huge {@code Vector} that you no longer need.
      * The smaller slice will hold onto a reference of the larger one, and will prevent it from being GC'ed.
@@ -136,7 +148,7 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
      * <p>
      * Returns a new {@link Vector} of the same size (but possibly a different type).
      * <p>
-     * Does not make any copies of underlying data structures.
+     * Does not make any copies of underlying collections.
      * <p>
      * This method is stack-safe, so a {@code Vector} can be mapped as many times as the heap permits.
      *
@@ -201,7 +213,7 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
     /**
      * Creates a {@code Vector} with this {@code Vector}'s elements in reversed order.
      * <p>
-     * Does not make copies of any underlying data structures.
+     * Does not make copies of any underlying collections.
      *
      * @return a {@code Vector<A>}
      */
@@ -212,7 +224,7 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
     /**
      * Creates a slice of this {@code Vector}.
      * <p>
-     * Does not make copies of any underlying data structures.
+     * Does not make copies of any underlying collections.
      * <p>
      * Use caution when taking a small slice of a huge {@code Vector} that you no longer need.
      * The smaller slice will hold onto a reference of the larger one, and will prevent it from being GC'ed.
@@ -241,7 +253,7 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
     /**
      * Returns a new {@code Vector} containing at most the first {@code count} elements of this {@code Vector}.
      * <p>
-     * Does not make copies of any underlying data structures.
+     * Does not make copies of any underlying collections.
      * <p>
      * Use caution when taking a small slice of a huge {@link Vector} that you no longer need.
      * The smaller slice will hold onto a reference of the larger one, and will prevent it from being GC'ed.
@@ -259,7 +271,7 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
     /**
      * Returns a new {@code Vector} containing at most the last {@code count} elements of this {@code Vector}.
      * <p>
-     * Does not make copies of any underlying data structures.
+     * Does not make copies of any underlying collections.
      * <p>
      * Use caution when taking a small slice of a huge {@link Vector} that you no longer need.
      * The smaller slice will hold onto a reference of the larger one, and will prevent it from being GC'ed.
@@ -294,7 +306,7 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
      * <p>
      * If this {@code Vector} is empty, returns {@link Maybe#nothing}.
      * <p>
-     * Does not make copies of any underlying data structures.
+     * Does not make copies of any underlying collections.
      *
      * @return a {@code Maybe<NonEmptyVector<A>>}
      */
@@ -310,7 +322,7 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
      * <p>
      * If this {@code Vector} is empty, throws an {@link IllegalArgumentException}.
      * <p>
-     * Does not make copies of any underlying data structures.
+     * Does not make copies of any underlying collections.
      *
      * @return a {@code NonEmptyVector<A>}
      * @throws IllegalArgumentException if this {@code Vector} is empty
@@ -326,7 +338,7 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
     /**
      * Zips this {@code Vector} with its indices.
      * <p>
-     * Does not make copies of any underlying data structures.
+     * Does not make copies of any underlying collections.
      *
      * @return a new {@code Vector} containing pairs consisting of all elements of this {@code Vector} paired with their index.
      * Indices start at 0.
