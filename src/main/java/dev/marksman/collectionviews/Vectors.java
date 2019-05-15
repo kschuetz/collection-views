@@ -124,7 +124,7 @@ final class Vectors {
         if (vec instanceof NonEmptyVector<?>) {
             return just((NonEmptyVector<A>) vec);
         } else if (!vec.isEmpty()) {
-            return just(new VectorCons<>(vec.unsafeGet(0), vec.tail()));
+            return just(new VectorCons<>(vec.unsafeGet(0), vec.drop(1)));
         } else {
             return nothing();
         }

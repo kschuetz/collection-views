@@ -134,7 +134,7 @@ final class ImmutableVectors {
         if (vec instanceof ImmutableNonEmptyVector<?>) {
             return just((ImmutableNonEmptyVector<A>) vec);
         } else if (!vec.isEmpty()) {
-            return just(new ImmutableVectorCons<>(vec.unsafeGet(0), vec.tail()));
+            return just(new ImmutableVectorCons<>(vec.unsafeGet(0), vec.drop(1)));
         } else {
             return nothing();
         }

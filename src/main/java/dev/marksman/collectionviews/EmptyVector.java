@@ -42,11 +42,6 @@ final class EmptyVector<A> extends ConcreteVector<A> implements ImmutableVector<
     }
 
     @Override
-    public ImmutableVector<A> tail() {
-        return this;
-    }
-
-    @Override
     public ImmutableVector<A> drop(int count) {
         validateDrop(count);
         return this;

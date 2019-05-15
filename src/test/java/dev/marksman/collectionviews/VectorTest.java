@@ -78,11 +78,6 @@ class VectorTest {
             }
 
             @Test
-            void tailIsEmpty() {
-                assertThat(Vector.wrap(new Integer[]{}).tail(), emptyIterable());
-            }
-
-            @Test
             void reverseIsEmpty() {
                 assertThat(Vector.wrap(new Integer[]{}).reverse(), emptyIterable());
             }
@@ -152,11 +147,6 @@ class VectorTest {
             }
 
             @Test
-            void tailIsEmpty() {
-                assertThat(Vector.wrap(emptyList()).tail(), emptyIterable());
-            }
-
-            @Test
             void reverseIsEmpty() {
                 assertThat(Vector.wrap(emptyList()).reverse(), emptyIterable());
             }
@@ -206,15 +196,6 @@ class VectorTest {
                 assertThat(subject, contains(1, 2, 3));
                 arr[0] = 4;
                 assertThat(subject, contains(4, 2, 3));
-            }
-
-            @Test
-            void tailWillNotMakeCopy() {
-                Integer[] arr = new Integer[]{1, 2, 3};
-                Vector<Integer> subject = Vector.wrap(arr);
-                assertThat(subject.tail(), contains(2, 3));
-                arr[2] = 4;
-                assertThat(subject.tail(), contains(2, 4));
             }
 
             @Test
@@ -319,11 +300,6 @@ class VectorTest {
                 @Test
                 void iteratesCorrectly() {
                     assertThat(subject, contains("foo", "bar", "baz"));
-                }
-
-                @Test
-                void tailIteratesCorrectly() {
-                    assertThat(subject.tail(), contains("bar", "baz"));
                 }
 
                 @Test
@@ -437,12 +413,6 @@ class VectorTest {
                     assertThat(subject, contains("foo"));
                 }
 
-                @Test
-                void tailIsEmpty() {
-                    assertTrue(subject.tail().isEmpty());
-                    assertThat(subject.tail(), emptyIterable());
-                }
-
             }
 
             @Nested
@@ -471,12 +441,6 @@ class VectorTest {
                 }
 
                 @Test
-                void tailIsEmpty() {
-                    assertTrue(subject.tail().isEmpty());
-                    assertThat(subject.tail(), emptyIterable());
-                }
-
-                @Test
                 void equalToEmpty() {
                     assertEquals(subject, Vector.empty());
                 }
@@ -501,15 +465,6 @@ class VectorTest {
                 assertThat(subject, contains(1, 2, 3));
                 list.set(0, 4);
                 assertThat(subject, contains(4, 2, 3));
-            }
-
-            @Test
-            void tailWillNotMakeCopy() {
-                List<Integer> list = asList(1, 2, 3);
-                Vector<Integer> subject = Vector.wrap(list);
-                assertThat(subject.tail(), contains(2, 3));
-                list.set(2, 4);
-                assertThat(subject.tail(), contains(2, 4));
             }
 
             @Test
@@ -614,11 +569,6 @@ class VectorTest {
                 @Test
                 void iteratesCorrectly() {
                     assertThat(subject, contains("foo", "bar", "baz"));
-                }
-
-                @Test
-                void tailIteratesCorrectly() {
-                    assertThat(subject.tail(), contains("bar", "baz"));
                 }
 
                 @Test
@@ -733,11 +683,6 @@ class VectorTest {
                     assertThat(subject, contains("foo"));
                 }
 
-                @Test
-                void tailIsEmpty() {
-                    assertTrue(subject.tail().isEmpty());
-                    assertThat(subject.tail(), emptyIterable());
-                }
             }
 
             @Nested
@@ -763,12 +708,6 @@ class VectorTest {
                 @Test
                 void iteratesCorrectly() {
                     assertThat(subject, emptyIterable());
-                }
-
-                @Test
-                void tailIsEmpty() {
-                    assertTrue(subject.tail().isEmpty());
-                    assertThat(subject.tail(), emptyIterable());
                 }
 
                 @Test

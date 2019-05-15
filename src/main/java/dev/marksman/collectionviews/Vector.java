@@ -227,20 +227,6 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
     }
 
     /**
-     * Returns the tail of this {@code Vector}.
-     * <p>
-     * The tail of a {@link Vector} is the same {@code Vector} with the first element dropped.
-     * May be empty.
-     * <p>
-     * Does not make copies of any underlying data structures.
-     *
-     * @return a {@code Vector<A>}
-     */
-    default Vector<A> tail() {
-        return drop(1);
-    }
-
-    /**
      * Returns a new {@code Vector} containing at most the first {@code count} elements of this {@code Vector}.
      * <p>
      * Does not make copies of any underlying data structures.

@@ -79,11 +79,6 @@ class ImmutableVectorTest {
         }
 
         @Test
-        void tailIsEmpty() {
-            assertThat(Vector.empty().tail(), emptyIterable());
-        }
-
-        @Test
         void reverseIsEmpty() {
             assertThat(Vector.empty().reverse(), emptyIterable());
         }
@@ -233,11 +228,6 @@ class ImmutableVectorTest {
                 }
 
                 @Test
-                void tailIteratesCorrectly() {
-                    assertThat(subject.tail(), contains("bar", "baz"));
-                }
-
-                @Test
                 void reverseIteratesCorrectly() {
                     assertThat(subject.reverse(), contains("baz", "bar", "foo"));
                 }
@@ -307,12 +297,6 @@ class ImmutableVectorTest {
                     assertThat(subject, contains("foo"));
                 }
 
-                @Test
-                void tailIsEmpty() {
-                    assertTrue(subject.tail().isEmpty());
-                    assertThat(subject.tail(), emptyIterable());
-                }
-
             }
 
             @Nested
@@ -340,11 +324,6 @@ class ImmutableVectorTest {
                     assertThat(subject, emptyIterable());
                 }
 
-                @Test
-                void tailIsEmpty() {
-                    assertTrue(subject.tail().isEmpty());
-                    assertThat(subject.tail(), emptyIterable());
-                }
             }
         }
 
@@ -472,11 +451,6 @@ class ImmutableVectorTest {
                 }
 
                 @Test
-                void tailIteratesCorrectly() {
-                    assertThat(subject.tail(), contains("bar", "baz"));
-                }
-
-                @Test
                 void reverseIteratesCorrectly() {
                     assertThat(subject.reverse(), contains("baz", "bar", "foo"));
                 }
@@ -547,11 +521,6 @@ class ImmutableVectorTest {
                     assertThat(subject, contains("foo"));
                 }
 
-                @Test
-                void tailIsEmpty() {
-                    assertTrue(subject.tail().isEmpty());
-                    assertThat(subject.tail(), emptyIterable());
-                }
             }
 
             @Nested
@@ -577,12 +546,6 @@ class ImmutableVectorTest {
                 @Test
                 void iteratesCorrectly() {
                     assertThat(subject, emptyIterable());
-                }
-
-                @Test
-                void tailIsEmpty() {
-                    assertTrue(subject.tail().isEmpty());
-                    assertThat(subject.tail(), emptyIterable());
                 }
 
                 @Test
@@ -720,11 +683,6 @@ class ImmutableVectorTest {
                 }
 
                 @Test
-                void tailIteratesCorrectly() {
-                    assertThat(subject.tail(), contains("bar", "baz"));
-                }
-
-                @Test
                 void reverseIteratesCorrectly() {
                     assertThat(subject.reverse(), contains("baz", "bar", "foo"));
                 }
@@ -784,11 +742,6 @@ class ImmutableVectorTest {
                     assertThat(subject, contains("foo"));
                 }
 
-                @Test
-                void tailIsEmpty() {
-                    assertTrue(subject.tail().isEmpty());
-                    assertThat(subject.tail(), emptyIterable());
-                }
             }
 
             @Nested
@@ -814,12 +767,6 @@ class ImmutableVectorTest {
                 @Test
                 void iteratesCorrectly() {
                     assertThat(subject, emptyIterable());
-                }
-
-                @Test
-                void tailIsEmpty() {
-                    assertTrue(subject.tail().isEmpty());
-                    assertThat(subject.tail(), emptyIterable());
                 }
 
                 @Test
@@ -1151,11 +1098,6 @@ class ImmutableVectorTest {
             @Test
             void iteratesCorrectly() {
                 assertThat(subject, contains("foo", "foo", "foo"));
-            }
-
-            @Test
-            void tailIteratesCorrectly() {
-                assertThat(subject.tail(), contains("foo", "foo"));
             }
 
             @Test
@@ -1532,11 +1474,6 @@ class ImmutableVectorTest {
             @Test
             void iteratesCorrectly() {
                 assertThat(subject, contains(0, 10, 20));
-            }
-
-            @Test
-            void tailIteratesCorrectly() {
-                assertThat(subject.tail(), contains(10, 20));
             }
 
             @Test

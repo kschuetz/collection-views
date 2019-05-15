@@ -12,7 +12,6 @@ import com.jnape.palatable.lambda.functions.Fn2;
  * In addition to guarantees of {@link Vector}, provides the following benefits :
  * <ul>
  * <li>{@link ImmutableVector#fmap} always returns a {@code ImmutableVector}.</li>
- * <li>{@link ImmutableVector#tail} always returns a {@code ImmutableVector}.</li>
  * <li>{@link ImmutableVector#take} always returns a {@code ImmutableVector}.</li>
  * <li>{@link ImmutableVector#drop} always returns a {@code ImmutableVector}.</li>
  * <li>{@link ImmutableVector#slice} always returns a {@code ImmutableVector}.</li>
@@ -141,21 +140,6 @@ public interface ImmutableVector<A> extends Vector<A>, Immutable {
     @Override
     default Tuple2<ImmutableVector<A>, ImmutableVector<A>> splitAt(int index) {
         return ImmutableVectors.splitAt(index, this);
-    }
-
-    /**
-     * Returns the tail of this {@code ImmutableVector}.
-     * <p>
-     * The tail of an {@link ImmutableVector} is the same {@code ImmutableVector} with the first element dropped.
-     * May be empty.
-     * <p>
-     * Does not make copies of any underlying data structures.
-     *
-     * @return an {@code ImmutableVector<A>}
-     */
-    @Override
-    default ImmutableVector<A> tail() {
-        return drop(1);
     }
 
     /**
