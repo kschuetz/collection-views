@@ -553,6 +553,21 @@ class ImmutableNonEmptyVectorTest {
         }
 
         @Test
+        void headIsCorrect() {
+            assertEquals(0, NonEmptyVector.range(1000).head());
+        }
+
+        @Test
+        void lastIsCorrect() {
+            assertEquals(999, NonEmptyVector.range(1000).last());
+        }
+
+        @Test
+        void tailIsCorrect() {
+            assertThat(NonEmptyVector.range(4).tail(), contains(1, 2, 3));
+        }
+
+        @Test
         void getInRange() {
             assertEquals(just(1_000_000_000), NonEmptyVector.range(Integer.MAX_VALUE).get(1_000_000_000));
         }

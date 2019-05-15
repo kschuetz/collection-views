@@ -42,6 +42,7 @@ class NonEmptyVectorTest {
                 NonEmptyVector<String> result = NonEmptyVector.maybeWrap(new String[]{"foo"}).orElseThrow(AssertionError::new);
                 assertThat(result, contains("foo"));
                 assertEquals("foo", result.head());
+                assertEquals("foo", result.last());
                 assertEquals(1, result.size());
             }
 
@@ -67,6 +68,7 @@ class NonEmptyVectorTest {
                 NonEmptyVector<String> result = NonEmptyVector.maybeWrap(singletonList("foo")).orElseThrow(AssertionError::new);
                 assertThat(result, contains("foo"));
                 assertEquals("foo", result.head());
+                assertEquals("foo", result.last());
                 assertEquals(1, result.size());
             }
 
@@ -98,6 +100,7 @@ class NonEmptyVectorTest {
                 NonEmptyVector<String> result = NonEmptyVector.wrapOrThrow(new String[]{"foo"});
                 assertThat(result, contains("foo"));
                 assertEquals("foo", result.head());
+                assertEquals("foo", result.last());
                 assertEquals(1, result.size());
             }
 
@@ -122,6 +125,7 @@ class NonEmptyVectorTest {
             void success() {
                 NonEmptyVector<String> result = NonEmptyVector.wrapOrThrow(singletonList("foo"));
                 assertEquals("foo", result.head());
+                assertEquals("foo", result.last());
                 assertEquals(1, result.size());
             }
 
@@ -153,6 +157,7 @@ class NonEmptyVectorTest {
                 NonEmptyVector<String> result = NonEmptyVector.maybeCopyFrom(new String[]{"foo"}).orElseThrow(AssertionError::new);
                 assertThat(result, contains("foo"));
                 assertEquals("foo", result.head());
+                assertEquals("foo", result.last());
                 assertEquals(1, result.size());
             }
 
@@ -184,6 +189,7 @@ class NonEmptyVectorTest {
                 NonEmptyVector<String> result = NonEmptyVector.maybeCopyFrom(singletonList("foo")).orElseThrow(AssertionError::new);
                 assertThat(result, contains("foo"));
                 assertEquals("foo", result.head());
+                assertEquals("foo", result.last());
                 assertEquals(1, result.size());
             }
 
@@ -229,6 +235,7 @@ class NonEmptyVectorTest {
                 NonEmptyVector<String> result = NonEmptyVector.copyFromOrThrow(new String[]{"foo"});
                 assertThat(result, contains("foo"));
                 assertEquals("foo", result.head());
+                assertEquals("foo", result.last());
                 assertEquals(1, result.size());
             }
 
@@ -260,6 +267,7 @@ class NonEmptyVectorTest {
                 NonEmptyVector<String> result = NonEmptyVector.copyFromOrThrow(singletonList("foo"));
                 assertThat(result, contains("foo"));
                 assertEquals("foo", result.head());
+                assertEquals("foo", result.last());
                 assertEquals(1, result.size());
             }
 
