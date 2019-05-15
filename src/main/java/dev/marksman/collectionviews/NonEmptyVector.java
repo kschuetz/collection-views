@@ -469,6 +469,16 @@ public interface NonEmptyVector<A> extends NonEmptyIterable<A>, Vector<A> {
         return ImmutableVectors.nonEmptyLazyFill(size, valueSupplier);
     }
 
+    /**
+     * Creates an {@code ImmutableNonEmptyVector<Integer>} containing elements 0..<code>size - 1</code>.
+     * In other words, each element of the returned {@code Vector} will contains its index.
+     * <p>
+     * Uses O(1) memory.
+     *
+     * @param size the number of elements.
+     *             Must be &gt;= 1.
+     * @return an {@code ImmutableNonEmptyVector<Integer>}
+     */
     static ImmutableNonEmptyVector<Integer> range(int size) {
         return ImmutableVectors.nonEmptyRange(size);
     }

@@ -1683,6 +1683,54 @@ class ImmutableVectorTest {
     }
 
     @Nested
+    @DisplayName("range")
+    class Range {
+
+        @Test
+        void throwsOnNegativeCount() {
+            assertThrows(IllegalArgumentException.class, () -> Vector.range(-1));
+        }
+
+        @Test
+        void countOfZeroReturnsEmptyVector() {
+            assertSame(Vector.empty(), Vector.range(0));
+        }
+
+        @Test
+        void iteratesCorrectly() {
+            assertThat(Vector.range(10), contains(0, 1, 2, 3, 4, 5, 6, 7, 8, 9));
+        }
+
+        @Test
+        void sizeIsCorrect() {
+            assertEquals(Integer.MAX_VALUE, Vector.range(Integer.MAX_VALUE).size());
+        }
+
+        @Test
+        void getInRange() {
+            assertEquals(just(1_000_000_000), Vector.range(Integer.MAX_VALUE).get(1_000_000_000));
+        }
+
+        @Test
+        void getOutOfRange() {
+            assertEquals(nothing(), Vector.range(10).get(1_000_000_000));
+            assertEquals(nothing(), Vector.range(10).get(-1));
+        }
+
+        @Test
+        void reverseIteratesCorrectly() {
+            assertThat(Vector.range(10).reverse(), contains(9, 8, 7, 6, 5, 4, 3, 2, 1, 0));
+        }
+
+        @Test
+        void equality() {
+            assertEquals(Vector.of(0, 1, 2, 3), Vector.range(4));
+            assertEquals(Vector.range(4), Vector.of(0, 1, 2, 3));
+        }
+
+    }
+
+    @Nested
     @DisplayName("fmap")
     class Fmap {
 

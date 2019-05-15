@@ -408,6 +408,17 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
         return ImmutableVectors.lazyFill(size, valueSupplier);
     }
 
+    /**
+     * Creates an {@code ImmutableVector<Integer>} containing elements 0..<code>size - 1</code>.
+     * In other words, each element of the returned {@code Vector} will contains its index.
+     * <p>
+     * Uses O(1) memory.
+     *
+     * @param size the number of elements.
+     *             Must be &gt;= 0.
+     *             If 0, the returned {@code ImmutableVector} will be empty.
+     * @return an {@code ImmutableVector<Integer>}
+     */
     static ImmutableVector<Integer> range(int size) {
         return ImmutableVectors.range(size);
     }
