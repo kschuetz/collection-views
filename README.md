@@ -4,6 +4,7 @@
 [![Javadoc](https://javadoc-badge.appspot.com/dev.marksman/collection-views.svg?label=javadoc)](https://kschuetz.github.io/collection-views/javadoc/)
 [![Build Status](https://travis-ci.org/kschuetz/collection-views.svg?branch=master)](https://travis-ci.org/kschuetz/collection-views)
 [![Maintainability](https://api.codeclimate.com/v1/badges/43ac4c983644c1bc7f5d/maintainability)](https://codeclimate.com/github/kschuetz/collection-views/maintainability)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fkschuetz%2Fcollection-views.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fkschuetz%2Fcollection-views?ref=badge_shield)
 
 #### Table of Contents
 
@@ -29,6 +30,9 @@
  - [Notes](#notes)
  - [License](#license)   
        
+
+
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fkschuetz%2Fcollection-views.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fkschuetz%2Fcollection-views?ref=badge_large)
 
 # <a name="what-is-it">What is it?</a>
 
