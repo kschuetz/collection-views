@@ -2325,4 +2325,57 @@ class ImmutableVectorTest {
 
     }
 
+    @Nested
+    @DisplayName("cross")
+    class Cross {
+
+        private String[] underlying1;
+        private List<Integer> underlying2;
+        private ImmutableVector<String> first;
+        private ImmutableVector<Integer> second;
+
+        @BeforeEach
+        void setUp() {
+            underlying1 = new String[]{"foo", "bar", "baz"};
+            first = Vector.copyFrom(underlying1);
+            underlying2 = asList(1, 2, 3);
+            second = Vector.copyFrom(underlying2);
+        }
+
+        @Test
+        void crossWithEmptyVectorIsEmpty() {
+            assertEquals(Vector.empty(), first.cross(Vector.empty()));
+        }
+
+        @Test
+        void emptyVectorCrossAnythingEmpty() {
+            assertEquals(Vector.empty(), Vector.empty().cross(first));
+        }
+
+        @Test
+        void iteratesCorrectly() {
+            assertThat(first.cross(second), contains(
+                    tuple("foo", 1), tuple("foo", 2), tuple("foo", 3),
+                    tuple("bar", 1), tuple("bar", 2), tuple("bar", 3),
+                    tuple("baz", 1), tuple("baz", 2), tuple("baz", 3)));
+        }
+
+        @Test
+        void sizeIsProductOfComponentSizes() {
+            assertEquals(27, first.cross(Vector.range(9)).size());
+        }
+
+        @Test
+        void notAffectedByMutation() {
+            ImmutableVector<Tuple2<String, Integer>> subject = first.cross(second);
+            underlying1[0] = "qwerty";
+            underlying2.set(1, 10);
+            assertThat(subject, contains(
+                    tuple("foo", 1), tuple("foo", 2), tuple("foo", 3),
+                    tuple("bar", 1), tuple("bar", 2), tuple("bar", 3),
+                    tuple("baz", 1), tuple("baz", 2), tuple("baz", 3)));
+        }
+
+    }
+
 }

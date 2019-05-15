@@ -26,7 +26,7 @@ final class ImmutableCrossJoinVector<A, B> extends ConcreteVector<Tuple2<A, B>>
 
     @Override
     public Tuple2<A, B> unsafeGet(int index) {
-        if (index <= 0 || index >= size) {
+        if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException();
         }
         return tuple(first.unsafeGet(index / stride),
