@@ -61,6 +61,10 @@ public interface NonEmptyVector<A> extends NonEmptyIterable<A>, Vector<A> {
         return unsafeGet(0);
     }
 
+    default Vector<A> init() {
+        return dropRight(1);
+    }
+
     /**
      * Tests whether this {@code NonEmptyVector} is empty.
      * <p>

@@ -48,6 +48,11 @@ public interface ImmutableNonEmptyVector<A> extends NonEmptyVector<A>, Immutable
         return ImmutableVectors.nonEmptyMap(f, this);
     }
 
+    @Override
+    default ImmutableVector<A> init() {
+        return dropRight(1);
+    }
+
     /**
      * Creates an {@code ImmutableNonEmptyVector} with this {@code ImmutableNonEmptyVector}'s elements in reversed order.
      * <p>
