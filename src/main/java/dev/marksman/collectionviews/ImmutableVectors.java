@@ -253,8 +253,11 @@ final class ImmutableVectors {
                 (ImmutableNonEmptyVector<Object>) source);
     }
 
-    static ImmutableNonEmptyVector<Integer> nonEmptyRange(int count) {
-        return nonEmptyLazyFill(count, id());
+    static ImmutableNonEmptyVector<Integer> nonEmptyRange(int size) {
+        if (size < 0) {
+            throw new IllegalArgumentException("size must be >= 1");
+        }
+        return nonEmptyLazyFill(size, id());
     }
 
     static <A> ImmutableNonEmptyVector<A> nonEmptyReverse(ImmutableNonEmptyVector<A> vec) {
@@ -286,8 +289,11 @@ final class ImmutableVectors {
         }
     }
 
-    static ImmutableVector<Integer> range(int count) {
-        return lazyFill(count, id());
+    static ImmutableVector<Integer> range(int size) {
+        if (size < 0) {
+            throw new IllegalArgumentException("size must be >= 0");
+        }
+        return lazyFill(size, id());
     }
 
     static <A> ImmutableVector<A> slice(int startIndex, int endIndexExclusive, ImmutableVector<A> source) {

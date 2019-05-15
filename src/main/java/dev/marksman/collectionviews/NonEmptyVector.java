@@ -457,4 +457,8 @@ public interface NonEmptyVector<A> extends NonEmptyIterable<A>, Vector<A> {
         return ImmutableVectors.nonEmptyLazyFill(size, valueSupplier);
     }
 
+    static ImmutableNonEmptyVector<Integer> range(int size) {
+        return ImmutableVectors.nonEmptyRange(size);
+    }
+
 }

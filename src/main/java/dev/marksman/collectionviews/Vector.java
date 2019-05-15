@@ -396,6 +396,10 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
         return ImmutableVectors.lazyFill(size, valueSupplier);
     }
 
+    static ImmutableVector<Integer> range(int size) {
+        return ImmutableVectors.range(size);
+    }
+
     /**
      * Creates a {@code Vector} that wraps an array.
      * <p>
