@@ -222,6 +222,10 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
         return Vectors.slice(startIndex, endIndexExclusive, this);
     }
 
+    default Tuple2<? extends Vector<A>, ? extends Vector<A>> splitAt(int index) {
+        return Vectors.splitAt(index, this);
+    }
+
     /**
      * Returns the tail of this {@code Vector}.
      * <p>

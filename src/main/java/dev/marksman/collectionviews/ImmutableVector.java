@@ -134,6 +134,11 @@ public interface ImmutableVector<A> extends Vector<A>, Immutable {
         return ImmutableVectors.slice(startIndex, endIndexExclusive, this);
     }
 
+    @Override
+    default Tuple2<ImmutableVector<A>, ImmutableVector<A>> splitAt(int index) {
+        return ImmutableVectors.splitAt(index, this);
+    }
+
     /**
      * Returns the tail of this {@code ImmutableVector}.
      * <p>

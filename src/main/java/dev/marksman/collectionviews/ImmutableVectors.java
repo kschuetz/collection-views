@@ -13,6 +13,7 @@ import java.util.Objects;
 
 import static com.jnape.palatable.lambda.adt.Maybe.just;
 import static com.jnape.palatable.lambda.adt.Maybe.nothing;
+import static com.jnape.palatable.lambda.adt.hlist.HList.tuple;
 import static com.jnape.palatable.lambda.functions.builtin.fn2.Into.into;
 import static com.jnape.palatable.lambda.functions.builtin.fn2.ToCollection.toCollection;
 import static com.jnape.palatable.lambda.functions.builtin.fn2.Tupler2.tupler;
@@ -247,6 +248,11 @@ final class ImmutableVectors {
             return sliceImpl(ImmutableVectorSlice::immutableVectorSlice, source.size(), () -> source,
                     startIndex, requestedSize);
         }
+    }
+
+    static <A> Tuple2<ImmutableVector<A>, ImmutableVector<A>> splitAt(int index, ImmutableVector<A> source) {
+        validateTake(index, source);
+        return tuple(source.take(index), source.drop(index));
     }
 
     static <A> ImmutableVector<A> take(int count, ImmutableVector<A> source) {

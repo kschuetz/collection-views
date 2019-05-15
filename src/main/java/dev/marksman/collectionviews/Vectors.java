@@ -14,6 +14,7 @@ import java.util.function.Supplier;
 
 import static com.jnape.palatable.lambda.adt.Maybe.just;
 import static com.jnape.palatable.lambda.adt.Maybe.nothing;
+import static com.jnape.palatable.lambda.adt.hlist.HList.tuple;
 import static com.jnape.palatable.lambda.functions.builtin.fn2.Into.into;
 import static com.jnape.palatable.lambda.functions.builtin.fn2.ToCollection.toCollection;
 import static com.jnape.palatable.lambda.functions.builtin.fn2.Tupler2.tupler;
@@ -220,6 +221,11 @@ final class Vectors {
             ArrayList<A> newList = toCollection(ArrayList::new, Take.take(requestedSize, Drop.drop(startIndex, source)));
             return ImmutableVectors.wrapAndVouchFor(newList);
         }
+    }
+
+    static <A> Tuple2<Vector<A>, Vector<A>> splitAt(int index, Vector<A> source) {
+        validateTake(index, source);
+        return tuple(source.take(index), source.drop(index));
     }
 
     static <A> Vector<A> take(int count, Vector<A> source) {
