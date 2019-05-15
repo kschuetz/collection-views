@@ -26,6 +26,11 @@ final class RepeatingVector<A> extends ConcreteVector<A>
     }
 
     @Override
+    public A last() {
+        return value;
+    }
+
+    @Override
     public int size() {
         return size;
     }

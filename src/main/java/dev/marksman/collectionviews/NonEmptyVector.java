@@ -54,7 +54,7 @@ public interface NonEmptyVector<A> extends NonEmptyIterable<A>, Vector<A> {
     /**
      * Returns the first element.
      *
-     * @return a element of type {@code A}
+     * @return an element of type {@code A}
      */
     @Override
     default A head() {
@@ -81,6 +81,15 @@ public interface NonEmptyVector<A> extends NonEmptyIterable<A>, Vector<A> {
     @Override
     default Iterator<A> iterator() {
         return VectorHelpers.vectorIterator(this);
+    }
+
+    /**
+     * Returns the last element.
+     *
+     * @return an element of type {@code A}
+     */
+    default A last() {
+        return unsafeGet(size() - 1);
     }
 
     /**

@@ -15,7 +15,7 @@ public interface NonEmptyIterable<A> extends Iterable<A> {
     /**
      * Returns the first element.
      *
-     * @return a element of type {@code A}
+     * @return an element of type {@code A}
      */
     A head();
 
