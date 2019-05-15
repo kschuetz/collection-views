@@ -119,11 +119,6 @@ public interface NonEmptyVector<A> extends NonEmptyIterable<A>, Vector<A> {
         return drop(1);
     }
 
-    @Override
-    default NonEmptyIterable<? extends Vector<A>> tails() {
-        return Vectors.nonEmptyTails(this);
-    }
-
     /**
      * Converts this {@code NonEmptyVector} to an {@code ImmutableNonEmptyVector}.
      * <p>
@@ -433,7 +428,7 @@ public interface NonEmptyVector<A> extends NonEmptyIterable<A>, Vector<A> {
      * the value {@code value}
      */
     static <A> ImmutableNonEmptyVector<A> fill(int size, A value) {
-        return Vectors.nonEmptyFill(size, value);
+        return ImmutableVectors.nonEmptyFill(size, value);
     }
 
     /**
@@ -450,7 +445,7 @@ public interface NonEmptyVector<A> extends NonEmptyIterable<A>, Vector<A> {
      * @return an {@code ImmutableNonEmptyVector<A>}
      */
     static <A> ImmutableNonEmptyVector<A> lazyFill(int size, Fn1<Integer, A> valueSupplier) {
-        return Vectors.nonEmptyLazyFill(size, valueSupplier);
+        return ImmutableVectors.nonEmptyLazyFill(size, valueSupplier);
     }
 
 }

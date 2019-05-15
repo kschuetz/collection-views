@@ -14,6 +14,7 @@ import java.util.Objects;
 import static com.jnape.palatable.lambda.adt.Maybe.just;
 import static com.jnape.palatable.lambda.adt.Maybe.nothing;
 import static com.jnape.palatable.lambda.adt.hlist.HList.tuple;
+import static com.jnape.palatable.lambda.functions.builtin.fn1.Id.id;
 import static com.jnape.palatable.lambda.functions.builtin.fn2.Into.into;
 import static com.jnape.palatable.lambda.functions.builtin.fn2.ToCollection.toCollection;
 import static com.jnape.palatable.lambda.functions.builtin.fn2.Tupler2.tupler;
@@ -123,6 +124,33 @@ final class ImmutableVectors {
         }
     }
 
+    static <A> ImmutableVector<A> fill(int size, A value) {
+        validateFill(size);
+        if (size == 0) {
+            return Vectors.empty();
+        } else {
+            return nonEmptyFill(size, value);
+        }
+    }
+
+    static <A> ImmutableVector<Integer> indices(Vector<A> vec) {
+        return range(vec.size());
+    }
+
+    static <A> NonEmptyIterable<ImmutableVector<A>> inits(ImmutableVector<A> source) {
+        return nonEmptyRange(source.size() + 1).fmap(source::dropRight);
+    }
+
+    static <A> ImmutableVector<A> lazyFill(int size, Fn1<Integer, A> valueSupplier) {
+        validateFill(size);
+        Objects.requireNonNull(valueSupplier);
+        if (size == 0) {
+            return Vectors.empty();
+        } else {
+            return nonEmptyLazyFill(size, valueSupplier);
+        }
+    }
+
     static <A, B> ImmutableVector<B> map(Fn1<? super A, ? extends B> f, ImmutableVector<A> source) {
         return maybeNonEmptyConvert(source)
                 .match(__ -> Vectors.empty(),
@@ -205,10 +233,28 @@ final class ImmutableVectors {
         return immutableCrossJoinVector(first, second);
     }
 
+    static <A> ImmutableNonEmptyVector<A> nonEmptyFill(int size, A value) {
+        validateNonEmptyFill(size);
+        return new RepeatingVector<>(size, value);
+    }
+
+    static <A> ImmutableNonEmptyVector<Integer> nonEmptyIndices(NonEmptyVector<A> vec) {
+        return nonEmptyRange(vec.size());
+    }
+
+    static <A> ImmutableNonEmptyVector<A> nonEmptyLazyFill(int size, Fn1<Integer, A> valueSupplier) {
+        validateNonEmptyFill(size);
+        return new LazyVector<>(size, 0, valueSupplier);
+    }
+
     @SuppressWarnings("unchecked")
     static <A, B> ImmutableNonEmptyVector<B> nonEmptyMap(Fn1<? super A, ? extends B> f, ImmutableNonEmptyVector<A> source) {
         return new ImmutableMappedVector<>(mapperChain((Fn1<Object, Object>) f),
                 (ImmutableNonEmptyVector<Object>) source);
+    }
+
+    static ImmutableNonEmptyVector<Integer> nonEmptyRange(int count) {
+        return nonEmptyLazyFill(count, id());
     }
 
     static <A> ImmutableNonEmptyVector<A> nonEmptyReverse(ImmutableNonEmptyVector<A> vec) {
@@ -217,10 +263,6 @@ final class ImmutableVectors {
         } else {
             return immutableReverseVector(vec);
         }
-    }
-
-    static <A> NonEmptyIterable<ImmutableVector<A>> nonEmptyTails(ImmutableNonEmptyVector<A> source) {
-        return Vectors.nonEmptyIndices(source).fmap(source::drop);
     }
 
     static <A, B, R> ImmutableNonEmptyVector<R> nonEmptyZipWith(Fn2<A, B, R> fn,
@@ -241,6 +283,10 @@ final class ImmutableVectors {
         } else {
             return immutableReverseVector(vec.toNonEmptyOrThrow());
         }
+    }
+
+    static ImmutableVector<Integer> range(int count) {
+        return lazyFill(count, id());
     }
 
     static <A> ImmutableVector<A> slice(int startIndex, int endIndexExclusive, ImmutableVector<A> source) {
@@ -266,8 +312,8 @@ final class ImmutableVectors {
         return tuple(source.take(index), source.drop(index));
     }
 
-    static <A> Iterable<ImmutableVector<A>> tails(ImmutableVector<A> source) {
-        return Vectors.indices(source).fmap(source::drop);
+    static <A> NonEmptyIterable<ImmutableVector<A>> tails(ImmutableVector<A> source) {
+        return nonEmptyRange(source.size() + 1).fmap(source::drop);
     }
 
     static <A> ImmutableVector<A> take(int count, ImmutableVector<A> source) {

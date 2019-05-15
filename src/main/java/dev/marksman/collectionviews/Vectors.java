@@ -15,11 +15,11 @@ import java.util.function.Supplier;
 import static com.jnape.palatable.lambda.adt.Maybe.just;
 import static com.jnape.palatable.lambda.adt.Maybe.nothing;
 import static com.jnape.palatable.lambda.adt.hlist.HList.tuple;
-import static com.jnape.palatable.lambda.functions.builtin.fn1.Id.id;
 import static com.jnape.palatable.lambda.functions.builtin.fn2.Into.into;
 import static com.jnape.palatable.lambda.functions.builtin.fn2.ToCollection.toCollection;
 import static com.jnape.palatable.lambda.functions.builtin.fn2.Tupler2.tupler;
 import static dev.marksman.collectionviews.CrossJoinVector.crossJoinVector;
+import static dev.marksman.collectionviews.ImmutableVectors.nonEmptyRange;
 import static dev.marksman.collectionviews.MapperChain.mapperChain;
 import static dev.marksman.collectionviews.Validation.*;
 import static dev.marksman.collectionviews.VectorZip.vectorZip;
@@ -55,15 +55,6 @@ final class Vectors {
         return EmptyVector.emptyVector();
     }
 
-    static <A> ImmutableVector<A> fill(int size, A value) {
-        validateFill(size);
-        if (size == 0) {
-            return empty();
-        } else {
-            return nonEmptyFill(size, value);
-        }
-    }
-
     static <A> Maybe<Integer> findIndex(Fn1<? super A, ? extends Boolean> predicate, Vector<A> vec) {
         int size = vec.size();
         for (int i = 0; i < size; i++) {
@@ -86,18 +77,8 @@ final class Vectors {
         return result;
     }
 
-    static <A> ImmutableVector<Integer> indices(Vector<A> vec) {
-        return lazyFill(vec.size(), id());
-    }
-
-    static <A> ImmutableVector<A> lazyFill(int size, Fn1<Integer, A> valueSupplier) {
-        validateFill(size);
-        Objects.requireNonNull(valueSupplier);
-        if (size == 0) {
-            return empty();
-        } else {
-            return nonEmptyLazyFill(size, valueSupplier);
-        }
+    static <A> NonEmptyIterable<Vector<A>> inits(Vector<A> source) {
+        return nonEmptyRange(source.size() + 1).fmap(source::dropRight);
     }
 
     static <A, B> Vector<B> map(Fn1<? super A, ? extends B> f, Vector<A> source) {
@@ -143,18 +124,8 @@ final class Vectors {
         return () -> new IllegalArgumentException("Cannot construct NonEmptyVector from empty input");
     }
 
-    static <A> ImmutableNonEmptyVector<A> nonEmptyFill(int size, A value) {
-        validateNonEmptyFill(size);
-        return new RepeatingVector<>(size, value);
-    }
-
-    static <A> ImmutableNonEmptyVector<Integer> nonEmptyIndices(NonEmptyVector<A> vec) {
-        return nonEmptyLazyFill(vec.size(), id());
-    }
-
-    static <A> ImmutableNonEmptyVector<A> nonEmptyLazyFill(int size, Fn1<Integer, A> valueSupplier) {
-        validateNonEmptyFill(size);
-        return new LazyVector<>(size, 0, valueSupplier);
+    static <A> NonEmptyIterable<Vector<A>> nonEmptyInits(NonEmptyVector<A> source) {
+        return nonEmptyRange(source.size() + 1).fmap(source::dropRight);
     }
 
     @SuppressWarnings("unchecked")
@@ -170,10 +141,6 @@ final class Vectors {
         } else {
             return ReverseVector.reverseVector(vec);
         }
-    }
-
-    static <A> NonEmptyIterable<Vector<A>> nonEmptyTails(NonEmptyVector<A> source) {
-        return nonEmptyIndices(source).fmap(source::drop);
     }
 
     @SafeVarargs
@@ -241,8 +208,8 @@ final class Vectors {
         return tuple(source.take(index), source.drop(index));
     }
 
-    static <A> Iterable<Vector<A>> tails(Vector<A> source) {
-        return indices(source).fmap(source::drop);
+    static <A> NonEmptyIterable<Vector<A>> tails(Vector<A> source) {
+        return nonEmptyRange(source.size() + 1).fmap(source::drop);
     }
 
     static <A> Vector<A> take(int count, Vector<A> source) {

@@ -99,6 +99,11 @@ public interface ImmutableVector<A> extends Vector<A>, Immutable {
         return ImmutableVectors.map(f, this);
     }
 
+    @Override
+    default NonEmptyIterable<? extends ImmutableVector<A>> inits() {
+        return ImmutableVectors.inits(this);
+    }
+
     /**
      * Creates an {@code ImmutableVector} with this {@code ImmutableVector}'s elements in reversed order.
      * <p>
@@ -143,7 +148,7 @@ public interface ImmutableVector<A> extends Vector<A>, Immutable {
     }
 
     @Override
-    default Iterable<ImmutableVector<A>> tails() {
+    default NonEmptyIterable<ImmutableVector<A>> tails() {
         return ImmutableVectors.tails(this);
     }
 

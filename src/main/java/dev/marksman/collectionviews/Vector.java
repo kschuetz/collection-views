@@ -169,6 +169,10 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
         }
     }
 
+    default NonEmptyIterable<? extends Vector<A>> inits() {
+        return Vectors.inits(this);
+    }
+
     /**
      * Tests whether this {@code Vector} is empty.
      * <p>
@@ -226,7 +230,7 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
         return Vectors.splitAt(index, this);
     }
 
-    default Iterable<? extends Vector<A>> tails() {
+    default NonEmptyIterable<? extends Vector<A>> tails() {
         return Vectors.tails(this);
     }
 
@@ -365,7 +369,7 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
      * the value {@code value}
      */
     static <A> ImmutableVector<A> fill(int size, A value) {
-        return Vectors.fill(size, value);
+        return ImmutableVectors.fill(size, value);
     }
 
     /**
@@ -385,7 +389,7 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
      * @return an {@code ImmutableVector<A>}
      */
     static <A> ImmutableVector<A> lazyFill(int size, Fn1<Integer, A> valueSupplier) {
-        return Vectors.lazyFill(size, valueSupplier);
+        return ImmutableVectors.lazyFill(size, valueSupplier);
     }
 
     /**
