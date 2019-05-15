@@ -18,11 +18,6 @@ final class LazyVector<A> extends ConcreteVector<A>
     }
 
     @Override
-    public A head() {
-        return valueSupplier.apply(offset);
-    }
-
-    @Override
     public int size() {
         return size;
     }

@@ -13,12 +13,6 @@ final class ImmutableMappedVector<A> extends ConcreteVector<A>
         this.underlying = underlying;
     }
 
-    @SuppressWarnings("unchecked")
-    @Override
-    public A head() {
-        return (A) mapper.apply(underlying.head());
-    }
-
     @Override
     public int size() {
         return underlying.size();

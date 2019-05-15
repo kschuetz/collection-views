@@ -22,11 +22,6 @@ final class WrappedListVector<A> extends ConcreteVector<A>
     }
 
     @Override
-    public A head() {
-        return underlying.get(0);
-    }
-
-    @Override
     public int size() {
         return underlying.size();
     }

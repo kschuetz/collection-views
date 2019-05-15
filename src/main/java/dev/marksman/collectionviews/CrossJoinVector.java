@@ -20,11 +20,6 @@ final class CrossJoinVector<A, B> extends ConcreteVector<Tuple2<A, B>>
     }
 
     @Override
-    public Tuple2<A, B> head() {
-        return unsafeGet(0);
-    }
-
-    @Override
     public int size() {
         return size;
     }

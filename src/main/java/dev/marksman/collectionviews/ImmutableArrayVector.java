@@ -18,11 +18,6 @@ final class ImmutableArrayVector<A> extends ConcreteVector<A>
     }
 
     @Override
-    public A head() {
-        return underlying[0];
-    }
-
-    @Override
     public int size() {
         return underlying.length;
     }

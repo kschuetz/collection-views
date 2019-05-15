@@ -52,6 +52,16 @@ public interface NonEmptyVector<A> extends NonEmptyIterable<A>, Vector<A> {
     }
 
     /**
+     * Returns the first element.
+     *
+     * @return a element of type {@code A}
+     */
+    @Override
+    default A head() {
+        return unsafeGet(0);
+    }
+
+    /**
      * Tests whether this {@code NonEmptyVector} is empty.
      * <p>
      * Always returns false for {@link NonEmptyVector}s.

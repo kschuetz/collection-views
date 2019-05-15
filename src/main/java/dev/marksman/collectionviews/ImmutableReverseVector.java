@@ -9,11 +9,6 @@ class ImmutableReverseVector<A> extends ConcreteVector<A>
     }
 
     @Override
-    public A head() {
-        return unsafeGet(0);
-    }
-
-    @Override
     public int size() {
         return underlying.size();
     }

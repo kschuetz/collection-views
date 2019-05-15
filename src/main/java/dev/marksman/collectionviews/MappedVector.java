@@ -11,12 +11,6 @@ final class MappedVector<A> extends ConcreteVector<A> implements NonEmptyVector<
         this.underlying = underlying;
     }
 
-    @SuppressWarnings("unchecked")
-    @Override
-    public A head() {
-        return (A) mapper.apply(underlying.head());
-    }
-
     @Override
     public int size() {
         return underlying.size();

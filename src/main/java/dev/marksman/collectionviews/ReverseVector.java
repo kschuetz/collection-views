@@ -8,11 +8,6 @@ class ReverseVector<A> extends ConcreteVector<A> implements NonEmptyVector<A> {
     }
 
     @Override
-    public A head() {
-        return unsafeGet(0);
-    }
-
-    @Override
     public int size() {
         return underlying.size();
     }
