@@ -169,6 +169,10 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
         }
     }
 
+    default ImmutableVector<Integer> indices() {
+        return ImmutableVectors.indices(this);
+    }
+
     default NonEmptyIterable<? extends Vector<A>> inits() {
         return Vectors.inits(this);
     }

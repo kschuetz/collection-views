@@ -61,6 +61,11 @@ public interface NonEmptyVector<A> extends NonEmptyIterable<A>, Vector<A> {
         return unsafeGet(0);
     }
 
+    @Override
+    default ImmutableNonEmptyVector<Integer> indices() {
+        return ImmutableVectors.nonEmptyIndices(this);
+    }
+
     default Vector<A> init() {
         return dropRight(1);
     }
