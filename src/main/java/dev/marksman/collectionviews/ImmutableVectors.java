@@ -274,7 +274,8 @@ final class ImmutableVectors {
     }
 
     static <A> ImmutableNonEmptyVector<Tuple2<A, Integer>> nonEmptyZipWithIndex(ImmutableNonEmptyVector<A> vec) {
-        return new ImmutableVectorZipWithIndex<>(vec);
+        Objects.requireNonNull(vec);
+        return nonEmptyZipWith(tupler(), vec, vec.indices());
     }
 
     static <A> ImmutableVector<A> reverse(ImmutableVector<A> vec) {
@@ -363,11 +364,8 @@ final class ImmutableVectors {
     }
 
     static <A> ImmutableVector<Tuple2<A, Integer>> zipWithIndex(ImmutableVector<A> vec) {
-        if (vec.isEmpty()) {
-            return empty();
-        } else {
-            return new ImmutableVectorZipWithIndex<>(vec.toNonEmptyOrThrow());
-        }
+        Objects.requireNonNull(vec);
+        return zipWith(tupler(), vec, vec.indices());
     }
 
     private static <A> ImmutableNonEmptyVector<A> getNonEmptyOrThrow(Maybe<ImmutableNonEmptyVector<A>> maybeResult) {

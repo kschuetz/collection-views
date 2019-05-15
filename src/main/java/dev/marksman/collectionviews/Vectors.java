@@ -169,7 +169,7 @@ final class Vectors {
 
     static <A> NonEmptyVector<Tuple2<A, Integer>> nonEmptyZipWithIndex(NonEmptyVector<A> vec) {
         Objects.requireNonNull(vec);
-        return new VectorZipWithIndex<>(vec);
+        return nonEmptyZipWith(tupler(), vec, vec.indices());
     }
 
     static <A> Vector<A> reverse(Vector<A> vec) {
@@ -254,11 +254,7 @@ final class Vectors {
 
     static <A> Vector<Tuple2<A, Integer>> zipWithIndex(Vector<A> vec) {
         Objects.requireNonNull(vec);
-        if (vec.isEmpty()) {
-            return empty();
-        } else {
-            return new VectorZipWithIndex<>(vec.toNonEmptyOrThrow());
-        }
+        return zipWith(tupler(), vec, vec.indices());
     }
 
     private static <A> NonEmptyVector<A> getNonEmptyOrThrow(Maybe<NonEmptyVector<A>> maybeResult) {
