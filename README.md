@@ -609,6 +609,8 @@ Throughout this library, the claim of O(1) means that the number of elements in 
 
 # <a name="license">License</a>
 
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fkschuetz%2Fcollection-views.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fkschuetz%2Fcollection-views?ref=badge_shield)
+
 *collection-views* is distributed under [The MIT License](http://choosealicense.com/licenses/mit/).
 
 The MIT License (MIT)
