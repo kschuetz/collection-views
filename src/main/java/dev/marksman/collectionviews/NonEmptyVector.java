@@ -100,6 +100,11 @@ public interface NonEmptyVector<A> extends NonEmptyIterable<A>, Vector<A> {
         return drop(1);
     }
 
+    @Override
+    default NonEmptyIterable<? extends Vector<A>> tails() {
+        return Vectors.nonEmptyTails(this);
+    }
+
     /**
      * Converts this {@code NonEmptyVector} to an {@code ImmutableNonEmptyVector}.
      * <p>

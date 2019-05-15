@@ -75,6 +75,11 @@ public interface ImmutableNonEmptyVector<A> extends NonEmptyVector<A>, Immutable
         return drop(1);
     }
 
+    @Override
+    default NonEmptyIterable<ImmutableVector<A>> tails() {
+        return ImmutableVectors.nonEmptyTails(this);
+    }
+
     /**
      * Returns an {@code ImmutableNonEmptyVector} containing the same elements as this one.
      * <p>

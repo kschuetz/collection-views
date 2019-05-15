@@ -142,6 +142,11 @@ public interface ImmutableVector<A> extends Vector<A>, Immutable {
         return ImmutableVectors.splitAt(index, this);
     }
 
+    @Override
+    default Iterable<ImmutableVector<A>> tails() {
+        return ImmutableVectors.tails(this);
+    }
+
     /**
      * Returns a new {@code ImmutableVector} containing at most the first {@code count} elements of this {@code ImmutableVector}.
      * <p>

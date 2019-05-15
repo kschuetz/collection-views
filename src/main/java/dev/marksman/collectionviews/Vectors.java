@@ -15,6 +15,7 @@ import java.util.function.Supplier;
 import static com.jnape.palatable.lambda.adt.Maybe.just;
 import static com.jnape.palatable.lambda.adt.Maybe.nothing;
 import static com.jnape.palatable.lambda.adt.hlist.HList.tuple;
+import static com.jnape.palatable.lambda.functions.builtin.fn1.Id.id;
 import static com.jnape.palatable.lambda.functions.builtin.fn2.Into.into;
 import static com.jnape.palatable.lambda.functions.builtin.fn2.ToCollection.toCollection;
 import static com.jnape.palatable.lambda.functions.builtin.fn2.Tupler2.tupler;
@@ -85,6 +86,10 @@ final class Vectors {
         return result;
     }
 
+    static <A> ImmutableVector<Integer> indices(Vector<A> vec) {
+        return lazyFill(vec.size(), id());
+    }
+
     static <A> ImmutableVector<A> lazyFill(int size, Fn1<Integer, A> valueSupplier) {
         validateFill(size);
         Objects.requireNonNull(valueSupplier);
@@ -143,6 +148,10 @@ final class Vectors {
         return new RepeatingVector<>(size, value);
     }
 
+    static <A> ImmutableNonEmptyVector<Integer> nonEmptyIndices(NonEmptyVector<A> vec) {
+        return nonEmptyLazyFill(vec.size(), id());
+    }
+
     static <A> ImmutableNonEmptyVector<A> nonEmptyLazyFill(int size, Fn1<Integer, A> valueSupplier) {
         validateNonEmptyFill(size);
         return new LazyVector<>(size, 0, valueSupplier);
@@ -161,6 +170,10 @@ final class Vectors {
         } else {
             return ReverseVector.reverseVector(vec);
         }
+    }
+
+    static <A> NonEmptyIterable<Vector<A>> nonEmptyTails(NonEmptyVector<A> source) {
+        return nonEmptyIndices(source).fmap(source::drop);
     }
 
     @SafeVarargs
@@ -226,6 +239,10 @@ final class Vectors {
     static <A> Tuple2<Vector<A>, Vector<A>> splitAt(int index, Vector<A> source) {
         validateTake(index, source);
         return tuple(source.take(index), source.drop(index));
+    }
+
+    static <A> Iterable<Vector<A>> tails(Vector<A> source) {
+        return indices(source).fmap(source::drop);
     }
 
     static <A> Vector<A> take(int count, Vector<A> source) {

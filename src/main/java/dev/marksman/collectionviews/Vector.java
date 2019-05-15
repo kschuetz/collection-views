@@ -226,6 +226,10 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
         return Vectors.splitAt(index, this);
     }
 
+    default Iterable<? extends Vector<A>> tails() {
+        return Vectors.tails(this);
+    }
+
     /**
      * Returns a new {@code Vector} containing at most the first {@code count} elements of this {@code Vector}.
      * <p>

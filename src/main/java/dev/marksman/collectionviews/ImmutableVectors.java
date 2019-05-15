@@ -219,6 +219,10 @@ final class ImmutableVectors {
         }
     }
 
+    static <A> NonEmptyIterable<ImmutableVector<A>> nonEmptyTails(ImmutableNonEmptyVector<A> source) {
+        return Vectors.nonEmptyIndices(source).fmap(source::drop);
+    }
+
     static <A, B, R> ImmutableNonEmptyVector<R> nonEmptyZipWith(Fn2<A, B, R> fn,
                                                                 ImmutableNonEmptyVector<A> first, ImmutableNonEmptyVector<B> second) {
         Objects.requireNonNull(fn);
@@ -260,6 +264,10 @@ final class ImmutableVectors {
     static <A> Tuple2<ImmutableVector<A>, ImmutableVector<A>> splitAt(int index, ImmutableVector<A> source) {
         validateTake(index, source);
         return tuple(source.take(index), source.drop(index));
+    }
+
+    static <A> Iterable<ImmutableVector<A>> tails(ImmutableVector<A> source) {
+        return Vectors.indices(source).fmap(source::drop);
     }
 
     static <A> ImmutableVector<A> take(int count, ImmutableVector<A> source) {
