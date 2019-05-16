@@ -13,7 +13,7 @@ import com.jnape.palatable.lambda.adt.Maybe;
  *
  * @param <A> the element type
  */
-public interface ImmutableSet<A> extends Set<A>, Immutable {
+public interface ImmutableSet<A> extends Set<A>, ImmutableFiniteIterable<A> {
 
     /**
      * Returns an {@code ImmutableSet} containing the same elements as this one.

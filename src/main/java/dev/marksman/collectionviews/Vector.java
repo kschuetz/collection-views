@@ -45,7 +45,7 @@ import static com.jnape.palatable.lambda.adt.Maybe.nothing;
  *
  * @param <A> the element type
  */
-public interface Vector<A> extends Iterable<A>, RandomAccess {
+public interface Vector<A> extends FiniteIterable<A>, RandomAccess {
 
     /**
      * Returns the size of this {@code Vector}.

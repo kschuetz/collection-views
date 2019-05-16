@@ -22,7 +22,7 @@ import com.jnape.palatable.lambda.functions.Fn2;
  *
  * @param <A> the element type
  */
-public interface ImmutableVector<A> extends Vector<A>, Immutable {
+public interface ImmutableVector<A> extends Vector<A>, ImmutableIterable<A> {
 
     /**
      * Returns the cartesian product of this {@code ImmutableVector} with another {@code ImmutableVector}.
