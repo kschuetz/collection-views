@@ -1,11 +1,12 @@
 package dev.marksman.collectionviews;
 
+import dev.marksman.collectionviews.iterables.NonEmptyIterable;
 import org.junit.jupiter.api.Test;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import static dev.marksman.collectionviews.NonEmptyIterable.nonEmptyIterable;
+import static dev.marksman.collectionviews.iterables.NonEmptyIterable.nonEmptyIterable;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static org.hamcrest.MatcherAssert.assertThat;

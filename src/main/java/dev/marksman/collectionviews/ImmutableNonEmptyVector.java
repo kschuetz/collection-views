@@ -4,6 +4,7 @@ import com.jnape.palatable.lambda.adt.Maybe;
 import com.jnape.palatable.lambda.adt.hlist.Tuple2;
 import com.jnape.palatable.lambda.functions.Fn1;
 import com.jnape.palatable.lambda.functions.Fn2;
+import dev.marksman.collectionviews.iterables.ImmutableNonEmptyIterable;
 
 import static com.jnape.palatable.lambda.adt.Maybe.just;
 

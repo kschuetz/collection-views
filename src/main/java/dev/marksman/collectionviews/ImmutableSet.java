@@ -1,6 +1,7 @@
 package dev.marksman.collectionviews;
 
 import com.jnape.palatable.lambda.adt.Maybe;
+import dev.marksman.collectionviews.iterables.ImmutableFiniteIterable;
 
 /**
  * A {@code Set} that is guaranteed at compile-time to be safe from mutation anywhere.
