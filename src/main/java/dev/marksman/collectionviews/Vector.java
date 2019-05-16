@@ -99,6 +99,7 @@ public interface Vector<A> extends FiniteIterable<A>, RandomAccess {
      *              empty {@code Vector}.
      * @return a {@code Vector<A>}
      */
+    @Override
     default Vector<A> drop(int count) {
         return Vectors.drop(count, this);
     }
@@ -230,6 +231,7 @@ public interface Vector<A> extends FiniteIterable<A>, RandomAccess {
      *
      * @return a {@code Vector<A>}
      */
+    @Override
     default Vector<A> reverse() {
         return Vectors.reverse(this);
     }
