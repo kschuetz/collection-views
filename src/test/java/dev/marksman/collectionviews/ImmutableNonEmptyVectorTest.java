@@ -197,6 +197,11 @@ class ImmutableNonEmptyVectorTest {
             }
 
             @Test
+            void initIteratesCorrectly() {
+                assertThat(subject.init(), contains("foo", "foo"));
+            }
+
+            @Test
             void tailIteratesCorrectly() {
                 assertThat(subject.tail(), contains("foo", "foo"));
             }
@@ -430,6 +435,11 @@ class ImmutableNonEmptyVectorTest {
             }
 
             @Test
+            void initIteratesCorrectly() {
+                assertThat(subject.init(), contains(0, 10));
+            }
+
+            @Test
             void tailIteratesCorrectly() {
                 assertThat(subject.tail(), contains(10, 20));
             }
@@ -560,6 +570,11 @@ class ImmutableNonEmptyVectorTest {
         @Test
         void lastIsCorrect() {
             assertEquals(999, NonEmptyVector.range(1000).last());
+        }
+
+        @Test
+        void initIsCorrect() {
+            assertThat(NonEmptyVector.range(4).init(), contains(0, 1, 2));
         }
 
         @Test

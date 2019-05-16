@@ -2442,4 +2442,39 @@ class ImmutableVectorTest {
 
     }
 
+    @Nested
+    @DisplayName("inits")
+    class Inits {
+
+        @Test
+        void emptyVector() {
+            assertThat(Vector.copyFrom(emptyList()).inits(), contains(Vector.empty()));
+        }
+
+        @Test
+        void vectorSize1() {
+            assertThat(Vector.copyFrom(singletonList("foo")).inits(),
+                    contains(Vector.of("foo"),
+                            Vector.empty()));
+        }
+
+        @Test
+        void vectorSize2() {
+            assertThat(Vector.copyFrom(asList("foo", "bar")).inits(),
+                    contains(Vector.of("foo", "bar"),
+                            Vector.of("foo"),
+                            Vector.empty()));
+        }
+
+        @Test
+        void vectorSize3() {
+            assertThat(Vector.copyFrom(asList("foo", "bar", "baz")).inits(),
+                    contains(Vector.of("foo", "bar", "baz"),
+                            Vector.of("foo", "bar"),
+                            Vector.of("foo"),
+                            Vector.empty()));
+        }
+
+    }
+
 }

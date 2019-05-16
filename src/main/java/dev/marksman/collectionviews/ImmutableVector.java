@@ -111,6 +111,14 @@ public interface ImmutableVector<A> extends Vector<A>, Immutable {
         return ImmutableVectors.map(f, this);
     }
 
+    /**
+     * Returns a {@code NonEmptyIterable} containing the inits of this {@code ImmutableVector}.
+     * <p>
+     * The first value will be this {@code ImmutableVector} and the final one will be an empty {@code Vector},
+     * with the intervening values the results of successive applications of {@code init}.
+     *
+     * @return a {@code NonEmptyIterable} over all the inits of this {@code ImmutableVector}
+     */
     @Override
     default NonEmptyIterable<? extends ImmutableVector<A>> inits() {
         return ImmutableVectors.inits(this);

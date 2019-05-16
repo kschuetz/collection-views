@@ -83,6 +83,16 @@ public interface NonEmptyVector<A> extends NonEmptyIterable<A>, Vector<A> {
         return ImmutableVectors.nonEmptyIndices(this);
     }
 
+    /**
+     * Returns the init of this {@code NonEmptyVector}.
+     * <p>
+     * The init of a {@link NonEmptyVector} is the same {@code Vector} with the last element dropped.
+     * May be empty.
+     * <p>
+     * Does not make copies of any underlying collections.
+     *
+     * @return a {@code Vector<A>}
+     */
     default Vector<A> init() {
         return dropRight(1);
     }
@@ -131,7 +141,7 @@ public interface NonEmptyVector<A> extends NonEmptyIterable<A>, Vector<A> {
     }
 
     /**
-     * Returns the tail of this {@code NonEmptyVector}. i.e. the same {@link Vector} with the first element dropped.
+     * Returns the tail of this {@code NonEmptyVector}.
      * <p>
      * The tail of a {@link NonEmptyVector} is the same {@code Vector} with the first element dropped.
      * May be empty.

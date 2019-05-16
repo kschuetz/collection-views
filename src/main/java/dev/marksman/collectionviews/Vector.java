@@ -190,6 +190,14 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
         return ImmutableVectors.indices(this);
     }
 
+    /**
+     * Returns a {@code NonEmptyIterable} containing the inits of this {@code Vector}.
+     * <p>
+     * The first value will be this {@code Vector} and the final one will be an empty {@code Vector},
+     * with the intervening values the results of successive applications of {@code init}.
+     *
+     * @return a {@code NonEmptyIterable} over all the inits of this {@code Vector}
+     */
     default NonEmptyIterable<? extends Vector<A>> inits() {
         return Vectors.inits(this);
     }

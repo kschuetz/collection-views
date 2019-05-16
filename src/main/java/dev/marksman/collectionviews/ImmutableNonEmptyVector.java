@@ -60,6 +60,16 @@ public interface ImmutableNonEmptyVector<A> extends NonEmptyVector<A>, Immutable
         return ImmutableVectors.nonEmptyMap(f, this);
     }
 
+    /**
+     * Returns the init of this {@code ImmutableNonEmptyVector}.
+     * <p>
+     * The init of a {@link ImmutableNonEmptyVector} is the same {@code Vector} with the last element dropped.
+     * May be empty.
+     * <p>
+     * Does not make copies of any underlying collections.
+     *
+     * @return an {@code ImmutableVector<A>}
+     */
     @Override
     default ImmutableVector<A> init() {
         return dropRight(1);
