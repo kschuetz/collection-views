@@ -1,6 +1,8 @@
-package dev.marksman.collectionviews;
+package dev.marksman.collectionviews.iterables;
 
+import com.jnape.palatable.lambda.functions.Fn1;
 import com.jnape.palatable.lambda.functions.builtin.fn2.Cons;
+import com.jnape.palatable.lambda.functions.builtin.fn2.Map;
 
 import java.util.Iterator;
 
@@ -11,7 +13,7 @@ import java.util.Iterator;
  *
  * @param <A> the element type
  */
-public interface NonEmptyIterable<A> extends Iterable<A> {
+public interface NonEmptyIterable<A> extends EnhancedIterable<A> {
     /**
      * Returns the first element.
      *
@@ -25,6 +27,11 @@ public interface NonEmptyIterable<A> extends Iterable<A> {
      * @return an {@code Iterable<A>}.  May be empty.
      */
     Iterable<A> tail();
+
+    @Override
+    default <B> NonEmptyIterable<B> fmap(Fn1<? super A, ? extends B> f) {
+        return nonEmptyIterable(f.apply(head()), Map.map(f, tail()));
+    }
 
     @Override
     default Iterator<A> iterator() {

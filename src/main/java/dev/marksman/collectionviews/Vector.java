@@ -5,6 +5,9 @@ import com.jnape.palatable.lambda.adt.hlist.Tuple2;
 import com.jnape.palatable.lambda.functions.Fn1;
 import com.jnape.palatable.lambda.functions.Fn2;
 import com.jnape.palatable.lambda.functions.builtin.fn2.Find;
+import dev.marksman.collectionviews.iterables.FiniteIterable;
+import dev.marksman.collectionviews.iterables.NonEmptyFiniteIterable;
+import dev.marksman.collectionviews.iterables.NonEmptyIterable;
 
 import java.util.Iterator;
 import java.util.List;
@@ -129,6 +132,7 @@ public interface Vector<A> extends FiniteIterable<A>, RandomAccess {
      * @return an element wrapped in a {@link Maybe#just} if a matching element is found;
      * {@link Maybe#nothing} otherwise.
      */
+    // TODO: remove, as EnhancedIterable provides this
     default Maybe<A> find(Fn1<? super A, ? extends Boolean> predicate) {
         return Find.find(predicate, this);
     }
@@ -160,6 +164,7 @@ public interface Vector<A> extends FiniteIterable<A>, RandomAccess {
      * @param <B> The type of the elements contained in the output Vector.
      * @return a {@code Vector<B>} of the same size
      */
+    @Override
     default <B> Vector<B> fmap(Fn1<? super A, ? extends B> f) {
         return Vectors.map(f, this);
     }
@@ -210,6 +215,7 @@ public interface Vector<A> extends FiniteIterable<A>, RandomAccess {
      *
      * @return true if this {@code Vector} is empty, false otherwise.
      */
+    @Override
     default boolean isEmpty() {
         return size() == 0;
     }
@@ -282,7 +288,8 @@ public interface Vector<A> extends FiniteIterable<A>, RandomAccess {
      *
      * @return a {@code NonEmptyIterable} over all the tails of this {@code Vector}
      */
-    default NonEmptyIterable<? extends Vector<A>> tails() {
+    @Override
+    default NonEmptyFiniteIterable<? extends Vector<A>> tails() {
         return Vectors.tails(this);
     }
 
@@ -300,6 +307,7 @@ public interface Vector<A> extends FiniteIterable<A>, RandomAccess {
      *              May exceed size of this {@code Vector}.
      * @return a {@code Vector<A>}
      */
+    @Override
     default Vector<A> take(int count) {
         return Vectors.take(count, this);
     }

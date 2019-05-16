@@ -1,8 +1,8 @@
-package dev.marksman.collectionviews;
+package dev.marksman.collectionviews.internal;
 
 import java.util.Iterator;
 
-final class ProtectedIterator<A> implements Iterator<A> {
+public final class ProtectedIterator<A> implements Iterator<A> {
     private final Iterator<A> underlying;
 
     private ProtectedIterator(Iterator<A> underlying) {
@@ -19,7 +19,7 @@ final class ProtectedIterator<A> implements Iterator<A> {
         return underlying.next();
     }
 
-    static <A> ProtectedIterator<A> protectedIterator(Iterator<A> underlying) {
+    public static <A> ProtectedIterator<A> protectedIterator(Iterator<A> underlying) {
         return new ProtectedIterator<>(underlying);
     }
 

@@ -1,9 +1,11 @@
 package dev.marksman.collectionviews;
 
+import dev.marksman.collectionviews.iterables.ImmutableFiniteIterable;
+
 import java.util.Iterator;
 import java.util.Set;
 
-import static dev.marksman.collectionviews.ProtectedIterator.protectedIterator;
+import static dev.marksman.collectionviews.internal.ProtectedIterator.protectedIterator;
 
 final class ImmutableWrappedSet<A> extends ConcreteSet<A>
         implements ImmutableNonEmptySet<A>, Primitive {

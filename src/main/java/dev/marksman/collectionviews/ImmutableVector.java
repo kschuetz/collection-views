@@ -4,6 +4,9 @@ import com.jnape.palatable.lambda.adt.Maybe;
 import com.jnape.palatable.lambda.adt.hlist.Tuple2;
 import com.jnape.palatable.lambda.functions.Fn1;
 import com.jnape.palatable.lambda.functions.Fn2;
+import dev.marksman.collectionviews.iterables.ImmutableIterable;
+import dev.marksman.collectionviews.iterables.NonEmptyFiniteIterable;
+import dev.marksman.collectionviews.iterables.NonEmptyIterable;
 
 /**
  * A {@code Vector} that is guaranteed at compile-time to be safe from mutation anywhere.
@@ -205,7 +208,7 @@ public interface ImmutableVector<A> extends Vector<A>, ImmutableIterable<A> {
      * @return a {@code NonEmptyIterable} over all the tails of this {@code ImmutableVector}
      */
     @Override
-    default NonEmptyIterable<ImmutableVector<A>> tails() {
+    default NonEmptyFiniteIterable<ImmutableVector<A>> tails() {
         return ImmutableVectors.tails(this);
     }
 
