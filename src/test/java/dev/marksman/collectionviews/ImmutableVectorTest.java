@@ -2646,5 +2646,51 @@ class ImmutableVectorTest {
         }
 
     }
-    
+
+    @Nested
+    @DisplayName("span")
+    class Span {
+
+        @Test
+        void throwsOnNullPredicate() {
+            assertThrows(NullPointerException.class, () -> Vector.copyFrom(singletonList(1)).span(null));
+        }
+
+        @Test
+        void alwaysTakeReturnsSameReference() {
+            ImmutableVector<Integer> source = Vector.copyFrom(asList(1, 2, 3));
+            Tuple2<ImmutableVector<Integer>, ImmutableVector<Integer>> span = source.span(constantly(true));
+            assertSame(source, span._1());
+        }
+
+        @Test
+        void takesAsMuchAsItCan() {
+            assertEquals(tuple(Vector.of(1, 2, 3), Vector.empty()),
+                    Vector.copyFrom(asList(1, 2, 3)).span(constantly(true)));
+        }
+
+        @Test
+        void onlyTakesWhatWasAskedFor() {
+            assertEquals(tuple(Vector.of(1, 2, 3), Vector.empty()),
+                    Vector.copyFrom(asList(1, 2, 3)).span(n -> n < 4));
+            assertEquals(tuple(Vector.of(1, 2), Vector.of(3)),
+                    Vector.copyFrom(asList(1, 2, 3)).span(n -> n < 3));
+            assertEquals(tuple(Vector.of(1), Vector.of(2, 3)),
+                    Vector.copyFrom(asList(1, 2, 3)).span(n -> n < 2));
+            assertEquals(tuple(Vector.empty(), Vector.of(1, 2, 3)),
+                    Vector.copyFrom(asList(1, 2, 3)).span(n -> n < 1));
+        }
+
+        @Test
+        void notAffectedByMutation() {
+            List<String> originalUnderlying = asList("baz", "bar", "foo");
+            ImmutableVector<String> original = Vector.copyFrom(originalUnderlying);
+            Tuple2<ImmutableVector<String>, ImmutableVector<String>> subject = original.span(s -> s.startsWith("b"));
+            assertEquals(tuple(Vector.of("baz", "bar"), Vector.of("foo")), subject);
+            originalUnderlying.set(0, "qwerty");
+            assertEquals(tuple(Vector.of("baz", "bar"), Vector.of("foo")), subject);
+        }
+
+    }
+
 }

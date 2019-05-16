@@ -83,7 +83,9 @@ public interface ImmutableVector<A> extends Vector<A>, Immutable {
      * <p>
      * Does not make copies of any underlying collections.
      *
-     * @param predicate a predicate;  not null
+     * @param predicate a predicate; not null.
+     *                  This function should be referentially transparent and not perform side-effects.
+     *                  It may be called zero or more times for each element.
      * @return an {@code ImmutableVector<A>}
      */
     default ImmutableVector<A> dropWhile(Fn1<? super A, ? extends Boolean> predicate) {
@@ -158,6 +160,20 @@ public interface ImmutableVector<A> extends Vector<A>, Immutable {
         return ImmutableVectors.slice(startIndex, endIndexExclusive, this);
     }
 
+    /**
+     * Splits this {@code ImmutableVector} into a prefix/suffix pair according to a predicate.
+     * <p>
+     * Does not make copies of any underlying collections.
+     * <p>
+     * Note that <code>vector.span(p)</code> is equivalent to, but possibly more efficient than
+     * <code>tuple(vector.takeWhile(p), vector.dropWhile(p))</code>
+     *
+     * @param predicate a predicate; not null.
+     *                  This function should be referentially transparent and not perform side-effects.
+     *                  It may be called zero or more times for each element.
+     * @return a {@code Tuple2} contains of {@code ImmutableVector}s, one of which containing the first {@code index} elements
+     * that satisfied the predicate, the second containing the other elements.
+     */
     default Tuple2<ImmutableVector<A>, ImmutableVector<A>> span(Fn1<? super A, ? extends Boolean> predicate) {
         return ImmutableVectors.span(predicate, this);
     }
@@ -236,7 +252,9 @@ public interface ImmutableVector<A> extends Vector<A>, Immutable {
      * <p>
      * Does not make copies of any underlying collections.
      *
-     * @param predicate a predicate;  not null
+     * @param predicate a predicate; not null.
+     *                  This function should be referentially transparent and not perform side-effects.
+     *                  It may be called zero or more times for each element.
      * @return an {@code ImmutableVector<A>}
      */
     default ImmutableVector<A> takeWhile(Fn1<? super A, ? extends Boolean> predicate) {
@@ -304,7 +322,7 @@ public interface ImmutableVector<A> extends Vector<A>, Immutable {
      * @param other The other {@code ImmutableVector}
      * @param <B>   The element type of the other {@code ImmutableVector}
      * @param <R>   The element type of the result
-     * @return A {@code ImmutableVector<R>}
+     * @return An {@code ImmutableVector<R>}
      */
     default <B, R> ImmutableVector<R> zipWith(Fn2<A, B, R> fn, ImmutableVector<B> other) {
         return ImmutableVectors.zipWith(fn, this, other);
