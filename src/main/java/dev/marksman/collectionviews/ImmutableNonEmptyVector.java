@@ -21,7 +21,7 @@ import static com.jnape.palatable.lambda.adt.Maybe.just;
  *
  * @param <A> the element type
  */
-public interface ImmutableNonEmptyVector<A> extends NonEmptyVector<A>, ImmutableVector<A> {
+public interface ImmutableNonEmptyVector<A> extends NonEmptyVector<A>, ImmutableVector<A>, ImmutableNonEmptyIterable<A> {
 
     /**
      * Returns the cartesian product of this {@code ImmutableNonEmptyVector} with another {@code ImmutableNonEmptyVector}.

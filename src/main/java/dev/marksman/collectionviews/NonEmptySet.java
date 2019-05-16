@@ -15,7 +15,7 @@ import static com.jnape.palatable.lambda.adt.Maybe.just;
  *
  * @param <A> the element type
  */
-public interface NonEmptySet<A> extends NonEmptyIterable<A>, Set<A> {
+public interface NonEmptySet<A> extends NonEmptyFiniteIterable<A>, Set<A> {
 
     /**
      * Tests whether this {@code NonEmptySet} is empty.

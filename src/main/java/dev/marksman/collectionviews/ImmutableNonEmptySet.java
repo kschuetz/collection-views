@@ -12,7 +12,7 @@ import static com.jnape.palatable.lambda.adt.Maybe.just;
  *
  * @param <A> the element type
  */
-public interface ImmutableNonEmptySet<A> extends NonEmptySet<A>, ImmutableSet<A> {
+public interface ImmutableNonEmptySet<A> extends NonEmptySet<A>, ImmutableSet<A>, ImmutableNonEmptyFiniteIterable<A> {
 
     /**
      * Returns an {@code ImmutableNonEmptySet} containing the same elements as this one.

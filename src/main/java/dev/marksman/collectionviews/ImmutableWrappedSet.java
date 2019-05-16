@@ -23,7 +23,7 @@ final class ImmutableWrappedSet<A> extends ConcreteSet<A>
     }
 
     @Override
-    public Iterable<A> tail() {
+    public ImmutableFiniteIterable<A> tail() {
         Iterator<A> iterator = iterator();
         iterator.next();
         return () -> iterator;

@@ -19,7 +19,7 @@ import com.jnape.palatable.lambda.functions.builtin.fn2.Find;
  *
  * @param <A> the element type
  */
-public interface Set<A> extends Iterable<A> {
+public interface Set<A> extends FiniteIterable<A> {
 
     /**
      * Tests if an element is a member of this {@code Set}.
