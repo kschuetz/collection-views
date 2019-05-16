@@ -25,6 +25,7 @@ import static com.jnape.palatable.lambda.functions.builtin.fn1.Repeat.repeat;
 import static com.jnape.palatable.lambda.functions.builtin.fn2.Cons.cons;
 import static com.jnape.palatable.lambda.functions.builtin.fn2.Replicate.replicate;
 import static com.jnape.palatable.lambda.functions.builtin.fn2.Take.take;
+import static com.jnape.palatable.lambda.functions.builtin.fn2.Tupler2.tupler;
 import static com.jnape.palatable.lambda.functions.builtin.fn3.FoldLeft.foldLeft;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
@@ -2422,6 +2423,54 @@ class ImmutableVectorTest {
                     tuple("foo", 1), tuple("foo", 2), tuple("foo", 3),
                     tuple("bar", 1), tuple("bar", 2), tuple("bar", 3),
                     tuple("baz", 1), tuple("baz", 2), tuple("baz", 3)));
+        }
+
+    }
+
+    @Nested
+    @DisplayName("zipWith")
+    class ZipWith {
+
+        private String[] underlying1;
+        private List<Integer> underlying2;
+        private ImmutableVector<String> first;
+        private ImmutableVector<Integer> second;
+
+        @BeforeEach
+        void setUp() {
+            underlying1 = new String[]{"foo", "bar", "baz", "qux"};
+            first = Vector.copyFrom(underlying1);
+            underlying2 = asList(1, 2, 3);
+            second = Vector.copyFrom(underlying2);
+        }
+
+        @Test
+        void zipWithEmptyVectorIsEmpty() {
+            assertEquals(Vector.empty(), first.zipWith(tupler(), Vector.empty()));
+        }
+
+        @Test
+        void emptyVectorZipWithAnythingEmpty() {
+            assertEquals(Vector.empty(), Vector.empty().zipWith(tupler(), first));
+        }
+
+        @Test
+        void iteratesCorrectly() {
+            assertThat(first.zipWith(tupler(), second),
+                    contains(tuple("foo", 1), tuple("bar", 2), tuple("baz", 3)));
+        }
+
+        @Test
+        void sizeIsShorterOfComponentSizes() {
+            assertEquals(4, first.zipWith(tupler(), Vector.range(9)).size());
+        }
+
+        @Test
+        void notAffectedByMutation() {
+            ImmutableVector<Tuple2<String, Integer>> subject = first.zipWith(tupler(), second);
+            underlying1[0] = "qwerty";
+            underlying2.set(1, 10);
+            assertThat(subject, contains(tuple("foo", 1), tuple("bar", 2), tuple("baz", 3)));
         }
 
     }

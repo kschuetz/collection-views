@@ -269,6 +269,22 @@ public interface ImmutableVector<A> extends Vector<A>, Immutable {
         return ImmutableVectors.nonEmptyConvertOrThrow(this);
     }
 
+    /**
+     * Zips together this {@code ImmutableVector} with another {@code ImmutableVector} by applying a zipping function.
+     * <p>
+     * Applies the function to the successive elements of of each {@code ImmutableVector} until one of them runs out of elements.
+     * <p>
+     * Does not make copies of any underlying collections.
+     *
+     * @param fn    The zipping function.
+     *              Not null.
+     *              This function should be referentially transparent and not perform side-effects.
+     *              It may be called zero or more times for each element.
+     * @param other The other {@code ImmutableVector}
+     * @param <B>   The element type of the other {@code ImmutableVector}
+     * @param <R>   The element type of the result
+     * @return A {@code ImmutableVector<R>}
+     */
     default <B, R> ImmutableVector<R> zipWith(Fn2<A, B, R> fn, ImmutableVector<B> other) {
         return ImmutableVectors.zipWith(fn, this, other);
     }

@@ -344,6 +344,22 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
         return Vectors.nonEmptyWrapOrThrow(this);
     }
 
+    /**
+     * Zips together this {@code Vector} with another {@code Vector} by applying a zipping function.
+     * <p>
+     * Applies the function to the successive elements of of each {@code Vector} until one of them runs out of elements.
+     * <p>
+     * Does not make copies of any underlying collections.
+     *
+     * @param fn    The zipping function.
+     *              Not null.
+     *              This function should be referentially transparent and not perform side-effects.
+     *              It may be called zero or more times for each element.
+     * @param other The other {@code Vector}
+     * @param <B>   The element type of the other {@code Vector}
+     * @param <R>   The element type of the result
+     * @return A {@code Vector<R>}
+     */
     default <B, R> Vector<R> zipWith(Fn2<A, B, R> fn, Vector<B> other) {
         return Vectors.zipWith(fn, this, other);
     }

@@ -199,6 +199,22 @@ public interface NonEmptyVector<A> extends NonEmptyIterable<A>, Vector<A> {
         return this;
     }
 
+    /**
+     * Zips together this {@code NonEmptyVector} with another {@code NonEmptyVector} by applying a zipping function.
+     * <p>
+     * Applies the function to the successive elements of of each {@code NonEmptyVector} until one of them runs out of elements.
+     * <p>
+     * Does not make copies of any underlying collections.
+     *
+     * @param fn    The zipping function.
+     *              Not null.
+     *              This function should be referentially transparent and not perform side-effects.
+     *              It may be called zero or more times for each element.
+     * @param other The other {@code NonEmptyVector}
+     * @param <B>   The element type of the other {@code NonEmptyVector}
+     * @param <R>   The element type of the result
+     * @return A {@code NonEmptyVector<R>}
+     */
     default <B, R> NonEmptyVector<R> zipWith(Fn2<A, B, R> fn, NonEmptyVector<B> other) {
         return Vectors.nonEmptyZipWith(fn, this, other);
     }

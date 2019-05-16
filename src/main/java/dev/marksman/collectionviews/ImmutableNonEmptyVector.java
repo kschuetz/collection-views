@@ -145,6 +145,22 @@ public interface ImmutableNonEmptyVector<A> extends NonEmptyVector<A>, Immutable
         return this;
     }
 
+    /**
+     * Zips together this {@code ImmutableNonEmptyVector} with another {@code ImmutableNonEmptyVector} by applying a zipping function.
+     * <p>
+     * Applies the function to the successive elements of of each {@code ImmutableNonEmptyVector} until one of them runs out of elements.
+     * <p>
+     * Does not make copies of any underlying collections.
+     *
+     * @param fn    The zipping function.
+     *              Not null.
+     *              This function should be referentially transparent and not perform side-effects.
+     *              It may be called zero or more times for each element.
+     * @param other The other {@code ImmutableNonEmptyVector}
+     * @param <B>   The element type of the other {@code ImmutableNonEmptyVector}
+     * @param <R>   The element type of the result
+     * @return A {@code ImmutableNonEmptyVector<R>}
+     */
     default <B, R> ImmutableNonEmptyVector<R> zipWith(Fn2<A, B, R> fn, ImmutableNonEmptyVector<B> other) {
         return ImmutableVectors.nonEmptyZipWith(fn, this, other);
     }
