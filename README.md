@@ -1,6 +1,7 @@
 # collection-views
 
 [![collection-views](https://img.shields.io/maven-central/v/dev.marksman/collection-views.svg)](http://search.maven.org/#search%7Cga%7C1%7Cdev.marksman.collection-views)
+[![Javadoc](https://javadoc-badge.appspot.com/dev.marksman/collection-views.svg?label=javadoc)](https://kschuetz.github.io/collection-views/javadoc/)
 [![Build Status](https://travis-ci.org/kschuetz/collection-views.svg?branch=master)](https://travis-ci.org/kschuetz/collection-views)
 [![Maintainability](https://api.codeclimate.com/v1/badges/43ac4c983644c1bc7f5d/maintainability)](https://codeclimate.com/github/kschuetz/collection-views/maintainability)
 
@@ -10,6 +11,7 @@
  - [What is it not?](#what-is-it-not)
  - [Why?](#why)
  - [Design principles](#design-principles)
+ - [Installation](#installation)
  - [Type of collection views](#types)
    - [`Vector<A>`](#vector)
    - [`NonEmptyVector<A>`](#non-empty-vector)
@@ -106,7 +108,7 @@ The views yielded by these transformation are new, independent views, and do not
 
 For convenience, collection views should be easy to create on the fly without the need for a pre-existing collection.  Views constructed this way should be first-class and have the same capabilities of all other views.  
 
-# Installation
+# <a name="installation">Installation</a>
 
 To install, add the dependency to the latest version to your `pom.xml` (Maven) or `build.gradle` (Gradle).
 
@@ -606,6 +608,8 @@ By design, no concrete classes in this library are exposed for direct instantiat
 Throughout this library, the claim of O(1) means that the number of elements in a collection has no bearing on performance.  However, the number of transformations applied to a view (such as mapping and slicing), will.  Technically, the complexity is O(k) where *k* is the number of transformations applied.  
 
 # <a name="license">License</a>
+
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fkschuetz%2Fcollection-views.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fkschuetz%2Fcollection-views?ref=badge_shield)
 
 *collection-views* is distributed under [The MIT License](http://choosealicense.com/licenses/mit/).
 
