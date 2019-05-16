@@ -2526,4 +2526,39 @@ class ImmutableVectorTest {
 
     }
 
+    @Nested
+    @DisplayName("tails")
+    class Tails {
+
+        @Test
+        void emptyVector() {
+            assertThat(Vector.copyFrom(emptyList()).tails(), contains(Vector.empty()));
+        }
+
+        @Test
+        void vectorSize1() {
+            assertThat(Vector.copyFrom(singletonList("foo")).tails(),
+                    contains(Vector.of("foo"),
+                            Vector.empty()));
+        }
+
+        @Test
+        void vectorSize2() {
+            assertThat(Vector.copyFrom(asList("foo", "bar")).tails(),
+                    contains(Vector.of("foo", "bar"),
+                            Vector.of("bar"),
+                            Vector.empty()));
+        }
+
+        @Test
+        void vectorSize3() {
+            assertThat(Vector.copyFrom(asList("foo", "bar", "baz")).tails(),
+                    contains(Vector.of("foo", "bar", "baz"),
+                            Vector.of("bar", "baz"),
+                            Vector.of("baz"),
+                            Vector.empty()));
+        }
+
+    }
+
 }

@@ -167,6 +167,14 @@ public interface ImmutableVector<A> extends Vector<A>, Immutable {
         return ImmutableVectors.splitAt(index, this);
     }
 
+    /**
+     * Returns a {@code NonEmptyIterable} containing the tails of this {@code ImmutableVector}.
+     * <p>
+     * The first value will be this {@code ImmutableVector} and the final one will be an empty {@code ImmutableVector},
+     * with the intervening values the results of successive applications of {@code tail}.
+     *
+     * @return a {@code NonEmptyIterable} over all the tails of this {@code ImmutableVector}
+     */
     @Override
     default NonEmptyIterable<ImmutableVector<A>> tails() {
         return ImmutableVectors.tails(this);

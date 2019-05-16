@@ -259,6 +259,14 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
         return Vectors.splitAt(index, this);
     }
 
+    /**
+     * Returns a {@code NonEmptyIterable} containing the tails of this {@code Vector}.
+     * <p>
+     * The first value will be this {@code Vector} and the final one will be an empty {@code Vector},
+     * with the intervening values the results of successive applications of {@code tail}.
+     *
+     * @return a {@code NonEmptyIterable} over all the tails of this {@code Vector}
+     */
     default NonEmptyIterable<? extends Vector<A>> tails() {
         return Vectors.tails(this);
     }
