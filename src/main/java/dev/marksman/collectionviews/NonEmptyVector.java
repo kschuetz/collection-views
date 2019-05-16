@@ -73,6 +73,11 @@ public interface NonEmptyVector<A> extends NonEmptyIterable<A>, Vector<A> {
         return unsafeGet(0);
     }
 
+    /**
+     * Returns an {@code ImmutableNonEmptyVector<Integer>} that contains all the indices of this {@code NonEmptyVector}.
+     *
+     * @return an {@code ImmutableNonEmptyVector<Integer>}
+     */
     @Override
     default ImmutableNonEmptyVector<Integer> indices() {
         return ImmutableVectors.nonEmptyIndices(this);

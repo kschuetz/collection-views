@@ -1943,4 +1943,20 @@ class VectorTest {
 
     }
 
+    @Nested
+    @DisplayName("indices")
+    class Indices {
+
+        @Test
+        void returnsEmptyVectorIfEmpty() {
+            assertSame(Vector.empty(), Vector.wrap(emptyList()).indices());
+        }
+
+        @Test
+        void iteratesCorrectly() {
+            assertThat(Vector.wrap(asList("foo", "bar", "baz")).indices(), contains(0, 1, 2));
+        }
+
+    }
+
 }

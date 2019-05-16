@@ -2426,4 +2426,20 @@ class ImmutableVectorTest {
 
     }
 
+    @Nested
+    @DisplayName("indices")
+    class Indices {
+
+        @Test
+        void returnsEmptyVectorIfEmpty() {
+            assertSame(Vector.empty(), Vector.empty().indices());
+        }
+
+        @Test
+        void iteratesCorrectly() {
+            assertThat(Vector.of("foo", "bar", "baz").indices(), contains(0, 1, 2));
+        }
+
+    }
+
 }

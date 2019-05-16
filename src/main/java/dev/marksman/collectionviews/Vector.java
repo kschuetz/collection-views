@@ -181,6 +181,11 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
         }
     }
 
+    /**
+     * Returns an {@code ImmutableVector<Integer>} that contains all the indices of this {@code Vector}.
+     *
+     * @return an {@code ImmutableVector<Integer>}
+     */
     default ImmutableVector<Integer> indices() {
         return ImmutableVectors.indices(this);
     }
