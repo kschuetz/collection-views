@@ -255,6 +255,19 @@ public interface Vector<A> extends Iterable<A>, RandomAccess {
         return Vectors.slice(startIndex, endIndexExclusive, this);
     }
 
+    /**
+     * Splits this {@code Vector} into two at a given position.
+     * <p>
+     * Does not make copies of any underlying collections.
+     * <p>
+     * Note that <code>vector.splitAt(n)</code> is equivalent to, but possibly more efficient than
+     * <code>tuple(vector.take(n), vector.drop(n))</code>
+     *
+     * @param index the position at which to split.
+     *              Must be &gt;= 0;
+     * @return a {@code Tuple2} contains of {@code Vector}s, one of which containing the first {@code index} elements,
+     * the second containing the other elements.
+     */
     default Tuple2<? extends Vector<A>, ? extends Vector<A>> splitAt(int index) {
         return Vectors.splitAt(index, this);
     }

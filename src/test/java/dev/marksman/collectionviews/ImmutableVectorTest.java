@@ -2561,4 +2561,90 @@ class ImmutableVectorTest {
 
     }
 
+    @Nested
+    @DisplayName("splitAt")
+    class SplitAt {
+
+        @Nested
+        @DisplayName("array")
+        class Array {
+
+            @Test
+            void throwsOnNegativeIndex() {
+                assertThrows(IllegalArgumentException.class, () -> Vector.copyFrom(new Integer[]{1}).splitAt(-1));
+            }
+
+            @Test
+            void takesAsMuchAsItCan() {
+                assertEquals(tuple(Vector.of(1, 2, 3), Vector.empty()),
+                        Vector.copyFrom(new Integer[]{1, 2, 3}).splitAt(1_000_000));
+            }
+
+            @Test
+            void onlyTakesWhatWasAskedFor() {
+                assertEquals(tuple(Vector.of(1, 2, 3), Vector.empty()),
+                        Vector.copyFrom(new Integer[]{1, 2, 3}).splitAt(3));
+                assertEquals(tuple(Vector.of(1, 2), Vector.of(3)),
+                        Vector.copyFrom(new Integer[]{1, 2, 3}).splitAt(2));
+                assertEquals(tuple(Vector.of(1), Vector.of(2, 3)),
+                        Vector.copyFrom(new Integer[]{1, 2, 3}).splitAt(1));
+                assertEquals(tuple(Vector.empty(), Vector.of(1, 2, 3)),
+                        Vector.copyFrom(new Integer[]{1, 2, 3}).splitAt(0));
+            }
+
+            @SuppressWarnings("AssertEqualsBetweenInconvertibleTypes")
+            @Test
+            void notAffectedByMutation() {
+                String[] originalUnderlying = new String[]{"foo", "bar", "baz"};
+                Vector<String> original = Vector.copyFrom(originalUnderlying);
+                Tuple2<? extends Vector<String>, ? extends Vector<String>> split = original.splitAt(2);
+                assertEquals(tuple(Vector.of("foo", "bar"), Vector.of("baz")), split);
+                originalUnderlying[1] = "qwerty";
+                assertEquals(tuple(Vector.of("foo", "bar"), Vector.of("baz")), split);
+            }
+
+        }
+
+        @Nested
+        @DisplayName("List")
+        class List {
+
+            @Test
+            void throwsOnNegativeIndex() {
+                assertThrows(IllegalArgumentException.class, () -> Vector.copyFrom(singletonList(1)).splitAt(-1));
+            }
+
+            @Test
+            void takesAsMuchAsItCan() {
+                assertEquals(tuple(Vector.of(1, 2, 3), Vector.empty()),
+                        Vector.copyFrom(asList(1, 2, 3)).splitAt(1_000_000));
+            }
+
+            @Test
+            void onlyTakesWhatWasAskedFor() {
+                assertEquals(tuple(Vector.of(1, 2, 3), Vector.empty()),
+                        Vector.copyFrom(asList(1, 2, 3)).splitAt(3));
+                assertEquals(tuple(Vector.of(1, 2), Vector.of(3)),
+                        Vector.copyFrom(asList(1, 2, 3)).splitAt(2));
+                assertEquals(tuple(Vector.of(1), Vector.of(2, 3)),
+                        Vector.copyFrom(asList(1, 2, 3)).splitAt(1));
+                assertEquals(tuple(Vector.empty(), Vector.of(1, 2, 3)),
+                        Vector.copyFrom(asList(1, 2, 3)).splitAt(0));
+            }
+
+            @SuppressWarnings("AssertEqualsBetweenInconvertibleTypes")
+            @Test
+            void notAffectedByMutation() {
+                java.util.List<String> originalUnderlying = asList("foo", "bar", "baz");
+                Vector<String> original = Vector.copyFrom(originalUnderlying);
+                Tuple2<? extends Vector<String>, ? extends Vector<String>> split = original.splitAt(2);
+                assertEquals(tuple(Vector.of("foo", "bar"), Vector.of("baz")), split);
+                originalUnderlying.set(1, "qwerty");
+                assertEquals(tuple(Vector.of("foo", "bar"), Vector.of("baz")), split);
+            }
+
+        }
+
+    }
+    
 }

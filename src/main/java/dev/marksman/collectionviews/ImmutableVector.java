@@ -162,6 +162,19 @@ public interface ImmutableVector<A> extends Vector<A>, Immutable {
         return ImmutableVectors.span(predicate, this);
     }
 
+    /**
+     * Splits this {@code ImmutableVector} into two at a given position.
+     * <p>
+     * Does not make copies of any underlying collections.
+     * <p>
+     * Note that <code>vector.splitAt(n)</code> is equivalent to, but possibly more efficient than
+     * <code>tuple(vector.take(n), vector.drop(n))</code>
+     *
+     * @param index the position at which to split.
+     *              Must be &gt;= 0;
+     * @return a {@code Tuple2} contains of {@code ImmutableVector}s, one of which containing the first {@code index} elements,
+     * the second containing the other elements.
+     */
     @Override
     default Tuple2<ImmutableVector<A>, ImmutableVector<A>> splitAt(int index) {
         return ImmutableVectors.splitAt(index, this);
