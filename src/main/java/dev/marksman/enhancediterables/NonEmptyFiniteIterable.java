@@ -8,6 +8,7 @@ import com.jnape.palatable.lambda.functions.builtin.fn1.Reverse;
 import com.jnape.palatable.lambda.functions.builtin.fn2.CartesianProduct;
 import com.jnape.palatable.lambda.functions.builtin.fn2.Map;
 import com.jnape.palatable.lambda.functions.builtin.fn3.ZipWith;
+import com.jnape.palatable.lambda.monoid.builtin.Concat;
 
 import static dev.marksman.enhancediterables.EnhancedIterables.nonEmptyFiniteIterableOrThrow;
 
@@ -22,7 +23,18 @@ public interface NonEmptyFiniteIterable<A> extends FiniteIterable<A>, NonEmptyIt
     FiniteIterable<A> tail();
 
     @Override
-    default <B> NonEmptyFiniteIterable<Tuple2<A, B>> cross(FiniteIterable<B> other) {
+    default NonEmptyFiniteIterable<A> concat(FiniteIterable<A> other) {
+        return nonEmptyFiniteIterableOrThrow(Concat.concat(this, other));
+    }
+
+    /**
+     * Returns the lazily computed cartesian product of this {@code NonEmptyFiniteIterable} with another {@code NonEmptyFiniteIterable}.
+     *
+     * @param other a {@code NonEmptyFiniteIterable} of any type
+     * @param <B>   the type of the other {@code NonEmptyFiniteIterable}
+     * @return a {@code NonEmptyFiniteIterable<Tuple2<A, B>>}
+     */
+    default <B> NonEmptyFiniteIterable<Tuple2<A, B>> cross(NonEmptyFiniteIterable<B> other) {
         return nonEmptyFiniteIterableOrThrow(CartesianProduct.cartesianProduct(this, other));
     }
 

@@ -33,7 +33,7 @@ public interface NonEmptyVector<A> extends NonEmptyFiniteIterable<A>, Vector<A> 
      * <p>
      * Does not make copies of any underlying collections.
      * <p>
-     * The returned {@link NonEmptyVector} will have a size of {@code size()} x {@code other.size()},
+     * The returned {@link NonEmptyVector} will have a size of {@code size()} × {@code other.size()},
      * but will allocate no extra memory (aside from a few bytes for housekeeping).
      *
      * @param other a {@code NonEmptyVector} of any type

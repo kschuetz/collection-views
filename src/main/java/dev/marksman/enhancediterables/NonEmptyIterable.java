@@ -5,10 +5,12 @@ import com.jnape.palatable.lambda.functions.Fn2;
 import com.jnape.palatable.lambda.functions.builtin.fn2.Cons;
 import com.jnape.palatable.lambda.functions.builtin.fn2.Map;
 import com.jnape.palatable.lambda.functions.builtin.fn3.ZipWith;
+import com.jnape.palatable.lambda.monoid.builtin.Concat;
 
 import java.util.Iterator;
 
 import static dev.marksman.enhancediterables.EnhancedIterable.enhancedIterable;
+import static dev.marksman.enhancediterables.EnhancedIterables.nonEmptyIterableOrThrow;
 
 /**
  * An {@code EnhancedIterable} that is guaranteed to contain at least one element.
@@ -18,6 +20,7 @@ import static dev.marksman.enhancediterables.EnhancedIterable.enhancedIterable;
  * @param <A> the element type
  */
 public interface NonEmptyIterable<A> extends EnhancedIterable<A> {
+
     /**
      * Returns the first element.
      *
@@ -26,11 +29,16 @@ public interface NonEmptyIterable<A> extends EnhancedIterable<A> {
     A head();
 
     /**
-     * Returns an {@link Iterable} containing all subsequent elements beyond the first.
+     * Returns an {@link EnhancedIterable} containing all subsequent elements beyond the first.
      *
-     * @return an {@code Iterable<A>}.  May be empty.
+     * @return an {@code EnhancedIterable<A>}.  May be empty.
      */
     EnhancedIterable<A> tail();
+
+    @Override
+    default NonEmptyIterable<A> concat(Iterable<A> other) {
+        return nonEmptyIterableOrThrow(Concat.concat(this, other));
+    }
 
     @Override
     default <B> NonEmptyIterable<B> fmap(Fn1<? super A, ? extends B> f) {

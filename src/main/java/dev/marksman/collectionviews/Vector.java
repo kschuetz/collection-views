@@ -4,7 +4,6 @@ import com.jnape.palatable.lambda.adt.Maybe;
 import com.jnape.palatable.lambda.adt.hlist.Tuple2;
 import com.jnape.palatable.lambda.functions.Fn1;
 import com.jnape.palatable.lambda.functions.Fn2;
-import com.jnape.palatable.lambda.functions.builtin.fn2.Find;
 import dev.marksman.enhancediterables.FiniteIterable;
 import dev.marksman.enhancediterables.NonEmptyFiniteIterable;
 import dev.marksman.enhancediterables.NonEmptyIterable;
@@ -77,7 +76,7 @@ public interface Vector<A> extends FiniteIterable<A>, RandomAccess {
      * <p>
      * Does not make copies of any underlying collections.
      * <p>
-     * The returned {@link Vector} will have a size of {@code size()} x {@code other.size()},
+     * The returned {@link Vector} will have a size of {@code size()} × {@code other.size()},
      * but will allocate no extra memory (aside from a few bytes for housekeeping).
      *
      * @param other a {@code Vector} of any type
@@ -123,18 +122,6 @@ public interface Vector<A> extends FiniteIterable<A>, RandomAccess {
      */
     default Vector<A> dropRight(int count) {
         return Vectors.dropRight(count, this);
-    }
-
-    /**
-     * Finds the first element of this {@code Vector} that satisfies a predicate, if any.
-     *
-     * @param predicate a predicate; not null
-     * @return an element wrapped in a {@link Maybe#just} if a matching element is found;
-     * {@link Maybe#nothing} otherwise.
-     */
-    // TODO: remove, as EnhancedIterable provides this
-    default Maybe<A> find(Fn1<? super A, ? extends Boolean> predicate) {
-        return Find.find(predicate, this);
     }
 
     /**
@@ -204,6 +191,7 @@ public interface Vector<A> extends FiniteIterable<A>, RandomAccess {
      *
      * @return a {@code NonEmptyIterable} over all the inits of this {@code Vector}
      */
+    @Override
     default NonEmptyIterable<? extends Vector<A>> inits() {
         return Vectors.inits(this);
     }

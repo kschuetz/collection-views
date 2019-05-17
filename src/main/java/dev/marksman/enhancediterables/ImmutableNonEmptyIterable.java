@@ -4,6 +4,7 @@ import com.jnape.palatable.lambda.functions.Fn1;
 import com.jnape.palatable.lambda.functions.Fn2;
 import com.jnape.palatable.lambda.functions.builtin.fn2.Map;
 import com.jnape.palatable.lambda.functions.builtin.fn3.ZipWith;
+import com.jnape.palatable.lambda.monoid.builtin.Concat;
 
 import static dev.marksman.enhancediterables.EnhancedIterables.immutableNonEmptyIterableOrThrow;
 
@@ -17,6 +18,11 @@ import static dev.marksman.enhancediterables.EnhancedIterables.immutableNonEmpty
 public interface ImmutableNonEmptyIterable<A> extends ImmutableIterable<A>, NonEmptyIterable<A> {
     @Override
     ImmutableIterable<A> tail();
+
+    @Override
+    default ImmutableNonEmptyIterable<A> concat(ImmutableIterable<A> other) {
+        return immutableNonEmptyIterableOrThrow(Concat.concat(this, other));
+    }
 
     @Override
     default <B> ImmutableNonEmptyIterable<B> fmap(Fn1<? super A, ? extends B> f) {

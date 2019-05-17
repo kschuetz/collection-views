@@ -4,7 +4,7 @@ import com.jnape.palatable.lambda.adt.Maybe;
 import com.jnape.palatable.lambda.adt.hlist.Tuple2;
 import com.jnape.palatable.lambda.functions.Fn1;
 import com.jnape.palatable.lambda.functions.Fn2;
-import dev.marksman.enhancediterables.ImmutableIterable;
+import dev.marksman.enhancediterables.ImmutableFiniteIterable;
 import dev.marksman.enhancediterables.NonEmptyFiniteIterable;
 import dev.marksman.enhancediterables.NonEmptyIterable;
 
@@ -25,14 +25,14 @@ import dev.marksman.enhancediterables.NonEmptyIterable;
  *
  * @param <A> the element type
  */
-public interface ImmutableVector<A> extends Vector<A>, ImmutableIterable<A>, Immutable {
+public interface ImmutableVector<A> extends Vector<A>, ImmutableFiniteIterable<A>, Immutable {
 
     /**
      * Returns the cartesian product of this {@code ImmutableVector} with another {@code ImmutableVector}.
      * <p>
      * Does not make copies of any underlying collections.
      * <p>
-     * The returned {@link ImmutableVector} will have a size of {@code size()} x {@code other.size()},
+     * The returned {@link ImmutableVector} will have a size of {@code size()} × {@code other.size()},
      * but will allocate no extra memory (aside from a few bytes for housekeeping).
      *
      * @param other an {@code ImmutableVector} of any type

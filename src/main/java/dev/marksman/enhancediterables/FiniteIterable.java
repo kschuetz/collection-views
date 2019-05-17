@@ -6,14 +6,13 @@ import com.jnape.palatable.lambda.functions.Fn2;
 import com.jnape.palatable.lambda.functions.builtin.fn1.Inits;
 import com.jnape.palatable.lambda.functions.builtin.fn1.Reverse;
 import com.jnape.palatable.lambda.functions.builtin.fn1.Tails;
-import com.jnape.palatable.lambda.functions.builtin.fn2.CartesianProduct;
-import com.jnape.palatable.lambda.functions.builtin.fn2.Drop;
-import com.jnape.palatable.lambda.functions.builtin.fn2.Map;
-import com.jnape.palatable.lambda.functions.builtin.fn2.Take;
+import com.jnape.palatable.lambda.functions.builtin.fn2.*;
 import com.jnape.palatable.lambda.functions.builtin.fn3.ZipWith;
+import com.jnape.palatable.lambda.monoid.builtin.Concat;
 
 import java.util.Collection;
 
+import static dev.marksman.enhancediterables.EnhancedIterables.nonEmptyFiniteIterableOrThrow;
 import static dev.marksman.enhancediterables.EnhancedIterables.nonEmptyIterableOrThrow;
 
 /**
@@ -23,10 +22,35 @@ import static dev.marksman.enhancediterables.EnhancedIterables.nonEmptyIterableO
  */
 public interface FiniteIterable<A> extends EnhancedIterable<A> {
 
+    @Override
+    default NonEmptyFiniteIterable<A> append(A element) {
+        return nonEmptyFiniteIterableOrThrow(Snoc.snoc(element, this));
+    }
+
+    default FiniteIterable<A> concat(FiniteIterable<A> other) {
+        return EnhancedIterables.finiteIterable(Concat.concat(this, other));
+    }
+
+    /**
+     * Returns the lazily computed cartesian product of this {@code FiniteIterable} with another {@code FiniteIterable}.
+     *
+     * @param other a {@code FiniteIterable} of any type
+     * @param <B>   the type of the other {@code FiniteIterable}
+     * @return a {@code FiniteIterable<Tuple2<A, B>>}
+     */
     default <B> FiniteIterable<Tuple2<A, B>> cross(FiniteIterable<B> other) {
         return EnhancedIterables.finiteIterable(CartesianProduct.cartesianProduct(this, other));
     }
 
+    /**
+     * Returns a new {@code FiniteIterable} that drops the first {@code count} elements of this {@code FiniteIterable}.
+     *
+     * @param count the number of elements to drop from this {@code FiniteIterable}.
+     *              Must be &gt;= 0.
+     *              May exceed size of this {@code FiniteIterable}, in which case, the result will be an
+     *              empty {@code FiniteIterable}.
+     * @return a {@code FiniteIterable<A>}
+     */
     @Override
     default FiniteIterable<A> drop(int count) {
         return EnhancedIterables.finiteIterable(Drop.drop(count, this));
@@ -39,6 +63,11 @@ public interface FiniteIterable<A> extends EnhancedIterable<A> {
 
     default NonEmptyIterable<? extends FiniteIterable<A>> inits() {
         return nonEmptyIterableOrThrow(Map.map(EnhancedIterables::finiteIterable, Inits.inits(this)));
+    }
+
+    @Override
+    default NonEmptyFiniteIterable<A> prepend(A element) {
+        return NonEmptyFiniteIterable.nonEmptyFiniteIterable(element, this);
     }
 
     default FiniteIterable<A> reverse() {
