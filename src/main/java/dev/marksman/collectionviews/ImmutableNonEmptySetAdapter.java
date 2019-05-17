@@ -1,10 +1,10 @@
 package dev.marksman.collectionviews;
 
-import dev.marksman.collectionviews.iterables.ImmutableFiniteIterable;
+import dev.marksman.enhancediterables.ImmutableFiniteIterable;
 
 import java.util.Iterator;
 
-import static dev.marksman.collectionviews.internal.ProtectedIterator.protectedIterator;
+import static dev.marksman.enhancediterables.internal.ProtectedIterator.protectedIterator;
 
 final class ImmutableNonEmptySetAdapter<A> extends ConcreteSet<A>
         implements ImmutableNonEmptySet<A>, Primitive {

@@ -3,7 +3,7 @@ package dev.marksman.collectionviews;
 import java.util.Iterator;
 import java.util.Set;
 
-import static dev.marksman.collectionviews.internal.ProtectedIterator.protectedIterator;
+import static dev.marksman.enhancediterables.internal.ProtectedIterator.protectedIterator;
 
 final class WrappedSet<A> extends ConcreteSet<A>
         implements NonEmptySet<A>, Primitive {

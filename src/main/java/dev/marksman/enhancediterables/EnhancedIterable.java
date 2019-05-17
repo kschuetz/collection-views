@@ -1,4 +1,4 @@
-package dev.marksman.collectionviews.iterables;
+package dev.marksman.enhancediterables;
 
 import com.jnape.palatable.lambda.adt.Maybe;
 import com.jnape.palatable.lambda.functions.Fn1;
@@ -10,8 +10,8 @@ import com.jnape.palatable.lambda.functions.builtin.fn2.Map;
 import com.jnape.palatable.lambda.functions.builtin.fn2.Take;
 import com.jnape.palatable.lambda.functions.builtin.fn3.ZipWith;
 
-import static dev.marksman.collectionviews.iterables.EnhancedIterables.enhancedIterable;
-import static dev.marksman.collectionviews.iterables.EnhancedIterables.nonEmptyIterableOrThrow;
+import static dev.marksman.enhancediterables.EnhancedIterables.enhancedIterable;
+import static dev.marksman.enhancediterables.EnhancedIterables.nonEmptyIterableOrThrow;
 
 public interface EnhancedIterable<A> extends Iterable<A> {
 

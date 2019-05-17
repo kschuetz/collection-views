@@ -1,4 +1,4 @@
-package dev.marksman.collectionviews.iterables;
+package dev.marksman.enhancediterables;
 
 import com.jnape.palatable.lambda.adt.hlist.Tuple2;
 import com.jnape.palatable.lambda.functions.Fn1;
@@ -11,8 +11,8 @@ import com.jnape.palatable.lambda.functions.builtin.fn2.Map;
 import com.jnape.palatable.lambda.functions.builtin.fn2.Take;
 import com.jnape.palatable.lambda.functions.builtin.fn3.ZipWith;
 
-import static dev.marksman.collectionviews.iterables.EnhancedIterables.immutableFiniteIterable;
-import static dev.marksman.collectionviews.iterables.EnhancedIterables.nonEmptyIterableOrThrow;
+import static dev.marksman.enhancediterables.EnhancedIterables.immutableFiniteIterable;
+import static dev.marksman.enhancediterables.EnhancedIterables.nonEmptyIterableOrThrow;
 
 public interface ImmutableFiniteIterable<A> extends ImmutableIterable<A>, FiniteIterable<A> {
 

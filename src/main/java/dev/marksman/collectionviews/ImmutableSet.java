@@ -1,7 +1,7 @@
 package dev.marksman.collectionviews;
 
 import com.jnape.palatable.lambda.adt.Maybe;
-import dev.marksman.collectionviews.iterables.ImmutableFiniteIterable;
+import dev.marksman.enhancediterables.ImmutableFiniteIterable;
 
 /**
  * A {@code Set} that is guaranteed at compile-time to be safe from mutation anywhere.
@@ -14,7 +14,7 @@ import dev.marksman.collectionviews.iterables.ImmutableFiniteIterable;
  *
  * @param <A> the element type
  */
-public interface ImmutableSet<A> extends Set<A>, ImmutableFiniteIterable<A> {
+public interface ImmutableSet<A> extends Set<A>, ImmutableFiniteIterable<A>, Immutable {
 
     /**
      * Returns an {@code ImmutableSet} containing the same elements as this one.

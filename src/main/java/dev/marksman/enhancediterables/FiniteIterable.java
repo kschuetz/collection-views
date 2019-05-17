@@ -1,4 +1,4 @@
-package dev.marksman.collectionviews.iterables;
+package dev.marksman.enhancediterables;
 
 import com.jnape.palatable.lambda.adt.hlist.Tuple2;
 import com.jnape.palatable.lambda.functions.Fn1;
@@ -10,7 +10,7 @@ import com.jnape.palatable.lambda.functions.builtin.fn2.Map;
 import com.jnape.palatable.lambda.functions.builtin.fn2.Take;
 import com.jnape.palatable.lambda.functions.builtin.fn3.ZipWith;
 
-import static dev.marksman.collectionviews.iterables.EnhancedIterables.finiteIterable;
+import static dev.marksman.enhancediterables.EnhancedIterables.finiteIterable;
 
 public interface FiniteIterable<A> extends EnhancedIterable<A> {
 
