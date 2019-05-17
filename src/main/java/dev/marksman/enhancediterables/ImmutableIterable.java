@@ -11,6 +11,13 @@ import com.jnape.palatable.lambda.functions.builtin.fn3.ZipWith;
 import static dev.marksman.enhancediterables.EnhancedIterables.immutableIterable;
 import static dev.marksman.enhancediterables.EnhancedIterables.nonEmptyIterableOrThrow;
 
+/**
+ * An {@code EnhancedIterable} that is safe from mutation.
+ * <p>
+ * May be infinite, finite, or empty.
+ *
+ * @param <A> the element type
+ */
 public interface ImmutableIterable<A> extends EnhancedIterable<A> {
 
     @Override
@@ -33,8 +40,13 @@ public interface ImmutableIterable<A> extends EnhancedIterable<A> {
         return immutableIterable(Take.take(count, this));
     }
 
-    default <B, R> ImmutableIterable<R> zipWith(Fn2<A, B, R> fn, ImmutableIterable<B> other) {
+    default <B, C> ImmutableIterable<C> zipWith(Fn2<A, B, C> fn, ImmutableIterable<B> other) {
         return immutableIterable(ZipWith.zipWith(fn.toBiFunction(), this, other));
+    }
+
+    @SafeVarargs
+    static <A> ImmutableNonEmptyFiniteIterable<A> of(A first, A... more) {
+        return EnhancedIterables.of(first, more);
     }
 
 }

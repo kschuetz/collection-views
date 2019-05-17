@@ -214,10 +214,10 @@ public interface NonEmptyVector<A> extends NonEmptyFiniteIterable<A>, Vector<A> 
      *              It may be called zero or more times for each element.
      * @param other The other {@code NonEmptyVector}
      * @param <B>   The element type of the other {@code NonEmptyVector}
-     * @param <R>   The element type of the result
-     * @return A {@code NonEmptyVector<R>}
+     * @param <C>   The element type of the result
+     * @return A {@code NonEmptyVector<C>}
      */
-    default <B, R> NonEmptyVector<R> zipWith(Fn2<A, B, R> fn, NonEmptyVector<B> other) {
+    default <B, C> NonEmptyVector<C> zipWith(Fn2<A, B, C> fn, NonEmptyVector<B> other) {
         return Vectors.nonEmptyZipWith(fn, this, other);
     }
 

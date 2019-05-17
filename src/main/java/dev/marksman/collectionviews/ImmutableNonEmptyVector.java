@@ -159,10 +159,10 @@ public interface ImmutableNonEmptyVector<A> extends NonEmptyVector<A>, Immutable
      *              It may be called zero or more times for each element.
      * @param other The other {@code ImmutableNonEmptyVector}
      * @param <B>   The element type of the other {@code ImmutableNonEmptyVector}
-     * @param <R>   The element type of the result
-     * @return A {@code ImmutableNonEmptyVector<R>}
+     * @param <C>   The element type of the result
+     * @return A {@code ImmutableNonEmptyVector<C>}
      */
-    default <B, R> ImmutableNonEmptyVector<R> zipWith(Fn2<A, B, R> fn, ImmutableNonEmptyVector<B> other) {
+    default <B, C> ImmutableNonEmptyVector<C> zipWith(Fn2<A, B, C> fn, ImmutableNonEmptyVector<B> other) {
         return ImmutableVectors.nonEmptyZipWith(fn, this, other);
     }
 

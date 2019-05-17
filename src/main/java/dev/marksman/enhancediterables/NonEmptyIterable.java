@@ -1,17 +1,19 @@
 package dev.marksman.enhancediterables;
 
 import com.jnape.palatable.lambda.functions.Fn1;
+import com.jnape.palatable.lambda.functions.Fn2;
 import com.jnape.palatable.lambda.functions.builtin.fn2.Cons;
 import com.jnape.palatable.lambda.functions.builtin.fn2.Map;
+import com.jnape.palatable.lambda.functions.builtin.fn3.ZipWith;
 
 import java.util.Iterator;
 
-import static dev.marksman.enhancediterables.EnhancedIterables.enhancedIterable;
+import static dev.marksman.enhancediterables.EnhancedIterable.enhancedIterable;
 
 /**
- * An {@link Iterable} that is guaranteed to contain at least one element.
+ * An {@code EnhancedIterable} that is guaranteed to contain at least one element.
  * <p>
- * May be infinite.
+ * May be infinite or finite.
  *
  * @param <A> the element type
  */
@@ -40,6 +42,11 @@ public interface NonEmptyIterable<A> extends EnhancedIterable<A> {
         return Cons.cons(head(), tail()).iterator();
     }
 
+    default <B, C> NonEmptyIterable<C> zipWith(Fn2<A, B, C> fn, NonEmptyIterable<B> other) {
+        return nonEmptyIterable(fn.apply(head(), other.head()),
+                ZipWith.zipWith(fn.toBiFunction(), tail(), other.tail()));
+    }
+
     /**
      * Creates a {@link NonEmptyIterable}.
      *
@@ -49,6 +56,7 @@ public interface NonEmptyIterable<A> extends EnhancedIterable<A> {
      * @return a {@code NonEmptyIterable<A>}
      */
     static <A> NonEmptyIterable<A> nonEmptyIterable(A head, Iterable<A> tail) {
+        EnhancedIterable<A> enhancedTail = enhancedIterable(tail);
         return new NonEmptyIterable<A>() {
             @Override
             public A head() {
@@ -57,8 +65,9 @@ public interface NonEmptyIterable<A> extends EnhancedIterable<A> {
 
             @Override
             public EnhancedIterable<A> tail() {
-                return enhancedIterable(tail);
+                return enhancedTail;
             }
         };
     }
+
 }

@@ -270,7 +270,7 @@ final class ImmutableVectors {
         }
     }
 
-    static <A, B, R> ImmutableNonEmptyVector<R> nonEmptyZipWith(Fn2<A, B, R> fn,
+    static <A, B, C> ImmutableNonEmptyVector<C> nonEmptyZipWith(Fn2<A, B, C> fn,
                                                                 ImmutableNonEmptyVector<A> first, ImmutableNonEmptyVector<B> second) {
         Objects.requireNonNull(fn);
         Objects.requireNonNull(first);
@@ -364,7 +364,7 @@ final class ImmutableVectors {
         }
     }
 
-    static <A, B, R> ImmutableVector<R> zipWith(Fn2<A, B, R> fn, ImmutableVector<A> first, ImmutableVector<B> second) {
+    static <A, B, C> ImmutableVector<C> zipWith(Fn2<A, B, C> fn, ImmutableVector<A> first, ImmutableVector<B> second) {
         return second.toNonEmpty().<Tuple2<ImmutableNonEmptyVector<A>, ImmutableNonEmptyVector<B>>>zip(first.toNonEmpty()
                 .fmap(tupler()))
                 .match(__ -> empty(),

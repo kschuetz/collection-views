@@ -162,7 +162,7 @@ final class Vectors {
         return getNonEmptyOrThrow(maybeNonEmptyWrap(vec));
     }
 
-    static <A, B, R> NonEmptyVector<R> nonEmptyZipWith(Fn2<A, B, R> fn, NonEmptyVector<A> first, NonEmptyVector<B> second) {
+    static <A, B, C> NonEmptyVector<C> nonEmptyZipWith(Fn2<A, B, C> fn, NonEmptyVector<A> first, NonEmptyVector<B> second) {
         Objects.requireNonNull(fn);
         Objects.requireNonNull(first);
         Objects.requireNonNull(second);
@@ -247,7 +247,7 @@ final class Vectors {
         }
     }
 
-    static <A, B, R> Vector<R> zipWith(Fn2<A, B, R> fn, Vector<A> first, Vector<B> second) {
+    static <A, B, C> Vector<C> zipWith(Fn2<A, B, C> fn, Vector<A> first, Vector<B> second) {
         return second.toNonEmpty().<Tuple2<NonEmptyVector<A>, NonEmptyVector<B>>>zip(first.toNonEmpty()
                 .fmap(tupler()))
                 .match(__ -> empty(),
