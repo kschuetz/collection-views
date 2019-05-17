@@ -12,23 +12,29 @@ import com.jnape.palatable.lambda.functions.builtin.fn2.Map;
 import com.jnape.palatable.lambda.functions.builtin.fn2.Take;
 import com.jnape.palatable.lambda.functions.builtin.fn3.ZipWith;
 
-import static dev.marksman.enhancediterables.EnhancedIterables.finiteIterable;
+import java.util.Collection;
+
 import static dev.marksman.enhancediterables.EnhancedIterables.nonEmptyIterableOrThrow;
 
+/**
+ * An {@code EnhancedIterable} that is finite.
+ *
+ * @param <A> the element type
+ */
 public interface FiniteIterable<A> extends EnhancedIterable<A> {
 
     default <B> FiniteIterable<Tuple2<A, B>> cross(FiniteIterable<B> other) {
-        return finiteIterable(CartesianProduct.cartesianProduct(this, other));
+        return EnhancedIterables.finiteIterable(CartesianProduct.cartesianProduct(this, other));
     }
 
     @Override
     default FiniteIterable<A> drop(int count) {
-        return finiteIterable(Drop.drop(count, this));
+        return EnhancedIterables.finiteIterable(Drop.drop(count, this));
     }
 
     @Override
     default <B> FiniteIterable<B> fmap(Fn1<? super A, ? extends B> f) {
-        return finiteIterable(Map.map(f, this));
+        return EnhancedIterables.finiteIterable(Map.map(f, this));
     }
 
     default NonEmptyIterable<? extends FiniteIterable<A>> inits() {
@@ -36,7 +42,7 @@ public interface FiniteIterable<A> extends EnhancedIterable<A> {
     }
 
     default FiniteIterable<A> reverse() {
-        return finiteIterable(Reverse.reverse(this));
+        return EnhancedIterables.finiteIterable(Reverse.reverse(this));
     }
 
     @Override
@@ -46,11 +52,20 @@ public interface FiniteIterable<A> extends EnhancedIterable<A> {
 
     @Override
     default FiniteIterable<A> take(int count) {
-        return finiteIterable(Take.take(count, this));
+        return EnhancedIterables.finiteIterable(Take.take(count, this));
     }
 
-    default <B, R> FiniteIterable<R> zipWith(Fn2<A, B, R> fn, Iterable<B> other) {
-        return finiteIterable(ZipWith.zipWith(fn.toBiFunction(), this, other));
+    default <B, C> FiniteIterable<C> zipWith(Fn2<A, B, C> fn, Iterable<B> other) {
+        return EnhancedIterables.finiteIterable(ZipWith.zipWith(fn.toBiFunction(), this, other));
+    }
+
+    static <A> FiniteIterable<A> finiteIterable(Collection<A> collection) {
+        return EnhancedIterables.finiteIterable(collection);
+    }
+
+    @SafeVarargs
+    static <A> ImmutableNonEmptyFiniteIterable<A> of(A first, A... more) {
+        return EnhancedIterables.of(first, more);
     }
 
 }

@@ -388,10 +388,10 @@ public interface Vector<A> extends FiniteIterable<A>, RandomAccess {
      *              It may be called zero or more times for each element.
      * @param other The other {@code Vector}
      * @param <B>   The element type of the other {@code Vector}
-     * @param <R>   The element type of the result
-     * @return A {@code Vector<R>}
+     * @param <C>   The element type of the result
+     * @return A {@code Vector<C>}
      */
-    default <B, R> Vector<R> zipWith(Fn2<A, B, R> fn, Vector<B> other) {
+    default <B, C> Vector<C> zipWith(Fn2<A, B, C> fn, Vector<B> other) {
         return Vectors.zipWith(fn, this, other);
     }
 

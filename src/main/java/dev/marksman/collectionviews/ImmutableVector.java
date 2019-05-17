@@ -324,10 +324,10 @@ public interface ImmutableVector<A> extends Vector<A>, ImmutableIterable<A>, Imm
      *              It may be called zero or more times for each element.
      * @param other The other {@code ImmutableVector}
      * @param <B>   The element type of the other {@code ImmutableVector}
-     * @param <R>   The element type of the result
-     * @return An {@code ImmutableVector<R>}
+     * @param <C>   The element type of the result
+     * @return An {@code ImmutableVector<C>}
      */
-    default <B, R> ImmutableVector<R> zipWith(Fn2<A, B, R> fn, ImmutableVector<B> other) {
+    default <B, C> ImmutableVector<C> zipWith(Fn2<A, B, C> fn, ImmutableVector<B> other) {
         return ImmutableVectors.zipWith(fn, this, other);
     }
 

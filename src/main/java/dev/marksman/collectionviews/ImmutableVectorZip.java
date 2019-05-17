@@ -2,15 +2,15 @@ package dev.marksman.collectionviews;
 
 import com.jnape.palatable.lambda.functions.Fn2;
 
-final class ImmutableVectorZip<A, B, R> extends ConcreteVector<R>
-        implements ImmutableNonEmptyVector<R> {
+final class ImmutableVectorZip<A, B, C> extends ConcreteVector<C>
+        implements ImmutableNonEmptyVector<C> {
 
-    private final Fn2<A, B, R> fn;
+    private final Fn2<A, B, C> fn;
     private final ImmutableNonEmptyVector<A> first;
     private final ImmutableNonEmptyVector<B> second;
     private final int size;
 
-    private ImmutableVectorZip(Fn2<A, B, R> fn, ImmutableNonEmptyVector<A> first, ImmutableNonEmptyVector<B> second) {
+    private ImmutableVectorZip(Fn2<A, B, C> fn, ImmutableNonEmptyVector<A> first, ImmutableNonEmptyVector<B> second) {
         this.fn = fn;
         this.first = first;
         this.second = second;
@@ -18,7 +18,7 @@ final class ImmutableVectorZip<A, B, R> extends ConcreteVector<R>
     }
 
     @Override
-    public R head() {
+    public C head() {
         return unsafeGet(0);
     }
 
@@ -28,14 +28,14 @@ final class ImmutableVectorZip<A, B, R> extends ConcreteVector<R>
     }
 
     @Override
-    public R unsafeGet(int index) {
+    public C unsafeGet(int index) {
         if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException();
         }
         return fn.apply(first.unsafeGet(index), second.unsafeGet(index));
     }
 
-    static <A, B, R> ImmutableVectorZip<A, B, R> immutableVectorZip(Fn2<A, B, R> fn,
+    static <A, B, C> ImmutableVectorZip<A, B, C> immutableVectorZip(Fn2<A, B, C> fn,
                                                                     ImmutableNonEmptyVector<A> first, ImmutableNonEmptyVector<B> second) {
         return new ImmutableVectorZip<>(fn, first, second);
     }

@@ -15,6 +15,11 @@ import com.jnape.palatable.lambda.functions.builtin.fn3.ZipWith;
 import static dev.marksman.enhancediterables.EnhancedIterables.immutableFiniteIterable;
 import static dev.marksman.enhancediterables.EnhancedIterables.nonEmptyIterableOrThrow;
 
+/**
+ * An {@code EnhancedIterable} that is both finite and safe from mutation.
+ *
+ * @param <A> the element type
+ */
 public interface ImmutableFiniteIterable<A> extends ImmutableIterable<A>, FiniteIterable<A> {
 
     default <B> ImmutableFiniteIterable<Tuple2<A, B>> cross(ImmutableFiniteIterable<B> other) {
@@ -50,8 +55,13 @@ public interface ImmutableFiniteIterable<A> extends ImmutableIterable<A>, Finite
         return immutableFiniteIterable(Take.take(count, this));
     }
 
-    default <B, R> ImmutableFiniteIterable<R> zipWith(Fn2<A, B, R> fn, ImmutableIterable<B> other) {
+    default <B, C> ImmutableFiniteIterable<C> zipWith(Fn2<A, B, C> fn, ImmutableIterable<B> other) {
         return immutableFiniteIterable(ZipWith.zipWith(fn.toBiFunction(), this, other));
+    }
+
+    @SafeVarargs
+    static <A> ImmutableNonEmptyFiniteIterable<A> of(A first, A... more) {
+        return EnhancedIterables.of(first, more);
     }
 
 }

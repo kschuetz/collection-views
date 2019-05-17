@@ -4,9 +4,18 @@ import com.jnape.palatable.lambda.adt.hlist.Tuple2;
 import com.jnape.palatable.lambda.functions.Fn1;
 import com.jnape.palatable.lambda.functions.Fn2;
 import com.jnape.palatable.lambda.functions.builtin.fn1.Init;
+import com.jnape.palatable.lambda.functions.builtin.fn1.Reverse;
+import com.jnape.palatable.lambda.functions.builtin.fn2.CartesianProduct;
+import com.jnape.palatable.lambda.functions.builtin.fn2.Map;
+import com.jnape.palatable.lambda.functions.builtin.fn3.ZipWith;
 
-import static dev.marksman.enhancediterables.EnhancedIterables.finiteIterable;
+import static dev.marksman.enhancediterables.EnhancedIterables.nonEmptyFiniteIterableOrThrow;
 
+/**
+ * An {@code EnhancedIterable} that is finite and guaranteed to contain at least one element.
+ *
+ * @param <A> the element type
+ */
 public interface NonEmptyFiniteIterable<A> extends FiniteIterable<A>, NonEmptyIterable<A> {
 
     @Override
@@ -14,25 +23,25 @@ public interface NonEmptyFiniteIterable<A> extends FiniteIterable<A>, NonEmptyIt
 
     @Override
     default <B> NonEmptyFiniteIterable<Tuple2<A, B>> cross(FiniteIterable<B> other) {
-        return null;
+        return nonEmptyFiniteIterableOrThrow(CartesianProduct.cartesianProduct(this, other));
     }
 
     @Override
     default <B> NonEmptyFiniteIterable<B> fmap(Fn1<? super A, ? extends B> f) {
-        return null;
+        return nonEmptyFiniteIterableOrThrow(Map.map(f, this));
     }
 
     default FiniteIterable<A> init() {
-        return finiteIterable(Init.init(this));
+        return EnhancedIterables.finiteIterable(Init.init(this));
     }
 
     @Override
     default NonEmptyFiniteIterable<A> reverse() {
-        return null;
+        return nonEmptyFiniteIterableOrThrow(Reverse.reverse(this));
     }
 
-    default <B, R> NonEmptyFiniteIterable<R> zipWith(Fn2<A, B, R> fn, NonEmptyFiniteIterable<B> other) {
-        return null;
+    default <B, C> NonEmptyFiniteIterable<C> zipWith(Fn2<A, B, C> fn, NonEmptyFiniteIterable<B> other) {
+        return nonEmptyFiniteIterableOrThrow(ZipWith.zipWith(fn.toBiFunction(), this, other));
     }
 
     /**
