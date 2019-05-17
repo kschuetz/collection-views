@@ -6,6 +6,8 @@ import com.jnape.palatable.lambda.functions.builtin.fn2.Map;
 
 import java.util.Iterator;
 
+import static dev.marksman.enhancediterables.EnhancedIterables.enhancedIterable;
+
 /**
  * An {@link Iterable} that is guaranteed to contain at least one element.
  * <p>
@@ -26,7 +28,7 @@ public interface NonEmptyIterable<A> extends EnhancedIterable<A> {
      *
      * @return an {@code Iterable<A>}.  May be empty.
      */
-    Iterable<A> tail();
+    EnhancedIterable<A> tail();
 
     @Override
     default <B> NonEmptyIterable<B> fmap(Fn1<? super A, ? extends B> f) {
@@ -54,8 +56,8 @@ public interface NonEmptyIterable<A> extends EnhancedIterable<A> {
             }
 
             @Override
-            public Iterable<A> tail() {
-                return tail;
+            public EnhancedIterable<A> tail() {
+                return enhancedIterable(tail);
             }
         };
     }

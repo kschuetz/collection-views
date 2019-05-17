@@ -3,7 +3,9 @@ package dev.marksman.enhancediterables;
 import com.jnape.palatable.lambda.adt.hlist.Tuple2;
 import com.jnape.palatable.lambda.functions.Fn1;
 import com.jnape.palatable.lambda.functions.Fn2;
+import com.jnape.palatable.lambda.functions.builtin.fn1.Inits;
 import com.jnape.palatable.lambda.functions.builtin.fn1.Reverse;
+import com.jnape.palatable.lambda.functions.builtin.fn1.Tails;
 import com.jnape.palatable.lambda.functions.builtin.fn2.CartesianProduct;
 import com.jnape.palatable.lambda.functions.builtin.fn2.Drop;
 import com.jnape.palatable.lambda.functions.builtin.fn2.Map;
@@ -11,6 +13,7 @@ import com.jnape.palatable.lambda.functions.builtin.fn2.Take;
 import com.jnape.palatable.lambda.functions.builtin.fn3.ZipWith;
 
 import static dev.marksman.enhancediterables.EnhancedIterables.finiteIterable;
+import static dev.marksman.enhancediterables.EnhancedIterables.nonEmptyIterableOrThrow;
 
 public interface FiniteIterable<A> extends EnhancedIterable<A> {
 
@@ -28,8 +31,17 @@ public interface FiniteIterable<A> extends EnhancedIterable<A> {
         return finiteIterable(Map.map(f, this));
     }
 
+    default NonEmptyIterable<? extends FiniteIterable<A>> inits() {
+        return nonEmptyIterableOrThrow(Map.map(EnhancedIterables::finiteIterable, Inits.inits(this)));
+    }
+
     default FiniteIterable<A> reverse() {
         return finiteIterable(Reverse.reverse(this));
+    }
+
+    @Override
+    default NonEmptyIterable<? extends FiniteIterable<A>> tails() {
+        return nonEmptyIterableOrThrow(Map.map(EnhancedIterables::finiteIterable, Tails.tails(this)));
     }
 
     @Override
@@ -37,7 +49,7 @@ public interface FiniteIterable<A> extends EnhancedIterable<A> {
         return finiteIterable(Take.take(count, this));
     }
 
-    default <B, R> FiniteIterable<R> zipWith(Fn2<A, B, R> fn, FiniteIterable<B> other) {
+    default <B, R> FiniteIterable<R> zipWith(Fn2<A, B, R> fn, Iterable<B> other) {
         return finiteIterable(ZipWith.zipWith(fn.toBiFunction(), this, other));
     }
 

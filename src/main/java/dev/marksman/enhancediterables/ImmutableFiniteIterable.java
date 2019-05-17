@@ -3,6 +3,7 @@ package dev.marksman.enhancediterables;
 import com.jnape.palatable.lambda.adt.hlist.Tuple2;
 import com.jnape.palatable.lambda.functions.Fn1;
 import com.jnape.palatable.lambda.functions.Fn2;
+import com.jnape.palatable.lambda.functions.builtin.fn1.Inits;
 import com.jnape.palatable.lambda.functions.builtin.fn1.Reverse;
 import com.jnape.palatable.lambda.functions.builtin.fn1.Tails;
 import com.jnape.palatable.lambda.functions.builtin.fn2.CartesianProduct;
@@ -28,6 +29,10 @@ public interface ImmutableFiniteIterable<A> extends ImmutableIterable<A>, Finite
     @Override
     default <B> ImmutableFiniteIterable<B> fmap(Fn1<? super A, ? extends B> f) {
         return immutableFiniteIterable(Map.map(f, this));
+    }
+
+    default NonEmptyIterable<? extends ImmutableFiniteIterable<A>> inits() {
+        return nonEmptyIterableOrThrow(Map.map(EnhancedIterables::immutableFiniteIterable, Inits.inits(this)));
     }
 
     @Override
