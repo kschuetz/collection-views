@@ -1,4 +1,4 @@
-package dev.marksman.collectionviews.iterables;
+package dev.marksman.enhancediterables;
 
 import com.jnape.palatable.lambda.functions.Fn1;
 import com.jnape.palatable.lambda.functions.Fn2;
@@ -7,12 +7,11 @@ import com.jnape.palatable.lambda.functions.builtin.fn2.Drop;
 import com.jnape.palatable.lambda.functions.builtin.fn2.Map;
 import com.jnape.palatable.lambda.functions.builtin.fn2.Take;
 import com.jnape.palatable.lambda.functions.builtin.fn3.ZipWith;
-import dev.marksman.collectionviews.Immutable;
 
-import static dev.marksman.collectionviews.iterables.EnhancedIterables.immutableIterable;
-import static dev.marksman.collectionviews.iterables.EnhancedIterables.nonEmptyIterableOrThrow;
+import static dev.marksman.enhancediterables.EnhancedIterables.immutableIterable;
+import static dev.marksman.enhancediterables.EnhancedIterables.nonEmptyIterableOrThrow;
 
-public interface ImmutableIterable<A> extends EnhancedIterable<A>, Immutable {
+public interface ImmutableIterable<A> extends EnhancedIterable<A> {
 
     @Override
     default ImmutableIterable<A> drop(int count) {

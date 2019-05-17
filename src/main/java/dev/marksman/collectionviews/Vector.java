@@ -5,9 +5,9 @@ import com.jnape.palatable.lambda.adt.hlist.Tuple2;
 import com.jnape.palatable.lambda.functions.Fn1;
 import com.jnape.palatable.lambda.functions.Fn2;
 import com.jnape.palatable.lambda.functions.builtin.fn2.Find;
-import dev.marksman.collectionviews.iterables.FiniteIterable;
-import dev.marksman.collectionviews.iterables.NonEmptyFiniteIterable;
-import dev.marksman.collectionviews.iterables.NonEmptyIterable;
+import dev.marksman.enhancediterables.FiniteIterable;
+import dev.marksman.enhancediterables.NonEmptyFiniteIterable;
+import dev.marksman.enhancediterables.NonEmptyIterable;
 
 import java.util.Iterator;
 import java.util.List;

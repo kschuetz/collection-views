@@ -1,4 +1,4 @@
-package dev.marksman.collectionviews.iterables;
+package dev.marksman.enhancediterables;
 
 import com.jnape.palatable.lambda.adt.hlist.Tuple2;
 import com.jnape.palatable.lambda.functions.Fn1;

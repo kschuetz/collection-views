@@ -1,8 +1,8 @@
-package dev.marksman.collectionviews.iterables;
+package dev.marksman.enhancediterables;
 
 import com.jnape.palatable.lambda.adt.hlist.Tuple2;
 import com.jnape.palatable.lambda.functions.builtin.fn1.Uncons;
-import dev.marksman.collectionviews.internal.ProtectedIterator;
+import dev.marksman.enhancediterables.internal.ProtectedIterator;
 
 class EnhancedIterables {
 

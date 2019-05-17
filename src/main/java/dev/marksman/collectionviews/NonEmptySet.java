@@ -1,8 +1,8 @@
 package dev.marksman.collectionviews;
 
 import com.jnape.palatable.lambda.adt.Maybe;
-import dev.marksman.collectionviews.iterables.NonEmptyFiniteIterable;
-import dev.marksman.collectionviews.iterables.NonEmptyIterable;
+import dev.marksman.enhancediterables.NonEmptyFiniteIterable;
+import dev.marksman.enhancediterables.NonEmptyIterable;
 
 import static com.jnape.palatable.lambda.adt.Maybe.just;
 

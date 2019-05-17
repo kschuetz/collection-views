@@ -1,4 +1,4 @@
-package dev.marksman.collectionviews.internal;
+package dev.marksman.enhancediterables.internal;
 
 import java.util.Iterator;
 
