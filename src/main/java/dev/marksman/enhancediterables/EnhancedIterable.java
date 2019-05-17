@@ -31,8 +31,8 @@ public interface EnhancedIterable<A> extends Iterable<A> {
         return !iterator().hasNext();
     }
 
-    default NonEmptyIterable<? extends Iterable<A>> tails() {
-        return nonEmptyIterableOrThrow(Tails.tails(this));
+    default NonEmptyIterable<? extends EnhancedIterable<A>> tails() {
+        return nonEmptyIterableOrThrow(Map.map(EnhancedIterables::enhancedIterable, Tails.tails(this)));
     }
 
     default EnhancedIterable<A> take(int count) {

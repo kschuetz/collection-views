@@ -1,5 +1,7 @@
 package dev.marksman.collectionviews;
 
+import dev.marksman.enhancediterables.FiniteIterable;
+
 import java.util.Iterator;
 
 import static dev.marksman.enhancediterables.internal.ProtectedIterator.protectedIterator;
@@ -17,7 +19,7 @@ final class NonEmptySetAdapter<A> extends ConcreteSet<A> implements NonEmptySet<
     }
 
     @Override
-    public Iterable<A> tail() {
+    public FiniteIterable<A> tail() {
         Iterator<A> iterator = iterator();
         iterator.next();
         return () -> iterator;

@@ -1,5 +1,7 @@
 package dev.marksman.collectionviews;
 
+import dev.marksman.enhancediterables.FiniteIterable;
+
 import java.util.Iterator;
 import java.util.Set;
 
@@ -23,7 +25,7 @@ final class WrappedSet<A> extends ConcreteSet<A>
     }
 
     @Override
-    public Iterable<A> tail() {
+    public FiniteIterable<A> tail() {
         Iterator<A> iterator = iterator();
         iterator.next();
         return () -> iterator;

@@ -28,4 +28,10 @@ class EnhancedIterables {
         return NonEmptyIterable.nonEmptyIterable(headTail._1(), headTail._2());
     }
 
+    static <A> ImmutableNonEmptyFiniteIterable<A> immutableNonEmptyFiniteIterableOrThrow(Iterable<A> underlying) {
+        Tuple2<A, Iterable<A>> headTail = Uncons.uncons(underlying)
+                .orElseThrow(() -> new IllegalArgumentException("underlying is empty"));
+        return null; //NonEmptyIterable.nonEmptyIterable(headTail._1(), headTail._2());
+    }
+
 }
