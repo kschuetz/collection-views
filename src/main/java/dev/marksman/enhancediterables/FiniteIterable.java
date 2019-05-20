@@ -80,6 +80,11 @@ public interface FiniteIterable<A> extends EnhancedIterable<A> {
         return NonEmptyFiniteIterable.nonEmptyFiniteIterable(element, this);
     }
 
+    @Override
+    default FiniteIterable<A> prependAll(A a) {
+        return EnhancedIterables.finiteIterable(PrependAll.prependAll(a, this));
+    }
+
     default FiniteIterable<A> reverse() {
         return EnhancedIterables.finiteIterable(Reverse.reverse(this));
     }

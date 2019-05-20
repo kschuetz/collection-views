@@ -8,6 +8,7 @@ import com.jnape.palatable.lambda.functions.builtin.fn1.Reverse;
 import com.jnape.palatable.lambda.functions.builtin.fn2.CartesianProduct;
 import com.jnape.palatable.lambda.functions.builtin.fn2.Intersperse;
 import com.jnape.palatable.lambda.functions.builtin.fn2.Map;
+import com.jnape.palatable.lambda.functions.builtin.fn2.PrependAll;
 import com.jnape.palatable.lambda.functions.builtin.fn3.ZipWith;
 import com.jnape.palatable.lambda.monoid.builtin.Concat;
 
@@ -51,6 +52,11 @@ public interface NonEmptyFiniteIterable<A> extends FiniteIterable<A>, NonEmptyIt
     @Override
     default NonEmptyFiniteIterable<A> intersperse(A a) {
         return nonEmptyFiniteIterableOrThrow(Intersperse.intersperse(a, this));
+    }
+
+    @Override
+    default NonEmptyFiniteIterable<A> prependAll(A a) {
+        return nonEmptyFiniteIterableOrThrow(PrependAll.prependAll(a, this));
     }
 
     @Override

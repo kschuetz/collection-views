@@ -5,10 +5,7 @@ import com.jnape.palatable.lambda.functions.Fn1;
 import com.jnape.palatable.lambda.functions.Fn2;
 import com.jnape.palatable.lambda.functions.builtin.fn1.Init;
 import com.jnape.palatable.lambda.functions.builtin.fn1.Reverse;
-import com.jnape.palatable.lambda.functions.builtin.fn2.CartesianProduct;
-import com.jnape.palatable.lambda.functions.builtin.fn2.Intersperse;
-import com.jnape.palatable.lambda.functions.builtin.fn2.Map;
-import com.jnape.palatable.lambda.functions.builtin.fn2.Snoc;
+import com.jnape.palatable.lambda.functions.builtin.fn2.*;
 import com.jnape.palatable.lambda.functions.builtin.fn3.ZipWith;
 import com.jnape.palatable.lambda.monoid.builtin.Concat;
 
@@ -65,6 +62,11 @@ public interface ImmutableNonEmptyFiniteIterable<A> extends ImmutableFiniteItera
     @Override
     default ImmutableNonEmptyFiniteIterable<A> prepend(A element) {
         return immutableNonEmptyFiniteIterable(element, this);
+    }
+
+    @Override
+    default ImmutableNonEmptyFiniteIterable<A> prependAll(A a) {
+        return immutableNonEmptyFiniteIterableOrThrow(PrependAll.prependAll(a, this));
     }
 
     @Override

@@ -78,6 +78,10 @@ public interface EnhancedIterable<A> extends Iterable<A> {
         return NonEmptyIterable.nonEmptyIterable(element, this);
     }
 
+    default EnhancedIterable<A> prependAll(A a) {
+        return enhancedIterable(PrependAll.prependAll(a, this));
+    }
+
     default NonEmptyIterable<? extends EnhancedIterable<A>> tails() {
         return nonEmptyIterableOrThrow(Map.map(EnhancedIterable::enhancedIterable, Tails.tails(this)));
     }

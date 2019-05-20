@@ -5,6 +5,7 @@ import com.jnape.palatable.lambda.functions.Fn2;
 import com.jnape.palatable.lambda.functions.builtin.fn2.Cons;
 import com.jnape.palatable.lambda.functions.builtin.fn2.Intersperse;
 import com.jnape.palatable.lambda.functions.builtin.fn2.Map;
+import com.jnape.palatable.lambda.functions.builtin.fn2.PrependAll;
 import com.jnape.palatable.lambda.functions.builtin.fn3.ZipWith;
 import com.jnape.palatable.lambda.monoid.builtin.Concat;
 
@@ -54,6 +55,11 @@ public interface NonEmptyIterable<A> extends EnhancedIterable<A> {
     @Override
     default Iterator<A> iterator() {
         return Cons.cons(head(), tail()).iterator();
+    }
+
+    @Override
+    default NonEmptyIterable<A> prependAll(A a) {
+        return nonEmptyIterableOrThrow(PrependAll.prependAll(a, this));
     }
 
     default <B, C> NonEmptyIterable<C> zipWith(Fn2<A, B, C> fn, NonEmptyIterable<B> other) {

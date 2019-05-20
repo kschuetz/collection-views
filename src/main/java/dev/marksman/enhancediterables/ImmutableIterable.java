@@ -62,6 +62,11 @@ public interface ImmutableIterable<A> extends EnhancedIterable<A> {
     }
 
     @Override
+    default ImmutableIterable<A> prependAll(A a) {
+        return immutableIterable(PrependAll.prependAll(a, this));
+    }
+
+    @Override
     default NonEmptyIterable<? extends ImmutableIterable<A>> tails() {
         return nonEmptyIterableOrThrow(Map.map(EnhancedIterables::immutableIterable, Tails.tails(this)));
     }

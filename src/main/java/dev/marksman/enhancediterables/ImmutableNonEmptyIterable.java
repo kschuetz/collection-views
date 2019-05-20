@@ -4,6 +4,7 @@ import com.jnape.palatable.lambda.functions.Fn1;
 import com.jnape.palatable.lambda.functions.Fn2;
 import com.jnape.palatable.lambda.functions.builtin.fn2.Intersperse;
 import com.jnape.palatable.lambda.functions.builtin.fn2.Map;
+import com.jnape.palatable.lambda.functions.builtin.fn2.PrependAll;
 import com.jnape.palatable.lambda.functions.builtin.fn3.ZipWith;
 import com.jnape.palatable.lambda.monoid.builtin.Concat;
 
@@ -33,6 +34,11 @@ public interface ImmutableNonEmptyIterable<A> extends ImmutableIterable<A>, NonE
     @Override
     default ImmutableNonEmptyIterable<A> intersperse(A a) {
         return immutableNonEmptyIterableOrThrow(Intersperse.intersperse(a, this));
+    }
+
+    @Override
+    default ImmutableNonEmptyIterable<A> prependAll(A a) {
+        return immutableNonEmptyIterableOrThrow(PrependAll.prependAll(a, this));
     }
 
     default <B, C> ImmutableNonEmptyIterable<C> zipWith(Fn2<A, B, C> fn, ImmutableNonEmptyIterable<B> other) {

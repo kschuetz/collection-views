@@ -78,6 +78,11 @@ public interface ImmutableFiniteIterable<A> extends ImmutableIterable<A>, Finite
     }
 
     @Override
+    default ImmutableFiniteIterable<A> prependAll(A a) {
+        return immutableFiniteIterable(PrependAll.prependAll(a, this));
+    }
+
+    @Override
     default ImmutableFiniteIterable<A> reverse() {
         return immutableFiniteIterable(Reverse.reverse(this));
     }
