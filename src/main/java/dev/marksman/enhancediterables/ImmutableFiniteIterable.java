@@ -102,6 +102,11 @@ public interface ImmutableFiniteIterable<A> extends ImmutableIterable<A>, Finite
         return immutableFiniteIterable(Take.take(count, this));
     }
 
+    @Override
+    default ImmutableFiniteIterable<A> takeWhile(Fn1<? super A, ? extends Boolean> predicate) {
+        return immutableFiniteIterable(TakeWhile.takeWhile(predicate, this));
+    }
+
     default <B, C> ImmutableFiniteIterable<C> zipWith(Fn2<A, B, C> fn, ImmutableIterable<B> other) {
         return immutableFiniteIterable(ZipWith.zipWith(fn.toBiFunction(), this, other));
     }

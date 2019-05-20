@@ -94,6 +94,10 @@ public interface EnhancedIterable<A> extends Iterable<A> {
         return finiteIterable(Take.take(count, this));
     }
 
+    default EnhancedIterable<A> takeWhile(Fn1<? super A, ? extends Boolean> predicate) {
+        return enhancedIterable(TakeWhile.takeWhile(predicate, this));
+    }
+
     default A[] toArray(Class<A[]> arrayType) {
         return ToArray.toArray(arrayType).apply(this);
     }

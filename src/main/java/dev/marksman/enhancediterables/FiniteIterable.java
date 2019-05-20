@@ -99,6 +99,11 @@ public interface FiniteIterable<A> extends EnhancedIterable<A> {
         return nonEmptyIterableOrThrow(Map.map(EnhancedIterables::finiteIterable, Tails.tails(this)));
     }
 
+    @Override
+    default EnhancedIterable<A> takeWhile(Fn1<? super A, ? extends Boolean> predicate) {
+        return EnhancedIterables.finiteIterable(TakeWhile.takeWhile(predicate, this));
+    }
+
     default <B, C> FiniteIterable<C> zipWith(Fn2<A, B, C> fn, Iterable<B> other) {
         return EnhancedIterables.finiteIterable(ZipWith.zipWith(fn.toBiFunction(), this, other));
     }
