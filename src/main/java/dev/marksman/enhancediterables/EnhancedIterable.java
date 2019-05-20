@@ -83,6 +83,10 @@ public interface EnhancedIterable<A> extends Iterable<A> {
         return finiteIterable(Take.take(count, this));
     }
 
+    default A[] toArray(Class<A[]> arrayType) {
+        return ToArray.toArray(arrayType).apply(this);
+    }
+
     default <B, C> EnhancedIterable<C> zipWith(Fn2<A, B, C> fn, Iterable<B> other) {
         return enhancedIterable(ZipWith.zipWith(fn.toBiFunction(), this, other));
     }
