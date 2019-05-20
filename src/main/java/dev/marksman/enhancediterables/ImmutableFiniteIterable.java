@@ -54,6 +54,11 @@ public interface ImmutableFiniteIterable<A> extends ImmutableIterable<A>, Finite
     }
 
     @Override
+    default ImmutableFiniteIterable<A> filter(Fn1<? super A, ? extends Boolean> predicate) {
+        return immutableFiniteIterable(Filter.<A>filter(predicate).apply(this));
+    }
+
+    @Override
     default <B> ImmutableFiniteIterable<B> fmap(Fn1<? super A, ? extends B> f) {
         return immutableFiniteIterable(Map.map(f, this));
     }

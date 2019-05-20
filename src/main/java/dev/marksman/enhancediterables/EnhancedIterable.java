@@ -44,6 +44,10 @@ public interface EnhancedIterable<A> extends Iterable<A> {
         return enhancedIterable(Drop.drop(count, this));
     }
 
+    default EnhancedIterable<A> filter(Fn1<? super A, ? extends Boolean> predicate) {
+        return enhancedIterable(Filter.<A>filter(predicate).apply(this));
+    }
+
     /**
      * Finds the first element of this {@code EnhancedIterable} that satisfies a predicate, if any.
      *

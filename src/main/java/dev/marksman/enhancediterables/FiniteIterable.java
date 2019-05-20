@@ -6,10 +6,7 @@ import com.jnape.palatable.lambda.functions.Fn2;
 import com.jnape.palatable.lambda.functions.builtin.fn1.Inits;
 import com.jnape.palatable.lambda.functions.builtin.fn1.Reverse;
 import com.jnape.palatable.lambda.functions.builtin.fn1.Tails;
-import com.jnape.palatable.lambda.functions.builtin.fn2.CartesianProduct;
-import com.jnape.palatable.lambda.functions.builtin.fn2.Drop;
-import com.jnape.palatable.lambda.functions.builtin.fn2.Map;
-import com.jnape.palatable.lambda.functions.builtin.fn2.Snoc;
+import com.jnape.palatable.lambda.functions.builtin.fn2.*;
 import com.jnape.palatable.lambda.functions.builtin.fn3.ZipWith;
 import com.jnape.palatable.lambda.monoid.builtin.Concat;
 
@@ -57,6 +54,11 @@ public interface FiniteIterable<A> extends EnhancedIterable<A> {
     @Override
     default FiniteIterable<A> drop(int count) {
         return EnhancedIterables.finiteIterable(Drop.drop(count, this));
+    }
+
+    @Override
+    default FiniteIterable<A> filter(Fn1<? super A, ? extends Boolean> predicate) {
+        return EnhancedIterables.finiteIterable(Filter.<A>filter(predicate).apply(this));
     }
 
     @Override
