@@ -12,6 +12,7 @@ import com.jnape.palatable.lambda.monoid.builtin.Concat;
 
 import java.util.Collection;
 
+import static com.jnape.palatable.lambda.adt.hlist.HList.tuple;
 import static dev.marksman.enhancediterables.EnhancedIterables.nonEmptyFiniteIterableOrThrow;
 import static dev.marksman.enhancediterables.EnhancedIterables.nonEmptyIterableOrThrow;
 
@@ -92,6 +93,13 @@ public interface FiniteIterable<A> extends EnhancedIterable<A> {
 
     default FiniteIterable<A> reverse() {
         return EnhancedIterables.finiteIterable(Reverse.reverse(this));
+    }
+
+    @Override
+    default Tuple2<? extends FiniteIterable<A>, ? extends FiniteIterable<A>> span(Fn1<? super A, ? extends Boolean> predicate) {
+        Tuple2<Iterable<A>, Iterable<A>> spanResult = Span.<A>span(predicate).apply(this);
+        return tuple(EnhancedIterables.finiteIterable(spanResult._1()),
+                EnhancedIterables.finiteIterable(spanResult._2()));
     }
 
     @Override

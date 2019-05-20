@@ -10,6 +10,7 @@ import com.jnape.palatable.lambda.functions.builtin.fn2.*;
 import com.jnape.palatable.lambda.functions.builtin.fn3.ZipWith;
 import com.jnape.palatable.lambda.monoid.builtin.Concat;
 
+import static com.jnape.palatable.lambda.adt.hlist.HList.tuple;
 import static dev.marksman.enhancediterables.EnhancedIterables.*;
 
 /**
@@ -90,6 +91,13 @@ public interface ImmutableFiniteIterable<A> extends ImmutableIterable<A>, Finite
     @Override
     default ImmutableFiniteIterable<A> reverse() {
         return immutableFiniteIterable(Reverse.reverse(this));
+    }
+
+    @Override
+    default Tuple2<? extends ImmutableFiniteIterable<A>, ? extends ImmutableFiniteIterable<A>> span(Fn1<? super A, ? extends Boolean> predicate) {
+        Tuple2<Iterable<A>, Iterable<A>> spanResult = Span.<A>span(predicate).apply(this);
+        return tuple(immutableFiniteIterable(spanResult._1()),
+                immutableFiniteIterable(spanResult._2()));
     }
 
     @Override

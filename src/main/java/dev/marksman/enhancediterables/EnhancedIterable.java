@@ -1,6 +1,7 @@
 package dev.marksman.enhancediterables;
 
 import com.jnape.palatable.lambda.adt.Maybe;
+import com.jnape.palatable.lambda.adt.hlist.Tuple2;
 import com.jnape.palatable.lambda.functions.Fn0;
 import com.jnape.palatable.lambda.functions.Fn1;
 import com.jnape.palatable.lambda.functions.Fn2;
@@ -11,6 +12,7 @@ import com.jnape.palatable.lambda.monoid.builtin.Concat;
 
 import java.util.Collection;
 
+import static com.jnape.palatable.lambda.adt.hlist.HList.tuple;
 import static dev.marksman.enhancediterables.EnhancedIterables.finiteIterable;
 import static dev.marksman.enhancediterables.EnhancedIterables.nonEmptyIterableOrThrow;
 import static dev.marksman.enhancediterables.internal.ProtectedIterator.protectedIterator;
@@ -84,6 +86,11 @@ public interface EnhancedIterable<A> extends Iterable<A> {
 
     default EnhancedIterable<A> prependAll(A a) {
         return enhancedIterable(PrependAll.prependAll(a, this));
+    }
+
+    default Tuple2<? extends EnhancedIterable<A>, ? extends EnhancedIterable<A>> span(Fn1<? super A, ? extends Boolean> predicate) {
+        Tuple2<Iterable<A>, Iterable<A>> spanResult = Span.<A>span(predicate).apply(this);
+        return tuple(enhancedIterable(spanResult._1()), enhancedIterable(spanResult._2()));
     }
 
     default NonEmptyIterable<? extends EnhancedIterable<A>> tails() {

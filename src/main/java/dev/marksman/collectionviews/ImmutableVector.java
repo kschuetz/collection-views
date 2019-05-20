@@ -178,6 +178,7 @@ public interface ImmutableVector<A> extends Vector<A>, ImmutableFiniteIterable<A
      * @return a {@code Tuple2} contains of {@code ImmutableVector}s, one of which containing the first {@code index} elements
      * that satisfied the predicate, the second containing the other elements.
      */
+    @Override
     default Tuple2<ImmutableVector<A>, ImmutableVector<A>> span(Fn1<? super A, ? extends Boolean> predicate) {
         return ImmutableVectors.span(predicate, this);
     }
