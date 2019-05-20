@@ -60,8 +60,8 @@ public interface ImmutableIterable<A> extends EnhancedIterable<A> {
     }
 
     @Override
-    default ImmutableIterable<A> take(int count) {
-        return immutableIterable(Take.take(count, this));
+    default ImmutableFiniteIterable<A> take(int count) {
+        return immutableFiniteIterable(Take.take(count, this));
     }
 
     default <B, C> ImmutableIterable<C> zipWith(Fn2<A, B, C> fn, ImmutableIterable<B> other) {

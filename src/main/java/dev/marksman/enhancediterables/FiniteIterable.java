@@ -6,7 +6,10 @@ import com.jnape.palatable.lambda.functions.Fn2;
 import com.jnape.palatable.lambda.functions.builtin.fn1.Inits;
 import com.jnape.palatable.lambda.functions.builtin.fn1.Reverse;
 import com.jnape.palatable.lambda.functions.builtin.fn1.Tails;
-import com.jnape.palatable.lambda.functions.builtin.fn2.*;
+import com.jnape.palatable.lambda.functions.builtin.fn2.CartesianProduct;
+import com.jnape.palatable.lambda.functions.builtin.fn2.Drop;
+import com.jnape.palatable.lambda.functions.builtin.fn2.Map;
+import com.jnape.palatable.lambda.functions.builtin.fn2.Snoc;
 import com.jnape.palatable.lambda.functions.builtin.fn3.ZipWith;
 import com.jnape.palatable.lambda.monoid.builtin.Concat;
 
@@ -79,17 +82,16 @@ public interface FiniteIterable<A> extends EnhancedIterable<A> {
         return nonEmptyIterableOrThrow(Map.map(EnhancedIterables::finiteIterable, Tails.tails(this)));
     }
 
-    @Override
-    default FiniteIterable<A> take(int count) {
-        return EnhancedIterables.finiteIterable(Take.take(count, this));
-    }
-
     default <B, C> FiniteIterable<C> zipWith(Fn2<A, B, C> fn, Iterable<B> other) {
         return EnhancedIterables.finiteIterable(ZipWith.zipWith(fn.toBiFunction(), this, other));
     }
 
     static <A> FiniteIterable<A> finiteIterable(Collection<A> collection) {
         return EnhancedIterables.finiteIterable(collection);
+    }
+
+    static <A> FiniteIterable<A> finiteIterable(int maxCount, Iterable<A> iterable) {
+        return EnhancedIterable.enhancedIterable(iterable).take(maxCount);
     }
 
     @SafeVarargs

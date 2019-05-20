@@ -8,6 +8,7 @@ import com.jnape.palatable.lambda.functions.builtin.fn2.*;
 import com.jnape.palatable.lambda.functions.builtin.fn3.ZipWith;
 import com.jnape.palatable.lambda.monoid.builtin.Concat;
 
+import static dev.marksman.enhancediterables.EnhancedIterables.finiteIterable;
 import static dev.marksman.enhancediterables.EnhancedIterables.nonEmptyIterableOrThrow;
 import static dev.marksman.enhancediterables.internal.ProtectedIterator.protectedIterator;
 
@@ -70,8 +71,8 @@ public interface EnhancedIterable<A> extends Iterable<A> {
         return nonEmptyIterableOrThrow(Map.map(EnhancedIterable::enhancedIterable, Tails.tails(this)));
     }
 
-    default EnhancedIterable<A> take(int count) {
-        return enhancedIterable(Take.take(count, this));
+    default FiniteIterable<A> take(int count) {
+        return finiteIterable(Take.take(count, this));
     }
 
     default <B, C> EnhancedIterable<C> zipWith(Fn2<A, B, C> fn, Iterable<B> other) {
