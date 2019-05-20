@@ -2,6 +2,7 @@ package dev.marksman.collectionviews;
 
 import com.jnape.palatable.lambda.adt.Maybe;
 import com.jnape.palatable.lambda.functions.Fn1;
+import dev.marksman.enhancediterables.ImmutableFiniteIterable;
 
 import java.util.Objects;
 
@@ -23,6 +24,11 @@ final class RepeatingVector<A> extends ConcreteVector<A>
     @Override
     public A head() {
         return value;
+    }
+
+    @Override
+    public ImmutableFiniteIterable<A> filter(Fn1<? super A, ? extends Boolean> predicate) {
+        return takeWhile(predicate);
     }
 
     @Override
