@@ -1,12 +1,15 @@
 package dev.marksman.enhancediterables;
 
 import com.jnape.palatable.lambda.adt.Maybe;
+import com.jnape.palatable.lambda.functions.Fn0;
 import com.jnape.palatable.lambda.functions.Fn1;
 import com.jnape.palatable.lambda.functions.Fn2;
 import com.jnape.palatable.lambda.functions.builtin.fn1.Tails;
 import com.jnape.palatable.lambda.functions.builtin.fn2.*;
 import com.jnape.palatable.lambda.functions.builtin.fn3.ZipWith;
 import com.jnape.palatable.lambda.monoid.builtin.Concat;
+
+import java.util.Collection;
 
 import static dev.marksman.enhancediterables.EnhancedIterables.finiteIterable;
 import static dev.marksman.enhancediterables.EnhancedIterables.nonEmptyIterableOrThrow;
@@ -85,6 +88,10 @@ public interface EnhancedIterable<A> extends Iterable<A> {
 
     default A[] toArray(Class<A[]> arrayType) {
         return ToArray.toArray(arrayType).apply(this);
+    }
+
+    default <C extends Collection<A>> C toCollection(Fn0<C> cSupplier) {
+        return ToCollection.toCollection(cSupplier).apply(this);
     }
 
     default <B, C> EnhancedIterable<C> zipWith(Fn2<A, B, C> fn, Iterable<B> other) {

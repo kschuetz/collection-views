@@ -1,9 +1,9 @@
 package dev.marksman.collectionviews;
 
+import com.jnape.palatable.lambda.functions.builtin.fn2.ToCollection;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.jnape.palatable.lambda.functions.builtin.fn2.ToCollection.toCollection;
 
 final class WrappedListVector<A> extends ConcreteVector<A>
         implements NonEmptyVector<A>, Primitive {
@@ -33,7 +33,7 @@ final class WrappedListVector<A> extends ConcreteVector<A>
 
     @Override
     public ImmutableNonEmptyVector<A> toImmutable() {
-        ArrayList<A> copied = toCollection(ArrayList::new, underlying);
+        ArrayList<A> copied = ToCollection.toCollection(ArrayList::new, underlying);
         return new ImmutableListVector<>(copied);
     }
 
