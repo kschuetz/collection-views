@@ -71,6 +71,11 @@ public interface FiniteIterable<A> extends EnhancedIterable<A> {
     }
 
     @Override
+    default FiniteIterable<A> intersperse(A a) {
+        return EnhancedIterables.finiteIterable(Intersperse.intersperse(a, this));
+    }
+
+    @Override
     default NonEmptyFiniteIterable<A> prepend(A element) {
         return NonEmptyFiniteIterable.nonEmptyFiniteIterable(element, this);
     }

@@ -3,6 +3,7 @@ package dev.marksman.enhancediterables;
 import com.jnape.palatable.lambda.functions.Fn1;
 import com.jnape.palatable.lambda.functions.Fn2;
 import com.jnape.palatable.lambda.functions.builtin.fn2.Cons;
+import com.jnape.palatable.lambda.functions.builtin.fn2.Intersperse;
 import com.jnape.palatable.lambda.functions.builtin.fn2.Map;
 import com.jnape.palatable.lambda.functions.builtin.fn3.ZipWith;
 import com.jnape.palatable.lambda.monoid.builtin.Concat;
@@ -43,6 +44,11 @@ public interface NonEmptyIterable<A> extends EnhancedIterable<A> {
     @Override
     default <B> NonEmptyIterable<B> fmap(Fn1<? super A, ? extends B> f) {
         return nonEmptyIterable(f.apply(head()), Map.map(f, tail()));
+    }
+
+    @Override
+    default NonEmptyIterable<A> intersperse(A a) {
+        return nonEmptyIterableOrThrow(Intersperse.intersperse(a, this));
     }
 
     @Override

@@ -68,6 +68,11 @@ public interface ImmutableFiniteIterable<A> extends ImmutableIterable<A>, Finite
     }
 
     @Override
+    default ImmutableFiniteIterable<A> intersperse(A a) {
+        return immutableFiniteIterable(Intersperse.intersperse(a, this));
+    }
+
+    @Override
     default ImmutableNonEmptyFiniteIterable<A> prepend(A element) {
         return ImmutableNonEmptyFiniteIterable.immutableNonEmptyFiniteIterable(element, this);
     }

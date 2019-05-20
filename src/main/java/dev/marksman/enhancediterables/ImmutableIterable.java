@@ -52,6 +52,11 @@ public interface ImmutableIterable<A> extends EnhancedIterable<A> {
     }
 
     @Override
+    default ImmutableIterable<A> intersperse(A a) {
+        return immutableIterable(Intersperse.intersperse(a, this));
+    }
+
+    @Override
     default ImmutableNonEmptyIterable<A> prepend(A element) {
         return ImmutableNonEmptyIterable.immutableNonEmptyIterable(element, this);
     }

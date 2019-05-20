@@ -6,6 +6,7 @@ import com.jnape.palatable.lambda.functions.Fn2;
 import com.jnape.palatable.lambda.functions.builtin.fn1.Init;
 import com.jnape.palatable.lambda.functions.builtin.fn1.Reverse;
 import com.jnape.palatable.lambda.functions.builtin.fn2.CartesianProduct;
+import com.jnape.palatable.lambda.functions.builtin.fn2.Intersperse;
 import com.jnape.palatable.lambda.functions.builtin.fn2.Map;
 import com.jnape.palatable.lambda.functions.builtin.fn2.Snoc;
 import com.jnape.palatable.lambda.functions.builtin.fn3.ZipWith;
@@ -54,6 +55,11 @@ public interface ImmutableNonEmptyFiniteIterable<A> extends ImmutableFiniteItera
     @Override
     default ImmutableFiniteIterable<A> init() {
         return immutableFiniteIterable(Init.init(this));
+    }
+
+    @Override
+    default ImmutableNonEmptyFiniteIterable<A> intersperse(A a) {
+        return immutableNonEmptyFiniteIterableOrThrow(Intersperse.intersperse(a, this));
     }
 
     @Override

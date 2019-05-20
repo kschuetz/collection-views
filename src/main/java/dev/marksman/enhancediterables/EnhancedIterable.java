@@ -63,6 +63,10 @@ public interface EnhancedIterable<A> extends Iterable<A> {
         return enhancedIterable(Map.map(f, this));
     }
 
+    default EnhancedIterable<A> intersperse(A a) {
+        return enhancedIterable(Intersperse.intersperse(a, this));
+    }
+
     default boolean isEmpty() {
         return !iterator().hasNext();
     }
