@@ -91,6 +91,7 @@ public interface ImmutableVector<A> extends Vector<A>, ImmutableFiniteIterable<A
      *                  It may be called zero or more times for each element.
      * @return an {@code ImmutableVector<A>}
      */
+    @Override
     default ImmutableVector<A> dropWhile(Fn1<? super A, ? extends Boolean> predicate) {
         return ImmutableVectors.dropWhile(predicate, this);
     }

@@ -57,6 +57,11 @@ public interface FiniteIterable<A> extends EnhancedIterable<A> {
     }
 
     @Override
+    default FiniteIterable<A> dropWhile(Fn1<? super A, ? extends Boolean> predicate) {
+        return EnhancedIterables.finiteIterable(DropWhile.dropWhile(predicate, this));
+    }
+
+    @Override
     default FiniteIterable<A> filter(Fn1<? super A, ? extends Boolean> predicate) {
         return EnhancedIterables.finiteIterable(Filter.<A>filter(predicate).apply(this));
     }

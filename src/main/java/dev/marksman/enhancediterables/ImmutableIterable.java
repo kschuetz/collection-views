@@ -42,6 +42,11 @@ public interface ImmutableIterable<A> extends EnhancedIterable<A> {
     }
 
     @Override
+    default ImmutableIterable<A> dropWhile(Fn1<? super A, ? extends Boolean> predicate) {
+        return immutableIterable(DropWhile.dropWhile(predicate, this));
+    }
+
+    @Override
     default ImmutableIterable<A> filter(Fn1<? super A, ? extends Boolean> predicate) {
         return immutableIterable(Filter.<A>filter(predicate).apply(this));
     }
