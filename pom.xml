@@ -15,6 +15,7 @@
 
     <properties>
         <lambda.version>3.3.0</lambda.version>
+        <enhanced-iterables.version>0.1.0</enhanced-iterables.version>
         <junit.version>5.4.0</junit.version>
         <maven-compiler-plugin.version>3.3</maven-compiler-plugin.version>
         <maven-jar-plugin.version>3.1.1</maven-jar-plugin.version>
@@ -60,6 +61,11 @@
             <groupId>com.jnape.palatable</groupId>
             <artifactId>lambda</artifactId>
             <version>${lambda.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>dev.marksman</groupId>
+            <artifactId>enhanced-iterables</artifactId>
+            <version>${enhanced-iterables.version}</version>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
