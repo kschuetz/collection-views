@@ -1,10 +1,10 @@
 package dev.marksman.collectionviews;
 
 import com.jnape.palatable.lambda.adt.Maybe;
+import com.jnape.palatable.lambda.functions.Fn0;
 
 import java.util.Arrays;
 import java.util.Objects;
-import java.util.function.Supplier;
 
 import static com.jnape.palatable.lambda.adt.Maybe.just;
 import static com.jnape.palatable.lambda.adt.Maybe.nothing;
@@ -34,7 +34,7 @@ class Sets {
         }
     }
 
-    static Supplier<IllegalArgumentException> nonEmptyError() {
+    static Fn0<IllegalArgumentException> nonEmptyError() {
         return () -> new IllegalArgumentException("Cannot construct NonEmptySet from empty input");
     }
 

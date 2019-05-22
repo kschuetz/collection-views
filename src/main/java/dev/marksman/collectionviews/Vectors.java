@@ -2,6 +2,7 @@ package dev.marksman.collectionviews;
 
 import com.jnape.palatable.lambda.adt.Maybe;
 import com.jnape.palatable.lambda.adt.hlist.Tuple2;
+import com.jnape.palatable.lambda.functions.Fn0;
 import com.jnape.palatable.lambda.functions.Fn1;
 import com.jnape.palatable.lambda.functions.Fn2;
 import com.jnape.palatable.lambda.functions.builtin.fn2.Drop;
@@ -12,7 +13,6 @@ import dev.marksman.enhancediterables.NonEmptyIterable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Supplier;
 
 import static com.jnape.palatable.lambda.adt.Maybe.just;
 import static com.jnape.palatable.lambda.adt.Maybe.nothing;
@@ -122,7 +122,7 @@ final class Vectors {
         return crossJoinVector(first, second);
     }
 
-    static Supplier<IllegalArgumentException> nonEmptyError() {
+    static Fn0<IllegalArgumentException> nonEmptyError() {
         return () -> new IllegalArgumentException("Cannot construct NonEmptyVector from empty input");
     }
 

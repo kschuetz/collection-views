@@ -14,8 +14,8 @@
     <url>http://www.github.com/kschuetz/collection-views</url>
 
     <properties>
-        <lambda.version>3.3.0</lambda.version>
-        <enhanced-iterables.version>0.1.0</enhanced-iterables.version>
+        <lambda.version>4.0.0</lambda.version>
+        <enhanced-iterables.version>0.2.0</enhanced-iterables.version>
         <junit.version>5.4.0</junit.version>
         <maven-compiler-plugin.version>3.3</maven-compiler-plugin.version>
         <maven-jar-plugin.version>3.1.1</maven-jar-plugin.version>

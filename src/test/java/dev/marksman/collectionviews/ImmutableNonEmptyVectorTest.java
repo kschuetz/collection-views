@@ -57,7 +57,7 @@ class ImmutableNonEmptyVectorTest {
         void functorComposition() {
             Fn1<Integer, Integer> f = n -> n * 2;
             Fn1<Integer, String> g = Object::toString;
-            assertEquals(subject.fmap(f).fmap(g), subject.fmap(f.andThen(g)));
+            assertEquals(subject.fmap(f).fmap(g), subject.fmap(f.fmap(g)));
         }
 
         @Test

@@ -120,7 +120,7 @@ final class EmptyVector<A> extends ConcreteVector<A> implements ImmutableVector<
 
     @Override
     public ImmutableNonEmptyVector<A> toNonEmptyOrThrow() {
-        throw Vectors.nonEmptyError().get();
+        throw Vectors.nonEmptyError().apply();
     }
 
     @SuppressWarnings("unchecked")

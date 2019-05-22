@@ -321,7 +321,7 @@ class NonEmptyVectorTest {
             NonEmptyVector<Integer> source = Vector.of(1, 2, 3);
             Fn1<Integer, Integer> f = n -> n * 2;
             Fn1<Integer, String> g = Object::toString;
-            assertEquals(source.fmap(f).fmap(g), source.fmap(f.andThen(g)));
+            assertEquals(source.fmap(f).fmap(g), source.fmap(f.fmap(g)));
         }
 
         @Test

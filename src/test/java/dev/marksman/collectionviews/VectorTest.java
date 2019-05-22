@@ -761,7 +761,7 @@ class VectorTest {
                 Vector<Integer> source = Vector.wrap(new Integer[]{1, 2, 3});
                 Fn1<Integer, Integer> f = n -> n * 2;
                 Fn1<Integer, String> g = Object::toString;
-                assertEquals(source.fmap(f).fmap(g), source.fmap(f.andThen(g)));
+                assertEquals(source.fmap(f).fmap(g), source.fmap(f.fmap(g)));
             }
 
             @Test
@@ -820,7 +820,7 @@ class VectorTest {
                 Vector<Integer> source = Vector.wrap(asList(1, 2, 3));
                 Fn1<Integer, Integer> f = n -> n * 2;
                 Fn1<Integer, String> g = Object::toString;
-                assertEquals(source.fmap(f).fmap(g), source.fmap(f.andThen(g)));
+                assertEquals(source.fmap(f).fmap(g), source.fmap(f.fmap(g)));
             }
 
             @Test
