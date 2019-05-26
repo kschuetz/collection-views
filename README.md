@@ -34,7 +34,7 @@
 
 *collection-views* is a small Java library that facilitates creating protected views over collections and arrays with as little overhead as possible.  It provides the interfaces `Vector<A>` and `Set<A>`, and some variations of these that provide additional guarantees. 
 
-It is intended to be used in conjunction with [lambda](https://palatable.github.io/lambda/).
+It builds on [enhanced-iterables](https://github.com/kschuetz/enhanced-iterables) and is intended to be used in conjunction with [lambda](https://github.com/palatable/lambda).
 
 For more details, check out the [javadoc](https://kschuetz.github.io/collection-views/javadoc/).
 
@@ -58,7 +58,7 @@ The goal of *collection-views* is to provide this functionality with as little o
 
 While *collection-views* has essentially the same purpose as `Collections.unmodifiableXXX` or Guava, here are a few reasons *collection-views* is different.
 
-- *collection-views* is designed to be used with [lambda](https://palatable.github.io/lambda/).  It takes advantage of lambda's types (such as `Maybe`), and should be comfortable to those already using lambda.  
+- *collection-views* is designed to be used with [lambda](https://github.com/palatable/lambda).  It takes advantage of lambda's types (such as `Maybe`), and should be comfortable to those already using lambda.  
 
 - *collection-views* gives you control over when to make copies. `Collections.unmodifiableXXX` will never make a copy, so you don't have a strong guarantee of immutability.  Guava, on the other hand, always initially makes a copy, and that may not be always what you want.  
 
@@ -130,7 +130,9 @@ Follow this link to get the dependency info for your preferred build tool:
 
 ## <a name="vector">`Vector<A>`</a>
 
-A `Vector` is a finite, ordered view of a collection, with O(1)[*](#o1-note) random access to its elements.  The bearer of a `Vector` has the following capabilities:
+A `Vector` is a finite, ordered view of a collection, with O(1)[*](#o1-note) random access to its elements.  It inherits all methods from `FiniteIterable<A>` in [enhanced-iterables](https://github.com/kschuetz/enhanced-iterables), and will return a new `Vector` for many of these methods.   
+
+The bearer of a `Vector` has the following capabilities:
 
 - Random access to any element in the `Vector` using the `get` method.
 - Get the size of the `Vector` in O(1)[*](#o1-note) using the `size` method.
@@ -238,7 +240,7 @@ An `ImmutableNonEmptyVector<A>` is a `Vector<A>` that also has all the guarantee
 
 ## Transformations available on `Vectors`
 
-The following transformations are available on all `Vector`s.  All return a new `Vector` with as specific a type as possible, and don't make copies of the underlying collection:
+While all methods of `EnhancedIterable` are available on all `Vectors`, some of them will also return `Vector`s instead of `Iterable`s.  The following transformations are available on all `Vector`s.  All return a new `Vector` with as specific a type as possible, and don't make copies of the underlying collection:
 
 - `fmap`
 - `reverse`
