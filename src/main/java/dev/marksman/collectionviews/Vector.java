@@ -12,8 +12,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.RandomAccess;
 
-import static com.jnape.palatable.lambda.adt.Maybe.maybe;
-import static com.jnape.palatable.lambda.adt.Maybe.nothing;
+import static com.jnape.palatable.lambda.adt.Maybe.*;
+import static dev.marksman.collectionviews.EmptyVectorBuilder.emptyVectorBuilder;
 
 /**
  * A finite, ordered view of a collection.
@@ -416,6 +416,28 @@ public interface Vector<A> extends FiniteIterable<A>, RandomAccess {
     @SafeVarargs
     static <A> ImmutableNonEmptyVector<A> of(A first, A... more) {
         return Vectors.nonEmptyVectorOf(first, more);
+    }
+
+    /**
+     * Creates a new {@code VectorBuilder}.
+     *
+     * @param <A> the element type
+     * @return an empty {@link VectorBuilder}
+     */
+    static <A> VectorBuilder<A> builder() {
+        return emptyVectorBuilder(nothing());
+    }
+
+    /**
+     * Creates a new {@code VectorBuilder} with an initial capacity hint.
+     *
+     * @param initialCapacity an initial capacity hint.
+     *                        Must be &gt;= 0.
+     * @param <A>             the element type
+     * @return an empty {@link VectorBuilder}
+     */
+    static <A> VectorBuilder<A> builder(int initialCapacity) {
+        return emptyVectorBuilder(just(initialCapacity));
     }
 
     /**
