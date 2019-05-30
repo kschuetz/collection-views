@@ -76,6 +76,19 @@ public interface NonEmptySet<A> extends NonEmptyFiniteIterable<A>, Set<A> {
     }
 
     /**
+     * Creates a {@code ImmutableNonEmptySet} with the given elements.
+     *
+     * @param first the first element
+     * @param more  the remaining elements
+     * @param <A>   the element type
+     * @return an {@code ImmutableNonEmptySet<A>}
+     */
+    @SafeVarargs
+    static <A> ImmutableNonEmptySet<A> of(A first, A... more) {
+        return Sets.nonEmptySetOf(first, more);
+    }
+
+    /**
      * Attempts to create a {@code NonEmptySet} that wraps a {@code java.util.Set}.
      * <p>
      * Does not make any copies of the given {@link java.util.Set}.

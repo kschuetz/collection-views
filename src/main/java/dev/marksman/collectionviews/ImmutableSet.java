@@ -63,4 +63,17 @@ public interface ImmutableSet<A> extends Set<A>, ImmutableFiniteIterable<A>, Imm
         return ImmutableSets.nonEmptyConvertOrThrow(this);
     }
 
+    /**
+     * Creates a {@code ImmutableNonEmptySet} with the given elements.
+     *
+     * @param first the first element
+     * @param more  the remaining elements
+     * @param <A>   the element type
+     * @return an {@code ImmutableNonEmptySet<A>}
+     */
+    @SafeVarargs
+    static <A> ImmutableNonEmptySet<A> of(A first, A... more) {
+        return Sets.nonEmptySetOf(first, more);
+    }
+
 }

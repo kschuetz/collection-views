@@ -86,4 +86,10 @@ final class ConcreteVectorBuilder<A> implements NonEmptyVectorBuilder<A> {
         return new ConcreteVectorBuilder<>(size, initialCapacity, underlying);
     }
 
+    static <A> ConcreteVectorBuilder<A> concreteVectorBuilder(Maybe<Integer> initialCapacity, A firstElement) {
+        ArrayList<A> underlying = initialCapacity.match(__ -> new ArrayList<>(), ArrayList::new);
+        underlying.add(firstElement);
+        return new ConcreteVectorBuilder<>(1, initialCapacity, underlying);
+    }
+
 }

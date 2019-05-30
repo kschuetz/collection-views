@@ -5,6 +5,10 @@ import dev.marksman.enhancediterables.NonEmptyFiniteIterable;
 
 import java.util.Collection;
 
+import static com.jnape.palatable.lambda.adt.Maybe.just;
+import static com.jnape.palatable.lambda.adt.Maybe.nothing;
+import static dev.marksman.collectionviews.EmptyVectorBuilder.emptyVectorBuilder;
+
 /**
  * A builder for {@code ImmutableVector}s.
  * <p>
@@ -63,5 +67,27 @@ public interface VectorBuilder<A> {
      * @return an {@code ImmutableVector}.
      */
     ImmutableVector<A> build();
+
+    /**
+     * Creates a new {@code VectorBuilder}.
+     *
+     * @param <A> the element type
+     * @return an empty {@link VectorBuilder}
+     */
+    static <A> VectorBuilder<A> builder() {
+        return emptyVectorBuilder(nothing());
+    }
+
+    /**
+     * Creates a new {@code VectorBuilder} with an initial capacity hint.
+     *
+     * @param initialCapacity an initial capacity hint.
+     *                        Must be &gt;= 0.
+     * @param <A>             the element type
+     * @return an empty {@link VectorBuilder}
+     */
+    static <A> VectorBuilder<A> builder(int initialCapacity) {
+        return emptyVectorBuilder(just(initialCapacity));
+    }
 
 }

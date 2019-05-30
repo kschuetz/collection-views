@@ -8,6 +8,10 @@ import dev.marksman.enhancediterables.ImmutableFiniteIterable;
 import dev.marksman.enhancediterables.NonEmptyFiniteIterable;
 import dev.marksman.enhancediterables.NonEmptyIterable;
 
+import static com.jnape.palatable.lambda.adt.Maybe.just;
+import static com.jnape.palatable.lambda.adt.Maybe.nothing;
+import static dev.marksman.collectionviews.EmptyVectorBuilder.emptyVectorBuilder;
+
 /**
  * A {@code Vector} that is guaranteed at compile-time to be safe from mutation anywhere.
  * In other words, it owns the sole reference to the underlying collection.
@@ -345,6 +349,28 @@ public interface ImmutableVector<A> extends Vector<A>, ImmutableFiniteIterable<A
     @Override
     default ImmutableVector<Tuple2<A, Integer>> zipWithIndex() {
         return ImmutableVectors.zipWithIndex(this);
+    }
+
+    /**
+     * Creates a new {@code VectorBuilder}.
+     *
+     * @param <A> the element type
+     * @return an empty {@link VectorBuilder}
+     */
+    static <A> VectorBuilder<A> builder() {
+        return emptyVectorBuilder(nothing());
+    }
+
+    /**
+     * Creates a new {@code VectorBuilder} with an initial capacity hint.
+     *
+     * @param initialCapacity an initial capacity hint.
+     *                        Must be &gt;= 0.
+     * @param <A>             the element type
+     * @return an empty {@link VectorBuilder}
+     */
+    static <A> VectorBuilder<A> builder(int initialCapacity) {
+        return emptyVectorBuilder(just(initialCapacity));
     }
 
 }

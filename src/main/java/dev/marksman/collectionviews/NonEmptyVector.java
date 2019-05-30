@@ -11,6 +11,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import static com.jnape.palatable.lambda.adt.Maybe.just;
+import static com.jnape.palatable.lambda.adt.Maybe.nothing;
+import static dev.marksman.collectionviews.ConcreteVectorBuilder.concreteVectorBuilder;
 
 /**
  * A {@code Vector} that is guaranteed at compile-time to contain at least one element.
@@ -232,6 +234,43 @@ public interface NonEmptyVector<A> extends NonEmptyFiniteIterable<A>, Vector<A> 
     @Override
     default NonEmptyVector<Tuple2<A, Integer>> zipWithIndex() {
         return Vectors.nonEmptyZipWithIndex(this);
+    }
+
+    /**
+     * Creates a {@code ImmutableNonEmptyVector} with the given elements.
+     *
+     * @param first the first element
+     * @param more  the remaining elements
+     * @param <A>   the element type
+     * @return an {@code ImmutableNonEmptyVector<A>}
+     */
+    @SafeVarargs
+    static <A> ImmutableNonEmptyVector<A> of(A first, A... more) {
+        return Vectors.nonEmptyVectorOf(first, more);
+    }
+
+    /**
+     * Creates a new {@code NonEmptyVectorBuilder}.
+     *
+     * @param first the first element
+     * @param <A>   the element type
+     * @return an empty {@link VectorBuilder}
+     */
+    static <A> NonEmptyVectorBuilder<A> builder(A first) {
+        return concreteVectorBuilder(nothing(), first);
+    }
+
+    /**
+     * Creates a new {@code NonEmptyVectorBuilder} with an initial capacity hint.
+     *
+     * @param initialCapacity an initial capacity hint.
+     *                        Must be &gt;= 0.
+     * @param first           the first element
+     * @param <A>             the element type
+     * @return an empty {@link VectorBuilder}
+     */
+    static <A> NonEmptyVectorBuilder<A> builder(int initialCapacity, A first) {
+        return concreteVectorBuilder(just(initialCapacity), first);
     }
 
     /**
