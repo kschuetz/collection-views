@@ -32,7 +32,7 @@
 
 # <a name="what-is-it">What is it?</a>
 
-*collection-views* is a small Java library that facilitates creating protected views over collections and arrays with as little overhead as possible.  It provides the interfaces `Vector<A>` and `Set<A>`, and some variations of these that provide additional guarantees. 
+*collection-views* is a Java library that facilitates creating protected views over collections and arrays with as little overhead as possible.  It provides the interfaces `Vector<A>` and `Set<A>`, and some variations of these that provide additional guarantees. 
 
 It builds on [enhanced-iterables](https://github.com/kschuetz/enhanced-iterables) and is intended to be used in conjunction with [lambda](https://github.com/palatable/lambda).
 
@@ -200,6 +200,10 @@ The copying of the input is a one-time cost, but in return you get an `Immutable
 Calling `Vector.of` with one or more elements will return a new `ImmutableNonEmptyVector`. 
 
 `Vector.fill` and `Vector.lazyFill` also create `ImmutableVector`s directly.
+
+#### <a name="vector-builders">Building using a `VectorBuilder`</a>
+
+The `Vector.builder` static method will return a new `VectorBuilder`, which can be used to construct new `ImmutableVector`s.
 
 #### <a name="vector-empty">Creating an empty `Vector`</a>
 
