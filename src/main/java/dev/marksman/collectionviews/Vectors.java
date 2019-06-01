@@ -7,7 +7,8 @@ import com.jnape.palatable.lambda.functions.Fn1;
 import com.jnape.palatable.lambda.functions.Fn2;
 import com.jnape.palatable.lambda.functions.builtin.fn2.Drop;
 import com.jnape.palatable.lambda.functions.builtin.fn2.Take;
-import dev.marksman.enhancediterables.NonEmptyFiniteIterable;
+import dev.marksman.enhancediterables.ImmutableNonEmptyFiniteIterable;
+import dev.marksman.enhancediterables.ImmutableNonEmptyIterable;
 import dev.marksman.enhancediterables.NonEmptyIterable;
 
 import java.util.ArrayList;
@@ -79,7 +80,7 @@ final class Vectors {
         return result;
     }
 
-    static <A> NonEmptyIterable<Vector<A>> inits(Vector<A> source) {
+    static <A> ImmutableNonEmptyIterable<Vector<A>> inits(Vector<A> source) {
         return nonEmptyRange(source.size() + 1).fmap(source::dropRight);
     }
 
@@ -210,7 +211,7 @@ final class Vectors {
         return tuple(source.take(index), source.drop(index));
     }
 
-    static <A> NonEmptyFiniteIterable<Vector<A>> tails(Vector<A> source) {
+    static <A> ImmutableNonEmptyFiniteIterable<Vector<A>> tails(Vector<A> source) {
         return nonEmptyRange(source.size() + 1).fmap(source::drop);
     }
 

@@ -5,8 +5,8 @@ import com.jnape.palatable.lambda.adt.hlist.Tuple2;
 import com.jnape.palatable.lambda.functions.Fn1;
 import com.jnape.palatable.lambda.functions.Fn2;
 import com.jnape.palatable.lambda.functions.builtin.fn2.Take;
-import dev.marksman.enhancediterables.NonEmptyFiniteIterable;
-import dev.marksman.enhancediterables.NonEmptyIterable;
+import dev.marksman.enhancediterables.ImmutableNonEmptyFiniteIterable;
+import dev.marksman.enhancediterables.ImmutableNonEmptyIterable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -139,7 +139,7 @@ final class ImmutableVectors {
         return range(vec.size());
     }
 
-    static <A> NonEmptyIterable<ImmutableVector<A>> inits(ImmutableVector<A> source) {
+    static <A> ImmutableNonEmptyIterable<ImmutableVector<A>> inits(ImmutableVector<A> source) {
         return nonEmptyRange(source.size() + 1).fmap(source::dropRight);
     }
 
@@ -321,7 +321,7 @@ final class ImmutableVectors {
         return tuple(source.take(index), source.drop(index));
     }
 
-    static <A> NonEmptyFiniteIterable<ImmutableVector<A>> tails(ImmutableVector<A> source) {
+    static <A> ImmutableNonEmptyFiniteIterable<ImmutableVector<A>> tails(ImmutableVector<A> source) {
         return nonEmptyRange(source.size() + 1).fmap(source::drop);
     }
 

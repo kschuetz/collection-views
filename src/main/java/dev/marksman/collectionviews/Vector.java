@@ -5,8 +5,8 @@ import com.jnape.palatable.lambda.adt.hlist.Tuple2;
 import com.jnape.palatable.lambda.functions.Fn1;
 import com.jnape.palatable.lambda.functions.Fn2;
 import dev.marksman.enhancediterables.FiniteIterable;
-import dev.marksman.enhancediterables.NonEmptyFiniteIterable;
-import dev.marksman.enhancediterables.NonEmptyIterable;
+import dev.marksman.enhancediterables.ImmutableNonEmptyFiniteIterable;
+import dev.marksman.enhancediterables.ImmutableNonEmptyIterable;
 
 import java.util.Iterator;
 import java.util.List;
@@ -192,7 +192,7 @@ public interface Vector<A> extends FiniteIterable<A>, RandomAccess {
      * @return a {@code NonEmptyIterable} over all the inits of this {@code Vector}
      */
     @Override
-    default NonEmptyIterable<? extends Vector<A>> inits() {
+    default ImmutableNonEmptyIterable<? extends Vector<A>> inits() {
         return Vectors.inits(this);
     }
 
@@ -277,7 +277,7 @@ public interface Vector<A> extends FiniteIterable<A>, RandomAccess {
      * @return a {@code NonEmptyIterable} over all the tails of this {@code Vector}
      */
     @Override
-    default NonEmptyFiniteIterable<? extends Vector<A>> tails() {
+    default ImmutableNonEmptyFiniteIterable<? extends Vector<A>> tails() {
         return Vectors.tails(this);
     }
 
@@ -342,6 +342,7 @@ public interface Vector<A> extends FiniteIterable<A>, RandomAccess {
      *
      * @return a {@code Maybe<NonEmptyVector<A>>}
      */
+    @Override
     default Maybe<? extends NonEmptyVector<A>> toNonEmpty() {
         return Vectors.maybeNonEmptyWrap(this);
     }
