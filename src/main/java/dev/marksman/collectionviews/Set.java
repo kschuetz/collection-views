@@ -124,6 +124,7 @@ public interface Set<A> extends FiniteIterable<A> {
      * @param <A>   the element type
      * @return an {@code ImmutableNonEmptySet<A>}
      */
+    @SuppressWarnings("varargs")
     @SafeVarargs
     static <A> ImmutableNonEmptySet<A> of(A first, A... more) {
         return Sets.nonEmptySetOf(first, more);

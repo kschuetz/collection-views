@@ -189,6 +189,7 @@ public interface ImmutableNonEmptyVector<A> extends NonEmptyVector<A>, Immutable
      * @param <A>   the element type
      * @return an {@code ImmutableNonEmptyVector<A>}
      */
+    @SuppressWarnings("varargs")
     @SafeVarargs
     static <A> ImmutableNonEmptyVector<A> of(A first, A... more) {
         return Vectors.nonEmptyVectorOf(first, more);

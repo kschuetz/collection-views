@@ -59,10 +59,10 @@ interface MapperChain {
     }
 
     final class MapperChainImpl implements MapperChain {
-        private final Iterable<Function> mappers;
+        private final Iterable<Function<Object, Object>> mappers;
         private volatile Fn1<Object, Object> fnComposedOnTheHeap;
 
-        private MapperChainImpl(Iterable<Function> mappers) {
+        private MapperChainImpl(Iterable<Function<Object, Object>> mappers) {
             this.mappers = mappers;
             fnComposedOnTheHeap = null;
         }
@@ -92,15 +92,13 @@ interface MapperChain {
             return fnComposedOnTheHeap;
         }
 
-        @SuppressWarnings("unchecked")
         private Fn1<Object, Object> build() {
-            ArrayList<Function> fnChain = toCollection(ArrayList::new, reverse(mappers));
+            ArrayList<Function<Object, Object>> fnChain = toCollection(ArrayList::new, reverse(mappers));
             return o -> foldLeft((x, fn) -> fn.apply(x), o, fnChain);
         }
     }
 
-    @SuppressWarnings("FunctionalExpressionCanBeFolded")
-    static Function lambdaToJava(Fn1<Object, Object> f) {
+    static Function<Object, Object> lambdaToJava(Fn1<Object, Object> f) {
         return f::apply;
     }
 

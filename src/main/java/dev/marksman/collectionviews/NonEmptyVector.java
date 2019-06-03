@@ -244,6 +244,7 @@ public interface NonEmptyVector<A> extends NonEmptyFiniteIterable<A>, Vector<A> 
      * @param <A>   the element type
      * @return an {@code ImmutableNonEmptyVector<A>}
      */
+    @SuppressWarnings("varargs")
     @SafeVarargs
     static <A> ImmutableNonEmptyVector<A> of(A first, A... more) {
         return Vectors.nonEmptyVectorOf(first, more);

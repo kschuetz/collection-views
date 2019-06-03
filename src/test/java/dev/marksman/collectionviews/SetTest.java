@@ -327,6 +327,7 @@ class SetTest {
 
     }
 
+    @SuppressWarnings("serial")
     @Nested
     @DisplayName("equality")
     class Equality {

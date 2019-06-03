@@ -146,6 +146,7 @@ final class Vectors {
         }
     }
 
+    @SuppressWarnings("varargs")
     @SafeVarargs
     static <A> ImmutableNonEmptyVector<A> nonEmptyVectorOf(A first, A... more) {
         return new ImmutableVectorCons<>(first, ImmutableVectors.wrapAndVouchFor(more));

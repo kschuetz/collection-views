@@ -16,7 +16,7 @@
 
     <properties>
         <lambda.version>4.0.0</lambda.version>
-        <enhanced-iterables.version>0.2.4</enhanced-iterables.version>
+        <enhanced-iterables.version>1.0.0</enhanced-iterables.version>
         <junit.version>5.4.0</junit.version>
         <maven-compiler-plugin.version>3.3</maven-compiler-plugin.version>
         <maven-jar-plugin.version>3.1.1</maven-jar-plugin.version>
@@ -92,8 +92,8 @@
                     <source>1.8</source>
                     <target>1.8</target>
                     <compilerArgs>
-                        <!--<compilerArg>-Xlint:all</compilerArg>-->
-                        <!--<compilerArg>-Werror</compilerArg>-->
+                        <compilerArg>-Xlint:all</compilerArg>
+                        <compilerArg>-Werror</compilerArg>
                     </compilerArgs>
                 </configuration>
             </plugin>

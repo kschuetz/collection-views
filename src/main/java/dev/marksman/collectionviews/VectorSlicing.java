@@ -26,6 +26,7 @@ final class VectorSlicing {
         }
     }
 
+    @SuppressWarnings("unchecked")
     static <A, V extends Vector<A>> V dropImpl(Fn3<Integer, Integer, V, V> factory, int count, V source) {
         validateDrop(count, source);
         if (count == 0) {
@@ -33,7 +34,6 @@ final class VectorSlicing {
         }
         int sourceSize = source.size();
         if (count >= sourceSize) {
-            //noinspection unchecked
             return (V) Vectors.empty();
         }
         return factory.apply(count, sourceSize - count, source);

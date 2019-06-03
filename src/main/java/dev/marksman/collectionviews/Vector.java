@@ -414,6 +414,7 @@ public interface Vector<A> extends FiniteIterable<A>, RandomAccess {
      * @param <A>   the element type
      * @return an {@code ImmutableNonEmptyVector<A>}
      */
+    @SuppressWarnings("varargs")
     @SafeVarargs
     static <A> ImmutableNonEmptyVector<A> of(A first, A... more) {
         return Vectors.nonEmptyVectorOf(first, more);

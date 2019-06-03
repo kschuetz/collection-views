@@ -38,6 +38,7 @@ class Sets {
         return () -> new IllegalArgumentException("Cannot construct NonEmptySet from empty input");
     }
 
+    @SuppressWarnings("varargs")
     @SafeVarargs
     static <A> ImmutableNonEmptySet<A> nonEmptySetOf(A first, A... more) {
         java.util.Set<A> underlying = new java.util.HashSet<>();
