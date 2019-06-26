@@ -27,6 +27,7 @@ import static com.jnape.palatable.lambda.functions.builtin.fn2.Replicate.replica
 import static com.jnape.palatable.lambda.functions.builtin.fn2.Take.take;
 import static com.jnape.palatable.lambda.functions.builtin.fn2.Tupler2.tupler;
 import static com.jnape.palatable.lambda.functions.builtin.fn3.FoldLeft.foldLeft;
+import static dev.marksman.collectionviews.EmptyVector.emptyVector;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
@@ -2689,6 +2690,49 @@ class ImmutableVectorTest {
             assertEquals(tuple(Vector.of("baz", "bar"), Vector.of("foo")), subject);
             originalUnderlying.set(0, "qwerty");
             assertEquals(tuple(Vector.of("baz", "bar"), Vector.of("foo")), subject);
+        }
+
+    }
+
+    @Nested
+    @DisplayName("magnetizeBy")
+    class MagnetizeBy {
+
+        @Test
+        void throwsOnNullPredicate() {
+            assertThrows(NullPointerException.class, () -> Vector.copyFrom(emptyList()).magnetizeBy(null));
+        }
+
+        @Test
+        void empty() {
+            assertEquals(emptyVector().magnetizeBy((x, y) -> true), emptyVector());
+        }
+
+        @Test
+        void singleton() {
+            assertEquals(Vector.copyFrom(singletonList("foo")).magnetizeBy((x, y) -> true), Vector.of(Vector.of("foo")));
+        }
+
+        @Test
+        void lambdaTestCase() {
+            assertEquals(Vector.of(Vector.of(1, 2, 3),
+                    Vector.of(2, 2, 3),
+                    Vector.of(2),
+                    Vector.of(1)),
+                    Vector.copyFrom(asList(1, 2, 3, 2, 2, 3, 2, 1)).magnetizeBy((x, y) -> x <= y));
+        }
+
+        @Test
+        void allPairsMatch() {
+            assertEquals(Vector.of(Vector.of(1, 2, 3, 4, 5, 6)),
+                    Vector.copyFrom(asList(1, 2, 3, 4, 5, 6)).magnetizeBy((x, y) -> x <= y));
+        }
+
+        @Test
+        void noPairsMatch() {
+            assertEquals(Vector.of(Vector.of(1), Vector.of(2), Vector.of(3),
+                    Vector.of(4), Vector.of(5), Vector.of(6)),
+                    Vector.copyFrom(asList(1, 2, 3, 4, 5, 6)).magnetizeBy((x, y) -> x > y));
         }
 
     }
