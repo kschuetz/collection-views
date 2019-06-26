@@ -5,7 +5,7 @@
 
     <groupId>dev.marksman</groupId>
     <artifactId>collection-views</artifactId>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>1.0.1</version>
 
     <name>collection-views</name>
     <description>
@@ -16,7 +16,7 @@
 
     <properties>
         <lambda.version>4.0.0</lambda.version>
-        <enhanced-iterables.version>1.0.0</enhanced-iterables.version>
+        <enhanced-iterables.version>1.0.1</enhanced-iterables.version>
         <junit.version>5.4.0</junit.version>
         <maven-compiler-plugin.version>3.3</maven-compiler-plugin.version>
         <maven-jar-plugin.version>3.1.1</maven-jar-plugin.version>

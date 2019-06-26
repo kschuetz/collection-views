@@ -2,7 +2,7 @@
 
 [![collection-views](https://img.shields.io/maven-central/v/dev.marksman/collection-views.svg)](http://search.maven.org/#search%7Cga%7C1%7Cdev.marksman.collection-views)
 [![Javadoc](https://javadoc-badge.appspot.com/dev.marksman/collection-views.svg?label=javadoc)](https://kschuetz.github.io/collection-views/javadoc/)
-[![Build Status](https://travis-ci.org/kschuetz/collection-views.svg?branch=master)](https://travis-ci.org/kschuetz/collection-views)
+[![CircleCI](https://circleci.com/gh/kschuetz/collection-views.svg?style=svg)](https://circleci.com/gh/kschuetz/collection-views)
 [![Maintainability](https://api.codeclimate.com/v1/badges/43ac4c983644c1bc7f5d/maintainability)](https://codeclimate.com/github/kschuetz/collection-views/maintainability)
 
 #### Table of Contents
