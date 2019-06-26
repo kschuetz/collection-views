@@ -153,6 +153,12 @@ final class ImmutableVectors {
         }
     }
 
+    static <A> ImmutableVector<? extends ImmutableNonEmptyVector<A>> magnetizeBy(Fn2<A, A, Boolean> predicate, ImmutableVector<A> source) {
+        Objects.requireNonNull(predicate);
+        return source.toNonEmpty().match(__ -> Vectors.empty(),
+                ne -> nonEmptyMagnetizeBy(predicate, ne));
+    }
+
     static <A, B> ImmutableVector<B> map(Fn1<? super A, ? extends B> f, ImmutableVector<A> source) {
         return maybeNonEmptyConvert(source)
                 .match(__ -> Vectors.empty(),
@@ -249,11 +255,25 @@ final class ImmutableVectors {
         return new LazyVector<>(size, 0, valueSupplier);
     }
 
+    static <A> ImmutableNonEmptyVector<? extends ImmutableNonEmptyVector<A>> nonEmptyMagnetizeBy(Fn2<A, A, Boolean> predicate, ImmutableNonEmptyVector<A> source) {
+        Objects.requireNonNull(predicate);
+        int size = source.size();
+        VectorBuilder<ImmutableNonEmptyVector<A>> builder = Vector.builder();
+        int index = 0;
+        while (index < size) {
+            Tuple2<ImmutableNonEmptyVector<A>, Integer> next = magnetizeAt(predicate, index, source);
+            builder = builder.add(next._1());
+            index = next._2();
+        }
+        return builder.build().toNonEmptyOrThrow();
+    }
+
     @SuppressWarnings("unchecked")
     static <A, B> ImmutableNonEmptyVector<B> nonEmptyMap(Fn1<? super A, ? extends B> f, ImmutableNonEmptyVector<A> source) {
         return new ImmutableMappedVector<>(mapperChain((Fn1<Object, Object>) f),
                 (ImmutableNonEmptyVector<Object>) source);
     }
+
 
     static ImmutableNonEmptyVector<Integer> nonEmptyRange(int size) {
         if (size < 0) {
@@ -378,6 +398,16 @@ final class ImmutableVectors {
 
     private static <A> ImmutableNonEmptyVector<A> getNonEmptyOrThrow(Maybe<ImmutableNonEmptyVector<A>> maybeResult) {
         return maybeResult.orElseThrow(Vectors.nonEmptyError());
+    }
+
+    private static <A> Tuple2<ImmutableNonEmptyVector<A>, Integer> magnetizeAt(Fn2<A, A, Boolean> predicate, int index, ImmutableVector<A> source) {
+        int maxIndex = source.size() - 1;
+        int firstIndex = index;
+        while (index < maxIndex && predicate.apply(source.unsafeGet(index), source.unsafeGet(index + 1))) {
+            index += 1;
+        }
+        int nextIndex = index + 1;
+        return tuple(slice(firstIndex, nextIndex, source).toNonEmptyOrThrow(), nextIndex);
     }
 
 }

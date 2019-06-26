@@ -135,6 +135,20 @@ public interface ImmutableVector<A> extends Vector<A>, ImmutableFiniteIterable<A
     }
 
     /**
+     * Returns an {@code ImmutableFiniteIterable} of contiguous groups of elements in this {@code ImmutableVector} that match a
+     * predicate pairwise.
+     *
+     * @param predicate the predicate function.
+     *                  This function should be referentially transparent and not perform side-effects.
+     *                  It may be called zero or more times for each element.
+     * @return an {@code ImmutableFiniteIterable<ImmutableNonEmptyVector<A>>} containing the contiguous groups
+     */
+    @Override
+    default ImmutableFiniteIterable<? extends ImmutableNonEmptyVector<A>> magnetizeBy(Fn2<A, A, Boolean> predicate) {
+        return ImmutableVectors.magnetizeBy(predicate, this);
+    }
+
+    /**
      * Creates an {@code ImmutableVector} with this {@code ImmutableVector}'s elements in reversed order.
      * <p>
      * Does not make copies of any underlying collections.
