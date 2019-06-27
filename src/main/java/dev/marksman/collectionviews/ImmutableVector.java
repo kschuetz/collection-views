@@ -6,7 +6,6 @@ import com.jnape.palatable.lambda.functions.Fn1;
 import com.jnape.palatable.lambda.functions.Fn2;
 import dev.marksman.enhancediterables.ImmutableFiniteIterable;
 import dev.marksman.enhancediterables.ImmutableNonEmptyFiniteIterable;
-import dev.marksman.enhancediterables.ImmutableNonEmptyIterable;
 
 import static com.jnape.palatable.lambda.adt.Maybe.just;
 import static com.jnape.palatable.lambda.adt.Maybe.nothing;
@@ -130,7 +129,7 @@ public interface ImmutableVector<A> extends Vector<A>, ImmutableFiniteIterable<A
      * @return a {@code NonEmptyIterable} over all the inits of this {@code ImmutableVector}
      */
     @Override
-    default ImmutableNonEmptyIterable<? extends ImmutableVector<A>> inits() {
+    default ImmutableNonEmptyFiniteIterable<? extends ImmutableVector<A>> inits() {
         return ImmutableVectors.inits(this);
     }
 

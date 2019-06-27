@@ -6,7 +6,6 @@ import com.jnape.palatable.lambda.functions.Fn1;
 import com.jnape.palatable.lambda.functions.Fn2;
 import dev.marksman.enhancediterables.FiniteIterable;
 import dev.marksman.enhancediterables.ImmutableNonEmptyFiniteIterable;
-import dev.marksman.enhancediterables.ImmutableNonEmptyIterable;
 
 import java.util.Iterator;
 import java.util.List;
@@ -192,7 +191,7 @@ public interface Vector<A> extends FiniteIterable<A>, RandomAccess {
      * @return a {@code NonEmptyIterable} over all the inits of this {@code Vector}
      */
     @Override
-    default ImmutableNonEmptyIterable<? extends Vector<A>> inits() {
+    default ImmutableNonEmptyFiniteIterable<? extends Vector<A>> inits() {
         return Vectors.inits(this);
     }
 

@@ -128,6 +128,7 @@ public interface NonEmptyVector<A> extends NonEmptyFiniteIterable<A>, Vector<A> 
      *
      * @return an element of type {@code A}
      */
+    @Override
     default A last() {
         return unsafeGet(size() - 1);
     }
