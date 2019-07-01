@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 ## [Unreleased]
 No changes yet
 
+## [1.0.3] - 2019-06-30
+### Changes
+- Upgrade [enhanced-iterables](https://github.com/kschuetz/enhanced-iterables) to version 1.0.3
+
 ## [1.0.2] - 2019-06-26
 ### Changes
 - Upgrade [enhanced-iterables](https://github.com/kschuetz/enhanced-iterables) to version 1.0.2
@@ -20,7 +24,8 @@ No changes yet
 ### Added
 - Initial release
 
-[Unreleased]: https://github.com/kschuetz/collection-views/compare/collection-views-1.0.2...HEAD
+[Unreleased]: https://github.com/kschuetz/collection-views/compare/collection-views-1.0.3...HEAD
+[1.0.3]: https://github.com/kschuetz/collection-views/compare/collection-views-1.0.2...collection-views-1.0.3
 [1.0.2]: https://github.com/kschuetz/collection-views/compare/collection-views-1.0.1...collection-views-1.0.2
 [1.0.1]: https://github.com/kschuetz/collection-views/compare/collection-views-1.0.0...collection-views-1.0.1
 [1.0.0]: https://github.com/kschuetz/collection-views/commits/collection-views-1.0.0
