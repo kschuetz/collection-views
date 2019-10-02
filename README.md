@@ -5,6 +5,12 @@
 [![CircleCI](https://circleci.com/gh/kschuetz/collection-views.svg?style=svg)](https://circleci.com/gh/kschuetz/collection-views)
 [![Maintainability](https://api.codeclimate.com/v1/badges/43ac4c983644c1bc7f5d/maintainability)](https://codeclimate.com/github/kschuetz/collection-views/maintainability)
 
+# [lambda](https://github.com/palatable/lambda) version compatibility
+
+| collection-views | lambda 5.0.0 | lambda 4.0.0 |
+|---|---|---|
+|1.0.x|:heavy_check_mark:|:heavy_check_mark:|
+
 #### Table of Contents
 
  - [What is it?](#what-is-it)
