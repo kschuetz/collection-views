@@ -7,9 +7,10 @@
 
 # [lambda](https://github.com/palatable/lambda) version compatibility
 
-| collection-views | lambda 5.0.0 | lambda 4.0.0 |
-|---|---|---|
-|1.0.x|:heavy_check_mark:|:heavy_check_mark:|
+| collection-views | lambda 5.1.0 | lambda 5.0.0 | lambda 4.0.0 |
+|---|---|---|---|
+|1.1.x|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
+|1.0.x|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
 
 #### Table of Contents
 
