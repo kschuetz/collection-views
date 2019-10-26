@@ -35,7 +35,7 @@ No changes yet
 - Initial release
 
 [Unreleased]: https://github.com/kschuetz/collection-views/compare/collection-views-1.1.0...HEAD
-[1.0.4]: https://github.com/kschuetz/collection-views/compare/collection-views-1.0.4...collection-views-1.1.0
+[1.1.0]: https://github.com/kschuetz/collection-views/compare/collection-views-1.0.4...collection-views-1.1.0
 [1.0.4]: https://github.com/kschuetz/collection-views/compare/collection-views-1.0.3...collection-views-1.0.4
 [1.0.3]: https://github.com/kschuetz/collection-views/compare/collection-views-1.0.2...collection-views-1.0.3
 [1.0.2]: https://github.com/kschuetz/collection-views/compare/collection-views-1.0.1...collection-views-1.0.2
