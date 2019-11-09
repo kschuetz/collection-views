@@ -543,6 +543,14 @@ public interface NonEmptyVector<A> extends NonEmptyFiniteIterable<A>, Vector<A> 
         return ImmutableVectors.nonEmptyLazyFill(size, valueSupplier);
     }
 
+    static <A> ImmutableNonEmptyVector<A> nonEmptyCopyFrom(NonEmptyIterable<A> source) {
+        return ImmutableVectors.nonEmptyCopyFrom(source);
+    }
+
+    static <A> ImmutableNonEmptyVector<A> nonEmptyCopyFrom(int maxCount, NonEmptyIterable<A> source) {
+        return ImmutableVectors.nonEmptyCopyFrom(maxCount, source);
+    }
+
     /**
      * Creates an {@code ImmutableNonEmptyVector<Integer>} containing elements 0..<code>size - 1</code>.
      * In other words, each element of the returned {@code Vector} will contains its index.

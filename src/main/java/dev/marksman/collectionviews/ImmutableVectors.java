@@ -6,6 +6,7 @@ import com.jnape.palatable.lambda.functions.Fn1;
 import com.jnape.palatable.lambda.functions.Fn2;
 import com.jnape.palatable.lambda.functions.builtin.fn2.Take;
 import dev.marksman.enhancediterables.ImmutableNonEmptyFiniteIterable;
+import dev.marksman.enhancediterables.NonEmptyIterable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -220,6 +221,16 @@ final class ImmutableVectors {
         return getNonEmptyOrThrow(maybeNonEmptyConvert(source));
     }
 
+    static <A> ImmutableNonEmptyVector<A> nonEmptyCopyFrom(NonEmptyIterable<A> source) {
+        Objects.requireNonNull(source);
+        return coerceNonEmpty(copyFrom(source));
+    }
+
+    static <A> ImmutableNonEmptyVector<A> nonEmptyCopyFrom(int maxCount, NonEmptyIterable<A> source) {
+        Validation.validateNonEmptyCopyFrom(maxCount, source);
+        return coerceNonEmpty(copyFrom(source.take(maxCount)));
+    }
+
     static <A> ImmutableNonEmptyVector<A> nonEmptyCopyFromOrThrow(Iterable<A> source) {
         return getNonEmptyOrThrow(maybeNonEmptyCopyFrom(source));
     }
@@ -407,6 +418,16 @@ final class ImmutableVectors {
         }
         int nextIndex = index + 1;
         return tuple(slice(firstIndex, nextIndex, source).toNonEmptyOrThrow(), nextIndex);
+    }
+
+    private static <A> ImmutableNonEmptyVector<A> coerceNonEmpty(ImmutableVector<A> source) {
+        if (source instanceof ImmutableNonEmptyVector<?>) {
+            return (ImmutableNonEmptyVector<A>) source;
+        } else if (!source.isEmpty()) {
+            return new ImmutableVectorCons<>(source.unsafeGet(0), source.drop(1));
+        } else {
+            throw Vectors.nonEmptyError().apply();
+        }
     }
 
 }

@@ -35,6 +35,11 @@ final class Validation {
         Objects.requireNonNull(source);
     }
 
+    static <A> void validateNonEmptyCopyFrom(int maxCount, A source) {
+        Validation.requirePositive("maxCount", maxCount);
+        Objects.requireNonNull(source);
+    }
+
     static <A> void validateTake(int count, A source) {
         validateTake(count);
         Objects.requireNonNull(source);
