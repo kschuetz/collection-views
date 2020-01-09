@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 ## [Unreleased]
 No changes yet
 
+## [1.1.1] - 2020-01-08
+### Added
+- `nonEmptyCopyFrom`
+
 ## [1.1.0] - 2019-10-27
 ### Changes
 - Upgrade [lambda](https://github.com/palatable/lambda) to version 5.1.0
@@ -34,7 +38,8 @@ No changes yet
 ### Added
 - Initial release
 
-[Unreleased]: https://github.com/kschuetz/collection-views/compare/collection-views-1.1.0...HEAD
+[Unreleased]: https://github.com/kschuetz/collection-views/compare/collection-views-1.1.1...HEAD
+[1.1.1]: https://github.com/kschuetz/collection-views/compare/collection-views-1.1.0...collection-views-1.1.1
 [1.1.0]: https://github.com/kschuetz/collection-views/compare/collection-views-1.0.4...collection-views-1.1.0
 [1.0.4]: https://github.com/kschuetz/collection-views/compare/collection-views-1.0.3...collection-views-1.0.4
 [1.0.3]: https://github.com/kschuetz/collection-views/compare/collection-views-1.0.2...collection-views-1.0.3
