@@ -2,6 +2,7 @@ package dev.marksman.collectionviews;
 
 import com.jnape.palatable.lambda.functions.Fn1;
 import com.jnape.palatable.lambda.functions.builtin.fn2.Eq;
+import dev.marksman.enhancediterables.NonEmptyIterable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -9,6 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.jnape.palatable.lambda.adt.Maybe.just;
 import static com.jnape.palatable.lambda.adt.Maybe.nothing;
@@ -311,6 +313,155 @@ class ImmutableNonEmptyVectorTest {
 
         }
 
+    }
+
+    @Nested
+    @DisplayName("nonEmptyCopyFrom")
+    class NonEmptyCopyFrom {
+
+        @Test
+        void throwsOnNullArgument() {
+            NonEmptyIterable<Integer> source = null;
+            assertThrows(NullPointerException.class, () -> NonEmptyVector.nonEmptyCopyFrom(source));
+        }
+
+        @Test
+        void makesCopy() {
+            Integer[] underlying = new Integer[]{1, 2, 3};
+            NonEmptyVector<Integer> source = NonEmptyVector.wrapOrThrow(underlying);
+            ImmutableNonEmptyVector<Integer> subject = NonEmptyVector.nonEmptyCopyFrom(source);
+            assertThat(subject, contains(1, 2, 3));
+            underlying[0] = 4;
+            assertThat(subject, contains(1, 2, 3));
+        }
+
+        @Test
+        void getWillNeverReturnNull() {
+            ImmutableNonEmptyVector<String> subject = NonEmptyVector.nonEmptyCopyFrom(NonEmptyVector.wrapOrThrow(new String[]{"foo", null, "baz"}));
+            assertEquals(just("foo"), subject.get(0));
+            assertEquals(nothing(), subject.get(1));
+            assertEquals(just("baz"), subject.get(2));
+        }
+
+        @Test
+        void iteratorNextReturnsCorrectElements() {
+            ImmutableNonEmptyVector<String> subject = NonEmptyVector.nonEmptyCopyFrom(NonEmptyVector.wrapOrThrow(new String[]{"foo", "bar", "baz"}));
+            Iterator<String> iterator = subject.iterator();
+            assertEquals("foo", iterator.next());
+            assertEquals("bar", iterator.next());
+            assertEquals("baz", iterator.next());
+        }
+
+        @SuppressWarnings("ConstantConditions")
+        @Test
+        void iteratorHasNextCanBeCalledMultipleTimes() {
+            ImmutableNonEmptyVector<String> subject = NonEmptyVector.nonEmptyCopyFrom(NonEmptyVector.wrapOrThrow(new String[]{"foo", "bar", "baz"}));
+            Iterator<String> iterator = subject.iterator();
+            assertTrue(iterator.hasNext());
+            assertTrue(iterator.hasNext());
+            assertTrue(iterator.hasNext());
+            assertEquals("foo", iterator.next());
+        }
+
+        @Test
+        void iteratorHasNextReturnsFalseIfNothingRemains() {
+            ImmutableNonEmptyVector<String> subject = NonEmptyVector.nonEmptyCopyFrom(NonEmptyVector.wrapOrThrow(new String[]{"foo"}));
+            Iterator<String> iterator = subject.iterator();
+            iterator.next();
+            assertFalse(iterator.hasNext());
+        }
+
+        @Test
+        void iteratorNextThrowsIfNothingRemains() {
+            ImmutableNonEmptyVector<String> subject = NonEmptyVector.nonEmptyCopyFrom(NonEmptyVector.wrapOrThrow(new String[]{"foo"}));
+            Iterator<String> iterator = subject.iterator();
+            iterator.next();
+            assertThrows(NoSuchElementException.class, iterator::next);
+        }
+
+        @Test
+        void iteratorThrowsIfRemoveIsCalled() {
+            ImmutableNonEmptyVector<String> subject = NonEmptyVector.nonEmptyCopyFrom(NonEmptyVector.wrapOrThrow(new String[]{"foo"}));
+            Iterator<String> iterator = subject.iterator();
+            assertThrows(UnsupportedOperationException.class, iterator::remove);
+        }
+
+        @Test
+        void throwsIfMaxCountLessThanOne() {
+            assertThrows(IllegalArgumentException.class, () -> NonEmptyVector.nonEmptyCopyFrom(0, NonEmptyVector.wrapOrThrow(new String[]{"foo"})));
+        }
+
+        @Test
+        void takesAsMuchAsItCan() {
+            assertThat(NonEmptyVector.nonEmptyCopyFrom(1_000_000, Vector.of(1, 2, 3)),
+                    contains(1, 2, 3));
+        }
+
+        @Test
+        void onlyTakesWhatWasAskedFor() {
+            assertThat(NonEmptyVector.nonEmptyCopyFrom(3, Vector.of(1, 2, 3)),
+                    contains(1, 2, 3));
+            assertThat(NonEmptyVector.nonEmptyCopyFrom(2, Vector.of(1, 2, 3)),
+                    contains(1, 2));
+            assertThat(NonEmptyVector.nonEmptyCopyFrom(1, Vector.of(1, 2, 3)),
+                    contains(1));
+        }
+
+        @Test
+        void doesNotIterateBeyondWhatWasAskedFor() {
+            NonEmptyIterable<Integer> source = NonEmptyIterable.nonEmptyIterable(0, () -> {
+                AtomicInteger n = new AtomicInteger(1);
+                return new Iterator<Integer>() {
+                    @Override
+                    public boolean hasNext() {
+                        return true;
+                    }
+
+                    @Override
+                    public Integer next() {
+                        int result = n.getAndIncrement();
+                        if (result > 2) {
+                            fail("iterated too far");
+                        }
+                        return result;
+                    }
+                };
+            });
+
+            assertEquals(Vector.of(0, 1, 2), NonEmptyVector.nonEmptyCopyFrom(3, source));
+        }
+
+        @Nested
+        @DisplayName("nonEmptyCopyFrom")
+        class NonEmptyCopyFromImmutableVector {
+
+            @Test
+            void returnsOriginalForPrimitives() {
+                ImmutableNonEmptyVector<Integer> original = Vector.of(1, 2, 3);
+                assertSame(original, NonEmptyVector.nonEmptyCopyFrom(original));
+            }
+
+            @Test
+            void makesCopyForNonPrimitives() {
+                ImmutableNonEmptyVector<Integer> source = Vector.of(1, 2, 3).fmap(n -> n * 2);
+                ImmutableNonEmptyVector<Integer> copied = NonEmptyVector.nonEmptyCopyFrom(source);
+                assertTrue(Util.isPrimitive(copied));
+                assertNotSame(source, copied);
+            }
+
+            @Test
+            void returnsOriginalIfMaxCountEqualsSize() {
+                ImmutableNonEmptyVector<Integer> original = Vector.of(1, 2, 3);
+                assertSame(original, NonEmptyVector.nonEmptyCopyFrom(3, original));
+            }
+
+            @Test
+            void returnsOriginalIfMaxCountExceedsSize() {
+                ImmutableNonEmptyVector<Integer> original = Vector.of(1, 2, 3);
+                assertSame(original, NonEmptyVector.nonEmptyCopyFrom(1_000_000, original));
+            }
+
+        }
     }
 
     @Nested

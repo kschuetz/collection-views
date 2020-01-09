@@ -543,10 +543,45 @@ public interface NonEmptyVector<A> extends NonEmptyFiniteIterable<A>, Vector<A> 
         return ImmutableVectors.nonEmptyLazyFill(size, valueSupplier);
     }
 
+    /**
+     * Creates an {@code ImmutableNonEmptyVector} that is copied from any {@code NonEmptyIterable}.
+     * <p>
+     * The entire {@link NonEmptyIterable} will be eagerly iterated.
+     * Be careful not to pass in an infinite {@code NonEmptyIterable} or this method will not terminate.
+     * <p>
+     * If necessary to guarantee immutability, this method will make a copy of the data provided.
+     * If {@code source} is an untransformed {@link ImmutableNonEmptyVector}, it will be returned directly.
+     *
+     * @param source a {@code NonEmptyIterable<A>} that will be iterated eagerly in its entirety;  not null
+     * @param <A>    the element type
+     * @return an {@code ImmutableNonEmptyVector<A>}
+     */
     static <A> ImmutableNonEmptyVector<A> nonEmptyCopyFrom(NonEmptyIterable<A> source) {
         return ImmutableVectors.nonEmptyCopyFrom(source);
     }
 
+    /**
+     * Creates an {@code ImmutableNonEmptyVector} that is copied from any {@code NonEmptyIterable}, but consuming a maximum number of elements.
+     * <p>
+     * The {@link NonEmptyIterable} will be eagerly iterated, but only up to a maximum of {@code maxCount} elements.
+     * If {@code maxCount} elements are not available, then the all of the elements available will be returned.
+     * <p>
+     * This method will make a copy of the data provided, unless {@code source} is
+     * an untransformed {@link ImmutableNonEmptyVector} and its size is less than or equal to {@code maxCount},
+     * in which case it will be returned directly.
+     * <p>
+     * If {@code source} is an {@code ImmutableNonEmptyVector} that is greater than {@code maxCount} in size,
+     * a copy will always be made, therefore making it memory-safe to take a small slice of
+     * a huge {@link Vector} that you no longer need.
+     *
+     * @param maxCount the maximum number of elements to consume from the source.
+     *                 Must be &gt;= 1.
+     * @param source   a {@code NonEmptyIterable<A>} that will be iterated eagerly for up to {@code maxCount} elements.
+     *                 Not null.
+     *                 It is safe for {@code source} to be infinite.
+     * @param <A>      the element type
+     * @return an {@code ImmutableNonEmptyVector} that contains at most {@code maxCount} elements
+     */
     static <A> ImmutableNonEmptyVector<A> nonEmptyCopyFrom(int maxCount, NonEmptyIterable<A> source) {
         return ImmutableVectors.nonEmptyCopyFrom(maxCount, source);
     }
