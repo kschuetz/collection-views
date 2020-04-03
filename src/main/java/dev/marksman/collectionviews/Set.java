@@ -44,6 +44,17 @@ public interface Set<A> extends FiniteIterable<A> {
     int size();
 
     /**
+     * Since a {@code Set} already contains only distinct values, this method always
+     * returns itself.
+     *
+     * @return itself
+     */
+    @Override
+    default Set<A> distinct() {
+        return this;
+    }
+
+    /**
      * Finds an element of this {@code Set} that satisfies a predicate, if any.
      *
      * @param predicate a predicate; not null

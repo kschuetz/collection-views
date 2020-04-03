@@ -20,6 +20,17 @@ import static com.jnape.palatable.lambda.adt.Maybe.just;
 public interface NonEmptySet<A> extends NonEmptyFiniteIterable<A>, Set<A> {
 
     /**
+     * Since a {@code NonEmptySet} already contains only distinct values, this method always
+     * returns itself.
+     *
+     * @return itself
+     */
+    @Override
+    default NonEmptySet<A> distinct() {
+        return this;
+    }
+
+    /**
      * Tests whether this {@code NonEmptySet} is empty.
      * <p>
      * Always returns false for {@link NonEmptySet}s.

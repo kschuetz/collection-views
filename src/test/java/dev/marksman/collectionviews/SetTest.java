@@ -123,6 +123,11 @@ class SetTest {
             }
 
             @Test
+            void distinctReturnsReferenceToSelf() {
+                assertSame(subject, subject.distinct());
+            }
+
+            @Test
             void equalToOtherSetWrappingEquivalentUnderlying() {
                 HashSet<String> otherUnderlying = toCollection(HashSet::new, asList("baz", "bar", "foo"));
                 Set<String> other = Set.wrap(otherUnderlying);
@@ -221,6 +226,11 @@ class SetTest {
             }
 
             @Test
+            void distinctReturnsReferenceToSelf() {
+                assertSame(subject, subject.distinct());
+            }
+
+            @Test
             void equalToOtherSetWrappingEquivalentUnderlying() {
                 java.util.Set<String> otherUnderlying = singleton("foo");
                 Set<String> other = Set.wrap(otherUnderlying);
@@ -293,6 +303,11 @@ class SetTest {
             @Test
             void equalToSelf() {
                 assertEquals(subject, subject);
+            }
+
+            @Test
+            void distinctReturnsReferenceToSelf() {
+                assertSame(subject, subject.distinct());
             }
 
             @Test

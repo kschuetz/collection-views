@@ -16,6 +16,17 @@ import static com.jnape.palatable.lambda.adt.Maybe.just;
 public interface ImmutableNonEmptySet<A> extends NonEmptySet<A>, ImmutableSet<A>, ImmutableNonEmptyFiniteIterable<A> {
 
     /**
+     * Since a {@code ImmutableNonEmptySet} already contains only distinct values, this method always
+     * returns itself.
+     *
+     * @return itself
+     */
+    @Override
+    default ImmutableNonEmptySet<A> distinct() {
+        return this;
+    }
+
+    /**
      * Returns an {@code ImmutableNonEmptySet} containing the same elements as this one.
      * <p>
      * Since this is an {@link ImmutableNonEmptySet} already, this method simply returns
