@@ -14,6 +14,7 @@ final class ConcreteVectorBuilder<A> implements NonEmptyVectorBuilder<A> {
     private final int size;
 
     private ConcreteVectorBuilder(int size, Maybe<Integer> initialCapacity, ArrayList<A> underlying) {
+        assert (size >= 1);
         this.initialCapacity = initialCapacity;
         this.underlying = underlying;
         this.size = size;
@@ -90,6 +91,14 @@ final class ConcreteVectorBuilder<A> implements NonEmptyVectorBuilder<A> {
         ArrayList<A> underlying = initialCapacity.match(__ -> new ArrayList<>(), ArrayList::new);
         underlying.add(firstElement);
         return new ConcreteVectorBuilder<>(1, initialCapacity, underlying);
+    }
+
+    static <A> ConcreteVectorBuilder<A> concreteVectorBuilder(Maybe<Integer> initialCapacity, Iterable<A> elements) {
+        ArrayList<A> underlying = initialCapacity.match(__ -> new ArrayList<>(), ArrayList::new);
+        for (A elem : elements) {
+            underlying.add(elem);
+        }
+        return new ConcreteVectorBuilder<>(underlying.size(), initialCapacity, underlying);
     }
 
 }
