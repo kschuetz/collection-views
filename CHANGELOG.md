@@ -6,6 +6,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 ## [Unreleased]
 No changes yet
 
+## [1.2.0] - 2020-04-03
+### Added
+- `SetBuilder`
+
+### Changes
+- `distinct` method on `Set`s now return the `Set` itself 
+
 ## [1.1.2] - 2020-02-18
 ### Changes
 - Upgrade [lambda](https://github.com/palatable/lambda) to version 5.2.0
@@ -43,7 +50,8 @@ No changes yet
 ### Added
 - Initial release
 
-[Unreleased]: https://github.com/kschuetz/collection-views/compare/collection-views-1.1.2...HEAD
+[Unreleased]: https://github.com/kschuetz/collection-views/compare/collection-views-1.2.0...HEAD
+[1.2.0]: https://github.com/kschuetz/collection-views/compare/collection-views-1.1.2...collection-views-1.2.0
 [1.1.2]: https://github.com/kschuetz/collection-views/compare/collection-views-1.1.1...collection-views-1.1.2
 [1.1.1]: https://github.com/kschuetz/collection-views/compare/collection-views-1.1.0...collection-views-1.1.1
 [1.1.0]: https://github.com/kschuetz/collection-views/compare/collection-views-1.0.4...collection-views-1.1.0
