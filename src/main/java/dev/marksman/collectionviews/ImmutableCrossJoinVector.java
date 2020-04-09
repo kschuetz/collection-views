@@ -5,7 +5,7 @@ import com.jnape.palatable.lambda.adt.hlist.Tuple2;
 import static com.jnape.palatable.lambda.adt.hlist.HList.tuple;
 
 final class ImmutableCrossJoinVector<A, B> extends ConcreteVector<Tuple2<A, B>>
-        implements ImmutableNonEmptyVector<Tuple2<A, B>> {
+        implements ImmutableNonEmptyVector<Tuple2<A, B>>, CopyOptimizeCheck {
 
     private final ImmutableNonEmptyVector<A> first;
     private final ImmutableNonEmptyVector<B> second;
@@ -31,6 +31,11 @@ final class ImmutableCrossJoinVector<A, B> extends ConcreteVector<Tuple2<A, B>>
         }
         return tuple(first.unsafeGet(index / stride),
                 second.unsafeGet(index % stride));
+    }
+
+    @Override
+    public boolean shouldNotMakeCopy() {
+        return Util.shouldNotMakeCopy(first) && Util.shouldNotMakeCopy(second);
     }
 
     static <A, B> ImmutableCrossJoinVector<A, B> immutableCrossJoinVector(ImmutableNonEmptyVector<A> first, ImmutableNonEmptyVector<B> second) {

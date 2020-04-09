@@ -48,7 +48,7 @@ final class ImmutableVectors {
 
     static <A> ImmutableVector<A> copyFrom(Iterable<A> source) {
         Objects.requireNonNull(source);
-        if (source instanceof ImmutableVector<?> && Util.isPrimitive(source)) {
+        if (source instanceof ImmutableVector<?> && Util.shouldNotMakeCopy(source)) {
             return (ImmutableVector<A>) source;
         } else if (!source.iterator().hasNext()) {
             return Vectors.empty();
@@ -63,7 +63,7 @@ final class ImmutableVectors {
         if (maxCount == 0) {
             return Vectors.empty();
         }
-        if (source instanceof ImmutableVector<?> && Util.isPrimitive(source)) {
+        if (source instanceof ImmutableVector<?> && Util.shouldNotMakeCopy(source)) {
             return ((ImmutableVector<A>) source).take(maxCount);
         } else {
             return copyFrom(Take.take(maxCount, source));
@@ -72,7 +72,7 @@ final class ImmutableVectors {
 
     static <A> ImmutableVector<A> copySliceFrom(int startIndex, int endIndexExclusive, Iterable<A> source) {
         validateSlice(startIndex, endIndexExclusive, source);
-        if (source instanceof ImmutableVector<?> && Util.isPrimitive(source)) {
+        if (source instanceof ImmutableVector<?> && Util.shouldNotMakeCopy(source)) {
             return ((ImmutableVector<A>) source).slice(startIndex, endIndexExclusive);
         } else {
             return Vectors.sliceFromIterable(startIndex, endIndexExclusive, source).toImmutable();

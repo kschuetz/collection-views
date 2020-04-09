@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 ## [Unreleased]
 No changes yet
 
+## [1.2.1] - 2020-04-08
+### Changes
+- `ImmutableVector#cross` optimizations
+
 ## [1.2.0] - 2020-04-03
 ### Added
 - `SetBuilder`
@@ -50,7 +54,8 @@ No changes yet
 ### Added
 - Initial release
 
-[Unreleased]: https://github.com/kschuetz/collection-views/compare/collection-views-1.2.0...HEAD
+[Unreleased]: https://github.com/kschuetz/collection-views/compare/collection-views-1.2.1...HEAD
+[1.2.1]: https://github.com/kschuetz/collection-views/compare/collection-views-1.2.0...collection-views-1.2.1
 [1.2.0]: https://github.com/kschuetz/collection-views/compare/collection-views-1.1.2...collection-views-1.2.0
 [1.1.2]: https://github.com/kschuetz/collection-views/compare/collection-views-1.1.1...collection-views-1.1.2
 [1.1.1]: https://github.com/kschuetz/collection-views/compare/collection-views-1.1.0...collection-views-1.1.1

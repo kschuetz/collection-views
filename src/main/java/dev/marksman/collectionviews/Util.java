@@ -19,6 +19,14 @@ final class Util {
         return (obj instanceof Primitive);
     }
 
+    static boolean shouldNotMakeCopy(Object obj) {
+        if (obj instanceof CopyOptimizeCheck) {
+            return ((CopyOptimizeCheck) obj).shouldNotMakeCopy();
+        } else {
+            return isPrimitive(obj);
+        }
+    }
+
     private static void renderElements(StringBuilder output, Iterable<?> iterable) {
         boolean inner = false;
         for (Object elem : iterable) {

@@ -2426,6 +2426,28 @@ class ImmutableVectorTest {
                     tuple("baz", 1), tuple("baz", 2), tuple("baz", 3)));
         }
 
+        @Test
+        void copyingFromDoesNotMakeCopyIfAllSourceVectorsAreUntransformed() {
+            ImmutableNonEmptyVector<Tuple2<Integer, String>> subject = Vector.of(1, 2, 3)
+                    .cross(Vector.of("foo", "bar", "baz"));
+            assertSame(subject, Vector.copyFrom(subject));
+        }
+
+        @Test
+        void copyingFromMakesCopyIfOneOfTheSourceVectorsIsTransformed() {
+            ImmutableNonEmptyVector<Tuple2<Integer, String>> subject = Vector.of(1, 2, 3).fmap(x -> x + 1)
+                    .cross(Vector.of("foo", "bar", "baz"));
+            assertNotSame(subject, Vector.copyFrom(subject));
+        }
+
+        @Test
+        void copyingFromResultsInUntransformed() {
+            ImmutableNonEmptyVector<Tuple2<Integer, String>> subject = Vector.of(1, 2, 3).fmap(x -> x + 1)
+                    .cross(Vector.of("foo", "bar", "baz"));
+            ImmutableVector<Tuple2<Integer, String>> copy = Vector.copyFrom(subject);
+            assertSame(copy, Vector.copyFrom(copy));
+        }
+
     }
 
     @Nested
