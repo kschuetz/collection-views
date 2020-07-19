@@ -32,9 +32,16 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.collection.IsEmptyIterable.emptyIterable;
 import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ImmutableVectorTest {
 
@@ -2756,7 +2763,55 @@ class ImmutableVectorTest {
                     Vector.of(4), Vector.of(5), Vector.of(6)),
                     Vector.copyFrom(asList(1, 2, 3, 4, 5, 6)).magnetizeBy((x, y) -> x > y));
         }
-
     }
 
+    @Nested
+    @DisplayName("slide")
+    class Slide {
+        @Test
+        void throwsOnZeroArgument() {
+            assertThrows(IllegalArgumentException.class, () -> Vector.empty().slide(0));
+        }
+
+        @Test
+        void onEmpty() {
+            assertThat(Vector.empty().slide(1), emptyIterable());
+        }
+
+        @Test
+        void k1() {
+            assertThat(Vector.of(0, 1, 2, 3).slide(1),
+                    contains(equalTo(Vector.of(0)),
+                            equalTo(Vector.of(1)),
+                            equalTo(Vector.of(2)),
+                            equalTo(Vector.of(3))));
+        }
+
+        @Test
+        void k2() {
+            assertThat(Vector.of(0, 1, 2, 3).slide(2),
+                    contains(equalTo(Vector.of(0, 1)),
+                            equalTo(Vector.of(1, 2)),
+                            equalTo(Vector.of(2, 3))));
+        }
+
+        @Test
+        void k3() {
+            assertThat(Vector.of(0, 1, 2, 3).slide(3),
+                    contains(equalTo(Vector.of(0, 1, 2)),
+                            equalTo(Vector.of(1, 2, 3))));
+        }
+
+        @Test
+        void k4() {
+            assertThat(Vector.of(0, 1, 2, 3).slide(4),
+                    contains(equalTo(Vector.of(0, 1, 2, 3))));
+        }
+
+        @Test
+        void k5() {
+            assertThat(Vector.of(0, 1, 2, 3).slide(5),
+                    contains(equalTo(Vector.of(0, 1, 2, 3))));
+        }
+    }
 }

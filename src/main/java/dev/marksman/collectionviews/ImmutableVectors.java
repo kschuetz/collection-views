@@ -5,6 +5,7 @@ import com.jnape.palatable.lambda.adt.hlist.Tuple2;
 import com.jnape.palatable.lambda.functions.Fn1;
 import com.jnape.palatable.lambda.functions.Fn2;
 import com.jnape.palatable.lambda.functions.builtin.fn2.Take;
+import dev.marksman.enhancediterables.ImmutableFiniteIterable;
 import dev.marksman.enhancediterables.ImmutableNonEmptyFiniteIterable;
 import dev.marksman.enhancediterables.NonEmptyIterable;
 
@@ -24,9 +25,15 @@ import static dev.marksman.collectionviews.ImmutableCrossJoinVector.immutableCro
 import static dev.marksman.collectionviews.ImmutableReverseVector.immutableReverseVector;
 import static dev.marksman.collectionviews.ImmutableVectorZip.immutableVectorZip;
 import static dev.marksman.collectionviews.MapperChain.mapperChain;
-import static dev.marksman.collectionviews.Validation.*;
+import static dev.marksman.collectionviews.Validation.validateCopyFrom;
+import static dev.marksman.collectionviews.Validation.validateDrop;
+import static dev.marksman.collectionviews.Validation.validateFill;
+import static dev.marksman.collectionviews.Validation.validateNonEmptyFill;
+import static dev.marksman.collectionviews.Validation.validateSlice;
+import static dev.marksman.collectionviews.Validation.validateTake;
 import static dev.marksman.collectionviews.Vector.empty;
 import static dev.marksman.collectionviews.VectorSlicing.sliceImpl;
+import static dev.marksman.enhancediterables.FiniteIterable.emptyFiniteIterable;
 
 final class ImmutableVectors {
 
@@ -336,6 +343,20 @@ final class ImmutableVectors {
         } else {
             return sliceImpl(ImmutableVectorSlice::immutableVectorSlice, source.size(), () -> source,
                     startIndex, requestedSize);
+        }
+    }
+
+    static <A> ImmutableFiniteIterable<? extends ImmutableNonEmptyVector<A>> slide(int k, ImmutableVector<A> source) {
+        if (k < 1) {
+            throw new IllegalArgumentException("k must be >= 1");
+        }
+        int size = source.size();
+        if (size == 0) {
+            return emptyFiniteIterable();
+        } else {
+            final int windowSize = Math.min(k, size);
+            final int maxIndex = 1 + size - windowSize;
+            return () -> new ImmutableVectorSlidingIterator<>(source, windowSize, maxIndex);
         }
     }
 
