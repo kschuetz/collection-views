@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 ## [Unreleased]
 No changes yet
 
+## [1.2.3] - 2020-07-19
+### Changes
+- `slide` now returns slices of the source `Vector`
+
 ## [1.2.2] - 2020-04-18
 ### Changes
 - Upgrade [enhanced-iterables](https://github.com/kschuetz/enhanced-iterables) to version 1.2.0
@@ -58,7 +62,8 @@ No changes yet
 ### Added
 - Initial release
 
-[Unreleased]: https://github.com/kschuetz/collection-views/compare/collection-views-1.2.2...HEAD
+[Unreleased]: https://github.com/kschuetz/collection-views/compare/collection-views-1.2.3...HEAD
+[1.2.3]: https://github.com/kschuetz/collection-views/compare/collection-views-1.2.2...collection-views-1.2.3
 [1.2.2]: https://github.com/kschuetz/collection-views/compare/collection-views-1.2.1...collection-views-1.2.2
 [1.2.1]: https://github.com/kschuetz/collection-views/compare/collection-views-1.2.0...collection-views-1.2.1
 [1.2.0]: https://github.com/kschuetz/collection-views/compare/collection-views-1.1.2...collection-views-1.2.0
