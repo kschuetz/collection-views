@@ -7,19 +7,22 @@
 
 # [lambda](https://github.com/palatable/lambda) version compatibility
 
-| collection-views | lambda 5.2.0 | lambda 5.1.0 | lambda 5.0.0 | lambda 4.0.0 |
-|---|---|---|---|---|
-|1.1.x|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
-|1.0.x|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
+The current version of *collection-views* has been certified to be compatible with the following lambda versions:
+
+- 5.3.0
+- 5.2.0
+- 5.1.0
+- 5.0.0
+- 4.0.0
 
 #### Table of Contents
 
- - [What is it?](#what-is-it)
- - [What is it not?](#what-is-it-not)
- - [Why?](#why)
- - [Design principles](#design-principles)
- - [Installation](#installation)
- - [Type of collection views](#types)
+- [What is it?](#what-is-it)
+- [What is it not?](#what-is-it-not)
+- [Why?](#why)
+- [Design principles](#design-principles)
+- [Installation](#installation)
+- [Type of collection views](#types)
    - [`Vector<A>`](#vector)
    - [`NonEmptyVector<A>`](#non-empty-vector)
    - [`ImmutableVector<A>`](#immutable-vector)
