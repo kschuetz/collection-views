@@ -7,6 +7,7 @@ import com.jnape.palatable.lambda.functions.Fn1;
 import com.jnape.palatable.lambda.functions.Fn2;
 import com.jnape.palatable.lambda.functions.builtin.fn2.Drop;
 import com.jnape.palatable.lambda.functions.builtin.fn2.Take;
+import dev.marksman.enhancediterables.FiniteIterable;
 import dev.marksman.enhancediterables.ImmutableNonEmptyFiniteIterable;
 import dev.marksman.enhancediterables.NonEmptyIterable;
 
@@ -23,8 +24,11 @@ import static com.jnape.palatable.lambda.functions.builtin.fn2.Tupler2.tupler;
 import static dev.marksman.collectionviews.CrossJoinVector.crossJoinVector;
 import static dev.marksman.collectionviews.ImmutableVectors.nonEmptyRange;
 import static dev.marksman.collectionviews.MapperChain.mapperChain;
-import static dev.marksman.collectionviews.Validation.*;
+import static dev.marksman.collectionviews.Validation.validateDrop;
+import static dev.marksman.collectionviews.Validation.validateSlice;
+import static dev.marksman.collectionviews.Validation.validateTake;
 import static dev.marksman.collectionviews.VectorZip.vectorZip;
+import static dev.marksman.enhancediterables.FiniteIterable.emptyFiniteIterable;
 
 final class Vectors {
 
@@ -203,6 +207,20 @@ final class Vectors {
         } else {
             ArrayList<A> newList = toCollection(ArrayList::new, Take.take(requestedSize, Drop.drop(startIndex, source)));
             return ImmutableVectors.wrapAndVouchFor(newList);
+        }
+    }
+
+    static <A> FiniteIterable<? extends NonEmptyVector<A>> slide(int k, Vector<A> source) {
+        if (k < 1) {
+            throw new IllegalArgumentException("k must be >= 1");
+        }
+        int size = source.size();
+        if (size == 0) {
+            return emptyFiniteIterable();
+        } else {
+            final int windowSize = Math.min(k, size);
+            final int maxIndex = 1 + size - windowSize;
+            return () -> new VectorSlidingIterator<>(source, windowSize, maxIndex);
         }
     }
 

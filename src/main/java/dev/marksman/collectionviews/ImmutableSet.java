@@ -17,6 +17,17 @@ import dev.marksman.enhancediterables.ImmutableFiniteIterable;
 public interface ImmutableSet<A> extends Set<A>, ImmutableFiniteIterable<A>, Immutable {
 
     /**
+     * Since an {@code ImmutableSet} already contains only distinct values, this method always
+     * returns itself.
+     *
+     * @return itself
+     */
+    @Override
+    default ImmutableSet<A> distinct() {
+        return this;
+    }
+
+    /**
      * Returns an {@code ImmutableSet} containing the same elements as this one.
      * <p>
      * Since this is an {@link ImmutableSet} already, this method simply returns

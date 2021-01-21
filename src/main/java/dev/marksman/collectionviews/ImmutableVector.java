@@ -182,6 +182,21 @@ public interface ImmutableVector<A> extends Vector<A>, ImmutableFiniteIterable<A
     }
 
     /**
+     * "Slides" a window of {@code k} elements across the {@code ImmutableVector} by one element at a time.
+     * <p>
+     * Example:
+     *
+     * <code>Vector.of(1, 2, 3, 4, 5).slide(2); // [[1, 2], [2, 3], [3, 4], [4, 5]]</code>
+     *
+     * @param k the number of elements in the sliding window.  Must be &gt;= 1.
+     * @return an {@code FiniteIterable<ImmutableNonEmptyVector<A>>}
+     */
+    @Override
+    default ImmutableFiniteIterable<? extends ImmutableNonEmptyVector<A>> slide(int k) {
+        return ImmutableVectors.slide(k, this);
+    }
+
+    /**
      * Splits this {@code ImmutableVector} into a prefix/suffix pair according to a predicate.
      * <p>
      * Does not make copies of any underlying collections.
