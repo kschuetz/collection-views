@@ -11,7 +11,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.RandomAccess;
 
-import static com.jnape.palatable.lambda.adt.Maybe.*;
+import static com.jnape.palatable.lambda.adt.Maybe.just;
+import static com.jnape.palatable.lambda.adt.Maybe.maybe;
+import static com.jnape.palatable.lambda.adt.Maybe.nothing;
 import static dev.marksman.collectionviews.EmptyVectorBuilder.emptyVectorBuilder;
 
 /**
@@ -248,6 +250,21 @@ public interface Vector<A> extends FiniteIterable<A>, RandomAccess {
      */
     default Vector<A> slice(int startIndex, int endIndexExclusive) {
         return Vectors.slice(startIndex, endIndexExclusive, this);
+    }
+
+    /**
+     * "Slides" a window of {@code k} elements across the {@code Vector} by one element at a time.
+     * <p>
+     * Example:
+     *
+     * <code>Vector.of(1, 2, 3, 4, 5).slide(2); // [[1, 2], [2, 3], [3, 4], [4, 5]]</code>
+     *
+     * @param k the number of elements in the sliding window.  Must be &gt;= 1.
+     * @return an {@code FiniteIterable<NonEmptyVector<A>>}
+     */
+    @Override
+    default FiniteIterable<? extends NonEmptyVector<A>> slide(int k) {
+        return Vectors.slide(k, this);
     }
 
     /**

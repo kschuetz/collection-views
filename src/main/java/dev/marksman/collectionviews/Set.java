@@ -5,6 +5,10 @@ import com.jnape.palatable.lambda.functions.Fn1;
 import com.jnape.palatable.lambda.functions.builtin.fn2.Find;
 import dev.marksman.enhancediterables.FiniteIterable;
 
+import static com.jnape.palatable.lambda.adt.Maybe.just;
+import static com.jnape.palatable.lambda.adt.Maybe.nothing;
+import static dev.marksman.collectionviews.EmptySetBuilder.emptySetBuilder;
+
 /**
  * A finite, unordered view of a collection that contains no duplicate elements.
  * <p>
@@ -40,6 +44,17 @@ public interface Set<A> extends FiniteIterable<A> {
     int size();
 
     /**
+     * Since a {@code Set} already contains only distinct values, this method always
+     * returns itself.
+     *
+     * @return itself
+     */
+    @Override
+    default Set<A> distinct() {
+        return this;
+    }
+
+    /**
      * Finds an element of this {@code Set} that satisfies a predicate, if any.
      *
      * @param predicate a predicate; not null
@@ -62,6 +77,7 @@ public interface Set<A> extends FiniteIterable<A> {
     }
 
     /**
+     * Converts this {@code Set} to an {@code ImmutableSet}.
      * Converts this {@code Set} to an {@code ImmutableSet}.
      * <p>
      * This method will make a copy of the underlying data structure if necessary to guarantee immutability.
@@ -131,6 +147,28 @@ public interface Set<A> extends FiniteIterable<A> {
     }
 
     /**
+     * Creates a new {@code SetBuilder}.
+     *
+     * @param <A> the element type
+     * @return an empty {@link SetBuilder}
+     */
+    static <A> SetBuilder<A> builder() {
+        return emptySetBuilder(nothing());
+    }
+
+    /**
+     * Creates a new {@code SetBuilder} with an initial capacity hint.
+     *
+     * @param initialCapacity an initial capacity hint.
+     *                        Must be &gt;= 0.
+     * @param <A>             the element type
+     * @return an empty {@link SetBuilder}
+     */
+    static <A> SetBuilder<A> builder(int initialCapacity) {
+        return emptySetBuilder(just(initialCapacity));
+    }
+
+    /**
      * Creates a {@code Set} that wraps a {@code java.util.Set}.
      * <p>
      * Does not make any copies of the given {@link java.util.Set}.
@@ -182,7 +220,7 @@ public interface Set<A> extends FiniteIterable<A> {
     }
 
     /**
-     * Creates an {@code ImmutableVector} that is copied from any {@code Iterable}, but consuming a maximum number of elements.
+     * Creates an {@code ImmutableSet} that is copied from any {@code Iterable}, but consuming a maximum number of elements.
      * <p>
      * The {@link Iterable} will be eagerly iterated, but only up to a maximum of {@code maxCount} elements.
      * If {@code maxCount} elements are not available, then the all of the elements available will be returned.
@@ -197,7 +235,7 @@ public interface Set<A> extends FiniteIterable<A> {
      *                 Not null.
      *                 It is safe for {@code source} to be infinite.
      * @param <A>      the element type
-     * @return an {@code ImmutableVector} that contains at most {@code maxCount} elements
+     * @return an {@code ImmutableSet} that contains at most {@code maxCount} elements
      */
     static <A> ImmutableSet<A> copyFrom(int maxCount, Iterable<A> source) {
         return ImmutableSets.copyFrom(maxCount, source);
