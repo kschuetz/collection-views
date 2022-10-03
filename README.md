@@ -1,7 +1,7 @@
 # collection-views
 
-[![collection-views](https://img.shields.io/maven-central/v/dev.marksman/collection-views.svg)](http://search.maven.org/#search%7Cga%7C1%7Cdev.marksman.collection-views)
-[![Javadoc](https://javadoc-badge.appspot.com/dev.marksman/collection-views.svg?label=javadoc)](https://kschuetz.github.io/collection-views/javadoc/)
+[![collection-views](https://img.shields.io/maven-central/v/software.kes/collection-views.svg)](http://search.maven.org/#search%7Cga%7C1%7Csoftware.kes.collection-views)
+[![Javadoc](https://javadoc-badge.appspot.com/software.kes/collection-views.svg?label=javadoc)](https://kschuetz.github.io/collection-views/javadoc/)
 [![CircleCI](https://circleci.com/gh/kschuetz/collection-views.svg?style=svg)](https://circleci.com/gh/kschuetz/collection-views)
 [![Maintainability](https://api.codeclimate.com/v1/badges/43ac4c983644c1bc7f5d/maintainability)](https://codeclimate.com/github/kschuetz/collection-views/maintainability)
 
@@ -123,7 +123,7 @@ For convenience, collection views should be easy to create on the fly without th
 To install, add the dependency to the latest version to your `pom.xml` (Maven) or `build.gradle` (Gradle).
 
 Follow this link to get the dependency info for your preferred build tool:
-[![collection-views](https://img.shields.io/maven-central/v/dev.marksman/collection-views.svg)](http://search.maven.org/#search%7Cga%7C1%7Cdev.marksman.collection-views)
+[![collection-views](https://img.shields.io/maven-central/v/software.kes/collection-views.svg)](http://search.maven.org/#search%7Cga%7C1%7Csoftware.kes.collection-views)
 
 # <a name="types">Types of collection views</a>
 
