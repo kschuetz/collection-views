@@ -1,17 +1,29 @@
 # Change Log
+
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ## [Unreleased]
+
 No changes yet
 
-## [1.2.3] - 2020-07-19
+## [2.0.0] - 2022-10-02
+
 ### Changes
+
+- Root package is now "software.kes.collectionviews"
+
+## [1.2.3] - 2020-07-19
+
+### Changes
+
 - `slide` now returns slices of the source `Vector`
 
 ## [1.2.2] - 2020-04-18
+
 ### Changes
+
 - Upgrade [enhanced-iterables](https://github.com/kschuetz/enhanced-iterables) to version 1.2.0
 
 ## [1.2.1] - 2020-04-08
@@ -55,23 +67,39 @@ No changes yet
 - `magnetizeBy` method now returns non-empty `Vector` slices
 
 ## [1.0.1] - 2019-06-25
+
 ### Changes
+
 - Upgrade [enhanced-iterables](https://github.com/kschuetz/enhanced-iterables) to version 1.0.1
 
 ## [1.0.0] - 2019-06-02
+
 ### Added
+
 - Initial release
 
-[Unreleased]: https://github.com/kschuetz/collection-views/compare/collection-views-1.2.3...HEAD
+[Unreleased]: https://github.com/kschuetz/collection-views/compare/collection-views-2.0.0...HEAD
+
+[2.0.0]: https://github.com/kschuetz/collection-views/compare/collection-views-1.2.3...collection-views-2.0.0
+
 [1.2.3]: https://github.com/kschuetz/collection-views/compare/collection-views-1.2.2...collection-views-1.2.3
+
 [1.2.2]: https://github.com/kschuetz/collection-views/compare/collection-views-1.2.1...collection-views-1.2.2
+
 [1.2.1]: https://github.com/kschuetz/collection-views/compare/collection-views-1.2.0...collection-views-1.2.1
+
 [1.2.0]: https://github.com/kschuetz/collection-views/compare/collection-views-1.1.2...collection-views-1.2.0
+
 [1.1.2]: https://github.com/kschuetz/collection-views/compare/collection-views-1.1.1...collection-views-1.1.2
+
 [1.1.1]: https://github.com/kschuetz/collection-views/compare/collection-views-1.1.0...collection-views-1.1.1
+
 [1.1.0]: https://github.com/kschuetz/collection-views/compare/collection-views-1.0.4...collection-views-1.1.0
+
 [1.0.4]: https://github.com/kschuetz/collection-views/compare/collection-views-1.0.3...collection-views-1.0.4
+
 [1.0.3]: https://github.com/kschuetz/collection-views/compare/collection-views-1.0.2...collection-views-1.0.3
+
 [1.0.2]: https://github.com/kschuetz/collection-views/compare/collection-views-1.0.1...collection-views-1.0.2
 [1.0.1]: https://github.com/kschuetz/collection-views/compare/collection-views-1.0.0...collection-views-1.0.1
 [1.0.0]: https://github.com/kschuetz/collection-views/commits/collection-views-1.0.0
