@@ -1,25 +1,28 @@
 # collection-views
 
-[![collection-views](https://img.shields.io/maven-central/v/dev.marksman/collection-views.svg)](http://search.maven.org/#search%7Cga%7C1%7Cdev.marksman.collection-views)
-[![Javadoc](https://javadoc-badge.appspot.com/dev.marksman/collection-views.svg?label=javadoc)](https://kschuetz.github.io/collection-views/javadoc/)
+[![collection-views](https://img.shields.io/maven-central/v/software.kes/collection-views.svg)](http://search.maven.org/#search%7Cga%7C1%7Csoftware.kes.collection-views)
+[![Javadoc](https://javadoc-badge.appspot.com/software.kes/collection-views.svg?label=javadoc)](https://kschuetz.github.io/collection-views/javadoc/)
 [![CircleCI](https://circleci.com/gh/kschuetz/collection-views.svg?style=svg)](https://circleci.com/gh/kschuetz/collection-views)
 [![Maintainability](https://api.codeclimate.com/v1/badges/43ac4c983644c1bc7f5d/maintainability)](https://codeclimate.com/github/kschuetz/collection-views/maintainability)
 
 # [lambda](https://github.com/palatable/lambda) version compatibility
 
-| collection-views | lambda 5.1.0 | lambda 5.0.0 | lambda 4.0.0 |
-|---|---|---|---|
-|1.1.x|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
-|1.0.x|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
+The current version of *collection-views* has been certified to be compatible with the following lambda versions:
+
+- 5.3.0
+- 5.2.0
+- 5.1.0
+- 5.0.0
+- 4.0.0
 
 #### Table of Contents
 
- - [What is it?](#what-is-it)
- - [What is it not?](#what-is-it-not)
- - [Why?](#why)
- - [Design principles](#design-principles)
- - [Installation](#installation)
- - [Type of collection views](#types)
+- [What is it?](#what-is-it)
+- [What is it not?](#what-is-it-not)
+- [Why?](#why)
+- [Design principles](#design-principles)
+- [Installation](#installation)
+- [Type of collection views](#types)
    - [`Vector<A>`](#vector)
    - [`NonEmptyVector<A>`](#non-empty-vector)
    - [`ImmutableVector<A>`](#immutable-vector)
@@ -120,7 +123,7 @@ For convenience, collection views should be easy to create on the fly without th
 To install, add the dependency to the latest version to your `pom.xml` (Maven) or `build.gradle` (Gradle).
 
 Follow this link to get the dependency info for your preferred build tool:
-[![collection-views](https://img.shields.io/maven-central/v/dev.marksman/collection-views.svg)](http://search.maven.org/#search%7Cga%7C1%7Cdev.marksman.collection-views)
+[![collection-views](https://img.shields.io/maven-central/v/software.kes/collection-views.svg)](http://search.maven.org/#search%7Cga%7C1%7Csoftware.kes.collection-views)
 
 # <a name="types">Types of collection views</a>
 
